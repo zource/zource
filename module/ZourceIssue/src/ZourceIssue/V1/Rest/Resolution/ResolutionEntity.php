@@ -129,4 +129,3 @@ class ResolutionEntity
         $this->position = $position;
     }
 }
-

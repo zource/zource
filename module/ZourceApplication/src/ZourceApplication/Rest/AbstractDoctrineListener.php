@@ -206,8 +206,8 @@ class AbstractDoctrineListener extends AbstractResourceListener
     public function patchList($data)
     {
         $dataList = [];
-        array_walk($data, function($entry) use (&$dataList) {
-            $entry = (array)$entry;;
+        array_walk($data, function ($entry) use (&$dataList) {
+            $entry = (array)$entry;
 
             $dataList[$entry['id']] = $entry;
         });
@@ -250,7 +250,7 @@ class AbstractDoctrineListener extends AbstractResourceListener
     public function replaceList($data)
     {
         $dataList = [];
-        array_walk($data, function($entry) use (&$dataList) {
+        array_walk($data, function ($entry) use (&$dataList) {
             $dataList[$entry->id] = (array)$entry;
         });
 

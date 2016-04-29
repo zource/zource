@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<ruleset name="Zource">
+    <description>The Zource coding standard,</description>
+
+    <config name="zend_ca_path" value="/path/to/ZendCodeAnalyzer"/>
+
+    <file>module/</file>
+
+    <exclude-pattern>module/ZourceApplication/config/</exclude-pattern>
+    <exclude-pattern>module/ZourceCalendar/config/</exclude-pattern>
+    <exclude-pattern>module/ZourceIssue/config/</exclude-pattern>
+    <exclude-pattern>module/ZourceProject/config/</exclude-pattern>
+    <exclude-pattern>module/ZourceUser/config/</exclude-pattern>
+    <exclude-pattern>vendor/</exclude-pattern>
+
+    <rule ref="PSR2" />
+</ruleset>

@@ -69,7 +69,7 @@ class AccountEntity
 
     /**
      * Gets the groups of this account.
-     * 
+     *
      * @return Collection
      */
     public function getGroups()

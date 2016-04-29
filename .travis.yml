@@ -18,4 +18,5 @@ install:
 script:
   - composer validate --strict
   - vendor/bin/phpcs --standard=psr2 module/
+  - vendor/bin/phpcs --standard=ruleset.xml
   - vendor/bin/phpunit
