@@ -1,2 +1,3 @@
 # zource
-The zource system.
+
+The open source company management application.
