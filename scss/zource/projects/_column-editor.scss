@@ -1,0 +1,66 @@
+.zource-column-editor {
+    border-spacing: 10px 0;
+    display: table;
+    list-style-type: none;
+    margin: 10px 0px 0px 0px;
+    padding: 0px;
+    width: 100%;
+}
+
+.zource-column-editor li {
+    background-color: #F9F9F9;
+    display: table-cell;
+    width: 1%;
+}
+
+.zource-column-editor-header {
+    h3 {
+        font-size: 20px;
+        margin: 0px;
+        padding: 10px;
+    }
+
+    p {
+        margin: 0px 0px 10px 0px;
+        padding: 0px 10px;
+    }
+}
+
+.zource-column-editor-constraints {
+    border-spacing: 10px 0;
+    display: table;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.zource-column-editor-constraint-maximum,
+.zource-column-editor-constraint-minimum {
+    background-color: #FFF;
+    display: table-cell;
+    padding: 4px;
+    width: 1%;
+}
+
+.zource-column-editor-constraint-minimum {
+    border: 1px solid #f6c342;
+}
+
+.zource-column-editor-constraint-maximum {
+    border: 1px solid #d04437;
+}
+
+.zource-column-editor-available-statuses {
+    padding: 10px;
+}
+
+.zource-column-editor-status {
+    background-color: #FFF;
+    border: 1px solid #CCC;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    padding: 10px;
+
+    .zui-status {
+        margin-bottom: 5px;
+    }
+}

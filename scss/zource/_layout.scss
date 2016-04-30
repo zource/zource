@@ -1,0 +1,90 @@
+body {
+    background-color: #F5F5F5;
+}
+
+#zource-content {
+    background-color: #FFF;
+    clear: both;
+}
+
+footer {
+    background-color: #F5F5F5;
+    border-top: 1px solid #CCC;
+    display: block;
+    height: 100px;
+    margin-bottom: 40px;
+    padding: 20px;
+    text-align: center;
+
+    a {
+        color: #707070;
+    }
+
+    ul {
+        display: block;
+        font-size: 0;
+        list-style: none;
+        padding: 0;
+
+        li {
+            display: inline-block;
+            font-size: 12px;
+            line-height: 1.66666666666667;
+            padding: 0;
+            white-space: nowrap;
+        }
+
+        li + li {
+            margin-left: 10px;
+        }
+
+        li + li:before {
+            content: "\b7";
+            margin-right: 10px;
+            speak: none;
+        }
+    }
+}
+
+#zui-page-header {
+    background-color: #F5F5F5;
+    border-bottom: 1px solid #CCC;
+}
+
+.zui-splitter-pane1 {
+    background-color: #F5F5F5;
+}
+
+.zui-page-sidebar-left {
+    border-right: 1px solid #CCC;
+}
+
+.zui-page-sidebar-right {
+    border-left: 1px solid #CCC;
+}
+
+.zui-layout-task {
+    #zource-content {
+        background-color: inherit;
+        padding-top: 40px;
+    }
+
+    .zui-page-panel {
+        background-color: #FFF;
+        border: 1px solid #CCC;
+        border-radius: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        width: 600px;
+    }
+
+    h2 {
+        font-size: 24px;
+        margin: 0px 0px 20px 0px;
+        padding: 0px;
+    }
+
+    footer {
+          border-top: none;
+    }
+}

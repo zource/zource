@@ -1,0 +1,13 @@
+{
+  "name": "zource",
+  "license": "proprietary",
+  "homepage": "http://github.com/zource/zource",
+  "ignore": [],
+  "private": true,
+  "dependencies": {
+    "jquery": "latest",
+    "jquery-ui": "~1.11.4",
+    "zource-zui": "latest",
+    "modernizr": "~2.8.3"
+  }
+}

@@ -1,0 +1,26 @@
+.zource-reports-list {
+    clear: both;
+    list-style-type: none;
+    margin: 0px;
+    padding: 0px;
+}
+
+.zource-reports-list li {
+    float: left;
+    border: 1px solid #E8E8E8;
+    background: #F9F9F9;
+    height: 200px;
+    margin: 0px 20px 20px 0px;
+    padding: 20px;
+    width: 300px;
+}
+
+.zource-reports-list li img {
+    display: block;
+    margin: 0px auto 10px auto;
+    text-align: center;
+}
+
+.zource-reports-list + h3 {
+    clear: both;
+}

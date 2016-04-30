@@ -1,0 +1,15 @@
+.zource-project-admin-widget-area {
+    display: table;
+}
+
+.zource-project-admin-widget-column {
+    display: table-cell;
+    padding: 0px 25px;
+    width: 50%;
+}
+
+.zource-project-admin-widget + .zource-project-admin-widget {
+    border-top: 1px solid #CCC;
+    margin-top: 25px;
+    padding-top: 25px;
+}

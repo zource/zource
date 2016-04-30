@@ -1,0 +1,31 @@
+.zource-activity-item {
+    border-bottom: 1px solid #F1F1F1;
+    margin-bottom: 15px;
+    overflow: hidden;
+    padding-bottom: 15px;
+    position: relative;
+}
+
+.zource-activity-item-icon {
+    left: 0px;
+    position: absolute;
+    top: 0px
+}
+
+.zource-activity-item-summary {
+    padding: 0px 0px 5px 60px;
+}
+
+.zource-activity-item-summary-description {
+    margin-top: 5px;
+}
+
+.zource-activity-item-info {
+    font-size: .9em;
+    padding: 5px 0px 0px 60px;
+
+    img {
+        margin: -3px 5px 0 0;
+        vertical-align: middle;
+    }
+}

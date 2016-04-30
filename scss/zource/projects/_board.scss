@@ -1,0 +1,92 @@
+.zource-board {
+    border-top: 1px solid #CCC;
+    margin-top: 10px;
+    min-height: 650px;
+    padding-top: 20px;
+    width: 100%;
+}
+
+.zource-board-column-headers,
+.zource-board-columns {
+    border-spacing: 10px 0;
+    display: table;
+    list-style-type: none;
+    margin: 0px;
+    padding: 0px;
+    table-layout: fixed;
+    width: 100%;
+
+    li {
+        display: table-cell;
+        width: 1%;
+    }
+}
+
+.zource-board-column-headers li {
+    border-bottom: 5px solid #F5F5F5;
+    padding-bottom: 10px;
+}
+
+.zource-board-columns li {
+    background-color: #F9F9F9;
+}
+
+.zource-board-swimlane-header {
+    font-size: 1.1em;
+    padding: 10px;
+
+    span {
+        color: #CCC;
+        font-size: 0.8em;
+    }
+}
+
+.zource-board-column-title {
+    font-size: 1.1em;
+}
+
+.zource-board-column-content {
+    background-color: #F9F9F9;
+    height: 100%;
+    margin-top: 10px;
+}
+
+.zource-board-entry {
+    background-color: #FFF;
+    border: 1px solid #CCC;
+    cursor: move;
+    margin: 0px 0px -1px 0px;
+    padding: 10px;
+    position: relative;
+}
+
+.zource-board-entry-color {
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 5px;
+}
+
+.zource-board-entry-avatar {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+
+.zource-board-entry-fields {
+    min-height: 66px;
+    padding: 0px 10px 10px 30px;
+}
+
+.zource-board-entry-fields-type {
+    left: 15px;
+    position: absolute;
+    top: 10px;
+}
+
+.zource-board-entry-fields-priority {
+    left: 15px;
+    position: absolute;
+    top: 32px;
+}

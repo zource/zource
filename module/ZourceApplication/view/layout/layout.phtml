@@ -1,25 +1,61 @@
 <?php echo $this->doctype(); ?>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-<?php
-    echo $this->headTitle('Apigility');
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <?php echo $this->headTitle('Zource'); ?>
+
+    <link href="<?php echo $this->basePath('css/zource.css'); ?>" media="screen" rel="stylesheet" type="text/css">
+    <?php
     echo $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0');
-    echo $this->headLink(array('rel' => 'icon', 'type' => 'image/png', 'href' => $this->basePath('/img/favicon.png')))
-        ->prependStylesheet($this->basePath('/zf-apigility/css/main.min.css'))
-        ->prependStylesheet($this->basePath('/zf-apigility/css/bootstrap.min.css'));
-    echo $this->headScript()
-        ->prependFile($this->basePath('/zf-apigility/js/bootstrap.min.js'))
-        ->prependFile($this->basePath('/zf-apigility/js/jquery.min.js'));
-?>
-    </head>
-    <body>
-        <div class="container">
-            <h1>Awesome Layout</h1>
+    echo $this->headLink(array('rel' => 'icon', 'type' => 'image/png', 'href' => $this->basePath('/img/favicon.png')));
+    echo $this->headScript();
+    ?>
+</head>
+<body class="zui-layout-task">
 
-            <?php echo $this->content; ?>
-        </div>
+<div id="wrapper">
+    <header class="zui-top-bar" id="top-bar" role="banner">
+        <nav role="navigation">
+            <div class="zui-header-primary">
+                <h1 class="zui-top-bar-logo">
+                    <a href="<?php echo $this->url('dashboard'); ?>">
+                        Zource
+                    </a>
+                </h1>
+            </div>
+            <div class="zui-top-bar-secondary">
+                <ul class="zui-nav">
+                    <li>
+                        <a href="<?php echo $this->url('login'); ?>">Log in</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
 
-        <?php echo $this->inlineScript() ?>
-    </body>
+    <section id="zource-content" role="main">
+        <?php echo $this->content; ?>
+    </section>
+
+    <footer>
+        <ul>
+            <li><a href="http://github.com/zource">Zource</a></li>
+            <li><a href="http://github.com/zource">About</a></li>
+            <li><a href="http://github.com/zource">Help</a></li>
+        </ul>
+
+        <ul>
+            <li><a href="http://github.com/zource">Powered by a free open source license for Zource.</a></li>
+        </ul>
+    </footer>
+</div>
+
+<script type="text/javascript" src="<?php echo $this->basePath('/vendor/jquery/dist/jquery.min.js'); ?>"></script>
+<script type="text/javascript" src="<?php echo $this->basePath('/vendor/jquery-ui/jquery-ui.min.js'); ?>"></script>
+<script type="text/javascript" src="<?php echo $this->basePath('/vendor/zource-zui/dist/js/zui.min.js'); ?>"></script>
+<script type="text/javascript" src="<?php echo $this->basePath('/js/zource.js'); ?>"></script>
+<?php echo $this->inlineScript() ?>
+</body>
 </html>

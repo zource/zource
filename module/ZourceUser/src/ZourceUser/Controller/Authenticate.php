@@ -7,15 +7,18 @@
  * @license https://raw.githubusercontent.com/zource/zource/master/LICENSE MIT
  */
 
-namespace ZourceApplication\Controller;
+namespace ZourceUser\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
 
-class IndexController extends AbstractActionController
+class Authenticate extends AbstractActionController
 {
-    public function indexAction()
+    public function loginAction()
     {
-        return new ViewModel();
+    }
+
+    public function logoutAction()
+    {
+        return $this->redirect()->toRoute('login');
     }
 }

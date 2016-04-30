@@ -1,0 +1,72 @@
+.gadget-column {
+    @include box-sizing(border-box);
+
+    display: table-cell;
+    vertical-align: top;
+    width: 100%;
+
+    .gadget {
+        border: 1px solid #CCC;
+        margin-bottom: 20px;
+
+        .gadget-header {
+            background-color: $color-primary;
+            padding: 5px;
+
+            h3 {
+                color: #FFF;
+                font-size: $body-font-size - 1px;
+                font-weight: bold;
+                margin: 0px;
+            }
+        }
+    }
+}
+
+.gadget-column + .gadget-column {
+    padding-left: 20px;
+}
+
+.gadget-1col-2col {
+    .gadget-column {
+        display: table-cell;
+        vertical-align: top;
+        width: 30%;
+    }
+
+    .gadget-column + .gadget-column {
+        display: table-cell;
+        vertical-align: top;
+        width: 70%;
+    }
+}
+
+.gadget-2col {
+    .gadget-column {
+        display: table-cell;
+        vertical-align: top;
+        width: 49%;
+    }
+}
+
+.gadget-2col-1col {
+    .gadget-column {
+        display: table-cell;
+        vertical-align: top;
+        width: 70%;
+    }
+
+    .gadget-column + .gadget-column {
+        display: table-cell;
+        vertical-align: top;
+        width: 30%;
+    }
+}
+
+.gadget-3col {
+    .gadget-column {
+        display: table-cell;
+        vertical-align: top;
+        width: 33%;
+    }
+}

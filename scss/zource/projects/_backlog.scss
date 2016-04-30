@@ -1,0 +1,113 @@
+.zource-backlog-sprint {
+    border-bottom: 1px solid #CCC;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+}
+
+.zource-backlog-header {
+    display: table;
+}
+
+.zource-backlog-name {
+    display: table-cell;
+    font-size: 1.1em;
+    font-weight: bold;
+    width: 1%;
+
+    span {
+        color: #999;
+        font-size: 0.9em;
+        font-weight: normal;
+    }
+}
+
+.zource-backlog-options {
+    display: table-cell;
+    text-align: right;
+    width: 1%;
+}
+
+.zource-backlog-info {
+    display: table;
+    padding: 5px 0px 10px 0px;
+    width: 100%;
+}
+
+.zource-backlog-dates,
+.zource-backlog-pages {
+    color: #999;
+    display: table-cell;
+}
+
+.zource-backlog-pages {
+    text-align: right;
+}
+
+.zource-backlog-stats {
+    margin: 0px 0px 10px 0px;
+}
+
+.zource-backlog-stats ul {
+    list-style-type: none;
+    margin: 0px;
+    padding: 0px;
+
+    li {
+        display: inline-block;
+        margin-right: 5px;
+    }
+}
+
+.zource-backlog-issues {
+    margin-top: 10px;
+}
+
+.zource-backlog-issue {
+    background: #FFF;
+    border: 1px solid #ccc;
+    color: #333;
+    cursor: move;
+    font-size: 14px;
+    line-height: 1.42857143;
+    margin-top: -1px;
+    position: relative;
+
+    &:hover {
+        background: #ebf2f9;
+    }
+}
+
+.zource-backlog-issue-color {
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 5px;
+}
+
+.zource-backlog-issue-avatar {
+    position: absolute;
+    right: 5px;
+    top: 3px;
+}
+
+.zource-backlog-issue-fields {
+    padding: 5px 5px 5px 55px;
+}
+
+.zource-backlog-issue-fields-type {
+    left: 15px;
+    position: absolute;
+    top: 6px;
+}
+
+.zource-backlog-issue-fields-priority {
+    left: 35px;
+    position: absolute;
+    top: 6px;
+}
+
+.zource-backlog-issue-fields-key,
+.zource-backlog-issue-fields-summary {
+    display: inline;
+}

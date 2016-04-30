@@ -1,0 +1,93 @@
+.zource-module-container-primary {
+    box-sizing: border-box;
+    display: table-cell;
+    margin: 0;
+    vertical-align: top;
+}
+
+.zource-module {
+    margin-bottom: 20px;
+}
+
+.zource-module .zource-module-header {
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAADCAYAAABS3WWCAAAAGXRFW…I/PvXFWFAAAAAYSURBVHjaYvj//z8D0/Pnz/8zgFgAAQYAS5UJscReGMIAAAAASUVORK5CYII=);
+    background-repeat: repeat-x;
+    background-attachment: scroll;
+    background-position: 0 10px;
+}
+
+.zource-module .zource-module-header h2 {
+    background-color: #FFF;
+    display: inline-block;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    margin: 0px;
+    padding-right: 5px;
+}
+
+.zource-module.zource-collapsed .zource-module-body {
+    display: none;
+}
+
+.zource-module .zource-module-body {
+    margin-top: 10px;
+}
+
+.zource-module .zource-module-body .zource-module-item-list {
+    list-style-type: none;
+    margin: 0px;
+    padding: 0px;
+
+    li {
+        display: table;
+        float: left;
+        line-height: 30px;
+        width: 100%;
+
+        .zource-module-item-name {
+            display: table-cell;
+            width: 150px;
+        }
+
+        .zource-module-item-value {
+            display: table-cell;
+
+            img {
+                vertical-align: text-bottom;
+            }
+        }
+    }
+
+    li.zource-module-item-full-width {
+        width: 100%;
+    }
+
+    &:after {
+        clear: both;
+        content: " ";
+        display: table;
+    }
+
+    &:before {
+        content: " ";
+        display: table;
+    }
+}
+
+.zource-module .zource-module-body .zource-module-item-list.zource-module-item-list-2col li {
+    width: 50%;
+}
+
+.zource-module .zource-module-body .zource-module-item-list.zource-module-item-list-2col li.zource-module-item-full-width {
+    width: 100%;
+}
+
+.zource-module-container-secondary {
+    box-sizing: border-box;
+    display: table-cell;
+    margin: 0;
+    vertical-align: top;
+    width: 35%;
+    padding-left: 30px;
+}

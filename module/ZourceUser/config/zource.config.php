@@ -10,6 +10,11 @@
 namespace ZourceUser;
 
 return [
+    'controllers' => [
+        'factories' => [
+            'ZourceUser\\Controller\\Authenticate' => 'ZourceUser\\Controller\\Service\\AuthenticateFactory',
+        ],
+    ],
     'doctrine' => [
         'driver' => [
             __NAMESPACE__ => [
@@ -30,10 +35,41 @@ return [
             ],
         ],
     ],
+    'router' => [
+        'routes' => [
+            'login' => [
+                'type' => 'Literal',
+                'options' => [
+                    'route' => '/login',
+                    'defaults' => [
+                        'controller' => 'ZourceUser\\Controller\\Authenticate',
+                        'action' => 'login',
+                    ],
+                ],
+            ],
+            'logout' => [
+                'type' => 'Literal',
+                'options' => [
+                    'route' => '/logout',
+                    'defaults' => [
+                        'controller' => 'ZourceUser\\Controller\\Authenticate',
+                        'action' => 'logout',
+                    ],
+                ],
+            ],
+        ],
+    ],
     'validators' => [
         'factories' => [
             'ZourceUser\\Validator\\Directory' => 'ZourceUser\\Validator\\Service\\DirectoryFactory',
             'ZourceUser\\Validator\\IdentityNotExists' => 'ZourceUser\\Validator\\Service\\IdentityNotExistsFactory',
+        ],
+    ],
+    'view_manager' => [
+        'template_map' => [
+            //'oauth/authorize' => __DIR__ . '/../view/oauth/authorize.phtml',
+            //'oauth/receive-code' => __DIR__ . '/../view/oauth/receive-code.phtml',
+            'zource-user/authenticate/login' => __DIR__ . '/../view/zource-user/authenticate/login.phtml',
         ],
     ],
 ];

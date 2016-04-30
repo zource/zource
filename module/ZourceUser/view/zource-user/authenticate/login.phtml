@@ -1,0 +1,29 @@
+<div class="zui-page-panel">
+    <div class="zui-page-content">
+
+        <h2>Login</h2>
+
+        <form action="" method="post">
+            <div class="zui-field-group">
+                <label for="identity">Identity</label>
+                <input type="text" name="identity" value="">
+                <div class="zui-description">Your username.</div>
+            </div>
+
+            <div class="zui-field-group">
+                <label for="credential">Credential</label>
+                <input type="password" name="credential" value="">
+                <div class="zui-description">Your password.</div>
+            </div>
+
+            <div class="zui-buttons-container">
+                <div class="zui-buttons">
+                    <input type="submit" name="submit" value="Login">
+                    <a class="zui-button zui-button-link cancel" href="<?php echo $this->url('dashboard'); ?>">
+                        Do you have trouble logging in?
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

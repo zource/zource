@@ -1,0 +1,36 @@
+@charset "UTF-8";
+
+@import "zource/settings";
+@import "zui";
+
+body {
+    background: #F5F5F5;
+}
+
+.zui-layout-task #zource-content {
+    background-color: inherit;
+    padding-top: 40px;
+}
+
+table > tbody > tr > td,
+table > tbody > tr > th,
+table > tfoot > tr > td,
+table > thead > tr > td,
+table > thead > tr > th {
+    vertical-align: middle;
+}
+
+@import "zource/dashboard";
+@import "zource/layout";
+@import "zource/load-more-button";
+@import "zource/meta-list";
+@import "zource/projects/admin-widgets";
+@import "zource/projects/backlog";
+@import "zource/projects/board";
+@import "zource/projects/summary";
+@import "zource/projects/reports";
+@import "zource/projects/column-editor";
+@import "zource/issues/toolbar";
+@import "zource/issues/modules";
+@import "zource/issues/search";
+@import "zource/issues/activity";
