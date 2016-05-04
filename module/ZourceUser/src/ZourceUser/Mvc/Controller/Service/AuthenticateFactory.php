@@ -17,7 +17,10 @@ class AuthenticateFactory implements FactoryInterface
 {
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $authenticationService = $serviceLocator->getServiceLocator()->get('Zend\\Authentication\\AuthenticationService');
+        $authenticationService = $serviceLocator->getServiceLocator()->get(
+            'Zend\\Authentication\\AuthenticationService'
+        );
+
         $authenticateForm = $serviceLocator->getServiceLocator()->get('ZourceUser\\Form\\Authenticate');
 
         return new Authenticate($authenticationService, $authenticateForm);
