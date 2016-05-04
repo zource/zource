@@ -88,7 +88,7 @@ class Storage implements
             'client_id' => $accessToken->getApplication()->getClientId()->toString(),
             'user_id' => $accessToken->getAccount()->getId()->toString(),
             'expires' => $accessToken->getExpires()->format('U'),
-            'scope' => $accessToken->getAccount()->getId()->toString(),
+            'scope' => $accessToken->getScope(),
             'id_token' => null,
         ];
     }
@@ -222,11 +222,22 @@ class Storage implements
         return true;
     }
 
-    public function getRefreshToken($refresh_token)
+    public function getRefreshToken($oauthToken)
     {
-        var_dump(__METHOD__);
-        var_dump($refresh_token);
-        exit;
+        /** @var OAuthRefreshToken $refreshToken */
+        $refreshToken = $this->entityManager->getRepository(OAuthRefreshToken::class)->find($oauthToken);
+
+        if (!$refreshToken) {
+            return null;
+        }
+
+        return [
+            'refresh_token' => null,
+            'client_id' => $refreshToken->getApplication()->getClientId()->toString(),
+            'user_id' => $refreshToken->getAccount()->getId()->toString(),
+            'expires' => $refreshToken->getExpires()->format('U'),
+            'scope' => $refreshToken->getScope(),
+        ];
     }
 
     public function setRefreshToken($refreshToken, $clientId, $userId, $expires, $scope = null)
@@ -252,11 +263,14 @@ class Storage implements
         $this->entityManager->flush($refreshToken);
     }
 
-    public function unsetRefreshToken($refresh_token)
+    public function unsetRefreshToken($refreshToken)
     {
-        var_dump(__METHOD__);
-        var_dump($refresh_token);
-        exit;
+        $qb = $this->entityManager->createQueryBuilder();
+        $qb->delete();
+        $qb->from(OAuthRefreshToken::class, 't');
+        $qb->where($qb->expr()->eq('t.refreshToken', ':token'));
+        $qb->setParameter(':token', $refreshToken);
+        $qb->getQuery()->execute();
     }
 
     public function checkUserCredentials($username, $password)
