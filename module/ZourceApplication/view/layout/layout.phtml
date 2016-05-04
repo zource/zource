@@ -25,21 +25,11 @@
                     </a>
                 </h1>
             </div>
+
+            <?php echo $this->zourceUiNav('top-bar-primary'); ?>
+
             <div class="zui-top-bar-secondary">
-                <ul class="zui-nav">
-                    <li>
-                        <?php if ($this->identity()) { ?>
-                            <a href="<?php echo $this->url('logout'); ?>"><?php echo $this->translate('layoutTopMenuLogout'); ?></a>
-                        <?php } else { ?>
-                            <a href="<?php echo $this->url('login'); ?>"><?php echo $this->translate('layoutTopMenuLogin'); ?></a>
-                        <?php } ?>
-                    </li>
-                    <?php if (class_exists('\ZF\Apigility\Admin\Module', false)) { ?>
-                        <li>
-                            <a href="<?php echo $this->url('zf-apigility/ui'); ?>">Apigility</a>
-                        </li>
-                    <?php } ?>
-                </ul>
+                <?php echo $this->zourceUiNav('top-bar-secondary'); ?>
             </div>
         </nav>
     </header>

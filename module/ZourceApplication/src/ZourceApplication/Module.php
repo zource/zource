@@ -9,10 +9,14 @@
 
 namespace ZourceApplication;
 
+use Zend\ModuleManager\Listener\ServiceListener;
+use Zend\ModuleManager\ModuleManager;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Zend\Stdlib\ArrayUtils;
 use ZF\Apigility\Provider\ApigilityProviderInterface;
+use ZourceApplication\Authorization\Condition\Service\PluginManager as AuthorizationConditionPluginManager;
+use ZourceApplication\Ui\Navigation\Item\Service\PluginManager as UiNavigationItemPluginManager;
 
 class Module implements ApigilityProviderInterface
 {
@@ -22,6 +26,14 @@ class Module implements ApigilityProviderInterface
             include __DIR__ . '/../../config/module.config.php',
             include __DIR__ . '/../../config/zource.config.php'
         );
+    }
+
+    public function init(ModuleManager $moduleManager)
+    {
+        /** @var ServiceListener $serviceListener */
+        $serviceListener = $moduleManager->getEvent()->getParam('ServiceManager')->get('ServiceListener');
+        $serviceListener->addServiceManager(AuthorizationConditionPluginManager::class, 'zource_conditions', '', '');
+        $serviceListener->addServiceManager(UiNavigationItemPluginManager::class, 'zource_ui_nav_items', '', '');
     }
 
     public function onBootstrap(MvcEvent $e)

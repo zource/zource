@@ -9,10 +9,24 @@
 
 namespace ZourceApplication;
 
+use Doctrine\ORM\Mapping\UnderscoreNamingStrategy;
+use Zend\Cache\Service\StorageCacheAbstractServiceFactory;
+use Zend\Db\Adapter\AdapterAbstractServiceFactory;
+use Zend\Form\FormAbstractServiceFactory;
+use Zend\Log\LoggerAbstractServiceFactory;
+use ZourceApplication\Authorization\Condition\ClassExists;
+use ZourceApplication\Authorization\Condition\Service\PluginManager as AuthorizationConditionPluginManager;
+use ZourceApplication\Mvc\Controller\Index;
+use ZourceApplication\UI\Navigation\Item\Service\ItemAbstractFactory;
+use ZourceApplication\UI\Navigation\Item\Service\PluginManager as UiNavigationItemPluginManager;
+use ZourceApplication\Validator\Service\UuidFactory;
+use ZourceApplication\Validator\Uuid;
+use ZourceApplication\View\Helper\UI\Service\NavFactory;
+
 return [
     'controllers' => [
         'invokables' => [
-            'ZourceApplication\\Controller\\Index' => 'ZourceApplication\\Controller\\IndexController',
+            Index::class => Index::class,
         ],
     ],
     'router' => [
@@ -27,7 +41,7 @@ return [
                 'options' => [
                     'route' => '/',
                     'defaults' => [
-                        'controller' => 'ZourceApplication\\Controller\\Index',
+                        'controller' => Index::class,
                         'action' => 'index',
                     ],
                 ],
@@ -36,13 +50,15 @@ return [
     ],
     'service_manager' => [
         'abstract_factories' => [
-            'Zend\\Cache\\Service\\StorageCacheAbstractServiceFactory',
-            'Zend\\Db\\Adapter\\AdapterAbstractServiceFactory',
-            'Zend\\Form\\FormAbstractServiceFactory',
-            'Zend\\Log\\LoggerAbstractServiceFactory',
+            StorageCacheAbstractServiceFactory::class,
+            AdapterAbstractServiceFactory::class,
+            FormAbstractServiceFactory::class,
+            LoggerAbstractServiceFactory::class,
         ],
         'invokables' => [
-            'UnderscoreNamingStrategy' => 'Doctrine\\ORM\\Mapping\\UnderscoreNamingStrategy',
+            'UnderscoreNamingStrategy' => UnderscoreNamingStrategy::class,
+            AuthorizationConditionPluginManager::class => AuthorizationConditionPluginManager::class,
+            UiNavigationItemPluginManager::class => UiNavigationItemPluginManager::class,
         ],
     ],
     'translator' => [
@@ -56,7 +72,12 @@ return [
     ],
     'validators' => [
         'factories' => [
-            'ZourceApplication\\Validator\\Uuid' => 'ZourceApplication\\Validator\\Service\\UuidFactory',
+            Uuid::class => UuidFactory::class,
+        ],
+    ],
+    'view_helpers' => [
+        'factories' => [
+            'zourceUiNav' => NavFactory::class,
         ],
     ],
     'view_manager' => [
@@ -70,11 +91,46 @@ return [
             'zource-application/index/index' => __DIR__ . '/../view/zource-application/index/index.phtml',
         ],
     ],
-    'zource' => [
-        'guard' => [
-            'identity' => [
-                'dashboard' => true,
+    'zource_conditions' => [
+        'invokables' => [
+            'ClassExists' => ClassExists::class,
+        ],
+    ],
+    'zource_guard' => [
+        'identity' => [
+            'dashboard' => true,
+        ],
+    ],
+    'zource_nav' => [
+        'top-bar-primary' => [],
+        'top-bar-secondary' => [
+            'items' => [
+                'apigility' => [
+                    'type' => 'label',
+                    'priority' => 10000,
+                    'options' => [
+                        'label' => 'Apigility',
+                        'route' => 'zf-apigility/ui',
+                        'title' => 'Enter the Apigility development environment.',
+                    ],
+                    'conditions' => [
+                        'class-exists' => [
+                            'type' => 'ClassExists',
+                            'options' => [
+                                'fqcn' => 'ZF\\Apigility\\Admin\\Module',
+                            ],
+                        ],
+                    ],
+                ],
             ],
+        ],
+    ],
+    'zource_ui_nav_items' => [
+        'abstract_factories' => [
+            ItemAbstractFactory::class,
+        ],
+        'aliases' => [
+            'label' => 'ZourceApplication\\UI\\Navigation\\Item\\Label',
         ],
     ],
 ];

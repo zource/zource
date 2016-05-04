@@ -32,7 +32,7 @@ class IdentityGuard extends AbstractListenerAggregate
         }
 
         $config = $serviceManager->get('Config');
-        $identityGuards = $config['zource']['guard']['identity'];
+        $identityGuards = $config['zource_guard']['identity'];
         $needsIdentity = null;
 
         foreach ($identityGuards as $guard => $needed) {

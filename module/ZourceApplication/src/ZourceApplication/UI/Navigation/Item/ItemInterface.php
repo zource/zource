@@ -7,15 +7,9 @@
  * @license https://raw.githubusercontent.com/zource/zource/master/LICENSE MIT
  */
 
-namespace ZourceApplication\Controller;
+namespace ZourceApplication\UI\Navigation\Item;
 
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
-
-class IndexController extends AbstractActionController
+interface ItemInterface
 {
-    public function indexAction()
-    {
-        return new ViewModel();
-    }
+    public function render(array $item);
 }

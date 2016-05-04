@@ -1,10 +1,10 @@
 <?php
-return array(
-    'zenddevelopertools' => array(
+return [
+    'zenddevelopertools' => [
         /**
          * General Profiler settings
          */
-        'profiler' => array(
+        'profiler' => [
             /**
              * Enables or disables the profiler.
              *
@@ -53,30 +53,30 @@ return array(
              * If a matches is defined, the profiler will be disabled if the
              * request does not match the pattern.
              *
-             * Example: 'matcher' => array('ip' => '127.0.0.1')
+             * Example: 'matcher' => ['ip' => '127.0.0.1')
              *          OR
-             *          'matcher' => array('url' => array('path' => '/admin')
+             *          'matcher' => ['url' => ['path' => '/admin')
              *
              * Note: The matcher is not implemented yet!
              */
-            'matcher' => array(),
+            'matcher' => [],
 
             /**
              * Contains a list with all collector the profiler should run.
-             * Zend Developer Tools ships with 'db' (Zend\Db), 'time', 'event', 'memory',
+             * Zend Developer Tools ships with 'db' (Zend\Db], 'time', 'event', 'memory',
              * 'exception', 'request' and 'mail' (Zend\Mail). If you wish to disable a default
              * collector, simply set the value to null or false.
              *
-             * Example: 'collectors' => array('db' => null)
+             * Example: 'collectors' => ['db' => null)
              *
              * Expects: array
              */
-            'collectors' => array(),
-        ),
+            'collectors' => [],
+        ],
         /**
          * General Toolbar settings
          */
-        'toolbar' => array(
+        'toolbar' => [
             /**
              * Enables or disables the Toolbar.
              *
@@ -116,21 +116,21 @@ return array(
              * Contains a list with all collector toolbar templates. The name
              * of the array key must be same as the name of the collector.
              *             *
-             * Example: 'profiler' => array(
-             *              'collectors' => array(
+             * Example: 'profiler' => [
+             *              'collectors' => [
              *                  // My_Collector_Example::getName() -> mycollector
              *                  'MyCollector' => 'My_Collector_Example',
              *              )
-             *          ),
-             *          'toolbar' => array(
-             *              'entries' => array(
+             *          ],
+             *          'toolbar' => [
+             *              'entries' => [
              *                  'mycollector' => 'example/toolbar/my-collector',
              *              )
-             *          ),
+             *          ],
              *
              * Expects: array
              */
-            'entries' => array(),
-        ),
-    ),
-);
+            'entries' => [],
+        ],
+    ],
+];

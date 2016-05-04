@@ -166,18 +166,21 @@ return [
             'zource-user/o-auth/receive-code' => __DIR__ . '/../view/zource-user/o-auth/receive-code.phtml',
         ],
     ],
-    'zource' => [
-        'guard' => [
-            'identity' => [
-                'login' => false,
-                'logout' => true,
-                'oauth/authorize' => true,
-                'oauth/token' => false,
-                'oauth' => false,
-                'zf-apigility/*' => false,
-            ],
-            'routes' => [
-            ],
+    'zource_conditions' => [
+        'factories' => [
+            'UserHasIdentity' => 'ZourceUser\\Authorization\\Condition\\Service\\UserHasIdentityFactory',
+        ],
+    ],
+    'zource_guard' => [
+        'identity' => [
+            'login' => false,
+            'logout' => true,
+            'oauth/authorize' => true,
+            'oauth/token' => false,
+            'oauth' => false,
+            'zf-apigility/*' => false,
+        ],
+        'routes' => [
         ],
     ],
     'zource_oauth' => [
@@ -185,6 +188,42 @@ return [
             'access_lifetime' => 3600,
             'allow_implicit' => true,
             'enforce_state' => true,
+        ],
+    ],
+    'zource_nav' => [
+        'top-bar-primary' => [],
+        'top-bar-secondary' => [
+            'items' => [
+                'login' => [
+                    'type' => 'label',
+                    'priority' => 1000,
+                    'options' => [
+                        'label' => 'layoutTopMenuLogin',
+                        'route' => 'login',
+                    ],
+                    'conditions' => [
+                        'user-has-identity' => [
+                            'type' => 'UserHasIdentity',
+                            'invert' => true,
+                            'options' => [],
+                        ],
+                    ],
+                ],
+                'logout' => [
+                    'type' => 'label',
+                    'priority' => 1000,
+                    'options' => [
+                        'label' => 'layoutTopMenuLogout',
+                        'route' => 'logout',
+                    ],
+                    'conditions' => [
+                        'user-has-identity' => [
+                            'type' => 'UserHasIdentity',
+                            'options' => [],
+                        ],
+                    ],
+                ],
+            ],
         ],
     ],
     'zf-oauth2' => [

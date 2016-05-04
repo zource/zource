@@ -30,7 +30,7 @@ class RouteGuard extends AbstractListenerAggregate
         }
 
         $config = $serviceManager->get('Config');
-        $routeGuards = $config['zource']['guard']['routes'];
+        $routeGuards = $config['zource_guard']['routes'];
 
         $routeOptions = null;
 
