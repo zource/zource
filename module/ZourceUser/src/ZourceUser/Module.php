@@ -9,15 +9,33 @@
 
 namespace ZourceUser;
 
+use Zend\Console\Console;
+use Zend\Mvc\MvcEvent;
+use Zend\Stdlib\ArrayUtils;
 use ZF\Apigility\Provider\ApigilityProviderInterface;
+use ZourceUser\Listener\IdentityGuard;
+use ZourceUser\Listener\RouteGuard;
 
 class Module implements ApigilityProviderInterface
 {
     public function getConfig()
     {
-        return array_merge(
+        return ArrayUtils::merge(
             include __DIR__ . '/../../config/module.config.php',
             include __DIR__ . '/../../config/zource.config.php'
         );
+    }
+
+    public function onBootstrap(MvcEvent $e)
+    {
+        if (!Console::isConsole()) {
+            $eventManager = $e->getApplication()->getEventManager();
+            
+            $guard = new IdentityGuard();
+            $guard->attach($eventManager);
+
+            $guard = new RouteGuard();
+            $guard->attach($eventManager);
+        }
     }
 }

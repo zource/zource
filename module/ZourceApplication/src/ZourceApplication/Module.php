@@ -9,15 +9,16 @@
 
 namespace ZourceApplication;
 
-use ZF\Apigility\Provider\ApigilityProviderInterface;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
+use Zend\Stdlib\ArrayUtils;
+use ZF\Apigility\Provider\ApigilityProviderInterface;
 
 class Module implements ApigilityProviderInterface
 {
     public function getConfig()
     {
-        return array_merge(
+        return ArrayUtils::merge(
             include __DIR__ . '/../../config/module.config.php',
             include __DIR__ . '/../../config/zource.config.php'
         );
@@ -29,5 +30,12 @@ class Module implements ApigilityProviderInterface
 
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
+
+        $viewHelperManager = $e->getApplication()->getServiceManager()->get('ViewHelperManager');
+
+        $formElementErrors = $viewHelperManager->get('formElementErrors');
+        $formElementErrors->setMessageOpenFormat('<div class="zui-error">');
+        $formElementErrors->setMessageSeparatorString('</div><div>');
+        $formElementErrors->setMessageCloseString('</div>');
     }
 }

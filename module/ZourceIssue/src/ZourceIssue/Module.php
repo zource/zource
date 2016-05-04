@@ -9,13 +9,14 @@
 
 namespace ZourceIssue;
 
+use Zend\Stdlib\ArrayUtils;
 use ZF\Apigility\Provider\ApigilityProviderInterface;
 
 class Module implements ApigilityProviderInterface
 {
     public function getConfig()
     {
-        return array_merge(
+        return ArrayUtils::merge(
             include __DIR__ . '/../../config/module.config.php',
             include __DIR__ . '/../../config/zource.config.php'
         );

@@ -91,11 +91,12 @@ return array(
     'zf-versioning' => array(
         'uri' => array(
             0 => 'zource-user.rest.account',
-            1 => 'zource-user.rest.email',
-            2 => 'zource-user.rest.group',
-            3 => 'zource-user.rest.identity',
-            4 => 'zource-user.rest.session',
-            5 => 'zource-user.rpc.group-register',
+            1 => 'zource-user.rest.account-details',
+            3 => 'zource-user.rest.email',
+            4 => 'zource-user.rest.group',
+            5 => 'zource-user.rest.identity',
+            6 => 'zource-user.rest.session',
+            7 => 'zource-user.rpc.group-register',
         ),
     ),
     'zf-rest' => array(
@@ -108,11 +109,9 @@ return array(
                 0 => 'GET',
                 1 => 'PATCH',
                 2 => 'PUT',
-                3 => 'DELETE',
             ),
             'collection_http_methods' => array(
                 0 => 'GET',
-                1 => 'POST',
             ),
             'collection_query_whitelist' => array(),
             'page_size' => 25,

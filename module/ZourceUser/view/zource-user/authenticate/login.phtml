@@ -1,29 +1,34 @@
 <div class="zui-page-panel">
     <div class="zui-page-content">
 
-        <h2>Login</h2>
+        <h2><?php echo $this->translate('loginFormTitle'); ?></h2>
 
-        <form action="" method="post">
+        <?php echo $this->form()->openTag($this->authenticateForm); ?>
+            <?php echo $this->formHidden($this->authenticateForm->get('token')); ?>
+
             <div class="zui-field-group">
-                <label for="identity">Identity</label>
-                <input type="text" name="identity" value="">
-                <div class="zui-description">Your username.</div>
+                <?php echo $this->formLabel($this->authenticateForm->get('identity')); ?>
+                <?php echo $this->formText($this->authenticateForm->get('identity')); ?>
+                <div class="zui-description"><?php echo $this->translate('loginFormInputIdentityTooltip'); ?></div>
+                <?php echo $this->formElementErrors($this->authenticateForm->get('identity')); ?>
             </div>
 
             <div class="zui-field-group">
-                <label for="credential">Credential</label>
-                <input type="password" name="credential" value="">
-                <div class="zui-description">Your password.</div>
+                <?php echo $this->formLabel($this->authenticateForm->get('credential')); ?>
+                <?php echo $this->formPassword($this->authenticateForm->get('credential')); ?>
+                <div class="zui-description"><?php echo $this->translate('loginFormInputCredentialTooltip'); ?></div>
+                <?php echo $this->formElementErrors($this->authenticateForm->get('credential')); ?>
             </div>
 
             <div class="zui-buttons-container">
                 <div class="zui-buttons">
-                    <input type="submit" name="submit" value="Login">
+                    <?php echo $this->formSubmit($this->authenticateForm->get('submit')); ?>
+
                     <a class="zui-button zui-button-link cancel" href="<?php echo $this->url('dashboard'); ?>">
-                        Do you have trouble logging in?
+                        <?php echo $this->translate('loginFormRequestPassword'); ?>
                     </a>
                 </div>
             </div>
-        </form>
+        <?php echo $this->form()->closeTag(); ?>
     </div>
 </div>

@@ -38,10 +38,20 @@ return [
         'abstract_factories' => [
             'Zend\\Cache\\Service\\StorageCacheAbstractServiceFactory',
             'Zend\\Db\\Adapter\\AdapterAbstractServiceFactory',
+            'Zend\\Form\\FormAbstractServiceFactory',
             'Zend\\Log\\LoggerAbstractServiceFactory',
         ],
         'invokables' => [
             'UnderscoreNamingStrategy' => 'Doctrine\\ORM\\Mapping\\UnderscoreNamingStrategy',
+        ],
+    ],
+    'translator' => [
+        'translation_file_patterns' => [
+            [
+                'type' => 'phparray',
+                'base_dir' => __DIR__ . '/../language',
+                'pattern' => '%s.php',
+            ],
         ],
     ],
     'validators' => [
@@ -58,6 +68,13 @@ return [
             'error/index' => __DIR__ . '/../view/error/index.phtml',
             'layout/layout' => __DIR__ . '/../view/layout/layout.phtml',
             'zource-application/index/index' => __DIR__ . '/../view/zource-application/index/index.phtml',
+        ],
+    ],
+    'zource' => [
+        'guard' => [
+            'identity' => [
+                'dashboard' => true,
+            ],
         ],
     ],
 ];

@@ -10,7 +10,6 @@
 return [
     'modules' => [
         'ZendDeveloperTools',
-        'ZFTool',
         'ZF\\Apigility\\Admin',
     ],
     'module_listener_options' => [

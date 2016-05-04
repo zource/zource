@@ -1,19 +1,17 @@
 <?php
 return array(
-    'router' => array(
-        'routes' => array(
-            'oauth2' => array(
-                'options' => array(
-                    'spec' => '%oauth%',
-                    'regex' => '(?P<oauth>(/authenticate/oauth))',
-                ),
-                'type' => 'regex',
-            ),
-        ),
+    'translator' => array(
+        'locale' => 'en-US',
     ),
     'zf-mvc-auth' => array(
         'authentication' => array(
-            'map' => array(),
+            'map' => array(
+                'ZourceApplication\\V1' => 'oauth2',
+                'ZourceCalendar\\V1' => 'oauth2',
+                'ZourceIssue\\V1' => 'oauth2',
+                'ZourceProject\\V1' => 'oauth2',
+                'ZourceUser\\V1' => 'oauth2',
+            ),
         ),
     ),
 );

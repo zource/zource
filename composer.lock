@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "9e2edaf511f572746beb275e461d0cf4",
-    "content-hash": "4b4fd899342282b227807c74b47447e5",
+    "hash": "dfa2a2740016ee2d227cfc66c92dbca4",
+    "content-hash": "b0aa57857f731c7d3fbc3fa771cd3a79",
     "packages": [
         {
             "name": "bshaffer/oauth2-server-php",
@@ -3655,16 +3655,16 @@
         },
         {
             "name": "zendframework/zend-form",
-            "version": "2.8.1",
+            "version": "2.8.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-form.git",
-                "reference": "59c483b06dd1f281a1f2f961e81107bd282a07f7"
+                "reference": "0e8cce481470443b716a155e5f6bf40242d30635"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-form/zipball/59c483b06dd1f281a1f2f961e81107bd282a07f7",
-                "reference": "59c483b06dd1f281a1f2f961e81107bd282a07f7",
+                "url": "https://api.github.com/repos/zendframework/zend-form/zipball/0e8cce481470443b716a155e5f6bf40242d30635",
+                "reference": "0e8cce481470443b716a155e5f6bf40242d30635",
                 "shasum": ""
             },
             "require": {
@@ -3676,10 +3676,11 @@
             "require-dev": {
                 "doctrine/annotations": "~1.0",
                 "fabpot/php-cs-fixer": "1.7.*",
-                "phpunit/phpunit": "~4.0",
+                "phpunit/phpunit": "^4.8",
                 "zendframework/zend-cache": "^2.6.1",
                 "zendframework/zend-captcha": "^2.5.4",
                 "zendframework/zend-code": "^2.6",
+                "zendframework/zend-escaper": "^2.5",
                 "zendframework/zend-eventmanager": "^2.6.2 || ^3.0",
                 "zendframework/zend-filter": "^2.6",
                 "zendframework/zend-i18n": "^2.6",
@@ -3715,7 +3716,10 @@
             "autoload": {
                 "psr-4": {
                     "Zend\\Form\\": "src/"
-                }
+                },
+                "files": [
+                    "autoload/formElementManagerPolyfill.php"
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -3726,7 +3730,7 @@
                 "form",
                 "zf2"
             ],
-            "time": "2016-04-18 18:28:33"
+            "time": "2016-05-01 20:34:32"
         },
         {
             "name": "zendframework/zend-http",
@@ -7175,129 +7179,6 @@
             "time": "2016-04-03 22:58:34"
         },
         {
-            "name": "zendframework/zenddiagnostics",
-            "version": "v1.0.9",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/zendframework/ZendDiagnostics.git",
-                "reference": "292653c287a9e9d811417d4cb8a0025a4c1894cf"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/ZendDiagnostics/zipball/292653c287a9e9d811417d4cb8a0025a4c1894cf",
-                "reference": "292653c287a9e9d811417d4cb8a0025a4c1894cf",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.3"
-            },
-            "require-dev": {
-                "doctrine/migrations": "~1.0@dev",
-                "guzzle/http": "3.*",
-                "guzzle/plugin-mock": "3.*",
-                "mikey179/vfsstream": "1.6.*",
-                "phpunit/phpunit": "4.7.*",
-                "predis/predis": "0.8.*",
-                "sensiolabs/security-checker": "1.3.*@dev",
-                "symfony/yaml": "v2.3.11",
-                "videlalvaro/php-amqplib": "2.*",
-                "zendframework/zend-loader": "2.*"
-            },
-            "suggest": {
-                "doctrine/migrations": "Required by Check\\DoctrineMigration",
-                "ext-bcmath": "Required by Check\\CpuPerformance",
-                "guzzle/http": "Required by Check\\GuzzleHttpService",
-                "predis/predis": "Required by Check\\Redis",
-                "sensiolabs/security-checker": "Required by Check\\SecurityAdvisory",
-                "symfony/yaml": "Required by Check\\YamlFile",
-                "videlalvaro/php-amqplib": "Required by Check\\RabbitMQ"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "ZendDiagnostics\\": "src/",
-                    "ZendDiagnosticsTest\\": "tests/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "description": "A set of components for performing diagnostic tests in PHP applications",
-            "homepage": "https://github.com/zendframework/ZendDiagnostics",
-            "keywords": [
-                "diagnostics",
-                "php",
-                "test"
-            ],
-            "time": "2016-04-01 10:39:00"
-        },
-        {
-            "name": "zendframework/zftool",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/zendframework/ZFTool.git",
-                "reference": "840c3eecd58454396983d84d1da293813af484af"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/ZFTool/zipball/840c3eecd58454396983d84d1da293813af484af",
-                "reference": "840c3eecd58454396983d84d1da293813af484af",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.3",
-                "zendframework/zend-code": ">=2.2.2",
-                "zendframework/zend-config": ">=2.2.2",
-                "zendframework/zend-console": ">=2.2.2",
-                "zendframework/zend-file": ">=2.2.2",
-                "zendframework/zend-form": ">=2.2.2",
-                "zendframework/zend-http": ">=2.2.2",
-                "zendframework/zend-i18n": ">=2.2.2",
-                "zendframework/zend-loader": ">=2.2.2",
-                "zendframework/zend-log": ">=2.2.2",
-                "zendframework/zend-modulemanager": ">=2.2.2",
-                "zendframework/zend-mvc": ">=2.2.2",
-                "zendframework/zend-serializer": ">=2.2.2",
-                "zendframework/zend-servicemanager": ">=2.2.2",
-                "zendframework/zend-stdlib": ">=2.2.2",
-                "zendframework/zend-text": ">=2.2.2",
-                "zendframework/zend-version": ">=2.2.2 ",
-                "zendframework/zend-view": ">=2.2.2",
-                "zendframework/zenddiagnostics": ">=1.0.0"
-            },
-            "require-dev": {
-                "fabpot/php-cs-fixer": "1.7.*",
-                "phpunit/phpunit": "4.*"
-            },
-            "bin": [
-                "zf.php"
-            ],
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "ZFTool\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "description": "Utility module for Zend Framework 2 applications.",
-            "homepage": "http://framework.zend.com/",
-            "keywords": [
-                "tool",
-                "zf2"
-            ],
-            "time": "2015-10-21 07:40:59"
-        },
-        {
             "name": "zfcampus/zf-apigility-admin",
             "version": "1.4.1",
             "source": {
@@ -7531,9 +7412,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "zendframework/zftool": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

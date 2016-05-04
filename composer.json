@@ -18,7 +18,6 @@
         "ramsey/uuid-doctrine": "^1.2"
     },
     "require-dev": {
-        "zendframework/zftool": "dev-master",
         "zfcampus/zf-apigility-admin": "^1.4.1",
         "zfcampus/zf-apigility-admin-ui": "^1.2.3",
         "zfcampus/zf-deploy": "~1.0",

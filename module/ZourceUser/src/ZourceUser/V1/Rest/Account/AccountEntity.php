@@ -38,23 +38,19 @@ class AccountEntity
      */
     private $groups;
 
-
     /**
-     * @ORM\Column(type="string")
-     * @var string
+     * @ORM\Column(type="string", length=60)
+     * @var string|null
      */
-    private $displayName;
+    private $credential;
 
     /**
      * Initializes a new instance of this class.
-     *
-     * @param string $displayName The display name of the account.
      */
-    public function __construct($displayName)
+    public function __construct()
     {
         $this->id = Uuid::uuid4();
         $this->groups = new ArrayCollection();
-        $this->displayName = $displayName;
     }
 
     /**
@@ -78,22 +74,18 @@ class AccountEntity
     }
 
     /**
-     * Gets the display name of the account.
-     *
-     * @return string
+     * @return null|string
      */
-    public function getDisplayName()
+    public function getCredential()
     {
-        return $this->displayName;
+        return $this->credential;
     }
 
     /**
-     * Sets the display name of the account.
-     *
-     * @param string $displayName The new display name of the account.
+     * @param null|string $credential
      */
-    public function setDisplayName($displayName)
+    public function setCredential($credential)
     {
-        $this->displayName = $displayName;
+        $this->credential = $credential;
     }
 }

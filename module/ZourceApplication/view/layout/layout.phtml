@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <?php echo $this->headTitle('Zource'); ?>
+    <?php echo $this->headTitle('headTitle'); ?>
 
     <link href="<?php echo $this->basePath('css/zource.css'); ?>" media="screen" rel="stylesheet" type="text/css">
     <?php
@@ -21,15 +21,24 @@
             <div class="zui-header-primary">
                 <h1 class="zui-top-bar-logo">
                     <a href="<?php echo $this->url('dashboard'); ?>">
-                        Zource
+                        <?php echo $this->translate('layoutTopMenuTitle'); ?>
                     </a>
                 </h1>
             </div>
             <div class="zui-top-bar-secondary">
                 <ul class="zui-nav">
                     <li>
-                        <a href="<?php echo $this->url('login'); ?>">Log in</a>
+                        <?php if ($this->identity()) { ?>
+                            <a href="<?php echo $this->url('logout'); ?>"><?php echo $this->translate('layoutTopMenuLogout'); ?></a>
+                        <?php } else { ?>
+                            <a href="<?php echo $this->url('login'); ?>"><?php echo $this->translate('layoutTopMenuLogin'); ?></a>
+                        <?php } ?>
                     </li>
+                    <?php if (class_exists('\ZF\Apigility\Admin\Module', false)) { ?>
+                        <li>
+                            <a href="<?php echo $this->url('zf-apigility/ui'); ?>">Apigility</a>
+                        </li>
+                    <?php } ?>
                 </ul>
             </div>
         </nav>
@@ -41,13 +50,13 @@
 
     <footer>
         <ul>
-            <li><a href="http://github.com/zource">Zource</a></li>
-            <li><a href="http://github.com/zource">About</a></li>
-            <li><a href="http://github.com/zource">Help</a></li>
+            <li><a href="http://github.com/zource"><?php echo $this->translate('layoutFooterMenuZource'); ?></a></li>
+            <li><a href="http://github.com/zource"><?php echo $this->translate('layoutFooterMenuAbout'); ?></a></li>
+            <li><a href="http://github.com/zource"><?php echo $this->translate('layoutFooterMenuHelp'); ?></a></li>
         </ul>
 
         <ul>
-            <li><a href="http://github.com/zource">Powered by a free open source license for Zource.</a></li>
+            <li><a href="http://github.com/zource"><?php echo $this->translate('layoutFooterPoweredByLicenseOpenSource'); ?></a></li>
         </ul>
     </footer>
 </div>

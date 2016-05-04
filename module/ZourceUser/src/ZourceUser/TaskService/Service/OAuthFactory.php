@@ -7,16 +7,20 @@
  * @license https://raw.githubusercontent.com/zource/zource/master/LICENSE MIT
  */
 
-namespace ZourceUser\Controller\Service;
+namespace ZourceUser\TaskService\Service;
 
+use Closure;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use ZourceUser\Controller\Authenticate;
+use ZourceUser\TaskService\OAuth;
 
-class AuthenticateFactory implements FactoryInterface
+class OAuthFactory implements FactoryInterface
 {
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        return new Authenticate();
+        /** @var Closure $server */
+        $server = $serviceLocator->get('ZF\OAuth2\Service\OAuth2Server');
+
+        return new OAuth($server());
     }
 }
