@@ -22,3 +22,7 @@ script:
   - composer validate --strict
   - vendor/bin/phpcs --standard=ruleset.xml
   - vendor/bin/phpunit
+
+notifications:
+  email: false
+  irc: "irc.freenode.org#zource"
