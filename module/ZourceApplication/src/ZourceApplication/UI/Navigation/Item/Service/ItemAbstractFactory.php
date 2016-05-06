@@ -22,9 +22,8 @@ class ItemAbstractFactory implements AbstractFactoryInterface
 
     public function createServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
     {
-        $conditionManager = $serviceLocator->getServiceLocator()->get(ConditionPluginManager::class);
         $view = $serviceLocator->getServiceLocator()->get('ViewRenderer');
 
-        return new $requestedName($conditionManager, $view);
+        return new $requestedName($view);
     }
 }

@@ -169,6 +169,7 @@ return [
     'zource_conditions' => [
         'factories' => [
             'UserHasIdentity' => 'ZourceUser\\Authorization\\Condition\\Service\\UserHasIdentityFactory',
+            'UserHasRole' => 'ZourceUser\\Authorization\\Condition\\Service\\UserHasRoleFactory',
         ],
     ],
     'zource_guard' => [
@@ -183,15 +184,7 @@ return [
         'routes' => [
         ],
     ],
-    'zource_oauth' => [
-        'server_options' => [
-            'access_lifetime' => 3600,
-            'allow_implicit' => true,
-            'enforce_state' => true,
-        ],
-    ],
     'zource_nav' => [
-        'top-bar-primary' => [],
         'top-bar-secondary' => [
             'items' => [
                 'login' => [
@@ -209,12 +202,12 @@ return [
                         ],
                     ],
                 ],
-                'logout' => [
-                    'type' => 'label',
+                'profile' => [
+                    'type' => 'dropdown',
                     'priority' => 1000,
                     'options' => [
-                        'label' => 'layoutTopMenuLogout',
-                        'route' => 'logout',
+                        'label' => 'layoutTopMenuProfile',
+                        'route' => 'dashboard',
                     ],
                     'conditions' => [
                         'user-has-identity' => [
@@ -222,8 +215,60 @@ return [
                             'options' => [],
                         ],
                     ],
+                    'child_items' => [
+                        'header' => [
+                            'type' => 'header',
+                            'priority' => 100,
+                            'options' => [
+                                'label' => 'layoutTopMenuProfileHeader',
+                            ],
+                        ],
+                        'settings' => [
+                            'type' => 'label',
+                            'priority' => 1000,
+                            'options' => [
+                                'label' => 'layoutTopMenuSettings',
+                                'route' => 'logout',
+                            ],
+                        ],
+                        'admin' => [
+                            'type' => 'label',
+                            'priority' => 2000,
+                            'options' => [
+                                'label' => 'layoutTopMenuAdmin',
+                                'route' => 'logout',
+                            ],
+                            'conditions' => [
+                                'user-has-identity' => [
+                                    'type' => 'UserHasRole',
+                                    'options' => [
+                                        'role' => 'admin',
+                                    ],
+                                ],
+                            ],
+                        ],
+                        'separator' => [
+                            'type' => 'separator',
+                            'priority' => 3000,
+                        ],
+                        'logout' => [
+                            'type' => 'label',
+                            'priority' => 4000,
+                            'options' => [
+                                'label' => 'layoutTopMenuLogout',
+                                'route' => 'logout',
+                            ],
+                        ],
+                    ],
                 ],
             ],
+        ],
+    ],
+    'zource_oauth' => [
+        'server_options' => [
+            'access_lifetime' => 3600,
+            'allow_implicit' => true,
+            'enforce_state' => true,
         ],
     ],
     'zf-oauth2' => [

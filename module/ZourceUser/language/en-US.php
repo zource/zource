@@ -8,6 +8,13 @@
  */
 
 return [
+    'layoutTopMenuAdmin' => 'Administration',
+    'layoutTopMenuLogin' => 'Log in',
+    'layoutTopMenuLogout' => 'Log out',
+    'layoutTopMenuProfile' => 'Profile',
+    'layoutTopMenuSettings' => 'Settings',
+    'layoutTopMenuProfileHeader' => 'Profile',
+
     'loginFormTitle' => 'Login',
     'loginFormRequestPassword' => 'Do you have trouble logging in?',
 

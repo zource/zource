@@ -11,5 +11,18 @@ namespace ZourceApplication\UI\Navigation\Item;
 
 interface ItemInterface
 {
+    /**
+     * Checks if the item is part of a list.
+     *
+     * @return bool Returns true when the item is part of a list; false otherwise.
+     */
+    public function isPartOfList();
+
+    /**
+     * Renders the item.
+     *
+     * @param array $item The item representation to render.
+     * @return string
+     */
     public function render(array $item);
 }

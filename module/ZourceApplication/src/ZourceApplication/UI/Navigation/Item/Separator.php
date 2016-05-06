@@ -9,19 +9,15 @@
 
 namespace ZourceApplication\UI\Navigation\Item;
 
-class Label extends AbstractItem
+class Separator extends AbstractItem
 {
-    use LabelTrait;
-    use UrlTrait;
-
     public function render(array $item)
     {
-        $options = $this->getOptions($item);
+        return '';
+    }
 
-        $label = $this->getLabel($options);
-        $title = $this->getTitle($options, $label);
-        $url = $this->getUrl($options);
-
-        return sprintf('<li><a href="%s" title="%s">%s</a></li>', $url, $title, $label);
+    public function isPartOfList()
+    {
+        return false;
     }
 }

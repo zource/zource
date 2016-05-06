@@ -10,33 +10,31 @@
 namespace ZourceApplication\UI\Navigation\Item;
 
 use Zend\View\Renderer\RendererInterface;
-use ZourceApplication\Authorization\Condition\Service\PluginManager;
 
 abstract class AbstractItem implements ItemInterface
 {
-    /**
-     * @var PluginManager
-     */
-    private $conditionManager;
-
     /**
      * @var RendererInterface
      */
     private $view;
 
-    public function __construct(PluginManager $conditionManager, RendererInterface $view)
+    public function __construct(RendererInterface $view)
     {
-        $this->conditionManager = $conditionManager;
         $this->view = $view;
     }
 
-    protected function getConditionManager()
+    public function isPartOfList()
     {
-        return $this->conditionManager;
+        return true;
     }
 
     protected function getView()
     {
         return $this->view;
+    }
+
+    protected function getOptions(array $item)
+    {
+        return empty($item['options']) ? [] : $item['options'];
     }
 }

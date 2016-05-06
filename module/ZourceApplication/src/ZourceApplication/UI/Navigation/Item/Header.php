@@ -9,19 +9,22 @@
 
 namespace ZourceApplication\UI\Navigation\Item;
 
-class Label extends AbstractItem
+class Header extends AbstractItem
 {
     use LabelTrait;
-    use UrlTrait;
-
+    
     public function render(array $item)
     {
         $options = $this->getOptions($item);
 
-        $label = $this->getLabel($options);
-        $title = $this->getTitle($options, $label);
-        $url = $this->getUrl($options);
+        return sprintf(
+            '<div class="zui-nav-heading"><strong>%s</strong></div>',
+            $this->getLabel($options)
+        );
+    }
 
-        return sprintf('<li><a href="%s" title="%s">%s</a></li>', $url, $title, $label);
+    public function isPartOfList()
+    {
+        return false;
     }
 }

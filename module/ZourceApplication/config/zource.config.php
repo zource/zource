@@ -17,6 +17,10 @@ use Zend\Log\LoggerAbstractServiceFactory;
 use ZourceApplication\Authorization\Condition\ClassExists;
 use ZourceApplication\Authorization\Condition\Service\PluginManager as AuthorizationConditionPluginManager;
 use ZourceApplication\Mvc\Controller\Index;
+use ZourceApplication\UI\Navigation\Item\Dropdown;
+use ZourceApplication\UI\Navigation\Item\Header;
+use ZourceApplication\UI\Navigation\Item\Label;
+use ZourceApplication\UI\Navigation\Item\Separator;
 use ZourceApplication\UI\Navigation\Item\Service\ItemAbstractFactory;
 use ZourceApplication\UI\Navigation\Item\Service\PluginManager as UiNavigationItemPluginManager;
 use ZourceApplication\Validator\Service\UuidFactory;
@@ -102,7 +106,10 @@ return [
         ],
     ],
     'zource_nav' => [
-        'top-bar-primary' => [],
+        'top-bar-primary' => [
+            'items' => [
+            ],
+        ],
         'top-bar-secondary' => [
             'items' => [
                 'apigility' => [
@@ -130,7 +137,10 @@ return [
             ItemAbstractFactory::class,
         ],
         'aliases' => [
-            'label' => 'ZourceApplication\\UI\\Navigation\\Item\\Label',
+            'dropdown' => Dropdown::class,
+            'label' => Label::class,
+            'header' => Header::class,
+            'separator' => Separator::class,
         ],
     ],
 ];

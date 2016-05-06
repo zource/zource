@@ -11,8 +11,6 @@ return [
     'headTitle' => 'Zource',
     
     'layoutTopMenuTitle' => 'Zource',
-    'layoutTopMenuLogin' => 'Log in',
-    'layoutTopMenuLogout' => 'Log out',
 
     'layoutFooterMenuZource' => 'Zource',
     'layoutFooterMenuAbout' => 'About',

@@ -12,46 +12,84 @@ namespace ZourceApplication\View\Helper\UI;
 use InvalidArgumentException;
 use Zend\View\Helper\AbstractHelper;
 use ZourceApplication\Authorization\Condition\Service\PluginManager as ConditionPluginManager;
+use ZourceApplication\UI\Navigation\Item\ItemInterface;
 use ZourceApplication\UI\Navigation\Item\Service\PluginManager;
 
 class Nav extends AbstractHelper
 {
     private $itemManager;
     private $conditionManager;
-    private $config;
+    private $menus;
+    private $ulClass;
 
-    public function __construct(PluginManager $itemManager, ConditionPluginManager $conditionManager, array $config)
+    public function __construct(PluginManager $itemManager, ConditionPluginManager $conditionManager, array $menus)
     {
         $this->itemManager = $itemManager;
         $this->conditionManager = $conditionManager;
-        $this->config = $config;
+        $this->menus = $menus;
+        $this->ulClass = 'zui-nav';
     }
 
-    public function __invoke($name)
+    public function __invoke($name = null)
     {
-        if (!array_key_exists($name, $this->config)) {
+        if (!$name) {
+            return $this;
+        }
+
+        return $this->render($name);
+    }
+
+    public function render($name)
+    {
+        if (!array_key_exists($name, $this->menus)) {
             throw new InvalidArgumentException(sprintf('The navigation "%s" does not exists.', $name));
         }
 
-        if (!$this->config[$name] || !$this->config[$name]['items']) {
+        if (!$this->menus[$name] || !$this->menus[$name]['items']) {
             return '';
         }
 
-        uasort($this->config[$name]['items'], [$this, 'onSort']);
+        return $this->renderChildren($this->menus[$name]['items']);
+    }
 
-        $result = '<ul class="zui-nav">';
+    public function renderChildren(array $items)
+    {
+        $result = '';
 
-        foreach ($this->config[$name]['items'] as $key => $item) {
+        // Sort the items before we render them.
+        uasort($items, [$this, 'onSort']);
+
+        // The amount of items that are rendered as part of a list. We use this
+        // to determine if we need to open or close the list.
+        $renderedItemCount = 0;
+
+        foreach ($items as $item) {
             if (array_key_exists('conditions', $item) && !$this->isAllowed($item)) {
                 continue;
             }
 
+            /** @var ItemInterface $renderer */
             $renderer = $this->itemManager->get($item['type']);
 
-            $result .= $renderer->render($item);
+            if ($renderer->isPartOfList() && $renderedItemCount === 0) {
+                $result .= '<ul class="' . $this->ulClass . '">' . "\n";
+            } else if (!$renderer->isPartOfList() && $renderedItemCount > 0) {
+                $result .= '</ul>' . "\n";
+                $renderedItemCount = 0;
+            }
+
+            if ($renderer->isPartOfList()) {
+                $renderedItemCount++;
+            }
+
+            $result .= $renderer->render($item) . "\n";
         }
 
-        return $result . '</ul>';
+        if ($renderedItemCount > 0) {
+            $result .= '</ul>';
+        }
+
+        return $result;
     }
 
     private function onSort($lft, $rgt)
