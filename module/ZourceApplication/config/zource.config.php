@@ -17,6 +17,7 @@ use Zend\Log\LoggerAbstractServiceFactory;
 use ZourceApplication\Authorization\Condition\ClassExists;
 use ZourceApplication\Authorization\Condition\Service\PluginManager as AuthorizationConditionPluginManager;
 use ZourceApplication\Mvc\Controller\Index;
+use ZourceApplication\UI\Navigation\Item\DashboardList;
 use ZourceApplication\UI\Navigation\Item\Dropdown;
 use ZourceApplication\UI\Navigation\Item\Header;
 use ZourceApplication\UI\Navigation\Item\Label;
@@ -109,6 +110,50 @@ return [
     'zource_nav' => [
         'top-bar-primary' => [
             'items' => [
+                'dashboards' => [
+                    'type' => 'dropdown',
+                    'priority' => 1000,
+                    'options' => [
+                        'label' => 'layoutTopMenuDashboards',
+                        'route' => 'dashboard',
+                        'title' => 'Enter the Apigility development environment.',
+                    ],
+                    'conditions' => [
+                        'class-exists' => [
+                            'type' => 'ClassExists',
+                            'options' => [
+                                'fqcn' => 'ZF\\Apigility\\Admin\\Module',
+                            ],
+                        ],
+                    ],
+                    'child_items' => [
+                        'header' => [
+                            'type' => 'header',
+                            'priority' => 100,
+                            'options' => [
+                                'label' => 'layoutTopMenuDashboardsAvailable',
+                            ],
+                        ],
+                        'dashboard-list' => [
+                            'type' => 'dashboard-list',
+                            'priority' => 200,
+                            'options' => [
+                            ],
+                        ],
+                        'separator' => [
+                            'type' => 'separator',
+                            'priority' => 300,
+                        ],
+                        'manage' => [
+                            'type' => 'label',
+                            'priority' => 400,
+                            'options' => [
+                                'label' => 'layoutTopMenuDashboardsManage',
+                                'route' => 'dashboard',
+                            ],
+                        ],
+                    ],
+                ],
             ],
         ],
         'top-bar-secondary' => [
@@ -138,6 +183,7 @@ return [
             ItemAbstractFactory::class,
         ],
         'aliases' => [
+            'dashboard-list' => DashboardList::class,
             'dropdown' => Dropdown::class,
             'label' => Label::class,
             'header' => Header::class,

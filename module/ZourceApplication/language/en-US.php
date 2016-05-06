@@ -12,6 +12,10 @@ return [
     
     'layoutTopMenuTitle' => 'Zource',
 
+    'layoutTopMenuDashboards' => 'Dashboards',
+    'layoutTopMenuDashboardsAvailable' => 'Available',
+    'layoutTopMenuDashboardsManage' => 'Manage',
+
     'layoutFooterMenuZource' => 'Zource',
     'layoutFooterMenuAbout' => 'About',
     'layoutFooterMenuHelp' => 'Help',
