@@ -1,20 +1,17 @@
-<div class="zui-page-panel">
-    <div class="zui-page-content">
+<?php $this->layout('layout/dialog'); ?>
 
-        <h2><?php echo $this->translate('oAuthAuthorizeFormTitle'); ?></h2>
+<h2><?php echo $this->translate('oAuthAuthorizeFormTitle'); ?></h2>
 
-        <p>
-            <?php echo sprintf(
-                $this->translate('oAuthAuthorizeFormDescription'),
-                $this->escapeHtml($this->application->getName())
-            ); ?>
-        </p>
+<p>
+    <?php echo sprintf(
+        $this->translate('oAuthAuthorizeFormDescription'),
+        $this->escapeHtml($this->application->getName())
+    ); ?>
+</p>
 
-        <form action="" method="post">
-            <div class="zui-buttons">
-                <input type="submit" name="allow" value="<?php echo $this->translate('oAuthAuthorizeFormYes'); ?>">
-                <input type="submit" name="deny" value="<?php echo $this->translate('oAuthAuthorizeFormNo'); ?>">
-            </div>
-        </form>
+<form action="" method="post">
+    <div class="zui-buttons">
+        <input type="submit" name="allow" value="<?php echo $this->translate('oAuthAuthorizeFormYes'); ?>">
+        <input type="submit" name="deny" value="<?php echo $this->translate('oAuthAuthorizeFormNo'); ?>">
     </div>
-</div>
+</form>

@@ -13,7 +13,7 @@
     echo $this->headScript();
     ?>
 </head>
-<body class="zui-layout-task">
+<body>
 
 <div id="wrapper">
     <header class="zui-top-bar" id="top-bar" role="banner">
@@ -35,7 +35,20 @@
     </header>
 
     <section id="zource-content" role="main">
-        <?php echo $this->content; ?>
+
+        <div id="zui-page-header" class="page-header">
+            <div class="zui-page-header-inner">
+                <div class="zui-page-header-main">
+                    <h1><?php echo $this->placeholder('page-title'); ?></h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="zui-page-panel">
+            <div class="zui-page-content zui-text-justify">
+                <?php echo $this->content; ?>
+            </div>
+        </div>
     </section>
 
     <footer>

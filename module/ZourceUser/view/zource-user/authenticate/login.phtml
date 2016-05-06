@@ -1,34 +1,31 @@
-<div class="zui-page-panel">
-    <div class="zui-page-content">
+<?php $this->layout('layout/dialog'); ?>
 
-        <h2><?php echo $this->translate('loginFormTitle'); ?></h2>
+<h2><?php echo $this->translate('loginFormTitle'); ?></h2>
 
-        <?php echo $this->form()->openTag($this->authenticateForm); ?>
-            <?php echo $this->formHidden($this->authenticateForm->get('token')); ?>
+<?php echo $this->form()->openTag($this->authenticateForm); ?>
+<?php echo $this->formHidden($this->authenticateForm->get('token')); ?>
 
-            <div class="zui-field-group">
-                <?php echo $this->formLabel($this->authenticateForm->get('identity')); ?>
-                <?php echo $this->formText($this->authenticateForm->get('identity')); ?>
-                <div class="zui-description"><?php echo $this->translate('loginFormInputIdentityTooltip'); ?></div>
-                <?php echo $this->formElementErrors($this->authenticateForm->get('identity')); ?>
-            </div>
+<div class="zui-field-group">
+    <?php echo $this->formLabel($this->authenticateForm->get('identity')); ?>
+    <?php echo $this->formText($this->authenticateForm->get('identity')); ?>
+    <div class="zui-description"><?php echo $this->translate('loginFormInputIdentityTooltip'); ?></div>
+    <?php echo $this->formElementErrors($this->authenticateForm->get('identity')); ?>
+</div>
 
-            <div class="zui-field-group">
-                <?php echo $this->formLabel($this->authenticateForm->get('credential')); ?>
-                <?php echo $this->formPassword($this->authenticateForm->get('credential')); ?>
-                <div class="zui-description"><?php echo $this->translate('loginFormInputCredentialTooltip'); ?></div>
-                <?php echo $this->formElementErrors($this->authenticateForm->get('credential')); ?>
-            </div>
+<div class="zui-field-group">
+    <?php echo $this->formLabel($this->authenticateForm->get('credential')); ?>
+    <?php echo $this->formPassword($this->authenticateForm->get('credential')); ?>
+    <div class="zui-description"><?php echo $this->translate('loginFormInputCredentialTooltip'); ?></div>
+    <?php echo $this->formElementErrors($this->authenticateForm->get('credential')); ?>
+</div>
 
-            <div class="zui-buttons-container">
-                <div class="zui-buttons">
-                    <?php echo $this->formSubmit($this->authenticateForm->get('submit')); ?>
+<div class="zui-buttons-container">
+    <div class="zui-buttons">
+        <?php echo $this->formSubmit($this->authenticateForm->get('submit')); ?>
 
-                    <a class="zui-button zui-button-link cancel" href="<?php echo $this->url('dashboard'); ?>">
-                        <?php echo $this->translate('loginFormRequestPassword'); ?>
-                    </a>
-                </div>
-            </div>
-        <?php echo $this->form()->closeTag(); ?>
+        <a class="zui-button zui-button-link cancel" href="<?php echo $this->url('dashboard'); ?>">
+            <?php echo $this->translate('loginFormRequestPassword'); ?>
+        </a>
     </div>
 </div>
+<?php echo $this->form()->closeTag(); ?>

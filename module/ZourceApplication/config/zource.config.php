@@ -91,7 +91,8 @@ return [
         'template_map' => [
             'error/404' => __DIR__ . '/../view/error/404.phtml',
             'error/index' => __DIR__ . '/../view/error/index.phtml',
-            'layout/layout' => __DIR__ . '/../view/layout/layout.phtml',
+            'layout/dialog' => __DIR__ . '/../view/layout/dialog.phtml',
+            'layout/page-header' => __DIR__ . '/../view/layout/page-header.phtml',
             'zource-application/index/index' => __DIR__ . '/../view/zource-application/index/index.phtml',
         ],
     ],

@@ -9,11 +9,34 @@
 
 namespace ZourceUser;
 
+use Zend\Authentication\AuthenticationService;
+use Zend\Form\Form;
+use ZourceUser\Authentication\OAuth\Service\StorageFactory;
+use ZourceUser\Authentication\OAuth\Storage;
+use ZourceUser\Authentication\Service\AuthenticationServiceFactory;
+use ZourceUser\Authorization\Condition\Service\UserHasIdentityFactory;
+use ZourceUser\Authorization\Condition\Service\UserHasRoleFactory;
+use ZourceUser\InputFilter\Authenticate as AuthenticateInputFilter;
+use ZourceUser\InputFilter\Service\AuthenticateFactory as AuthenticateInputFilterFactory;
+use ZourceUser\Mvc\Controller\Authenticate;
+use ZourceUser\Mvc\Controller\OAuth;
+use ZourceUser\Mvc\Controller\Service\AuthenticateFactory;
+use ZourceUser\Mvc\Controller\Service\OAuthFactory;
+use ZourceUser\Mvc\Controller\Service\SettingsFactory;
+use ZourceUser\Mvc\Controller\Settings;
+use ZourceUser\Validator\Directory;
+use ZourceUser\Validator\IdentityNotExists;
+use ZourceUser\Validator\Service\DirectoryFactory;
+use ZourceUser\Validator\Service\IdentityNotExistsFactory;
+use ZourceUser\TaskService\OAuth as OAuthTaskService;
+use ZourceUser\TaskService\Service\OAuthFactory as OAuthTaskServiceFactory;
+
 return [
     'controllers' => [
         'factories' => [
-            'ZourceUser\\Mvc\\Controller\\Authenticate' => 'ZourceUser\\Mvc\\Controller\\Service\\AuthenticateFactory',
-            'ZourceUser\\Mvc\\Controller\\OAuth' => 'ZourceUser\\Mvc\\Controller\\Service\\OAuthFactory',
+            Authenticate::class => AuthenticateFactory::class,
+            OAuth::class => OAuthFactory::class,
+            Settings::class => SettingsFactory::class,
         ],
     ],
     'doctrine' => [
@@ -39,19 +62,19 @@ return [
     ],
     'forms' => [
         'ZourceUser\\Form\\Authenticate' => [
-            'type' => 'Zend\\Form\\Form',
+            'type' => Form::class,
             'hydrator' => 'ClassMethods',
-            'input_filter' => 'ZourceUser\\InputFilter\\Authenticate',
+            'input_filter' => AuthenticateInputFilter::class,
             'elements' => [
                 'csrf' => [
                     'spec' => [
-                        'type' => 'Zend\\Form\\Element\\Csrf',
+                        'type' => 'Csrf',
                         'name' => 'token',
                     ],
                 ],
                 'identity' => [
                     'spec' => [
-                        'type' => 'Zend\\Form\\Element\\Text',
+                        'type' => 'Text',
                         'name' => 'identity',
                         'options' => [
                             'label' => 'loginFormInputIdentityLabel',
@@ -60,7 +83,7 @@ return [
                 ],
                 'credential' => [
                     'spec' => [
-                        'type' => 'Zend\\Form\\Element\\Password',
+                        'type' => 'Password',
                         'name' => 'credential',
                         'options' => [
                             'label' => 'loginFormInputCredentialLabel',
@@ -69,7 +92,7 @@ return [
                 ],
                 'submit' => [
                     'spec' => [
-                        'type' => 'Zend\\Form\\Element\\Submit',
+                        'type' => 'Submit',
                         'name' => 'submit',
                         'attributes' => [
                             'value' => 'loginFormInputSubmitValue',
@@ -81,7 +104,7 @@ return [
     ],
     'input_filters' => [
         'factories' => [
-            'ZourceUser\\InputFilter\\Authenticate' => 'ZourceUser\\InputFilter\\Service\\AuthenticateFactory',
+            AuthenticateInputFilter::class => AuthenticateInputFilterFactory::class,
         ],
     ],
     'router' => [
@@ -91,7 +114,7 @@ return [
                 'options' => [
                     'route' => '/login',
                     'defaults' => [
-                        'controller' => 'ZourceUser\\Mvc\\Controller\\Authenticate',
+                        'controller' => Authenticate::class,
                         'action' => 'login',
                     ],
                 ],
@@ -101,22 +124,22 @@ return [
                 'options' => [
                     'route' => '/logout',
                     'defaults' => [
-                        'controller' => 'ZourceUser\\Mvc\\Controller\\Authenticate',
+                        'controller' => Authenticate::class,
                         'action' => 'logout',
                     ],
                 ],
             ],
             'oauth' => [
-                'type' => 'Zend\\Mvc\\Router\\Http\\Literal',
+                'type' => 'Literal',
                 'options' => [
                     'route' => '/oauth',
                     'defaults' => [
-                        'controller' => 'ZourceUser\\Mvc\\Controller\\OAuth',
+                        'controller' => OAuth::class,
                     ],
                 ],
                 'child_routes' => [
                     'authorize' => [
-                        'type' => 'Zend\\Mvc\\Router\\Http\\Literal',
+                        'type' => 'Literal',
                         'options' => [
                             'route' => '/authorize',
                             'defaults' => [
@@ -125,7 +148,7 @@ return [
                         ],
                     ],
                     'token' => [
-                        'type' => 'Zend\\Mvc\\Router\\Http\\Literal',
+                        'type' => 'Literal',
                         'options' => [
                             'route' => '/token',
                             'defaults' => [
@@ -135,13 +158,23 @@ return [
                     ],
                 ],
             ],
+            'settings' => [
+                'type' => 'Literal',
+                'options' => [
+                    'route' => '/settings',
+                    'defaults' => [
+                        'controller' => Settings::class,
+                        'action' => 'index',
+                    ],
+                ],
+            ],
         ],
     ],
     'service_manager' => [
         'factories' => [
-            'Zend\\Authentication\\AuthenticationService' => 'ZourceUser\\Authentication\\Service\\AuthenticationServiceFactory',
-            'ZourceUser\\TaskService\\OAuth' => 'ZourceUser\\TaskService\\Service\\OAuthFactory',
-            'ZourceUser\\Authentication\\OAuth\\Storage' => 'ZourceUser\\Authentication\\OAuth\\Service\\StorageFactory',
+            AuthenticationService::class => AuthenticationServiceFactory::class,
+            OAuthTaskService::class => OAuthTaskServiceFactory::class,
+            Storage::class => StorageFactory::class,
         ],
     ],
     'translator' => [
@@ -155,8 +188,8 @@ return [
     ],
     'validators' => [
         'factories' => [
-            'ZourceUser\\Validator\\Directory' => 'ZourceUser\\Validator\\Service\\DirectoryFactory',
-            'ZourceUser\\Validator\\IdentityNotExists' => 'ZourceUser\\Validator\\Service\\IdentityNotExistsFactory',
+            Directory::class => DirectoryFactory::class,
+            IdentityNotExists::class => IdentityNotExistsFactory::class,
         ],
     ],
     'view_manager' => [
@@ -168,8 +201,8 @@ return [
     ],
     'zource_conditions' => [
         'factories' => [
-            'UserHasIdentity' => 'ZourceUser\\Authorization\\Condition\\Service\\UserHasIdentityFactory',
-            'UserHasRole' => 'ZourceUser\\Authorization\\Condition\\Service\\UserHasRoleFactory',
+            'UserHasIdentity' => UserHasIdentityFactory::class,
+            'UserHasRole' => UserHasRoleFactory::class,
         ],
     ],
     'zource_guard' => [
@@ -179,6 +212,7 @@ return [
             'oauth/authorize' => true,
             'oauth/token' => false,
             'oauth' => false,
+            'settings' => true,
             'zf-apigility/*' => false,
         ],
         'routes' => [
@@ -228,7 +262,7 @@ return [
                             'priority' => 1000,
                             'options' => [
                                 'label' => 'layoutTopMenuSettings',
-                                'route' => 'logout',
+                                'route' => 'settings',
                             ],
                         ],
                         'admin' => [
@@ -272,7 +306,7 @@ return [
         ],
     ],
     'zf-oauth2' => [
-        'storage' => 'ZourceUser\\Authentication\\OAuth\\Storage',
+        'storage' => Storage::class,
         'grant_types' => array(
             'client_credentials' => true,
             'authorization_code' => true,

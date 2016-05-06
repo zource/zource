@@ -17,4 +17,12 @@ return [
     'layoutFooterMenuHelp' => 'Help',
 
     'layoutFooterPoweredByLicenseOpenSource' => 'Powered by a free open source license for Zource.',
+
+    'error404Title' => 'A 404 error occurred',
+    'error404NoExceptionAvailable' => 'No Exception available',
+
+    'error500Title' => 'An error occurred',
+    'error500NoExceptionAvailable' => 'No Exception available',
+
+    'pageDashboardTitle' => 'Dashboard',
 ];

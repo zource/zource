@@ -1,7 +1,11 @@
-<div class="zui-page-panel">
-    <div class="zui-page-content">
+<?php
 
-        <h2>Hello</h2>
-        <p>World</p>
-    </div>
-</div>
+$this->layout('layout/page-header');
+
+$this->placeholder('page-title')->set($this->translate('pageDashboardTitle'));
+
+?>
+
+<h2>Hello</h2>
+
+<p>World</p>
