@@ -9,19 +9,25 @@
 
 namespace ZourceUser\Authentication\Service;
 
-use Zend\Authentication\AuthenticationService;
+use Doctrine\ORM\EntityManager;
+use Zend\Crypt\Password\PasswordInterface;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use ZourceUser\Authentication\Adapter\Zource;
+use ZourceUser\Authentication\AuthenticationService;
 
 class AuthenticationServiceFactory implements FactoryInterface
 {
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
+        /** @var EntityManager $entityManager */
         $entityManager = $serviceLocator->get('doctrine.entitymanager.orm_default');
 
-        $adapter = new Zource($entityManager, 'username');
+        /** @var PasswordInterface $crypter */
+        $crypter = $serviceLocator->get(PasswordInterface::class);
 
-        return new AuthenticationService(null, $adapter);
+        $adapter = new Zource($entityManager, 'username', $crypter);
+
+        return new AuthenticationService($entityManager, null, $adapter);
     }
 }

@@ -2,7 +2,8 @@
 
 $this->layout('layout/page-header');
 
-$this->placeholder('page-title')->set($this->translate('error404Title'));
+$this->placeholder('layout')->pageTitle = $this->translate('error404Title');
+$this->placeholder('layout')->pageMenu = null;
 
 ?>
 
@@ -106,7 +107,7 @@ $this->placeholder('page-title')->set($this->translate('error404Title'));
         <?php endif; ?>
 
     <?php else: ?>
-        
+
         <h3><?php echo $this->translate('error404NoExceptionAvailable') ?></h3>
 
     <?php endif ?>

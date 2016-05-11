@@ -1,0 +1,46 @@
+<?php
+
+$this->layout('layout/page-header');
+
+$this->placeholder('layout')->pageTitle = $this->translate('layoutUserProfileTitle');
+$this->placeholder('layout')->pageMenu = 'user-settings';
+
+$this->profileForm->setAttribute('action', $this->url('settings/profile'));
+$this->profileForm->setAttribute('method', 'post');
+$this->profileForm->prepare();
+
+?>
+
+<h2><?php echo $this->translate('pageUserProfileTitle'); ?></h2>
+
+<?php echo $this->form()->openTag($this->profileForm); ?>
+    <?php echo $this->formHidden($this->profileForm->get('token')); ?>
+    <?php echo $this->formElementErrors($this->profileForm->get('token')); ?>
+
+    <div class="zui-field-group">
+        <?php echo $this->formText($this->profileForm->get('name')); ?>
+        <?php echo $this->formLabel($this->profileForm->get('name')); ?>
+        <?php echo $this->zourceFormDescription($this->profileForm->get('name')); ?>
+        <?php echo $this->formElementErrors($this->profileForm->get('name')); ?>
+    </div>
+
+    <div class="zui-field-group">
+        <?php echo $this->formText($this->profileForm->get('middleName')); ?>
+        <?php echo $this->formLabel($this->profileForm->get('middleName')); ?>
+        <?php echo $this->zourceFormDescription($this->profileForm->get('middleName')); ?>
+        <?php echo $this->formElementErrors($this->profileForm->get('middleName')); ?>
+    </div>
+
+    <div class="zui-field-group">
+        <?php echo $this->formText($this->profileForm->get('surname')); ?>
+        <?php echo $this->formLabel($this->profileForm->get('surname')); ?>
+        <?php echo $this->zourceFormDescription($this->profileForm->get('surname')); ?>
+        <?php echo $this->formElementErrors($this->profileForm->get('surname')); ?>
+    </div>
+
+    <div class="zui-buttons-container">
+        <div class="zui-buttons">
+            <?php echo $this->formSubmit($this->profileForm->get('submit')); ?>
+        </div>
+    </div>
+<?php echo $this->form()->closeTag(); ?>

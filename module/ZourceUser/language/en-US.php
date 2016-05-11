@@ -8,12 +8,29 @@
  */
 
 return [
-    'layoutTopMenuAdmin' => 'Administration',
+    'accountFormCurrentPassword' => 'Current password',
+    'accountFormCurrentPasswordDesc' => 'Your current password.',
+    'accountFormNewPassword' => 'New password',
+    'accountFormNewPasswordDesc' => 'Your new password.',
+    'accountFormConfirmPassword' => 'Confirm password',
+    'accountFormConfirmPasswordDesc' => 'Confirm your new password.',
+    'accountFormSubmit' => 'Change',
+
     'layoutTopMenuLogin' => 'Log in',
-    'layoutTopMenuLogout' => 'Log out',
     'layoutTopMenuProfile' => 'Profile',
-    'layoutTopMenuSettings' => 'Settings',
-    'layoutTopMenuProfileHeader' => 'Profile',
+
+    'topBarProfileMenuHeader' => 'Profile',
+    'topBarProfileMenuViewProfile' => 'View profile',
+    'topBarProfileMenuSettings' => 'Settings',
+    'topBarProfileMenuAdministration' => 'Administration',
+    'topBarProfileMenuLogout' => 'Log out',
+
+    'userSettingsMenuProfile' => 'Profile',
+    'userSettingsMenuAccount' => 'Account',
+    'userSettingsMenuEmails' => 'E-mails',
+    'userSettingsMenuNotifications' => 'Notifications',
+    'userSettingsMenuSecurity' => 'Security',
+    'userSettingsMenuApplications' => 'Applications',
 
     'loginFormTitle' => 'Login',
     'loginFormRequestPassword' => 'Do you have trouble logging in?',
@@ -30,4 +47,22 @@ return [
     'oAuthAuthorizeFormDescription' => 'Are you sure you want to authorize %s?',
     'oAuthAuthorizeFormYes' => 'Yes',
     'oAuthAuthorizeFormNo' => 'No',
+
+    'layoutUserProfileTitle' => 'Profile',
+
+    'pageUserApplicationTitle' => 'Applications',
+    'pageUserAccountTitle' => 'Account',
+    'pageUserEmailTitle' => 'Email',
+    'pageUserAddEmailTitle' => 'Add Email Address',
+    'pageUserNotificationTitle' => 'Notifications',
+    'pageUserProfileTitle' => 'Profile',
+    'pageUserSecurityTitle' => 'Security',
+
+    'profileFormName' => 'Name',
+    'profileFormNameDesc' => 'Your name.',
+    'profileFormMiddleName' => 'Middle name',
+    'profileFormMiddleNameDesc' => 'Your middle name, this field can also be used for surname prefixes.',
+    'profileFormSurname' => 'Surname',
+    'profileFormSurnameDesc' => 'Your surname.',
+    'profileFormSubmit' => 'Save',
 ];

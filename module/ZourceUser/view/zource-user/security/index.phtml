@@ -1,0 +1,82 @@
+<?php
+
+$this->layout('layout/page-header');
+
+$this->placeholder('layout')->pageTitle = $this->translate('layoutUserProfileTitle');
+$this->placeholder('layout')->pageMenu = 'user-settings';
+
+?>
+
+<h2><?php echo $this->translate('pageUserSecurityTitle'); ?></h2>
+
+<h3>Two-factor authentication</h3>
+
+<?php if ($this->account->hasTwoFactorAuthentication()) { ?>
+    <p>
+        <span class="zui-status zui-status-green">Enabled</span>
+        Two-factor authentication is currently enabled
+    </p>
+
+    <p>
+        <a href="">Save your recovery codes</a> in a safe place. They will allow you to access your account if you ever lose your phone.
+    </p>
+<?php } else { ?>
+    <p>
+        <span class="zui-status zui-status-red">Disabled</span>
+        Two-factor authentication is currently disabled
+    </p>
+<?php } ?>
+
+<h3>Sessions</h3>
+
+<p>
+    This is a list of devices that have logged into your account. Revoke any sessions that you do not recognize.
+</p>
+
+<table class="zui-table">
+    <thead>
+        <tr>
+            <th>IP Address</th>
+            <th>User agent</th>
+            <th>Location</th>
+            <th>Signed in</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>127.0.0.1</td>
+            <td><?php echo $_SERVER['HTTP_USER_AGENT']; ?></td>
+            <td>Rotterdam, South Holland, The Netherlands</td>
+            <td>11 hours ago</td>
+            <td class="text-right">
+                <a href="" class="zui-button">
+                    Revoke
+                </a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<h3>Security history</h3>
+
+<p>
+    This is a security log of important events involving your account.
+</p>
+
+<table class="zui-table">
+    <thead>
+        <tr>
+            <th>Event</th>
+            <th>Description</th>
+            <th>When</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>hook.create</td>
+            <td>A hook to packagist was created.</td>
+            <td>11 hours ago</td>
+        </tr>
+    </tbody>
+</table>

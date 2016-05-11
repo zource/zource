@@ -42,10 +42,10 @@ class Storage implements
      */
     private $crypter;
 
-    public function __construct(EntityManager $entityManager)
+    public function __construct(EntityManager $entityManager, PasswordInterface $crypter)
     {
         $this->entityManager = $entityManager;
-        $this->crypter = new Bcrypt();
+        $this->crypter = $crypter;
     }
 
     /**

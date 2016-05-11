@@ -12,9 +12,10 @@ namespace ZourceUser\Mvc\Controller\Service;
 use Zend\Authentication\AuthenticationService;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use ZourceUser\Mvc\Controller\Settings;
+use ZourceApplication\TaskService\RemoteAddressLookup;
+use ZourceUser\Mvc\Controller\Security;
 
-class SettingsFactory implements FactoryInterface
+class SecurityFactory implements FactoryInterface
 {
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
@@ -23,6 +24,9 @@ class SettingsFactory implements FactoryInterface
             'Zend\\Authentication\\AuthenticationService'
         );
 
-        return new Settings($authenticationService);
+        /** @var RemoteAddressLookup $remoteAddressLookup */
+        $remoteAddressLookup = $serviceLocator->getServiceLocator()->get(RemoteAddressLookup::class);
+
+        return new Security($authenticationService, $remoteAddressLookup);
     }
 }

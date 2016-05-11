@@ -10,6 +10,8 @@
 namespace ZourceUser\Authentication\OAuth\Service;
 
 use Doctrine\ORM\EntityManager;
+use Zend\Console\Prompt\Password;
+use Zend\Crypt\Password\PasswordInterface;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use ZourceUser\Authentication\OAuth\Storage;
@@ -21,6 +23,9 @@ class StorageFactory implements FactoryInterface
         /** @var EntityManager $entityManager */
         $entityManager = $serviceLocator->get('doctrine.entitymanager.orm_default');
 
-        return new Storage($entityManager);
+        /** @var PasswordInterface $crypter */
+        $crypter = $serviceLocator->get(PasswordInterface::class);
+
+        return new Storage($entityManager, $crypter);
     }
 }

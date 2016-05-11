@@ -8,14 +8,14 @@
 <div class="zui-field-group">
     <?php echo $this->formLabel($this->authenticateForm->get('identity')); ?>
     <?php echo $this->formText($this->authenticateForm->get('identity')); ?>
-    <div class="zui-description"><?php echo $this->translate('loginFormInputIdentityTooltip'); ?></div>
+    <?php echo $this->zourceFormDescription($this->authenticateForm->get('identity')); ?>
     <?php echo $this->formElementErrors($this->authenticateForm->get('identity')); ?>
 </div>
 
 <div class="zui-field-group">
     <?php echo $this->formLabel($this->authenticateForm->get('credential')); ?>
     <?php echo $this->formPassword($this->authenticateForm->get('credential')); ?>
-    <div class="zui-description"><?php echo $this->translate('loginFormInputCredentialTooltip'); ?></div>
+    <?php echo $this->zourceFormDescription($this->authenticateForm->get('credential')); ?>
     <?php echo $this->formElementErrors($this->authenticateForm->get('credential')); ?>
 </div>
 

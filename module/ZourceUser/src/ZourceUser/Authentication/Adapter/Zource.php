@@ -45,10 +45,10 @@ class Zource implements ValidatableAdapterInterface
      */
     private $directory;
     
-    public function __construct(EntityManager $entityManager, $directory)
+    public function __construct(EntityManager $entityManager, $directory, PasswordInterface $crypter)
     {
         $this->entityManager = $entityManager;
-        $this->crypter = new Bcrypt();
+        $this->crypter = $crypter;
         $this->directory = $directory;
     }
 

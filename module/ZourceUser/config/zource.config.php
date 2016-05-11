@@ -10,33 +10,57 @@
 namespace ZourceUser;
 
 use Zend\Authentication\AuthenticationService;
+use Zend\Crypt\Password\Bcrypt;
+use Zend\Crypt\Password\PasswordInterface;
 use Zend\Form\Form;
 use ZourceUser\Authentication\OAuth\Service\StorageFactory;
 use ZourceUser\Authentication\OAuth\Storage;
 use ZourceUser\Authentication\Service\AuthenticationServiceFactory;
 use ZourceUser\Authorization\Condition\Service\UserHasIdentityFactory;
 use ZourceUser\Authorization\Condition\Service\UserHasRoleFactory;
+use ZourceUser\Form\Account as AccountForm;
+use ZourceUser\Form\Authenticate as AuthenticateForm;
+use ZourceUser\Form\Profile as ProfileForm;
+use ZourceUser\InputFilter\Account as AccountInputFilter;
 use ZourceUser\InputFilter\Authenticate as AuthenticateInputFilter;
+use ZourceUser\InputFilter\Profile as ProfileInputFilter;
 use ZourceUser\InputFilter\Service\AuthenticateFactory as AuthenticateInputFilterFactory;
+use ZourceUser\Mvc\Controller\Account;
+use ZourceUser\Mvc\Controller\Application;
 use ZourceUser\Mvc\Controller\Authenticate;
+use ZourceUser\Mvc\Controller\Email;
+use ZourceUser\Mvc\Controller\Notification;
 use ZourceUser\Mvc\Controller\OAuth;
+use ZourceUser\Mvc\Controller\Profile;
+use ZourceUser\Mvc\Controller\Security;
+use ZourceUser\Mvc\Controller\Service\AccountFactory;
+use ZourceUser\Mvc\Controller\Service\ApplicationFactory;
 use ZourceUser\Mvc\Controller\Service\AuthenticateFactory;
+use ZourceUser\Mvc\Controller\Service\EmailFactory;
+use ZourceUser\Mvc\Controller\Service\NotificationFactory;
 use ZourceUser\Mvc\Controller\Service\OAuthFactory;
-use ZourceUser\Mvc\Controller\Service\SettingsFactory;
-use ZourceUser\Mvc\Controller\Settings;
+use ZourceUser\Mvc\Controller\Service\ProfileFactory;
+use ZourceUser\Mvc\Controller\Service\SecurityFactory;
+use ZourceUser\TaskService\OAuth as OAuthTaskService;
+use ZourceUser\TaskService\PasswordChanger;
+use ZourceUser\TaskService\Service\OAuthFactory as OAuthTaskServiceFactory;
+use ZourceUser\TaskService\Service\PasswordChangerFactory;
 use ZourceUser\Validator\Directory;
 use ZourceUser\Validator\IdentityNotExists;
 use ZourceUser\Validator\Service\DirectoryFactory;
 use ZourceUser\Validator\Service\IdentityNotExistsFactory;
-use ZourceUser\TaskService\OAuth as OAuthTaskService;
-use ZourceUser\TaskService\Service\OAuthFactory as OAuthTaskServiceFactory;
 
 return [
     'controllers' => [
         'factories' => [
+            Account::class => AccountFactory::class,
+            Application::class => ApplicationFactory::class,
             Authenticate::class => AuthenticateFactory::class,
+            Email::class => EmailFactory::class,
+            Notification::class => NotificationFactory::class,
             OAuth::class => OAuthFactory::class,
-            Settings::class => SettingsFactory::class,
+            Profile::class => ProfileFactory::class,
+            Security::class => SecurityFactory::class,
         ],
     ],
     'doctrine' => [
@@ -61,50 +85,29 @@ return [
         ],
     ],
     'forms' => [
-        'ZourceUser\\Form\\Authenticate' => [
-            'type' => Form::class,
+        AccountForm::class => [
+            'type' => AccountForm::class,
+            'hydrator' => 'ClassMethods',
+            'input_filter' => AccountInputFilter::class,
+        ],
+        AuthenticateForm::class => [
+            'type' => AuthenticateForm::class,
             'hydrator' => 'ClassMethods',
             'input_filter' => AuthenticateInputFilter::class,
-            'elements' => [
-                'csrf' => [
-                    'spec' => [
-                        'type' => 'Csrf',
-                        'name' => 'token',
-                    ],
-                ],
-                'identity' => [
-                    'spec' => [
-                        'type' => 'Text',
-                        'name' => 'identity',
-                        'options' => [
-                            'label' => 'loginFormInputIdentityLabel',
-                        ],
-                    ],
-                ],
-                'credential' => [
-                    'spec' => [
-                        'type' => 'Password',
-                        'name' => 'credential',
-                        'options' => [
-                            'label' => 'loginFormInputCredentialLabel',
-                        ],
-                    ],
-                ],
-                'submit' => [
-                    'spec' => [
-                        'type' => 'Submit',
-                        'name' => 'submit',
-                        'attributes' => [
-                            'value' => 'loginFormInputSubmitValue',
-                        ],
-                    ],
-                ],
-            ],
+        ],
+        ProfileForm::class => [
+            'type' => ProfileForm::class,
+            'hydrator' => 'ClassMethods',
+            'input_filter' => ProfileInputFilter::class,
         ],
     ],
     'input_filters' => [
         'factories' => [
             AuthenticateInputFilter::class => AuthenticateInputFilterFactory::class,
+        ],
+        'invokables' => [
+            AccountInputFilter::class => AccountInputFilter::class,
+            ProfileInputFilter::class => ProfileInputFilter::class,
         ],
     ],
     'router' => [
@@ -167,6 +170,68 @@ return [
                         'action' => 'index',
                     ],
                 ],
+                'child_routes' => [
+                    'account' => [
+                        'type' => 'Literal',
+                        'options' => [
+                            'route' => '/account',
+                            'defaults' => [
+                                'controller' => Account::class,
+                                'action' => 'index',
+                            ],
+                        ],
+                    ],
+                    'applications' => [
+                        'type' => 'Literal',
+                        'options' => [
+                            'route' => '/applications',
+                            'defaults' => [
+                                'controller' => Application::class,
+                                'action' => 'index',
+                            ],
+                        ],
+                    ],
+                    'email' => [
+                        'type' => 'Literal',
+                        'options' => [
+                            'route' => '/email',
+                            'defaults' => [
+                                'controller' => Email::class,
+                                'action' => 'index',
+                            ],
+                        ],
+                    ],
+                    'notifications' => [
+                        'type' => 'Literal',
+                        'options' => [
+                            'route' => '/notifications',
+                            'defaults' => [
+                                'controller' => Notification::class,
+                                'action' => 'index',
+                            ],
+                        ],
+                    ],
+                    'profile' => [
+                        'type' => 'Literal',
+                        'options' => [
+                            'route' => '/profile',
+                            'defaults' => [
+                                'controller' => Profile::class,
+                                'action' => 'index',
+                            ],
+                        ],
+                    ],
+                    'security' => [
+                        'type' => 'Literal',
+                        'options' => [
+                            'route' => '/security',
+                            'defaults' => [
+                                'controller' => Security::class,
+                                'action' => 'index',
+                            ],
+                        ],
+                    ],
+                ],
             ],
         ],
     ],
@@ -174,7 +239,11 @@ return [
         'factories' => [
             AuthenticationService::class => AuthenticationServiceFactory::class,
             OAuthTaskService::class => OAuthTaskServiceFactory::class,
+            PasswordChanger::class => PasswordChangerFactory::class,
             Storage::class => StorageFactory::class,
+        ],
+        'invokables' => [
+            PasswordInterface::class => Bcrypt::class,
         ],
     ],
     'translator' => [
@@ -194,9 +263,15 @@ return [
     ],
     'view_manager' => [
         'template_map' => [
+            'zource-user/account/index' => __DIR__ . '/../view/zource-user/account/index.phtml',
+            'zource-user/application/index' => __DIR__ . '/../view/zource-user/application/index.phtml',
             'zource-user/authenticate/login' => __DIR__ . '/../view/zource-user/authenticate/login.phtml',
+            'zource-user/email/index' => __DIR__ . '/../view/zource-user/email/index.phtml',
+            'zource-user/notification/index' => __DIR__ . '/../view/zource-user/notification/index.phtml',
             'zource-user/o-auth/authorize' => __DIR__ . '/../view/zource-user/o-auth/authorize.phtml',
             'zource-user/o-auth/receive-code' => __DIR__ . '/../view/zource-user/o-auth/receive-code.phtml',
+            'zource-user/profile/index' => __DIR__ . '/../view/zource-user/profile/index.phtml',
+            'zource-user/security/index' => __DIR__ . '/../view/zource-user/security/index.phtml',
         ],
     ],
     'zource_conditions' => [
@@ -212,7 +287,7 @@ return [
             'oauth/authorize' => true,
             'oauth/token' => false,
             'oauth' => false,
-            'settings' => true,
+            'settings/*' => true,
             'zf-apigility/*' => false,
         ],
         'routes' => [
@@ -254,22 +329,30 @@ return [
                             'type' => 'header',
                             'priority' => 100,
                             'options' => [
-                                'label' => 'layoutTopMenuProfileHeader',
+                                'label' => 'topBarProfileMenuHeader',
+                            ],
+                        ],
+                        'profile' => [
+                            'type' => 'label',
+                            'priority' => 200,
+                            'options' => [
+                                'label' => 'topBarProfileMenuViewProfile',
+                                'route' => 'settings/profile',
                             ],
                         ],
                         'settings' => [
                             'type' => 'label',
-                            'priority' => 1000,
+                            'priority' => 300,
                             'options' => [
-                                'label' => 'layoutTopMenuSettings',
-                                'route' => 'settings',
+                                'label' => 'topBarProfileMenuSettings',
+                                'route' => 'settings/profile',
                             ],
                         ],
                         'admin' => [
                             'type' => 'label',
-                            'priority' => 2000,
+                            'priority' => 400,
                             'options' => [
-                                'label' => 'layoutTopMenuAdmin',
+                                'label' => 'topBarProfileMenuAdministration',
                                 'route' => 'logout',
                             ],
                             'conditions' => [
@@ -283,16 +366,75 @@ return [
                         ],
                         'separator' => [
                             'type' => 'separator',
-                            'priority' => 3000,
+                            'priority' => 500,
                         ],
                         'logout' => [
                             'type' => 'label',
-                            'priority' => 4000,
+                            'priority' => 600,
                             'options' => [
-                                'label' => 'layoutTopMenuLogout',
+                                'label' => 'topBarProfileMenuLogout',
                                 'route' => 'logout',
                             ],
                         ],
+                    ],
+                ],
+            ],
+        ],
+        'user-settings' => [
+            'items' => [
+                'header' => [
+                    'type' => 'header',
+                    'priority' => 100,
+                    'options' => [
+                        'label' => 'Personal Settings',
+                    ],
+                ],
+                'profile' => [
+                    'type' => 'label',
+                    'priority' => 200,
+                    'options' => [
+                        'label' => 'userSettingsMenuProfile',
+                        'route' => 'settings/profile',
+                    ],
+                ],
+                'account' => [
+                    'type' => 'label',
+                    'priority' => 300,
+                    'options' => [
+                        'label' => 'userSettingsMenuAccount',
+                        'route' => 'settings/account',
+                    ],
+                ],
+                'emails' => [
+                    'type' => 'label',
+                    'priority' => 400,
+                    'options' => [
+                        'label' => 'userSettingsMenuEmails',
+                        'route' => 'settings/email',
+                    ],
+                ],
+                'notifications' => [
+                    'type' => 'label',
+                    'priority' => 500,
+                    'options' => [
+                        'label' => 'userSettingsMenuNotifications',
+                        'route' => 'settings/notifications',
+                    ],
+                ],
+                'security' => [
+                    'type' => 'label',
+                    'priority' => 600,
+                    'options' => [
+                        'label' => 'userSettingsMenuSecurity',
+                        'route' => 'settings/security',
+                    ],
+                ],
+                'applications' => [
+                    'type' => 'label',
+                    'priority' => 700,
+                    'options' => [
+                        'label' => 'userSettingsMenuApplications',
+                        'route' => 'settings/applications',
                     ],
                 ],
             ],

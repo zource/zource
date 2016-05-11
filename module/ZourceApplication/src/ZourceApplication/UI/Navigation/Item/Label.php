@@ -22,6 +22,16 @@ class Label extends AbstractItem
         $title = $this->getTitle($options, $label);
         $url = $this->getUrl($options);
 
-        return sprintf('<li><a href="%s" title="%s">%s</a></li>', $url, $title, $label);
+        $listAttr = [];
+        $listAttr['role'] = 'presentation';
+        //$listAttr['class'] = 'selected';
+
+        return sprintf(
+            '<li %s><a href="%s" title="%s">%s</a></li>',
+            $this->createAttribs($listAttr),
+            $url,
+            $title,
+            $label
+        );
     }
 }

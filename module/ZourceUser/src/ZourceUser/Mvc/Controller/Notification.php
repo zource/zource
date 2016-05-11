@@ -12,7 +12,7 @@ namespace ZourceUser\Mvc\Controller;
 use Zend\Authentication\AuthenticationService;
 use Zend\Mvc\Controller\AbstractActionController;
 
-class Settings extends AbstractActionController
+class Notification extends AbstractActionController
 {
     private $authenticationService;
 

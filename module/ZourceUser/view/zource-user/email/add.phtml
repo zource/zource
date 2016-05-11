@@ -1,0 +1,10 @@
+<?php
+
+$this->layout('layout/page-header');
+
+$this->placeholder('layout')->pageTitle = $this->translate('layoutUserProfileTitle');
+$this->placeholder('layout')->pageMenu = 'user-settings';
+
+?>
+
+<h2><?php echo $this->translate('pageUserAddEmailTitle'); ?></h2>

@@ -9,10 +9,12 @@
 
 namespace ZourceApplication;
 
+use Zend\Console\Console;
 use Zend\ModuleManager\Listener\ServiceListener;
 use Zend\ModuleManager\ModuleManager;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
+use Zend\Session\ManagerInterface;
 use Zend\Stdlib\ArrayUtils;
 use ZF\Apigility\Provider\ApigilityProviderInterface;
 use ZourceApplication\Authorization\Condition\Service\PluginManager as AuthorizationConditionPluginManager;
@@ -43,11 +45,17 @@ class Module implements ApigilityProviderInterface
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
 
-        $viewHelperManager = $e->getApplication()->getServiceManager()->get('ViewHelperManager');
+        if (!Console::isConsole()) {
+            $viewHelperManager = $e->getApplication()->getServiceManager()->get('ViewHelperManager');
 
-        $formElementErrors = $viewHelperManager->get('formElementErrors');
-        $formElementErrors->setMessageOpenFormat('<div class="zui-error">');
-        $formElementErrors->setMessageSeparatorString('</div><div>');
-        $formElementErrors->setMessageCloseString('</div>');
+            $formElementErrors = $viewHelperManager->get('formElementErrors');
+            $formElementErrors->setMessageOpenFormat('<div class="zui-error">');
+            $formElementErrors->setMessageSeparatorString('</div><div>');
+            $formElementErrors->setMessageCloseString('</div>');
+
+            /** @var ManagerInterface $sessionManager */
+            $sessionManager = $e->getApplication()->getServiceManager()->get(ManagerInterface::class);
+            $sessionManager->start();
+        }
     }
 }

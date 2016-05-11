@@ -37,4 +37,15 @@ abstract class AbstractItem implements ItemInterface
     {
         return empty($item['options']) ? [] : $item['options'];
     }
+
+    protected function createAttribs(array $attribs)
+    {
+        $result = [];
+
+        foreach ($attribs as $name => $value) {
+            $result[] = $name . '="' . $this->getView()->escapeHtmlAttr($value) . '"';
+        }
+
+        return implode(' ', $result);
+    }
 }

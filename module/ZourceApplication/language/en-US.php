@@ -29,4 +29,6 @@ return [
     'error500NoExceptionAvailable' => 'No Exception available',
 
     'pageDashboardTitle' => 'Dashboard',
+    
+    'pageUserSettingsTitle' => 'Settings',
 ];

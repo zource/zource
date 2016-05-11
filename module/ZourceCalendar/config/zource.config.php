@@ -27,4 +27,33 @@ return [
             ],
         ],
     ],
+    'translator' => [
+        'translation_file_patterns' => [
+            [
+                'type' => 'phparray',
+                'base_dir' => __DIR__ . '/../language',
+                'pattern' => '%s.php',
+            ],
+        ],
+    ],
+    'zource_nav' => [
+        'top-bar-primary' => [
+            'items' => [
+                'calendar' => [
+                    'type' => 'dropdown',
+                    'priority' => 2000,
+                    'options' => [
+                        'label' => 'layoutTopMenuCalendar',
+                        'route' => 'dashboard',
+                    ],
+                    'conditions' => [
+                        'user-has-identity' => [
+                            'type' => 'UserHasIdentity',
+                            'options' => [],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
 ];

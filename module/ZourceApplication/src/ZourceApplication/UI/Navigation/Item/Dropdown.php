@@ -40,7 +40,7 @@ class Dropdown extends Label
         $anchorAttr['aria-expanded'] = 'false';
         $anchorAttr['title'] = $title;
 
-        $result = '<li>';
+        $result = '<li role="presentation">';
         $result .= sprintf(
             '<a %s>%s</a>',
             $this->createAttribs($anchorAttr),
@@ -64,16 +64,5 @@ class Dropdown extends Label
             $this->createAttribs($boxAttr),
             $this->getView()->zourceUiNav()->renderChildren($item['child_items'])
         );
-    }
-
-    private function createAttribs(array $attribs)
-    {
-        $result = [];
-
-        foreach ($attribs as $name => $value) {
-            $result[] = $name . '="' . $this->getView()->escapeHtmlAttr($value) . '"';
-        }
-
-        return implode(' ', $result);
     }
 }

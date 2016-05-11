@@ -1,0 +1,60 @@
+<?php
+
+$this->layout('layout/page-header');
+
+$this->placeholder('layout')->pageTitle = $this->translate('layoutUserProfileTitle');
+$this->placeholder('layout')->pageMenu = 'user-settings';
+
+?>
+
+<h2><?php echo $this->translate('pageUserEmailTitle'); ?></h2>
+
+<table class="zui-table-striped">
+    <thead>
+        <tr>
+            <th>E-mail address</th>
+            <th class="text-right">Verified</th>
+            <th class="text-right">Options</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php for ($i = 0; $i < 5; ++$i) { ?>
+        <tr>
+            <td width="70%">walter@tamboer.nl</td>
+            <td width="10%" class="text-right">
+                <span class="zui-status zui-status-green zui-status-subtle">Verified</span>
+            </td>
+            <td width="15%" class="text-right">
+                <a href="" class="zui-button">Make primary</a>
+                <a href="" class="zui-button">
+                    <i class="zui-icon zui-icon-check"></i>
+                    Verify
+                </a>
+            </td>
+        </tr>
+        <?php } ?>
+    </tbody>
+</table>
+
+<h3><?php echo $this->translate('pageUserAddEmailTitle'); ?></h3>
+
+<p>
+    You will receive an e-mail message in your inbox. This message contains a link which you need to click to verify
+    the e-mail address is yours. It's always possible to delete unverified e-mail addresses.<br />
+    Adding an e-mail address also means you can use it to login to your account.
+</p>
+
+<form>
+    <div class="zui-field-group">
+        <label for="old_password">E-mail address</label>
+        <input type="text" name="emailAddress" value="">
+        <div class="zui-description">The e-mail address that needs to be added.</div>
+    </div>
+
+    <div class="zui-buttons-container">
+        <div class="zui-buttons">
+            <a class="zui-button" href="">Add</a>
+        </div>
+    </div>
+</form>
+

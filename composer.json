@@ -27,6 +27,7 @@
         "psr-0": {
             "ZourceApplication\\": "module/ZourceApplication/src/",
             "ZourceCalendar\\": "module/ZourceCalendar/src/",
+            "ZourceContact\\": "module/ZourceContact/src/",
             "ZourceIssue\\": "module/ZourceIssue/src/",
             "ZourceProject\\": "module/ZourceProject/src/",
             "ZourceUser\\": "module/ZourceUser/src/"
@@ -36,6 +37,7 @@
         "psr-0": {
             "ZourceApplicationTest\\": "module/ZourceApplication/tests/",
             "ZourceCalendarTest\\": "module/ZourceCalendar/tests/",
+            "ZourceContactTest\\": "module/ZourceContact/tests/",
             "ZourceIssueTest\\": "module/ZourceIssue/tests/",
             "ZourceProjectTest\\": "module/ZourceProject/tests/",
             "ZourceUserTest\\": "module/ZourceUser/tests/"

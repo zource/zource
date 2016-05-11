@@ -2,7 +2,8 @@
 
 $this->layout('layout/page-header');
 
-$this->placeholder('page-title')->set($this->translate('error500Title'));
+$this->placeholder('layout')->pageTitle = $this->translate('error500Title');
+$this->placeholder('layout')->pageMenu = null;
 
 ?>
 

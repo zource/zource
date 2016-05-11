@@ -35,17 +35,26 @@
     </header>
 
     <section id="zource-content" role="main">
-
         <div id="zui-page-header" class="page-header">
             <div class="zui-page-header-inner">
                 <div class="zui-page-header-main">
-                    <h1><?php echo $this->placeholder('page-title'); ?></h1>
+                    <h1><?php echo $this->placeholder('layout')->pageTitle; ?></h1>
                 </div>
             </div>
         </div>
 
         <div class="zui-page-panel">
-            <div class="zui-page-content zui-text-justify">
+            <?php if (!empty($this->placeholder('layout')->pageMenu)) { ?>
+            <div class="zui-page-sidebar zui-page-sidebar-left">
+                <nav class="zui-navgroup zui-navgroup-vertical">
+                    <div class="zui-navgroup-inner">
+                        <?php echo $this->zourceUiNav($this->placeholder('layout')->pageMenu); ?>
+                    </div>
+                </nav>
+            </div>
+            <?php } ?>
+
+            <div class="zui-page-content">
                 <?php echo $this->content; ?>
             </div>
         </div>

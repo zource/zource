@@ -15,6 +15,7 @@ use Zend\Stdlib\ArrayUtils;
 use ZF\Apigility\Provider\ApigilityProviderInterface;
 use ZourceUser\Listener\IdentityGuard;
 use ZourceUser\Listener\RouteGuard;
+use ZourceUser\Listener\Session;
 
 class Module implements ApigilityProviderInterface
 {
@@ -36,6 +37,9 @@ class Module implements ApigilityProviderInterface
 
             $guard = new RouteGuard();
             $guard->attach($eventManager);
+
+            $session = new Session();
+            $session->attach($eventManager);
         }
     }
 }
