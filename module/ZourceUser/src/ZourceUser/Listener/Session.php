@@ -28,6 +28,10 @@ class Session extends AbstractListenerAggregate
 
     public function onPostLogin(MvcEvent $e)
     {
+        if (!$e->getRouteMatch()) {
+            return;
+        }
+
         /** @var string $matchedRouteName */
         $matchedRouteName = $e->getRouteMatch()->getMatchedRouteName();
 
@@ -61,6 +65,10 @@ class Session extends AbstractListenerAggregate
 
     public function onPostLogout(MvcEvent $e)
     {
+        if (!$e->getRouteMatch()) {
+            return;
+        }
+
         /** @var string $matchedRouteName */
         $matchedRouteName = $e->getRouteMatch()->getMatchedRouteName();
 

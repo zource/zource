@@ -78,4 +78,23 @@ class RemoteAddressEntry
     {
         return $this->cityName;
     }
+
+    public function getLocation()
+    {
+        $location = [];
+
+        if ($this->getCityName()) {
+            $location[] = $this->getCityName();
+        }
+
+        if ($this->getRegionName()) {
+            $location[] = $this->getRegionName();
+        }
+
+        if ($this->getCountryName()) {
+            $location[] = $this->getCountryName();
+        }
+
+        return implode(', ', $location);
+    }
 }

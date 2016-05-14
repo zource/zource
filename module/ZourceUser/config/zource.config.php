@@ -12,7 +12,6 @@ namespace ZourceUser;
 use Zend\Authentication\AuthenticationService;
 use Zend\Crypt\Password\Bcrypt;
 use Zend\Crypt\Password\PasswordInterface;
-use Zend\Form\Form;
 use ZourceUser\Authentication\OAuth\Service\StorageFactory;
 use ZourceUser\Authentication\OAuth\Storage;
 use ZourceUser\Authentication\Service\AuthenticationServiceFactory;
@@ -31,6 +30,7 @@ use ZourceUser\Mvc\Controller\Authenticate;
 use ZourceUser\Mvc\Controller\Email;
 use ZourceUser\Mvc\Controller\Notification;
 use ZourceUser\Mvc\Controller\OAuth;
+use ZourceUser\Mvc\Controller\Plugin\Service\IdentityFactory;
 use ZourceUser\Mvc\Controller\Profile;
 use ZourceUser\Mvc\Controller\Security;
 use ZourceUser\Mvc\Controller\Service\AccountFactory;
@@ -61,6 +61,11 @@ return [
             OAuth::class => OAuthFactory::class,
             Profile::class => ProfileFactory::class,
             Security::class => SecurityFactory::class,
+        ],
+    ],
+    'controller_plugins' => [
+        'factories' => [
+            'zourceIdentity' => IdentityFactory::class,
         ],
     ],
     'doctrine' => [
@@ -228,6 +233,18 @@ return [
                             'defaults' => [
                                 'controller' => Security::class,
                                 'action' => 'index',
+                            ],
+                        ],
+                        'may_terminate' => true,
+                        'child_routes' => [
+                            'revoke-session' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => '/revoke-session/:id',
+                                    'defaults' => [
+                                        'action' => 'revokeSession',
+                                    ],
+                                ],
                             ],
                         ],
                     ],

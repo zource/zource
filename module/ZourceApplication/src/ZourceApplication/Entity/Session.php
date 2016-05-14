@@ -42,6 +42,12 @@ class Session
      * @ORM\Column(type="datetime")
      * @var DateTime
      */
+    private $creationDate;
+
+    /**
+     * @ORM\Column(type="datetime")
+     * @var DateTime
+     */
     private $lastModified;
 
     /**
@@ -76,6 +82,7 @@ class Session
         $this->userAgent = $userAgent;
         $this->remoteAddress = $remoteAddress;
 
+        $this->creationDate = new DateTime();
         $this->lastModified = new DateTime();
         $this->lifetime = 3600;
     }
@@ -118,6 +125,14 @@ class Session
     public function setData($data)
     {
         $this->data = $data;
+    }
+
+    /**
+     * @return DateTime
+     */
+    public function getCreationDate()
+    {
+        return $this->creationDate;
     }
 
     /**

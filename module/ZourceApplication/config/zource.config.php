@@ -32,6 +32,8 @@ use ZourceApplication\Session\Service\SessionStorageFactory;
 use ZourceApplication\Session\Service\StorageFactory;
 use ZourceApplication\TaskService\RemoteAddressLookup;
 use ZourceApplication\TaskService\Service\RemoteAddressLookupFactory;
+use ZourceApplication\TaskService\Service\SessionFactory;
+use ZourceApplication\TaskService\Session;
 use ZourceApplication\UI\Navigation\Item\DashboardList;
 use ZourceApplication\UI\Navigation\Item\Dropdown;
 use ZourceApplication\UI\Navigation\Item\Header;
@@ -100,9 +102,10 @@ return [
         'factories' => [
             ConfigInterface::class => SessionConfigFactory::class,
             ManagerInterface::class => SessionManagerFactory::class,
+            RemoteAddressLookup::class => RemoteAddressLookupFactory::class,
+            Session::class => SessionFactory::class,
             StorageInterface::class => StorageFactory::class,
             SaveHandlerInterface::class => SaveHandlerFactory::class,
-            RemoteAddressLookup::class => RemoteAddressLookupFactory::class,
         ],
         'invokables' => [
             'UnderscoreNamingStrategy' => UnderscoreNamingStrategy::class,

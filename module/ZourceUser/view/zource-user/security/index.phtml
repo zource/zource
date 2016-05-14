@@ -33,50 +33,49 @@ $this->placeholder('layout')->pageMenu = 'user-settings';
     This is a list of devices that have logged into your account. Revoke any sessions that you do not recognize.
 </p>
 
-<table class="zui-table">
+<table class="zui-table zui-table-bordered">
     <thead>
         <tr>
             <th>IP Address</th>
             <th>User agent</th>
             <th>Location</th>
             <th>Signed in</th>
+            <th>Last active</th>
             <th></th>
         </tr>
     </thead>
     <tbody>
+        <?php foreach ($this->sessions as $session) { ?>
         <tr>
-            <td>127.0.0.1</td>
-            <td><?php echo $_SERVER['HTTP_USER_AGENT']; ?></td>
-            <td>Rotterdam, South Holland, The Netherlands</td>
-            <td>11 hours ago</td>
+            <td><?php echo $this->escapeHtml($session['remoteAddress']); ?></td>
+            <td title="<?php echo $this->escapeHtmlAttr($session['userAgent']); ?>">
+                <?php echo (string)$this->userAgentParser->parse($session['userAgent']); ?><br>
+                <span style="font-size: 80%;"><?php echo $session['userAgent']; ?></span>
+            </td>
+            <td><?php
+
+                $lookupEntry = $this->remoteAddressLookup->lookup($session['remoteAddress']);
+                $location = $lookupEntry->getLocation();
+
+                echo $location ?: '<em>Unknown</em>';
+
+                ?></td>
+            <td><?php echo $session['creationDate']->format('r'); ?></td>
+            <td><?php echo $session['lastModified']->format('r'); ?></td>
             <td class="text-right">
-                <a href="" class="zui-button">
-                    Revoke
-                </a>
+                <?php if (session_id() !== $session['id']) { ?>
+                    <a href="<?php echo $this->url('settings/security/revoke-session', [
+                        'id' => $session['id'],
+                    ]); ?>" class="zui-button">
+                <?php } else { ?>
+                    <a href="<?php echo $this->url('settings/security/revoke-session', [
+                        'id' => $session['id'],
+                    ]); ?>" class="zui-button" disabled="disabled" aria-disabled="true">
+                <?php } ?>
+                        Revoke
+                    </a>
             </td>
         </tr>
-    </tbody>
-</table>
-
-<h3>Security history</h3>
-
-<p>
-    This is a security log of important events involving your account.
-</p>
-
-<table class="zui-table">
-    <thead>
-        <tr>
-            <th>Event</th>
-            <th>Description</th>
-            <th>When</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>hook.create</td>
-            <td>A hook to packagist was created.</td>
-            <td>11 hours ago</td>
-        </tr>
+        <?php } ?>
     </tbody>
 </table>

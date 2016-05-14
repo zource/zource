@@ -12,26 +12,55 @@ namespace ZourceUser\Mvc\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use ZourceApplication\TaskService\RemoteAddressLookup;
+use ZourceApplication\TaskService\Session;
 use ZourceUser\Authentication\AuthenticationService;
 
 class Security extends AbstractActionController
 {
+    /**
+     * @var AuthenticationService
+     */
     private $authenticationService;
-    private $remoteAddressLookup;
+
+    /**
+     * @var Session
+     */
+    private $sessionService;
 
     public function __construct(
         AuthenticationService $authenticationService,
-        RemoteAddressLookup $remoteAddressLookup
+        Session $sessionService
     ) {
         $this->authenticationService = $authenticationService;
-        $this->remoteAddressLookup = $remoteAddressLookup;
+        $this->sessionService = $sessionService;
     }
 
     public function indexAction()
     {
+        $account = $this->authenticationService->getAccountEntity();
+        
         return new ViewModel([
-            'account' => $this->authenticationService->getAccountEntity(),
-            'remoteAddressLookup' => $this->remoteAddressLookup,
+            'account' => $account,
+            'remoteAddressLookup' => $this->sessionService->getRemoteAddressLookup(),
+            'sessions' => $this->sessionService->getForAccount($account),
+            'userAgentParser' => $this->sessionService->getUserAgentParser(),
         ]);
+    }
+
+    public function revokeSessionAction()
+    {
+        $session = $this->sessionService->getSession($this->params('id'));
+
+        if (!$session) {
+            return $this->notFoundAction();
+        }
+
+        if ($this->zourceIdentity() !== $session->getAccount()) {
+            return $this->notFoundAction();
+        }
+
+        $this->sessionService->deleteSession($session);
+
+        return $this->redirect()->toRoute('settings/security');
     }
 }

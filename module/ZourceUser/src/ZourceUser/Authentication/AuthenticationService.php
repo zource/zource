@@ -31,6 +31,15 @@ class AuthenticationService extends BaseAuthenticationService
         $this->entityManager = $entityManager;
     }
 
+    public function clearIdentity()
+    {
+        $this->cachedIdentity = null;
+        $this->cachedAccount = null;
+
+        return parent::clearIdentity();
+    }
+
+
     public function getIdentityEntity()
     {
         if (!$this->cachedIdentity && $this->hasIdentity()) {

@@ -15,7 +15,9 @@
         "zfr/zfr-cors": "^1.2",
         "zendframework/zend-developer-tools": "^0.0.2",
         "zfcampus/zf-apigility-documentation-swagger": "^1.1",
-        "ramsey/uuid-doctrine": "^1.2"
+        "ramsey/uuid-doctrine": "^1.2",
+        "ua-parser/uap-php": "^3.4",
+        "bacon/bacon-qr-code": "^1.0"
     },
     "require-dev": {
         "zfcampus/zf-apigility-admin": "^1.4.1",

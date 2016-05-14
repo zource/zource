@@ -7,15 +7,13 @@
  * @license https://raw.githubusercontent.com/zource/zource/master/LICENSE MIT
  */
 
-namespace ZourceUser\Mvc\Controller\Service;
+namespace ZourceUser\Mvc\Controller\Plugin\Service;
 
-use Zend\Authentication\AuthenticationService;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use ZourceApplication\TaskService\Session;
-use ZourceUser\Mvc\Controller\Security;
+use ZourceUser\Mvc\Controller\Plugin\Identity;
 
-class SecurityFactory implements FactoryInterface
+class IdentityFactory implements FactoryInterface
 {
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
@@ -23,10 +21,7 @@ class SecurityFactory implements FactoryInterface
         $authenticationService = $serviceLocator->getServiceLocator()->get(
             'Zend\\Authentication\\AuthenticationService'
         );
-
-        /** @var Session $sessionService */
-        $sessionService = $serviceLocator->getServiceLocator()->get(Session::class);
-
-        return new Security($authenticationService, $sessionService);
+        
+        return new Identity($authenticationService);
     }
 }
