@@ -7,24 +7,24 @@
  * @license https://raw.githubusercontent.com/zource/zource/master/LICENSE MIT
  */
 
-namespace ZourceUser\Mvc\Controller\Plugin\Service;
+namespace ZourceUser\TaskService\Service;
 
+use Doctrine\ORM\EntityManager;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use ZourceUser\Mvc\Controller\Plugin\Identity;
+use Zend\Session\Container;
+use ZourceUser\TaskService\TwoFactorAuthentication;
 
-class IdentityFactory implements FactoryInterface
+class TwoFactorAuthenticationFactory implements FactoryInterface
 {
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         /** @var EntityManager $entityManager */
-        $entityManager = $serviceLocator->getServiceLocator()->get('doctrine.entitymanager.orm_default');
+        $entityManager = $serviceLocator->get('doctrine.entitymanager.orm_default');
 
-        /** @var AuthenticationService $authenticationService */
-        $authenticationService = $serviceLocator->getServiceLocator()->get(
-            'Zend\\Authentication\\AuthenticationService'
-        );
-        
-        return new Identity($entityManager, $authenticationService);
+        /** @var Container $session2FA */
+        $session2FA = $serviceLocator->get('ZourceUserSession2FA');
+
+        return new TwoFactorAuthentication($entityManager, $session2FA);
     }
 }

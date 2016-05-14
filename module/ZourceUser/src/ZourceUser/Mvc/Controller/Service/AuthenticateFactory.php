@@ -11,18 +11,30 @@ namespace ZourceUser\Mvc\Controller\Service;
 
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\Session\Container;
+use ZourceUser\Authentication\AuthenticationService;
+use ZourceUser\Form\Authenticate as AuthenticateForm;
+use ZourceUser\Form\VerifyCode;
 use ZourceUser\Mvc\Controller\Authenticate;
 
 class AuthenticateFactory implements FactoryInterface
 {
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
+        /** @var AuthenticationService $authenticationService */
         $authenticationService = $serviceLocator->getServiceLocator()->get(
             'Zend\\Authentication\\AuthenticationService'
         );
 
-        $authenticateForm = $serviceLocator->getServiceLocator()->get('ZourceUser\\Form\\Authenticate');
+        /** @var AuthenticateForm $authenticateForm */
+        $authenticateForm = $serviceLocator->getServiceLocator()->get(AuthenticateForm::class);
 
-        return new Authenticate($authenticationService, $authenticateForm);
+        /** @var VerifyCode $verifyCodeForm */
+        $verifyCodeForm = $serviceLocator->getServiceLocator()->get(VerifyCode::class);
+
+        /** @var Container $authSession */
+        $authSession = $serviceLocator->getServiceLocator()->get('ZourceUserSessionAuthenticate');
+
+        return new Authenticate($authenticationService, $authenticateForm, $verifyCodeForm, $authSession);
     }
 }

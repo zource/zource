@@ -20,18 +20,22 @@ use ZourceUser\Authorization\Condition\Service\UserHasRoleFactory;
 use ZourceUser\Form\Account as AccountForm;
 use ZourceUser\Form\Authenticate as AuthenticateForm;
 use ZourceUser\Form\Profile as ProfileForm;
+use ZourceUser\Form\VerifyCode as VerifyCodeForm;
 use ZourceUser\InputFilter\Account as AccountInputFilter;
 use ZourceUser\InputFilter\Authenticate as AuthenticateInputFilter;
 use ZourceUser\InputFilter\Profile as ProfileInputFilter;
 use ZourceUser\InputFilter\Service\AuthenticateFactory as AuthenticateInputFilterFactory;
+use ZourceUser\InputFilter\VerifyCode as VerifyCodeInputFilter;
 use ZourceUser\Mvc\Controller\Account;
 use ZourceUser\Mvc\Controller\Application;
 use ZourceUser\Mvc\Controller\Authenticate;
 use ZourceUser\Mvc\Controller\Email;
 use ZourceUser\Mvc\Controller\Notification;
 use ZourceUser\Mvc\Controller\OAuth;
+use ZourceUser\Mvc\Controller\Plugin\Service\AccountFactory as AccountPluginFactory;
 use ZourceUser\Mvc\Controller\Plugin\Service\IdentityFactory;
 use ZourceUser\Mvc\Controller\Profile;
+use ZourceUser\Mvc\Controller\RecoveryCodes;
 use ZourceUser\Mvc\Controller\Security;
 use ZourceUser\Mvc\Controller\Service\AccountFactory;
 use ZourceUser\Mvc\Controller\Service\ApplicationFactory;
@@ -41,10 +45,14 @@ use ZourceUser\Mvc\Controller\Service\NotificationFactory;
 use ZourceUser\Mvc\Controller\Service\OAuthFactory;
 use ZourceUser\Mvc\Controller\Service\ProfileFactory;
 use ZourceUser\Mvc\Controller\Service\SecurityFactory;
+use ZourceUser\Mvc\Controller\Service\TwoFactorAuthenticationFactory;
+use ZourceUser\Mvc\Controller\TwoFactorAuthentication;
 use ZourceUser\TaskService\OAuth as OAuthTaskService;
 use ZourceUser\TaskService\PasswordChanger;
 use ZourceUser\TaskService\Service\OAuthFactory as OAuthTaskServiceFactory;
 use ZourceUser\TaskService\Service\PasswordChangerFactory;
+use ZourceUser\TaskService\Service\TwoFactorAuthenticationFactory as TwoFactorAuthenticationServiceFactory;
+use ZourceUser\TaskService\TwoFactorAuthentication as TwoFactorAuthenticationService;
 use ZourceUser\Validator\Directory;
 use ZourceUser\Validator\IdentityNotExists;
 use ZourceUser\Validator\Service\DirectoryFactory;
@@ -61,10 +69,12 @@ return [
             OAuth::class => OAuthFactory::class,
             Profile::class => ProfileFactory::class,
             Security::class => SecurityFactory::class,
+            TwoFactorAuthentication::class => TwoFactorAuthenticationFactory::class,
         ],
     ],
     'controller_plugins' => [
         'factories' => [
+            'zourceAccount' => AccountPluginFactory::class,
             'zourceIdentity' => IdentityFactory::class,
         ],
     ],
@@ -105,6 +115,11 @@ return [
             'hydrator' => 'ClassMethods',
             'input_filter' => ProfileInputFilter::class,
         ],
+        VerifyCodeForm::class => [
+            'type' => VerifyCodeForm::class,
+            'hydrator' => 'ClassMethods',
+            'input_filter' => VerifyCodeInputFilter::class,
+        ],
     ],
     'input_filters' => [
         'factories' => [
@@ -113,6 +128,7 @@ return [
         'invokables' => [
             AccountInputFilter::class => AccountInputFilter::class,
             ProfileInputFilter::class => ProfileInputFilter::class,
+            VerifyCodeInputFilter::class => VerifyCodeInputFilter::class,
         ],
     ],
     'router' => [
@@ -124,6 +140,16 @@ return [
                     'defaults' => [
                         'controller' => Authenticate::class,
                         'action' => 'login',
+                    ],
+                ],
+            ],
+            'login-tfa' => [
+                'type' => 'Literal',
+                'options' => [
+                    'route' => '/login/tfa',
+                    'defaults' => [
+                        'controller' => Authenticate::class,
+                        'action' => 'login-tfa',
                     ],
                 ],
             ],
@@ -237,12 +263,62 @@ return [
                         ],
                         'may_terminate' => true,
                         'child_routes' => [
+                            'recovery-codes' => [
+                                'type' => 'Literal',
+                                'options' => [
+                                    'route' => '/2fa/recovery-codes',
+                                    'defaults' => [
+                                        'controller' => RecoveryCodes::class,
+                                        'action' => 'index',
+                                    ],
+                                ],
+                            ],
+                            'recovery-codes-download' => [
+                                'type' => 'Literal',
+                                'options' => [
+                                    'route' => '/2fa/recovery-codes/download',
+                                    'defaults' => [
+                                        'controller' => RecoveryCodes::class,
+                                        'action' => 'download',
+                                    ],
+                                ],
+                            ],
                             'revoke-session' => [
                                 'type' => 'Segment',
                                 'options' => [
                                     'route' => '/revoke-session/:id',
                                     'defaults' => [
                                         'action' => 'revokeSession',
+                                    ],
+                                ],
+                            ],
+                            'tfa-enable' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => '/2fa/enable',
+                                    'defaults' => [
+                                        'controller' => TwoFactorAuthentication::class,
+                                        'action' => 'enable',
+                                    ],
+                                ],
+                            ],
+                            'tfa-disable' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => '/2fa/disable',
+                                    'defaults' => [
+                                        'controller' => TwoFactorAuthentication::class,
+                                        'action' => 'disable',
+                                    ],
+                                ],
+                            ],
+                            'tfa-image' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => '/2fa/image',
+                                    'defaults' => [
+                                        'controller' => TwoFactorAuthentication::class,
+                                        'action' => 'render-qr-code',
                                     ],
                                 ],
                             ],
@@ -258,10 +334,15 @@ return [
             OAuthTaskService::class => OAuthTaskServiceFactory::class,
             PasswordChanger::class => PasswordChangerFactory::class,
             Storage::class => StorageFactory::class,
+            TwoFactorAuthenticationService::class => TwoFactorAuthenticationServiceFactory::class,
         ],
         'invokables' => [
             PasswordInterface::class => Bcrypt::class,
         ],
+    ],
+    'session_containers' => [
+        'ZourceUserSessionAuthenticate',
+        'ZourceUserSession2FA',
     ],
     'translator' => [
         'translation_file_patterns' => [
@@ -283,12 +364,15 @@ return [
             'zource-user/account/index' => __DIR__ . '/../view/zource-user/account/index.phtml',
             'zource-user/application/index' => __DIR__ . '/../view/zource-user/application/index.phtml',
             'zource-user/authenticate/login' => __DIR__ . '/../view/zource-user/authenticate/login.phtml',
+            'zource-user/authenticate/login-tfa' => __DIR__ . '/../view/zource-user/authenticate/login-tfa.phtml',
             'zource-user/email/index' => __DIR__ . '/../view/zource-user/email/index.phtml',
             'zource-user/notification/index' => __DIR__ . '/../view/zource-user/notification/index.phtml',
             'zource-user/o-auth/authorize' => __DIR__ . '/../view/zource-user/o-auth/authorize.phtml',
             'zource-user/o-auth/receive-code' => __DIR__ . '/../view/zource-user/o-auth/receive-code.phtml',
             'zource-user/profile/index' => __DIR__ . '/../view/zource-user/profile/index.phtml',
             'zource-user/security/index' => __DIR__ . '/../view/zource-user/security/index.phtml',
+            'zource-user/two-factor-authentication/disable' => __DIR__ . '/../view/zource-user/two-factor-authentication/disable.phtml',
+            'zource-user/two-factor-authentication/enable' => __DIR__ . '/../view/zource-user/two-factor-authentication/enable.phtml',
         ],
     ],
     'zource_conditions' => [
@@ -300,6 +384,7 @@ return [
     'zource_guard' => [
         'identity' => [
             'login' => false,
+            'login-tfa' => false,
             'logout' => true,
             'oauth/authorize' => true,
             'oauth/token' => false,

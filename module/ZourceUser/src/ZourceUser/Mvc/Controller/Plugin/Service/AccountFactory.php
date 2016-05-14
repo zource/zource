@@ -9,11 +9,12 @@
 
 namespace ZourceUser\Mvc\Controller\Plugin\Service;
 
+use Doctrine\ORM\EntityManager;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use ZourceUser\Mvc\Controller\Plugin\Identity;
+use ZourceUser\Mvc\Controller\Plugin\Account;
 
-class IdentityFactory implements FactoryInterface
+class AccountFactory implements FactoryInterface
 {
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
@@ -24,7 +25,7 @@ class IdentityFactory implements FactoryInterface
         $authenticationService = $serviceLocator->getServiceLocator()->get(
             'Zend\\Authentication\\AuthenticationService'
         );
-        
-        return new Identity($entityManager, $authenticationService);
+
+        return new Account($entityManager, $authenticationService);
     }
 }

@@ -12,6 +12,7 @@ namespace ZourceUser\Mvc\Controller\Service;
 use Zend\Authentication\AuthenticationService;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\Session\Container;
 use ZourceApplication\TaskService\Session;
 use ZourceUser\Mvc\Controller\Security;
 

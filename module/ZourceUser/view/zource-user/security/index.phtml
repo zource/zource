@@ -17,13 +17,24 @@ $this->placeholder('layout')->pageMenu = 'user-settings';
         Two-factor authentication is currently enabled
     </p>
 
-    <p>
-        <a href="">Save your recovery codes</a> in a safe place. They will allow you to access your account if you ever lose your phone.
-    </p>
+    <ul>
+        <li>
+            <a href="<?php echo $this->url('settings/security/recovery-codes'); ?>">
+                Save your recovery codes</a> in a safe place. They will allow you to access your account if you ever lose your phone.
+            </a>
+        </li>
+        <li>
+            We do not recommend that you do, but you can <a href="<?php echo $this->url('settings/security/tfa-disable'); ?>">disable two-factor authentication</a>.
+        </li>
+    </ul>
 <?php } else { ?>
     <p>
         <span class="zui-status zui-status-red">Disabled</span>
         Two-factor authentication is currently disabled
+    </p>
+
+    <p>
+        <a href="<?php echo $this->url('settings/security/tfa-enable'); ?>">Would you like to enable Two-factor authentication?</a>
     </p>
 <?php } ?>
 

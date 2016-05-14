@@ -18,6 +18,7 @@ use Zend\Log\LoggerAbstractServiceFactory;
 use Zend\Session\Config\ConfigInterface;
 use Zend\Session\ManagerInterface;
 use Zend\Session\SaveHandler\SaveHandlerInterface;
+use Zend\Session\Service\ContainerAbstractServiceFactory;
 use Zend\Session\Service\SessionConfigFactory;
 use Zend\Session\Service\SessionManagerFactory;
 use Zend\Session\Storage\StorageInterface;
@@ -94,10 +95,11 @@ return [
     ],
     'service_manager' => [
         'abstract_factories' => [
-            StorageCacheAbstractServiceFactory::class,
             AdapterAbstractServiceFactory::class,
+            ContainerAbstractServiceFactory::class,
             FormAbstractServiceFactory::class,
             LoggerAbstractServiceFactory::class,
+            StorageCacheAbstractServiceFactory::class,
         ],
         'factories' => [
             ConfigInterface::class => SessionConfigFactory::class,

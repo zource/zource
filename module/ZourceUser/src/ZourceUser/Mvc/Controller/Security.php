@@ -9,9 +9,10 @@
 
 namespace ZourceUser\Mvc\Controller;
 
+use Base32\Base32;
+use Zend\Http\Response\Stream;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use ZourceApplication\TaskService\RemoteAddressLookup;
 use ZourceApplication\TaskService\Session;
 use ZourceUser\Authentication\AuthenticationService;
 
@@ -27,10 +28,8 @@ class Security extends AbstractActionController
      */
     private $sessionService;
 
-    public function __construct(
-        AuthenticationService $authenticationService,
-        Session $sessionService
-    ) {
+    public function __construct(AuthenticationService $authenticationService, Session $sessionService)
+    {
         $this->authenticationService = $authenticationService;
         $this->sessionService = $sessionService;
     }
@@ -55,7 +54,7 @@ class Security extends AbstractActionController
             return $this->notFoundAction();
         }
 
-        if ($this->zourceIdentity() !== $session->getAccount()) {
+        if ($this->zourceAccount() !== $session->getAccount()) {
             return $this->notFoundAction();
         }
 

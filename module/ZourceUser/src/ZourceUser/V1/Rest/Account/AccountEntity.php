@@ -207,4 +207,9 @@ class AccountEntity
     {
         return $this->groups;
     }
+
+    public function getDisplayName()
+    {
+        return 'Walter Tamboer';
+    }
 }

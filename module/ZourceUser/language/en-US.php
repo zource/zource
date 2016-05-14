@@ -19,6 +19,10 @@ return [
     'layoutTopMenuLogin' => 'Log in',
     'layoutTopMenuProfile' => 'Profile',
 
+    'loginTfaFormTitle' => 'Two-Factor Authentication',
+    'loginTfaFormDesc' => 'Open the two-factor authentication app on your device to view your authentication code and verify your identity.',
+    'loginTfaFormNoPhone' => 'If you do not have access to your phone, you can enter a recovery code to retrieve access to your account.',
+
     'topBarProfileMenuHeader' => 'Profile',
     'topBarProfileMenuViewProfile' => 'View profile',
     'topBarProfileMenuSettings' => 'Settings',
@@ -65,4 +69,10 @@ return [
     'profileFormSurname' => 'Surname',
     'profileFormSurnameDesc' => 'Your surname.',
     'profileFormSubmit' => 'Save',
+
+    'verifyCodeFormCode' => 'Code',
+    'verifyCodeFormCodeDesc' => 'Enter the six-digit code from the application.',
+    'verifyCodeFormSubmit' => 'Verify',
+
+    'verifyCodeInputFilterCodeMessage' => 'Two-factor authentication failed.',
 ];

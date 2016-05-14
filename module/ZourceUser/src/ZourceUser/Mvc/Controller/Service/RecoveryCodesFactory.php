@@ -7,24 +7,31 @@
  * @license https://raw.githubusercontent.com/zource/zource/master/LICENSE MIT
  */
 
-namespace ZourceUser\Mvc\Controller\Plugin\Service;
+namespace ZourceUser\Mvc\Controller\Service;
 
+use Zend\Authentication\AuthenticationService;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use ZourceUser\Mvc\Controller\Plugin\Identity;
+use Zend\Session\Container;
+use ZourceApplication\TaskService\Session;
+use ZourceUser\Mvc\Controller\RecoveryCodes;
+use ZourceUser\Mvc\Controller\TwoFactorAuthentication;
 
-class IdentityFactory implements FactoryInterface
+class RecoveryCodesFactory implements FactoryInterface
 {
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        /** @var EntityManager $entityManager */
-        $entityManager = $serviceLocator->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-
         /** @var AuthenticationService $authenticationService */
         $authenticationService = $serviceLocator->getServiceLocator()->get(
             'Zend\\Authentication\\AuthenticationService'
         );
-        
-        return new Identity($entityManager, $authenticationService);
+
+        /** @var Session $sessionService */
+        $sessionService = $serviceLocator->getServiceLocator()->get(Session::class);
+
+        /** @var Container $session2FA */
+        $session2FA = $serviceLocator->getServiceLocator()->get('ZourceUserSession2FA');
+
+        return new RecoveryCodes($authenticationService, $sessionService, $session2FA, $verifyCodeForm);
     }
 }

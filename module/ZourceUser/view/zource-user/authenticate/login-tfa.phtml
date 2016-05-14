@@ -1,0 +1,25 @@
+<?php $this->layout('layout/dialog'); ?>
+
+<h2><?php echo $this->translate('loginTfaFormTitle'); ?></h2>
+
+<?php echo $this->form()->openTag($this->verifyCodeForm); ?>
+<?php echo $this->formHidden($this->verifyCodeForm->get('token')); ?>
+
+<p>
+    <?php echo $this->translate('loginTfaFormDesc'); ?>
+</p>
+
+<div class="zui-field-group">
+    <?php echo $this->formLabel($this->verifyCodeForm->get('code')); ?>
+    <?php echo $this->formText($this->verifyCodeForm->get('code')); ?>
+    <?php echo $this->zourceFormDescription($this->verifyCodeForm->get('code')); ?>
+    <?php echo $this->formElementErrors($this->verifyCodeForm->get('code')); ?>
+</div>
+
+<div class="zui-buttons-container">
+    <div class="zui-buttons">
+        <?php echo $this->formSubmit($this->verifyCodeForm->get('submit')); ?>
+        <a href="<?php echo $this->url('login'); ?>" class="zui-button">Cancel</a>
+    </div>
+</div>
+<?php echo $this->form()->closeTag(); ?>

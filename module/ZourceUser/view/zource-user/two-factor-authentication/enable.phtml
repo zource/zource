@@ -1,0 +1,51 @@
+<?php
+
+$this->layout('layout/dialog');
+
+$this->placeholder('layout')->pageTitle = $this->translate('layoutUserProfileTitle');
+$this->placeholder('layout')->pageMenu = 'user-settings';
+
+$this->verifyCodeForm->setAttribute('action', $this->url('settings/security/tfa-enable'));
+$this->verifyCodeForm->setAttribute('method', 'post');
+$this->verifyCodeForm->prepare();
+
+?>
+
+<h2>Two-factor authentication</h2>
+
+<h3>Step 1</h3>
+<p class="text-center">
+    <img src="<?php echo $this->url('settings/security/tfa-image'); ?>" alt="QR Code" style="width: 256px; height: 256px;">
+</p>
+
+<p>
+    Scan the image above with the two-factor authentication app on your phone. If you can’t use a barcode, enter
+    this text code instead: <?php echo $this->secretCode; ?>
+</p>
+
+<h3>Step 2</h3>
+
+<p>
+    After scanning the barcode image, the app will display a six-digit code that you can enter below.
+</p>
+
+<?php echo $this->form()->openTag($this->verifyCodeForm); ?>
+    <?php echo $this->formHidden($this->verifyCodeForm->get('token')); ?>
+
+    <div class="zui-field-group">
+        <?php echo $this->formLabel($this->verifyCodeForm->get('code')); ?>
+        <?php echo $this->formText($this->verifyCodeForm->get('code')); ?>
+        <?php echo $this->zourceFormDescription($this->verifyCodeForm->get('code')); ?>
+        <?php echo $this->formElementErrors($this->verifyCodeForm->get('code')); ?>
+    </div>
+
+    <div class="zui-buttons-container">
+        <div class="zui-buttons">
+            <?php echo $this->formSubmit($this->verifyCodeForm->get('submit')); ?>
+
+            <a class="zui-button cancel" href="<?php echo $this->url('settings/security/tfa-disable'); ?>">
+                Cancel
+            </a>
+        </div>
+    </div>
+</form>

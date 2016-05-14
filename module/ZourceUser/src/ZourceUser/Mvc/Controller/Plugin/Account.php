@@ -12,9 +12,9 @@ namespace ZourceUser\Mvc\Controller\Plugin;
 use Doctrine\ORM\EntityManager;
 use Zend\Mvc\Controller\Plugin\AbstractPlugin;
 use ZourceUser\Authentication\AuthenticationService;
-use ZourceUser\V1\Rest\Identity\IdentityEntity;
+use ZourceUser\V1\Rest\Account\AccountEntity;
 
-class Identity extends AbstractPlugin
+class Account extends AbstractPlugin
 {
     /**
      * @var EntityManager
@@ -38,12 +38,12 @@ class Identity extends AbstractPlugin
             return $this->getEntity($id);
         }
 
-        return $this->authenticationService->getIdentityEntity();
+        return $this->authenticationService->getAccountEntity();
     }
 
     private function getEntity($id)
     {
-        $account = $this->entityManager->getRepository(IdentityEntity::class);
+        $account = $this->entityManager->getRepository(AccountEntity::class);
 
         return $account->find($id);
     }

@@ -50,7 +50,7 @@ class Module implements ApigilityProviderInterface
 
             $formElementErrors = $viewHelperManager->get('formElementErrors');
             $formElementErrors->setMessageOpenFormat('<div class="zui-error">');
-            $formElementErrors->setMessageSeparatorString('</div><div>');
+            $formElementErrors->setMessageSeparatorString('</div><div class="zui-error">');
             $formElementErrors->setMessageCloseString('</div>');
 
             /** @var ManagerInterface $sessionManager */
