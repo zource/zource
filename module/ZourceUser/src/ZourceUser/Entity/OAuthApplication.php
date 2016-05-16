@@ -160,6 +160,22 @@ class OAuthApplication
     /**
      * @return null|string
      */
+    public function getHomepage()
+    {
+        return $this->homepage;
+    }
+
+    /**
+     * @param null|string $homepage
+     */
+    public function setHomepage($homepage)
+    {
+        $this->homepage = $homepage;
+    }
+
+    /**
+     * @return null|string
+     */
     public function getRedirectUri()
     {
         return $this->redirectUri;

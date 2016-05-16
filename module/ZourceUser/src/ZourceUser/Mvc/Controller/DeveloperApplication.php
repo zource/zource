@@ -11,8 +11,8 @@ namespace ZourceUser\Mvc\Controller;
 
 use Zend\Form\FormInterface;
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Session\Container;
 use Zend\View\Model\ViewModel;
-use ZourceUser\Entity\OAuthApplication;
 use ZourceUser\TaskService\Application as ApplicationService;
 
 class DeveloperApplication extends AbstractActionController
@@ -27,10 +27,16 @@ class DeveloperApplication extends AbstractActionController
      */
     private $applicationForm;
 
+    /**
+     * @var Container
+     */
+    private $sessionContainer;
+
     public function __construct(ApplicationService $applicationService, FormInterface $applicationForm)
     {
         $this->applicationService = $applicationService;
         $this->applicationForm = $applicationForm;
+        $this->sessionContainer = new Container('oauthCreationSession');
     }
 
     public function createAction()
@@ -41,7 +47,8 @@ class DeveloperApplication extends AbstractActionController
             if ($this->applicationForm->isValid()) {
                 $data = $this->applicationForm->getData();
 
-                $this->applicationService->createApplicationFromArray($this->zourceAccount(), $data);
+                $clientSecret = $this->applicationService->createApplicationFromArray($this->zourceAccount(), $data);
+                $this->sessionContainer->clientSecret = $clientSecret;
 
                 return $this->redirect()->toRoute('settings/applications');
             }
@@ -62,6 +69,20 @@ class DeveloperApplication extends AbstractActionController
 
         if ($application->getAccount() !== $this->zourceAccount()) {
             return $this->notFoundAction();
+        }
+
+        $this->applicationForm->bind($application);
+
+        if ($this->getRequest()->isPost()) {
+            $this->applicationForm->setData($this->getRequest()->getPost());
+
+            if ($this->applicationForm->isValid()) {
+                $updatedApplication = $this->applicationForm->getData();
+
+                $this->applicationService->persistApplication($updatedApplication);
+
+                return $this->redirect()->toRoute('settings/applications');
+            }
         }
 
         return new ViewModel([

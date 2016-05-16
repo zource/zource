@@ -9,6 +9,21 @@ $this->placeholder('layout')->pageMenu = 'user-settings';
 
 <h2><?php echo $this->translate('pageUserApplicationTitle'); ?></h2>
 
+<?php if ($this->clientSecret) { ?>
+    <div class="zui-alert">
+        <p class="zui-alert-title">
+            <strong>Application Created</strong>
+        </p>
+
+        <p>
+            your application has been created, copy the client secret because this will be the only moment it will be
+            visible: <pre><?php echo $this->clientSecret; ?></pre>
+        </p>
+
+        <span class="zui-icon zui-icon-x" role="button" tabindex="0"></span>
+    </div>
+<?php } ?>
+
 <div class="zui-tabs zui-horizontal-tabs">
     <ul class="zui-tabs-menu" role="tablist">
         <li role="presentation" class="zui-menu-item zui-active-tab">

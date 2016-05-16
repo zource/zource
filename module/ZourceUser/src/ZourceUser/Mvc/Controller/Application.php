@@ -11,6 +11,7 @@ namespace ZourceUser\Mvc\Controller;
 
 use Zend\Authentication\AuthenticationService;
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Session\Container;
 use Zend\View\Model\ViewModel;
 use ZourceUser\TaskService\Application as ApplicationService;
 
@@ -21,15 +22,29 @@ class Application extends AbstractActionController
      */
     private $applicationService;
 
+    /**
+     * @var Container
+     */
+    private $sessionContainer;
+
     public function __construct(ApplicationService $applicationService)
     {
         $this->applicationService = $applicationService;
+        $this->sessionContainer = new Container('oauthCreationSession');
     }
 
     public function indexAction()
     {
+        $clientSecret = null;
+
+        if ($this->sessionContainer->clientSecret) {
+            $clientSecret = $this->sessionContainer->clientSecret;
+            $this->sessionContainer->clientSecret = null;
+        }
+
         return new ViewModel([
             'applications' => $this->applicationService->getForAccount($this->zourceAccount()),
+            'clientSecret' => $clientSecret,
         ]);
     }
 }

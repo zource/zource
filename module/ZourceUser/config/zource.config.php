@@ -126,7 +126,12 @@ return [
         ],
         CreateApplicationForm::class => [
             'type' => CreateApplicationForm::class,
-            'hydrator' => 'ClassMethods',
+            'hydrator' => [
+                'type' => 'ClassMethods',
+                'options' => [
+                    'underscoreSeparatedKeys' => false,
+                ],
+            ],
             'input_filter' => CreateApplicationInputFilter::class,
         ],
         ProfileForm::class => [

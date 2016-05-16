@@ -23,21 +23,69 @@ class CreateApplication extends InputFilter
         $this->add([
             'name' => 'name',
             'required' => true,
+            'filters' => [
+                [
+                    'name' => 'Zend\\Filter\\StringTrim',
+                ],
+                [
+                    'name' => 'Zend\\Filter\\StripTags',
+                ],
+            ],
         ]);
 
         $this->add([
             'name' => 'description',
             'required' => false,
+            'filters' => [
+                [
+                    'name' => 'Zend\\Filter\\StringTrim',
+                ],
+                [
+                    'name' => 'Zend\\Filter\\StripTags',
+                ],
+            ],
         ]);
 
         $this->add([
             'name' => 'homepage',
             'required' => true,
+            'filters' => [
+                [
+                    'name' => 'Zend\\Filter\\StringTrim',
+                ],
+                [
+                    'name' => 'Zend\\Filter\\StripTags',
+                ],
+            ],
+            'validators' => [
+                [
+                    'name' => 'Zend\\Validator\\Uri',
+                    'options' => [
+                        'allowRelative' => false,
+                    ],
+                ],
+            ],
         ]);
 
         $this->add([
-            'name' => 'authorizationCallback',
+            'name' => 'redirectUri',
             'required' => false,
+            'filters' => [
+                [
+                    'name' => 'Zend\\Filter\\StringTrim',
+                ],
+                [
+                    'name' => 'Zend\\Filter\\StripTags',
+                ],
+            ],
+            'validators' => [
+                [
+                    'name' => 'Zend\\Validator\\Uri',
+                    'options' => [
+                        'allowRelative' => false,
+                    ],
+                ],
+            ],
         ]);
     }
 }

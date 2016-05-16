@@ -22,9 +22,9 @@ return [
     'applicationFormDescriptionDesc' => 'The description that is displayed to users when they authorize.',
     'applicationFormHomepage' => 'Homepage',
     'applicationFormHomepageDesc' => 'The homepage of the application.',
-    'applicationFormAuthorizationCallback' => 'Callback URL',
-    'applicationFormAuthorizationCallbackDesc' => 'Your application\'s callback URL.',
-    'applicationFormSubmit' => 'Create',
+    'applicationFormRedirectUri' => 'Callback URL',
+    'applicationFormRedirectUriDesc' => 'Your application\'s callback URL.',
+    'applicationFormSubmit' => 'Save',
     'applicationFormCancel' => 'Cancel',
     'updateApplicationFormDelete' => 'Delete',
 

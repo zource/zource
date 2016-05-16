@@ -49,10 +49,10 @@ class CreateApplication extends BaseForm
 
         $this->add([
             'type' => 'Text',
-            'name' => 'authorizationCallback',
+            'name' => 'redirectUri',
             'options' => [
-                'label' => 'applicationFormAuthorizationCallback',
-                'description' => 'applicationFormAuthorizationCallbackDesc',
+                'label' => 'applicationFormRedirectUri',
+                'description' => 'applicationFormRedirectUriDesc',
             ],
         ]);
 

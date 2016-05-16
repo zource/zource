@@ -37,6 +37,12 @@ class Application
         $this->entityManager->flush($application);
     }
 
+    public function persistApplication(OAuthApplication $oauthApplication)
+    {
+        $this->entityManager->persist($oauthApplication);
+        $this->entityManager->flush($oauthApplication);
+    }
+
     public function getForAccount(AccountEntity $account)
     {
         $applications = $this->entityManager->getRepository(OAuthApplication::class)->findBy([
@@ -48,16 +54,15 @@ class Application
 
     public function createApplicationFromArray(AccountEntity $account, array $data)
     {
-        $clientSecret = Rand::getString(64);
+        $clientSecret = Rand::getString(64, 'abcdefghijklmnopqrstuvwxyz0123456789');
         
         $oauthApplication = new OAuthApplication($data['name'], $data['homepage']);
         $oauthApplication->setAccount($account);
         $oauthApplication->setClientSecret($this->crypter->create($clientSecret));
         $oauthApplication->setDescription($data['description']);
-        $oauthApplication->setRedirectUri($data['authorizationCallback']);
+        $oauthApplication->setRedirectUri($data['redirectUri']);
 
-        $this->entityManager->persist($oauthApplication);
-        $this->entityManager->flush($oauthApplication);
+        $this->persistApplication($oauthApplication);
 
         return $clientSecret;
     }
