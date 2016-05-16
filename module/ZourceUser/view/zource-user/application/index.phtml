@@ -12,40 +12,55 @@ $this->placeholder('layout')->pageMenu = 'user-settings';
 <div class="zui-tabs zui-horizontal-tabs">
     <ul class="zui-tabs-menu" role="tablist">
         <li role="presentation" class="zui-menu-item zui-active-tab">
-            <a href="#authorized-applications" role="tab" aria-selected="true"><strong>Authorized Applications</strong></a>
+            <a href="#authorized-applications" role="tab" aria-selected="true"><strong>Developer
+                    applications</strong></a>
         </li>
         <li role="presentation" class="zui-menu-item">
-            <a href="#tab2" role="tab" aria-selected="false"><strong>Incoming</strong></a>
+            <a href="#tab2" role="tab" aria-selected="false"><strong>Authorized applications</strong></a>
         </li>
     </ul>
 
     <div class="zui-tabs-content">
         <div role="tabpanel" aria-hidden="true" id="authorized-applications" class="zui-tabs-pane zui-active-pane">
-            <table class="zui-table-striped">
-                <thead>
-                    <tr>
-                        <th>Appplication</th>
-                        <th class="text-right">Options</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php for ($i = 0; $i < 5; ++$i) { ?>
+            <?php if (count($this->applications) === 0) { ?>
+                <p>
+                    No applications created yet, <a href="<?php echo $this->url('settings/applications/create'); ?>">would
+                        you like to create one</a>?
+                </p>
+            <?php } else { ?>
+                <table class="zui-table-striped">
+                    <thead>
                         <tr>
-                            <td width="70%">Demo Application <?php echo $i; ?></td>
-                            <td width="30%" class="text-right">
-                                <a href="" class="zui-button">
-                                    <i class="zui-icon zui-icon-trash"></i>
-                                    Revoke
-                                </a>
-                            </td>
+                            <th>Appplication</th>
                         </tr>
-                    <?php } ?>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($this->applications as $application) { ?>
+                            <tr>
+                                <td>
+                                    <a href="<?php echo $this->url('settings/applications/update', [
+                                        'id' => $application->getClientId()->toString(),
+                                    ]); ?>">
+                                        <?php echo $this->escapeHtml($application->getName()); ?>
+                                    </a><br/>
+                                    <small>Client
+                                        ID: <?php echo $this->escapeHtml($application->getClientId()); ?></small>
+                                </td>
+                            </tr>
+                        <?php } ?>
+                    </tbody>
+                </table>
+
+                <p>
+                    <a href="<?php echo $this->url('settings/applications/create'); ?>" class="zui-button">Create</a>
+                </p>
+            <?php } ?>
         </div>
 
         <div role="tabpanel" aria-hidden="false" id="tab2" class="zui-tabs-pane">
-            Hello Item 2
+            <p>
+                No applications are authorized to access your account.
+            </p>
         </div>
     </div>
 </div>

@@ -7,21 +7,24 @@
  * @license https://raw.githubusercontent.com/zource/zource/master/LICENSE MIT
  */
 
-namespace ZourceUser\Mvc\Controller\Service;
+namespace ZourceUser\TaskService\Service;
 
-use Zend\Authentication\AuthenticationService;
+use Doctrine\ORM\EntityManager;
+use Zend\Crypt\Password\PasswordInterface;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use ZourceUser\Mvc\Controller\Application;
-use ZourceUser\TaskService\Application as ApplicationService;
+use ZourceUser\TaskService\Application;
 
 class ApplicationFactory implements FactoryInterface
 {
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        /** @var ApplicationService $applicationService */
-        $applicationService = $serviceLocator->getServiceLocator()->get(ApplicationService::class);
+        /** @var EntityManager $entityManager */
+        $entityManager = $serviceLocator->get('doctrine.entitymanager.orm_default');
 
-        return new Application($applicationService);
+        /** @var PasswordInterface $crypter */
+        $crypter = $serviceLocator->get(PasswordInterface::class);
+
+        return new Application($entityManager, $crypter);
     }
 }

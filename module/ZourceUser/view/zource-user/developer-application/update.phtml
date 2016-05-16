@@ -1,0 +1,64 @@
+<?php
+
+$this->layout('layout/page-header');
+
+$this->placeholder('layout')->pageTitle = $this->translate('layoutUserProfileTitle');
+$this->placeholder('layout')->pageMenu = 'user-settings';
+
+$this->applicationForm->setAttribute('action', $this->url('settings/applications/update', [
+    'id' => $this->application->getClientId()->toString(),
+]));
+$this->applicationForm->setAttribute('method', 'post');
+$this->applicationForm->prepare();
+
+?>
+
+<h2><?php echo $this->translate('pageUserUpdateApplicationTitle'); ?></h2>
+
+<?php echo $this->form()->openTag($this->applicationForm); ?>
+<?php echo $this->formHidden($this->applicationForm->get('token')); ?>
+
+<div class="zui-field-group">
+    <?php echo $this->formLabel($this->applicationForm->get('name')); ?>
+    <?php echo $this->formText($this->applicationForm->get('name')); ?>
+    <?php echo $this->zourceFormDescription($this->applicationForm->get('name')); ?>
+    <?php echo $this->formElementErrors($this->applicationForm->get('name')); ?>
+</div>
+
+<div class="zui-field-group">
+    <?php echo $this->formLabel($this->applicationForm->get('description')); ?>
+    <?php echo $this->formTextarea($this->applicationForm->get('description')); ?>
+    <?php echo $this->zourceFormDescription($this->applicationForm->get('description')); ?>
+    <?php echo $this->formElementErrors($this->applicationForm->get('description')); ?>
+</div>
+
+<div class="zui-field-group">
+    <?php echo $this->formLabel($this->applicationForm->get('homepage')); ?>
+    <?php echo $this->formText($this->applicationForm->get('homepage')); ?>
+    <?php echo $this->zourceFormDescription($this->applicationForm->get('homepage')); ?>
+    <?php echo $this->formElementErrors($this->applicationForm->get('homepage')); ?>
+</div>
+
+<div class="zui-field-group">
+    <?php echo $this->formLabel($this->applicationForm->get('authorizationCallback')); ?>
+    <?php echo $this->formText($this->applicationForm->get('authorizationCallback')); ?>
+    <?php echo $this->zourceFormDescription($this->applicationForm->get('authorizationCallback')); ?>
+    <?php echo $this->formElementErrors($this->applicationForm->get('authorizationCallback')); ?>
+</div>
+
+<div class="zui-buttons-container">
+    <div class="zui-buttons">
+        <?php echo $this->formSubmit($this->applicationForm->get('submit')); ?>
+
+        <a href="<?php echo $this->url('settings/applications/delete', [
+            'id' => $this->application->getClientId()->toString(),
+        ]); ?>" class="zui-button">
+            <?php echo $this->translate('updateApplicationFormDelete'); ?>
+        </a>
+
+        <a href="<?php echo $this->url('settings/applications'); ?>" class="zui-button zui-button-link">
+            <?php echo $this->translate('applicationFormCancel'); ?>
+        </a>
+    </div>
+</div>
+<?php echo $this->form()->closeTag(); ?>

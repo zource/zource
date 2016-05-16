@@ -16,6 +16,18 @@ return [
     'accountFormConfirmPasswordDesc' => 'Confirm your new password.',
     'accountFormSubmit' => 'Change',
 
+    'applicationFormName' => 'Name',
+    'applicationFormNameDesc' => 'The name that is displayed to users when they authorize.',
+    'applicationFormDescription' => 'Description',
+    'applicationFormDescriptionDesc' => 'The description that is displayed to users when they authorize.',
+    'applicationFormHomepage' => 'Homepage',
+    'applicationFormHomepageDesc' => 'The homepage of the application.',
+    'applicationFormAuthorizationCallback' => 'Callback URL',
+    'applicationFormAuthorizationCallbackDesc' => 'Your application\'s callback URL.',
+    'applicationFormSubmit' => 'Create',
+    'applicationFormCancel' => 'Cancel',
+    'updateApplicationFormDelete' => 'Delete',
+
     'layoutTopMenuLogin' => 'Log in',
     'layoutTopMenuProfile' => 'Profile',
 
@@ -66,6 +78,9 @@ return [
     'resetPasswordFormVerificationDesc' => 'Verify your new password.',
     'resetPasswordFormSubmit' => 'Change',
     'resetPasswordFormCancel' => 'Back to the login screen',
+
+    'pageUserCreateApplicationTitle' => 'Create Application',
+    'pageUserUpdateApplicationTitle' => 'Update Application',
 
     'pageUserApplicationTitle' => 'Applications',
     'pageUserAccountTitle' => 'Account',

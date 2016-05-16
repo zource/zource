@@ -19,12 +19,14 @@ use ZourceUser\Authorization\Condition\Service\UserHasIdentityFactory;
 use ZourceUser\Authorization\Condition\Service\UserHasRoleFactory;
 use ZourceUser\Form\Account as AccountForm;
 use ZourceUser\Form\Authenticate as AuthenticateForm;
+use ZourceUser\Form\CreateApplication as CreateApplicationForm;
 use ZourceUser\Form\Profile as ProfileForm;
 use ZourceUser\Form\RequestPassword as RequestPasswordForm;
 use ZourceUser\Form\ResetPassword as ResetPasswordForm;
 use ZourceUser\Form\VerifyCode as VerifyCodeForm;
 use ZourceUser\InputFilter\Account as AccountInputFilter;
 use ZourceUser\InputFilter\Authenticate as AuthenticateInputFilter;
+use ZourceUser\InputFilter\CreateApplication as CreateApplicationInputFilter;
 use ZourceUser\InputFilter\Profile as ProfileInputFilter;
 use ZourceUser\InputFilter\RequestPassword as RequestPasswordInputFilter;
 use ZourceUser\InputFilter\ResetPassword as ResetPasswordInputFilter;
@@ -33,6 +35,7 @@ use ZourceUser\InputFilter\VerifyCode as VerifyCodeInputFilter;
 use ZourceUser\Mvc\Controller\Account;
 use ZourceUser\Mvc\Controller\Application;
 use ZourceUser\Mvc\Controller\Authenticate;
+use ZourceUser\Mvc\Controller\DeveloperApplication;
 use ZourceUser\Mvc\Controller\Email;
 use ZourceUser\Mvc\Controller\Notification;
 use ZourceUser\Mvc\Controller\OAuth;
@@ -45,6 +48,7 @@ use ZourceUser\Mvc\Controller\Security;
 use ZourceUser\Mvc\Controller\Service\AccountFactory;
 use ZourceUser\Mvc\Controller\Service\ApplicationFactory;
 use ZourceUser\Mvc\Controller\Service\AuthenticateFactory;
+use ZourceUser\Mvc\Controller\Service\DeveloperApplicationFactory;
 use ZourceUser\Mvc\Controller\Service\EmailFactory;
 use ZourceUser\Mvc\Controller\Service\NotificationFactory;
 use ZourceUser\Mvc\Controller\Service\OAuthFactory;
@@ -53,8 +57,10 @@ use ZourceUser\Mvc\Controller\Service\RequestFactory;
 use ZourceUser\Mvc\Controller\Service\SecurityFactory;
 use ZourceUser\Mvc\Controller\Service\TwoFactorAuthenticationFactory;
 use ZourceUser\Mvc\Controller\TwoFactorAuthentication;
+use ZourceUser\TaskService\Application as ApplicationService;
 use ZourceUser\TaskService\OAuth as OAuthTaskService;
 use ZourceUser\TaskService\PasswordChanger;
+use ZourceUser\TaskService\Service\ApplicationFactory as ApplicationServiceFactory;
 use ZourceUser\TaskService\Service\OAuthFactory as OAuthTaskServiceFactory;
 use ZourceUser\TaskService\Service\PasswordChangerFactory;
 use ZourceUser\TaskService\Service\TwoFactorAuthenticationFactory as TwoFactorAuthenticationServiceFactory;
@@ -70,6 +76,7 @@ return [
             Account::class => AccountFactory::class,
             Application::class => ApplicationFactory::class,
             Authenticate::class => AuthenticateFactory::class,
+            DeveloperApplication::class => DeveloperApplicationFactory::class,
             Email::class => EmailFactory::class,
             Notification::class => NotificationFactory::class,
             OAuth::class => OAuthFactory::class,
@@ -117,6 +124,11 @@ return [
             'hydrator' => 'ClassMethods',
             'input_filter' => AuthenticateInputFilter::class,
         ],
+        CreateApplicationForm::class => [
+            'type' => CreateApplicationForm::class,
+            'hydrator' => 'ClassMethods',
+            'input_filter' => CreateApplicationInputFilter::class,
+        ],
         ProfileForm::class => [
             'type' => ProfileForm::class,
             'hydrator' => 'ClassMethods',
@@ -144,10 +156,11 @@ return [
         ],
         'invokables' => [
             AccountInputFilter::class => AccountInputFilter::class,
+            CreateApplicationInputFilter::class => CreateApplicationInputFilter::class,
             ProfileInputFilter::class => ProfileInputFilter::class,
-            VerifyCodeInputFilter::class => VerifyCodeInputFilter::class,
             RequestPasswordInputFilter::class => RequestPasswordInputFilter::class,
             ResetPasswordInputFilter::class => ResetPasswordInputFilter::class,
+            VerifyCodeInputFilter::class => VerifyCodeInputFilter::class,
         ],
     ],
     'router' => [
@@ -271,6 +284,39 @@ return [
                                 'action' => 'index',
                             ],
                         ],
+                        'may_terminate' => true,
+                        'child_routes' => [
+                            'create' => [
+                                'type' => 'Literal',
+                                'options' => [
+                                    'route' => '/create',
+                                    'defaults' => [
+                                        'controller' => DeveloperApplication::class,
+                                        'action' => 'create',
+                                    ],
+                                ],
+                            ],
+                            'update' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => '/update/:id',
+                                    'defaults' => [
+                                        'controller' => DeveloperApplication::class,
+                                        'action' => 'update',
+                                    ],
+                                ],
+                            ],
+                            'delete' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => '/delete/:id',
+                                    'defaults' => [
+                                        'controller' => DeveloperApplication::class,
+                                        'action' => 'delete',
+                                    ],
+                                ],
+                            ],
+                        ],
                     ],
                     'email' => [
                         'type' => 'Literal',
@@ -381,6 +427,7 @@ return [
     'service_manager' => [
         'factories' => [
             AuthenticationService::class => AuthenticationServiceFactory::class,
+            ApplicationService::class => ApplicationServiceFactory::class,
             OAuthTaskService::class => OAuthTaskServiceFactory::class,
             PasswordChanger::class => PasswordChangerFactory::class,
             Storage::class => StorageFactory::class,
@@ -415,6 +462,8 @@ return [
             'zource-user/application/index' => __DIR__ . '/../view/zource-user/application/index.phtml',
             'zource-user/authenticate/login' => __DIR__ . '/../view/zource-user/authenticate/login.phtml',
             'zource-user/authenticate/login-tfa' => __DIR__ . '/../view/zource-user/authenticate/login-tfa.phtml',
+            'zource-user/developer-application/create' => __DIR__ . '/../view/zource-user/developer-application/create.phtml',
+            'zource-user/developer-application/update' => __DIR__ . '/../view/zource-user/developer-application/update.phtml',
             'zource-user/email/index' => __DIR__ . '/../view/zource-user/email/index.phtml',
             'zource-user/notification/index' => __DIR__ . '/../view/zource-user/notification/index.phtml',
             'zource-user/o-auth/authorize' => __DIR__ . '/../view/zource-user/o-auth/authorize.phtml',

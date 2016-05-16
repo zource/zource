@@ -63,19 +63,26 @@ class OAuthApplication
      * @ORM\Column(type="string", nullable=true)
      * @var string|null
      */
+    private $homepage;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @var string|null
+     */
     private $redirectUri;
 
     /**
      * Initializes a new instance of this class.
      *
-     * @param string $clientSecret
      * @param string $name
+     * @param string $homepage
      */
-    public function __construct($name)
+    public function __construct($name, $homepage)
     {
         $this->clientId = Uuid::uuid4();
         $this->createdOn = new DateTimeImmutable('now');
         $this->name = $name;
+        $this->homepage = $homepage;
     }
 
     /**

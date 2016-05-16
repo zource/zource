@@ -11,17 +11,25 @@ namespace ZourceUser\Mvc\Controller;
 
 use Zend\Authentication\AuthenticationService;
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\View\Model\ViewModel;
+use ZourceUser\TaskService\Application as ApplicationService;
 
 class Application extends AbstractActionController
 {
-    private $authenticationService;
+    /**
+     * @var ApplicationService
+     */
+    private $applicationService;
 
-    public function __construct(AuthenticationService $authenticationService)
+    public function __construct(ApplicationService $applicationService)
     {
-        $this->authenticationService = $authenticationService;
+        $this->applicationService = $applicationService;
     }
 
     public function indexAction()
     {
+        return new ViewModel([
+            'applications' => $this->applicationService->getForAccount($this->zourceAccount()),
+        ]);
     }
 }

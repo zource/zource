@@ -9,19 +9,22 @@
 
 namespace ZourceUser\Mvc\Controller\Service;
 
-use Zend\Authentication\AuthenticationService;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use ZourceUser\Mvc\Controller\Application;
+use ZourceUser\Form\CreateApplication;
+use ZourceUser\Mvc\Controller\DeveloperApplication;
 use ZourceUser\TaskService\Application as ApplicationService;
 
-class ApplicationFactory implements FactoryInterface
+class DeveloperApplicationFactory implements FactoryInterface
 {
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         /** @var ApplicationService $applicationService */
         $applicationService = $serviceLocator->getServiceLocator()->get(ApplicationService::class);
 
-        return new Application($applicationService);
+        /** @var CreateApplication $createApplicationForm */
+        $createApplicationForm = $serviceLocator->getServiceLocator()->get(CreateApplication::class);
+
+        return new DeveloperApplication($applicationService, $createApplicationForm);
     }
 }
