@@ -16,7 +16,6 @@ use OAuth2\Storage\AuthorizationCodeInterface;
 use OAuth2\Storage\ClientCredentialsInterface;
 use OAuth2\Storage\RefreshTokenInterface;
 use OAuth2\Storage\UserCredentialsInterface;
-use Zend\Crypt\Password\Bcrypt;
 use Zend\Crypt\Password\PasswordInterface;
 use ZourceUser\Entity\OAuthAccessToken;
 use ZourceUser\Entity\OAuthApplication;

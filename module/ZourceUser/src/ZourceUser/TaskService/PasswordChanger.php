@@ -33,4 +33,65 @@ class PasswordChanger
         $this->entityManager->persist($account);
         $this->entityManager->flush($account);
     }
+
+    public function assignResetCredentialCode($emailAddress)
+    {
+        $emailAddressRepository = $this->entityManager->getRepository(EmailEntity::class);
+
+        /** @var EmailEntity $emailAddress */
+        $emailAddress = $emailAddressRepository->findOneBy([
+            'address' => $emailAddress,
+        ]);
+
+        if (!$emailAddress || !$emailAddress->isVerified()) {
+            return;
+        }
+
+        mail('walter.tamboer@live.com', 'Subject', 'data');
+        exit('done');
+
+        $validChars = implode('', array_merge(range('a', 'z'), range('A', 'Z'), range('0', '9')));
+        $emailAddress->getAccount()->setResetCredentialCode(Rand::getString(32, $validChars));
+
+        $this->passwordChanger->flush($emailAddress->getAccount());
+
+        $transport = \Swift_MailTransport::newInstance();
+
+        $logger = new \Swift_Plugins_Loggers_EchoLogger();
+
+        $mailer = new \Swift_Mailer($transport);
+        $mailer->registerPlugin(new \Swift_Plugins_LoggerPlugin($logger));
+
+        /** @var \Swift_Message $message */
+        $message = $mailer->createMessage();
+        $message->setTo($emailAddress->getAddress());
+        //$message->setBoundary('zource_' . md5(time()));
+        $message->setSubject('Test');
+        $message->setBody('This is a test.');
+        $message->addPart('<q>Here is the message itself</q>', 'text/html');
+
+        $failures = [];
+        $result = $mailer->send($message, $failures);
+
+        var_dump($data, $failures, $result, $logger->dump());
+        exit;
+    }
+
+    public function resetAccountPassword($resetCode, $newPassword)
+    {
+        /** @var AccountEntity $account */
+        $account = $this->entityManager->getRepository(AccountEntity::class)->findOneBy([
+            'resetCredentialCode' => $resetCode,
+        ]);
+
+        if (!$account) {
+            return null;
+        }
+
+        $account->setResetCredentialCode(null);
+
+        $this->changePassword($account, $newPassword);
+
+        return $account;
+    }
 }

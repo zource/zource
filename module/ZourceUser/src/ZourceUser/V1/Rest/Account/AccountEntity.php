@@ -46,7 +46,7 @@ class AccountEntity
     private $credential;
 
     /**
-     * @ORM\Column(type="string", length=32)
+     * @ORM\Column(type="string", length=32, nullable=true)
      * @var string|null
      */
     private $resetCredentialCode;

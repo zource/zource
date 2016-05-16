@@ -47,10 +47,10 @@ class EmailEntity
     private $isPrimary;
 
     /**
-     * @ORM\Column(type="boolean")
-     * @var boolean
+     * @ORM\Column(type="string", nullable=true)
+     * @var string|null
      */
-    private $validated;
+    private $validationCode;
 
     /**
      * Initializes a new instance of this class.
@@ -64,7 +64,7 @@ class EmailEntity
         $this->account = $account;
         $this->address = $address;
         $this->isPrimary = false;
-        $this->validated = false;
+        $this->validationCode = null;
     }
 
     /**
@@ -108,12 +108,42 @@ class EmailEntity
     }
 
     /**
-     * Gets a flag that indicates whether or not the e-mail address is validated.
+     * Sets the flag that indicates whether or not this e-mail address is a primary address.
      *
-     * @return boolean
+     * @param boolean $isPrimary
      */
-    public function getValidated()
+    public function setIsPrimary($isPrimary)
     {
-        return $this->validated;
+        $this->isPrimary = $isPrimary;
+    }
+
+    /**
+     * Gets the validation code for this e-mail address.
+     *
+     * @return null|string
+     */
+    public function getValidationCode()
+    {
+        return $this->validationCode;
+    }
+
+    /**
+     * Sets the validation code for this e-mail address.
+     *
+     * @param null|string $validationCode
+     */
+    public function setValidationCode($validationCode)
+    {
+        $this->validationCode = $validationCode;
+    }
+
+    /**
+     * Checks if the email address is verified.
+     * 
+     * @return bool
+     */
+    public function isVerified()
+    {
+        return $this->getValidationCode() === null;
     }
 }

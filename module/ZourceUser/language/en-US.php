@@ -54,6 +54,19 @@ return [
 
     'layoutUserProfileTitle' => 'Profile',
 
+    'pageRequestPasswordTitle' => 'Request Password',
+
+    'pageResetPasswordTitle' => 'Reset Password',
+
+    'resetPasswordFormCode' => 'Code',
+    'resetPasswordFormCodeDesc' => 'The reset code of your account.',
+    'resetPasswordFormCredential' => 'Password',
+    'resetPasswordFormCredentialDesc' => 'Enter your new password.',
+    'resetPasswordFormVerification' => 'Verify',
+    'resetPasswordFormVerificationDesc' => 'Verify your new password.',
+    'resetPasswordFormSubmit' => 'Change',
+    'resetPasswordFormCancel' => 'Back to the login screen',
+
     'pageUserApplicationTitle' => 'Applications',
     'pageUserAccountTitle' => 'Account',
     'pageUserEmailTitle' => 'Email',
@@ -69,6 +82,11 @@ return [
     'profileFormSurname' => 'Surname',
     'profileFormSurnameDesc' => 'Your surname.',
     'profileFormSubmit' => 'Save',
+
+    'requestPasswordFormEmail' => 'E-mail',
+    'requestPasswordFormEmailDesc' => 'Your e-mail address',
+    'requestPasswordFormSubmit' => 'Send',
+    'requestPasswordFormCancel' => 'Did you suddenly remember?',
 
     'verifyCodeFormCode' => 'Code',
     'verifyCodeFormCodeDesc' => 'Enter the six-digit code from the application.',

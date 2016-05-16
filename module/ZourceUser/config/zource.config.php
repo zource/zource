@@ -20,10 +20,14 @@ use ZourceUser\Authorization\Condition\Service\UserHasRoleFactory;
 use ZourceUser\Form\Account as AccountForm;
 use ZourceUser\Form\Authenticate as AuthenticateForm;
 use ZourceUser\Form\Profile as ProfileForm;
+use ZourceUser\Form\RequestPassword as RequestPasswordForm;
+use ZourceUser\Form\ResetPassword as ResetPasswordForm;
 use ZourceUser\Form\VerifyCode as VerifyCodeForm;
 use ZourceUser\InputFilter\Account as AccountInputFilter;
 use ZourceUser\InputFilter\Authenticate as AuthenticateInputFilter;
 use ZourceUser\InputFilter\Profile as ProfileInputFilter;
+use ZourceUser\InputFilter\RequestPassword as RequestPasswordInputFilter;
+use ZourceUser\InputFilter\ResetPassword as ResetPasswordInputFilter;
 use ZourceUser\InputFilter\Service\AuthenticateFactory as AuthenticateInputFilterFactory;
 use ZourceUser\InputFilter\VerifyCode as VerifyCodeInputFilter;
 use ZourceUser\Mvc\Controller\Account;
@@ -36,6 +40,7 @@ use ZourceUser\Mvc\Controller\Plugin\Service\AccountFactory as AccountPluginFact
 use ZourceUser\Mvc\Controller\Plugin\Service\IdentityFactory;
 use ZourceUser\Mvc\Controller\Profile;
 use ZourceUser\Mvc\Controller\RecoveryCodes;
+use ZourceUser\Mvc\Controller\Request;
 use ZourceUser\Mvc\Controller\Security;
 use ZourceUser\Mvc\Controller\Service\AccountFactory;
 use ZourceUser\Mvc\Controller\Service\ApplicationFactory;
@@ -44,6 +49,7 @@ use ZourceUser\Mvc\Controller\Service\EmailFactory;
 use ZourceUser\Mvc\Controller\Service\NotificationFactory;
 use ZourceUser\Mvc\Controller\Service\OAuthFactory;
 use ZourceUser\Mvc\Controller\Service\ProfileFactory;
+use ZourceUser\Mvc\Controller\Service\RequestFactory;
 use ZourceUser\Mvc\Controller\Service\SecurityFactory;
 use ZourceUser\Mvc\Controller\Service\TwoFactorAuthenticationFactory;
 use ZourceUser\Mvc\Controller\TwoFactorAuthentication;
@@ -68,6 +74,7 @@ return [
             Notification::class => NotificationFactory::class,
             OAuth::class => OAuthFactory::class,
             Profile::class => ProfileFactory::class,
+            Request::class => RequestFactory::class,
             Security::class => SecurityFactory::class,
             TwoFactorAuthentication::class => TwoFactorAuthenticationFactory::class,
         ],
@@ -115,6 +122,16 @@ return [
             'hydrator' => 'ClassMethods',
             'input_filter' => ProfileInputFilter::class,
         ],
+        RequestPasswordForm::class => [
+            'type' => RequestPasswordForm::class,
+            'hydrator' => 'ClassMethods',
+            'input_filter' => RequestPasswordInputFilter::class,
+        ],
+        ResetPasswordForm::class => [
+            'type' => ResetPasswordForm::class,
+            'hydrator' => 'ClassMethods',
+            'input_filter' => ResetPasswordInputFilter::class,
+        ],
         VerifyCodeForm::class => [
             'type' => VerifyCodeForm::class,
             'hydrator' => 'ClassMethods',
@@ -129,6 +146,8 @@ return [
             AccountInputFilter::class => AccountInputFilter::class,
             ProfileInputFilter::class => ProfileInputFilter::class,
             VerifyCodeInputFilter::class => VerifyCodeInputFilter::class,
+            RequestPasswordInputFilter::class => RequestPasswordInputFilter::class,
+            ResetPasswordInputFilter::class => ResetPasswordInputFilter::class,
         ],
     ],
     'router' => [
@@ -187,6 +206,37 @@ return [
                             'route' => '/token',
                             'defaults' => [
                                 'action' => 'token',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'request' => [
+                'type' => 'Literal',
+                'options' => [
+                    'route' => '/request',
+                ],
+                'child_routes' => [
+                    'password' => [
+                        'type' => 'Literal',
+                        'options' => [
+                            'route' => '/password',
+                            'defaults' => [
+                                'controller' => Request::class,
+                                'action' => 'password',
+                            ],
+                        ],
+                    ],
+                    'reset-password' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => '/password/reset[/:code]',
+                            'defaults' => [
+                                'controller' => Request::class,
+                                'action' => 'reset-password',
+                            ],
+                            'constraints' => [
+                                'code' => '[a-z0-9]{32}',
                             ],
                         ],
                     ],
@@ -370,6 +420,8 @@ return [
             'zource-user/o-auth/authorize' => __DIR__ . '/../view/zource-user/o-auth/authorize.phtml',
             'zource-user/o-auth/receive-code' => __DIR__ . '/../view/zource-user/o-auth/receive-code.phtml',
             'zource-user/profile/index' => __DIR__ . '/../view/zource-user/profile/index.phtml',
+            'zource-user/request/password' => __DIR__ . '/../view/zource-user/request/password.phtml',
+            'zource-user/request/reset-password' => __DIR__ . '/../view/zource-user/request/reset-password.phtml',
             'zource-user/security/index' => __DIR__ . '/../view/zource-user/security/index.phtml',
             'zource-user/two-factor-authentication/disable' => __DIR__ . '/../view/zource-user/two-factor-authentication/disable.phtml',
             'zource-user/two-factor-authentication/enable' => __DIR__ . '/../view/zource-user/two-factor-authentication/enable.phtml',
@@ -389,6 +441,8 @@ return [
             'oauth/authorize' => true,
             'oauth/token' => false,
             'oauth' => false,
+            'request/password' => false,
+            'request/reset-password' => false,
             'settings/*' => true,
             'zf-apigility/*' => false,
         ],
