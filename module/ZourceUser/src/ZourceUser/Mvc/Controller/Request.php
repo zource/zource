@@ -15,7 +15,7 @@ use Zend\Math\Rand;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use ZourceUser\TaskService\PasswordChanger;
-use ZourceUser\V1\Rest\Account\AccountEntity;
+use ZourceUser\Entity\AccountInterface;
 use ZourceUser\V1\Rest\Email\EmailEntity;
 
 class Request extends AbstractActionController

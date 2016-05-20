@@ -12,7 +12,7 @@ namespace ZourceUser\V1\Rest\Identity;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
-use ZourceUser\V1\Rest\Account\AccountEntity;
+use ZourceUser\Entity\AccountInterface;
 
 /**
  * @ORM\Entity
@@ -28,9 +28,9 @@ class IdentityEntity
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="ZourceUser\V1\Rest\Account\AccountEntity")
+     * @ORM\ManyToOne(targetEntity="ZourceUser\Entity\AccountInterface")
      * @ORM\JoinColumn(onDelete="CASCADE")
-     * @var AccountEntity
+     * @var AccountInterface
      */
     private $account;
 
@@ -53,11 +53,11 @@ class IdentityEntity
     /**
      * Initializes a new instance of this class.
      *
-     * @param AccountEntity $account The account to which this entity belongs.
+     * @param AccountInterface $account The account to which this entity belongs.
      * @param string $directory The directory of the identity.
      * @param string $identity The identity representation.
      */
-    public function __construct(AccountEntity $account, $directory, $identity)
+    public function __construct(AccountInterface $account, $directory, $identity)
     {
         $this->id = Uuid::uuid4();
         $this->account = $account;
@@ -78,7 +78,7 @@ class IdentityEntity
     /**
      * Gets the account for this identity.
      *
-     * @return AccountEntity
+     * @return AccountInterface
      */
     public function getAccount()
     {

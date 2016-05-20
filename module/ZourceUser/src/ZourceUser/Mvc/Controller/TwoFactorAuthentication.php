@@ -17,7 +17,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use ZourceUser\Form\VerifyCode;
 use ZourceUser\TaskService\TwoFactorAuthentication as TwoFactorAuthenticationService;
-use ZourceUser\V1\Rest\Account\AccountEntity;
+use ZourceUser\Entity\AccountInterface;
 
 class TwoFactorAuthentication extends AbstractActionController
 {

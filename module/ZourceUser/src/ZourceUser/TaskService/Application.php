@@ -13,7 +13,7 @@ use Doctrine\ORM\EntityManager;
 use Zend\Crypt\Password\PasswordInterface;
 use Zend\Math\Rand;
 use ZourceUser\Entity\OAuthApplication;
-use ZourceUser\V1\Rest\Account\AccountEntity;
+use ZourceUser\Entity\AccountInterface;
 
 class Application
 {
@@ -43,7 +43,7 @@ class Application
         $this->entityManager->flush($oauthApplication);
     }
 
-    public function getForAccount(AccountEntity $account)
+    public function getForAccount(AccountInterface $account)
     {
         $applications = $this->entityManager->getRepository(OAuthApplication::class)->findBy([
             'account' => $account,
@@ -52,7 +52,7 @@ class Application
         return $applications;
     }
 
-    public function createApplicationFromArray(AccountEntity $account, array $data)
+    public function createApplicationFromArray(AccountInterface $account, array $data)
     {
         $clientSecret = Rand::getString(64, 'abcdefghijklmnopqrstuvwxyz0123456789');
         

@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 use ZourceProject\V1\Rest\Category\CategoryEntity;
-use ZourceUser\V1\Rest\Account\AccountEntity;
+use ZourceUser\Entity\AccountInterface;
 
 /**
  * @ORM\Entity
@@ -55,9 +55,9 @@ class ProjectEntity
     private $category;
 
     /**
-     * @ORM\ManyToOne(targetEntity="ZourceUser\V1\Rest\Account\AccountEntity")
+     * @ORM\ManyToOne(targetEntity="ZourceUser\Entity\AccountInterface")
      * @ORM\JoinColumn(onDelete="CASCADE")
-     * @var AccountEntity
+     * @var AccountInterface
      */
     private $lead;
 
@@ -170,7 +170,7 @@ class ProjectEntity
     /**
      * Gets the value of lead
      *
-     * @return AccountEntity
+     * @return AccountInterface
      */
     public function getLead()
     {
@@ -180,7 +180,7 @@ class ProjectEntity
     /**
      * Sets the value of lead
      *
-     * @param AccountEntity $lead
+     * @param AccountInterface $lead
      */
     public function setLead($lead)
     {

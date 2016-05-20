@@ -57,7 +57,7 @@ class Session extends AbstractListenerAggregate
 
         /** @var SessionEntity $session */
         $session = $respository->find($sessionManager->getId());
-        $session->setAccount($authenticationService->getAccountEntity());
+        $session->setAccount($authenticationService->getAccountInterface());
 
         $entityManager->persist($session);
         $entityManager->flush($session);

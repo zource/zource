@@ -35,7 +35,7 @@ class GroupEntity
     private $name;
 
     /**
-     * @ORM\ManyToMany(targetEntity="ZourceUser\V1\Rest\Account\AccountEntity", mappedBy="groups")
+     * @ORM\ManyToMany(targetEntity="ZourceUser\Entity\AccountInterface", mappedBy="groups")
      * @var Collection
      */
     private $users;

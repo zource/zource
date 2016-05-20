@@ -42,7 +42,7 @@ class Account extends AbstractActionController
             if ($this->accountForm->isValid()) {
                 $data = $this->accountForm->getData();
 
-                $account = $this->authenticationService->getAccountEntity();
+                $account = $this->authenticationService->getAccountInterface();
 
                 $this->passwordChanger->changePassword($account, $data['newPassword']);
 

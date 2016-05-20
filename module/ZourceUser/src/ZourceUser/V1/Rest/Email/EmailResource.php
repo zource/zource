@@ -10,7 +10,7 @@
 namespace ZourceUser\V1\Rest\Email;
 
 use ZourceApplication\Rest\AbstractDoctrineListener;
-use ZourceUser\V1\Rest\Account\AccountEntity;
+use ZourceUser\Entity\AccountInterface;
 
 class EmailResource extends AbstractDoctrineListener
 {
@@ -19,7 +19,7 @@ class EmailResource extends AbstractDoctrineListener
      */
     public function create($data)
     {
-        $account = $this->getEntityManager()->getRepository(AccountEntity::class)->find($data->account);
+        $account = $this->getEntityManager()->getRepository(AccountInterface::class)->find($data->account);
 
         $data->account = $account;
 

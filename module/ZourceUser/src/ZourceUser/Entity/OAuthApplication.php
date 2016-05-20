@@ -13,7 +13,7 @@ use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
-use ZourceUser\V1\Rest\Account\AccountEntity as AccountInterface;
+use ZourceUser\Entity\AccountInterface as AccountInterface;
 
 /**
  * @ORM\Entity
@@ -35,7 +35,7 @@ class OAuthApplication
     private $clientSecret;
 
     /**
-     * @ORM\ManyToOne(targetEntity="ZourceUser\V1\Rest\Account\AccountEntity", fetch="EAGER")
+     * @ORM\ManyToOne(targetEntity="ZourceUser\Entity\AccountInterface", fetch="EAGER")
      * @ORM\JoinColumn(onDelete="CASCADE")
      * @var AccountInterface|null
      */

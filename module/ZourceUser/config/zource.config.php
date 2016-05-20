@@ -17,6 +17,8 @@ use ZourceUser\Authentication\OAuth\Storage;
 use ZourceUser\Authentication\Service\AuthenticationServiceFactory;
 use ZourceUser\Authorization\Condition\Service\UserHasIdentityFactory;
 use ZourceUser\Authorization\Condition\Service\UserHasRoleFactory;
+use ZourceUser\Entity\Account as AccountEntity;
+use ZourceUser\Entity\AccountInterface;
 use ZourceUser\Form\Account as AccountForm;
 use ZourceUser\Form\AddEmail as AddEmailForm;
 use ZourceUser\Form\Authenticate as AuthenticateForm;
@@ -107,7 +109,6 @@ return [
                 'cache' => 'array',
                 'paths' => [
                     __DIR__ . '/../src/' . __NAMESPACE__ . '/Entity',
-                    __DIR__ . '/../src/' . __NAMESPACE__ . '/V1/Rest/Account',
                     __DIR__ . '/../src/' . __NAMESPACE__ . '/V1/Rest/Email',
                     __DIR__ . '/../src/' . __NAMESPACE__ . '/V1/Rest/Group',
                     __DIR__ . '/../src/' . __NAMESPACE__ . '/V1/Rest/Identity',
@@ -117,6 +118,13 @@ return [
             'orm_default' => [
                 'drivers' => [
                     __NAMESPACE__ => __NAMESPACE__
+                ],
+            ],
+        ],
+        'entity_resolver' => [
+            'orm_default' => [
+                'resolvers' => [
+                    AccountInterface::class => AccountEntity::class,
                 ],
             ],
         ],

@@ -15,7 +15,7 @@ use Zend\Form\FormInterface;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Session\Container;
 use Zend\View\Model\ViewModel;
-use ZourceUser\V1\Rest\Account\AccountEntity;
+use ZourceUser\Entity\AccountInterface;
 
 class Authenticate extends AbstractActionController
 {
@@ -71,7 +71,7 @@ class Authenticate extends AbstractActionController
             $this->authenticateForm->setData($this->getRequest()->getPost());
 
             if ($this->authenticateForm->isValid()) {
-                /** @var AccountEntity $account */
+                /** @var AccountInterface $account */
                 $account = $this->zourceAccount();
 
                 $this->authSession->identity = $this->identity();
@@ -99,7 +99,7 @@ class Authenticate extends AbstractActionController
         if ($this->getRequest()->isPost()) {
             $this->verifyCodeForm->setData($this->getRequest()->getPost());
 
-            /** @var AccountEntity $account */
+            /** @var AccountInterface $account */
             $account = $this->zourceIdentity($this->authSession->identity)->getAccount();
 
             /** @var \ZourceUser\InputFilter\VerifyCode $inputFilter */
@@ -133,7 +133,7 @@ class Authenticate extends AbstractActionController
         return $this->redirect()->toRoute('login');
     }
 
-    private function redirectAfterLogin(AccountEntity $account)
+    private function redirectAfterLogin(AccountInterface $account)
     {
         if (!$this->authSession->verified && $account->hasTwoFactorAuthentication()) {
             return $this->redirect()->toRoute('login-tfa');

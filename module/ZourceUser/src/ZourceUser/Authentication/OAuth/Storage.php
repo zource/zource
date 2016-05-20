@@ -21,7 +21,7 @@ use ZourceUser\Entity\OAuthAccessToken;
 use ZourceUser\Entity\OAuthApplication;
 use ZourceUser\Entity\OAuthAuthorizationCode;
 use ZourceUser\Entity\OAuthRefreshToken;
-use ZourceUser\V1\Rest\Account\AccountEntity;
+use ZourceUser\Entity\AccountInterface;
 use ZourceUser\V1\Rest\Identity\IdentityEntity;
 
 class Storage implements
@@ -58,11 +58,11 @@ class Storage implements
 
     /**
      * @param string $id
-     * @return AccountEntity
+     * @return AccountInterface
      */
     public function getAccount($id)
     {
-        return $this->entityManager->getRepository(AccountEntity::class)->find($id);
+        return $this->entityManager->getRepository(AccountInterface::class)->find($id);
     }
 
     /**
@@ -99,11 +99,8 @@ class Storage implements
             return;
         }
 
-        /** @var AccountEntity $account */
-        $account = $this->getAccount($userId);
-        if (!$account) {
-            return;
-        }
+        /** @var AccountInterface $account */
+        $account = $userId ? $this->getAccount($userId) : null;
 
         $expireDate = new DateTime();
         $expireDate->setTimestamp($expires);
@@ -169,6 +166,10 @@ class Storage implements
     public function checkClientCredentials($clientId, $clientSecret = null)
     {
         $application = $this->getApplication($clientId);
+
+        if (!$application) {
+            return false;
+        }
 
         return $this->crypter->verify($clientSecret, $application->getClientSecret());
     }
@@ -246,7 +247,7 @@ class Storage implements
             return;
         }
 
-        /** @var AccountEntity $account */
+        /** @var AccountInterface $account */
         $account = $this->getAccount($userId);
         if (!$account) {
             return;

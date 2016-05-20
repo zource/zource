@@ -73,7 +73,7 @@ class VerifyEmailCode extends AbstractValidator
      */
     public function isValid($value, $context = null)
     {
-        $account = $this->getAuthenticationService()->getAccountEntity();
+        $account = $this->getAuthenticationService()->getAccountInterface();
         $repository = $this->getEntityManager()->getRepository(EmailEntity::class);
 
         $qb = $repository->createQueryBuilder('e');

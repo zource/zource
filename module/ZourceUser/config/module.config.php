@@ -116,7 +116,7 @@ return array(
             'collection_query_whitelist' => array(),
             'page_size' => 25,
             'page_size_param' => null,
-            'entity_class' => 'ZourceUser\\V1\\Rest\\Account\\AccountEntity',
+            'entity_class' => 'ZourceUser\\V1\\Rest\\Account\\AccountInterface',
             'collection_class' => 'ZourceUser\\V1\\Rest\\Account\\AccountCollection',
             'service_name' => 'Account',
         ),
@@ -274,7 +274,7 @@ return array(
     ),
     'zf-hal' => array(
         'metadata_map' => array(
-            'ZourceUser\\V1\\Rest\\Account\\AccountEntity' => array(
+            'ZourceUser\\V1\\Rest\\Account\\AccountInterface' => array(
                 'entity_identifier_name' => 'id',
                 'route_name' => 'zource-user.rest.account',
                 'route_identifier_name' => 'account_id',

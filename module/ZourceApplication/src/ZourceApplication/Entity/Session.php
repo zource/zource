@@ -11,7 +11,7 @@ namespace ZourceApplication\Entity;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use ZourceUser\V1\Rest\Account\AccountEntity;
+use ZourceUser\Entity\AccountInterface;
 
 /**
  * @ORM\Entity
@@ -27,8 +27,8 @@ class Session
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="ZourceUser\V1\Rest\Account\AccountEntity")
-     * @var AccountEntity|null
+     * @ORM\ManyToOne(targetEntity="ZourceUser\Entity\AccountInterface")
+     * @var AccountInterface|null
      */
     private $account;
 
@@ -96,7 +96,7 @@ class Session
     }
 
     /**
-     * @return AccountEntity|null
+     * @return AccountInterface|null
      */
     public function getAccount()
     {
@@ -104,9 +104,9 @@ class Session
     }
 
     /**
-     * @param AccountEntity|null $account
+     * @param AccountInterface|null $account
      */
-    public function setAccount(AccountEntity $account = null)
+    public function setAccount(AccountInterface $account = null)
     {
         $this->account = $account;
     }

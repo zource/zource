@@ -13,7 +13,7 @@ use Base32\Base32;
 use Doctrine\ORM\EntityManager;
 use Zend\Math\Rand;
 use Zend\Session\Container;
-use ZourceUser\V1\Rest\Account\AccountEntity;
+use ZourceUser\Entity\AccountInterface;
 use ZourceUser\V1\Rest\Email\EmailEntity;
 
 class Email
@@ -28,7 +28,7 @@ class Email
         $this->entityManager = $entityManager;
     }
 
-    public function createFromArray(AccountEntity $account, array $data)
+    public function createFromArray(AccountInterface $account, array $data)
     {
         $isPrimary = $account->getEmailAddresses()->count() === 0;
         $validationCode = $this->generateValidationCode();
@@ -41,7 +41,7 @@ class Email
         $this->entityManager->flush($emailAddress);
     }
 
-    public function getAddress(AccountEntity $account, $id)
+    public function getAddress(AccountInterface $account, $id)
     {
         $emailAddressesRepository = $this->entityManager->getRepository(EmailEntity::class);
 
@@ -51,7 +51,7 @@ class Email
         ]);
     }
 
-    public function getAddressByCode(AccountEntity $account, $id, $code)
+    public function getAddressByCode(AccountInterface $account, $id, $code)
     {
         $emailAddressesRepository = $this->entityManager->getRepository(EmailEntity::class);
 
@@ -62,7 +62,7 @@ class Email
         ]);
     }
 
-    public function makePrimary(AccountEntity $account, $id)
+    public function makePrimary(AccountInterface $account, $id)
     {
         $emailAddressesRepository = $this->entityManager->getRepository(EmailEntity::class);
 
@@ -83,7 +83,7 @@ class Email
         return $emailAddress;
     }
 
-    public function activate(AccountEntity $account, $id, $code)
+    public function activate(AccountInterface $account, $id, $code)
     {
         $emailAddress = $this->getAddressByCode($account, $id, $code);
         if (!$emailAddress) {
@@ -102,7 +102,7 @@ class Email
         $this->entityManager->flush($emailAddress);
     }
 
-    public function getForAccount(AccountEntity $account)
+    public function getForAccount(AccountInterface $account)
     {
         $emailAddressesRepository = $this->entityManager->getRepository(EmailEntity::class);
 

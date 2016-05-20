@@ -11,7 +11,7 @@ namespace ZourceUser\TaskService;
 
 use Doctrine\ORM\EntityManager;
 use Zend\Crypt\Password\PasswordInterface;
-use ZourceUser\V1\Rest\Account\AccountEntity;
+use ZourceUser\Entity\AccountInterface;
 
 class PasswordChanger
 {
@@ -24,7 +24,7 @@ class PasswordChanger
         $this->crypter = $crypter;
     }
 
-    public function changePassword(AccountEntity $account, $newPassword)
+    public function changePassword(AccountInterface $account, $newPassword)
     {
         $credential = $this->crypter->create($newPassword);
 
@@ -79,8 +79,8 @@ class PasswordChanger
 
     public function resetAccountPassword($resetCode, $newPassword)
     {
-        /** @var AccountEntity $account */
-        $account = $this->entityManager->getRepository(AccountEntity::class)->findOneBy([
+        /** @var AccountInterface $account */
+        $account = $this->entityManager->getRepository(AccountInterface::class)->findOneBy([
             'resetCredentialCode' => $resetCode,
         ]);
 

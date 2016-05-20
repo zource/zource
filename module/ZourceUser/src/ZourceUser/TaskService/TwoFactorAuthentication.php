@@ -13,7 +13,7 @@ use Base32\Base32;
 use Doctrine\ORM\EntityManager;
 use Zend\Math\Rand;
 use Zend\Session\Container;
-use ZourceUser\V1\Rest\Account\AccountEntity;
+use ZourceUser\Entity\AccountInterface;
 
 class TwoFactorAuthentication
 {
@@ -60,7 +60,7 @@ class TwoFactorAuthentication
         $this->session->code = null;
     }
 
-    public function persistTwoFactorAuthentication(AccountEntity $account, $secret)
+    public function persistTwoFactorAuthentication(AccountInterface $account, $secret)
     {
         $account->setTwoFactorAuthenticationType(self::OTP_TOTP);
         $account->setTwoFactorAuthenticationCode($secret);
@@ -69,7 +69,7 @@ class TwoFactorAuthentication
         $this->entityManager->flush($account);
     }
 
-    public function clearTwoFactorAuthentication(AccountEntity $account)
+    public function clearTwoFactorAuthentication(AccountInterface $account)
     {
         $account->setTwoFactorAuthenticationType(null);
         $account->setTwoFactorAuthenticationCode(null);

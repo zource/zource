@@ -15,7 +15,7 @@ use Zend\Authentication\Adapter\ValidatableAdapterInterface;
 use Zend\Authentication\Result;
 use Zend\Crypt\Password\Bcrypt;
 use Zend\Crypt\Password\PasswordInterface;
-use ZourceUser\V1\Rest\Account\AccountEntity;
+use ZourceUser\Entity\AccountInterface;
 use ZourceUser\V1\Rest\Identity\IdentityEntity;
 
 class Zource implements ValidatableAdapterInterface

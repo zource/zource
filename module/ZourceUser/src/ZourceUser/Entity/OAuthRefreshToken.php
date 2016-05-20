@@ -11,7 +11,7 @@ namespace ZourceUser\Entity;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use ZourceUser\V1\Rest\Account\AccountEntity;
+use ZourceUser\Entity\AccountInterface;
 
 /**
  * @ORM\Entity
@@ -34,9 +34,9 @@ class OAuthRefreshToken
     private $application;
 
     /**
-     * @ORM\ManyToOne(targetEntity="ZourceUser\V1\Rest\Account\AccountEntity", fetch="LAZY")
+     * @ORM\ManyToOne(targetEntity="ZourceUser\Entity\AccountInterface", fetch="LAZY")
      * @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
-     * @var AccountEntity
+     * @var AccountInterface
      */
     private $account;
 
@@ -52,7 +52,7 @@ class OAuthRefreshToken
      */
     private $scope;
 
-    public function __construct($refreshToken, OAuthApplication $application, AccountEntity $account, $expires)
+    public function __construct($refreshToken, OAuthApplication $application, AccountInterface $account, $expires)
     {
         $this->refreshToken = $refreshToken;
         $this->application = $application;
@@ -77,7 +77,7 @@ class OAuthRefreshToken
     }
 
     /**
-     * @return AccountEntity
+     * @return AccountInterface
      */
     public function getAccount()
     {

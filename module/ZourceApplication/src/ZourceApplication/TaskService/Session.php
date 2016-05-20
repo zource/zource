@@ -11,7 +11,7 @@ namespace ZourceApplication\TaskService;
 
 use Doctrine\ORM\EntityManager;
 use ZourceApplication\Entity\Session as SessionEntity;
-use ZourceUser\V1\Rest\Account\AccountEntity;
+use ZourceUser\Entity\AccountInterface;
 
 class Session
 {
@@ -62,7 +62,7 @@ class Session
         $qb->getQuery()->execute();
     }
 
-    public function getForAccount(AccountEntity $account)
+    public function getForAccount(AccountInterface $account)
     {
         $repository = $this->entityManager->getRepository(SessionEntity::class);
 

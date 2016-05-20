@@ -12,7 +12,7 @@ namespace ZourceUser\V1\Rest\Email;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
-use ZourceUser\V1\Rest\Account\AccountEntity;
+use ZourceUser\Entity\AccountInterface;
 
 /**
  * @ORM\Entity
@@ -28,9 +28,9 @@ class EmailEntity
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="ZourceUser\V1\Rest\Account\AccountEntity")
+     * @ORM\ManyToOne(targetEntity="ZourceUser\Entity\AccountInterface")
      * @ORM\JoinColumn(onDelete="CASCADE")
-     * @var AccountEntity
+     * @var AccountInterface
      */
     private $account;
 
@@ -55,10 +55,10 @@ class EmailEntity
     /**
      * Initializes a new instance of this class.
      *
-     * @param AccountEntity $account The account to which the e-mail address belongs.
+     * @param AccountInterface $account The account to which the e-mail address belongs.
      * @param string $address The e-mail address.
      */
-    public function __construct(AccountEntity $account, $address)
+    public function __construct(AccountInterface $account, $address)
     {
         $this->id = Uuid::uuid4();
         $this->account = $account;
@@ -80,7 +80,7 @@ class EmailEntity
     /**
      * Gets the account to which this e-mail address belongs.
      *
-     * @return AccountEntity
+     * @return AccountInterface
      */
     public function getAccount()
     {

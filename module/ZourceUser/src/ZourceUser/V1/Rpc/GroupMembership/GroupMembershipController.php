@@ -7,7 +7,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 use ZF\ApiProblem\ApiProblem;
 use ZF\ApiProblem\ApiProblemResponse;
 use ZF\ContentNegotiation\ViewModel;
-use ZourceUser\V1\Rest\Account\AccountEntity;
+use ZourceUser\Entity\AccountInterface;
 use ZourceUser\V1\Rest\Group\GroupEntity;
 
 class GroupMembershipController extends AbstractActionController
@@ -24,8 +24,8 @@ class GroupMembershipController extends AbstractActionController
 
     public function groupMembershipAction()
     {
-        /** @var AccountEntity $account */
-        $account = $this->entityManager->getRepository(AccountEntity::class)->find($this->bodyParam('account'));
+        /** @var AccountInterface $account */
+        $account = $this->entityManager->getRepository(AccountInterface::class)->find($this->bodyParam('account'));
         if (!$account) {
             return new ApiProblem(404, 'The account could not be found.');
         }

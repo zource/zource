@@ -11,7 +11,7 @@ namespace ZourceUser\Entity;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use ZourceUser\V1\Rest\Account\AccountEntity;
+use ZourceUser\Entity\AccountInterface;
 
 /**
  * @ORM\Entity
@@ -34,9 +34,9 @@ class OAuthAuthorizationCode
     private $application;
 
     /**
-     * @ORM\ManyToOne(targetEntity="ZourceUser\V1\Rest\Account\AccountEntity", fetch="LAZY")
+     * @ORM\ManyToOne(targetEntity="ZourceUser\Entity\AccountInterface", fetch="LAZY")
      * @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
-     * @var AccountEntity
+     * @var AccountInterface
      */
     private $account;
 
@@ -63,14 +63,14 @@ class OAuthAuthorizationCode
      *
      * @param string $authorizationCode
      * @param OAuthApplication $application
-     * @param AccountEntity $account
+     * @param AccountInterface $account
      * @param string $redirectUri
      * @param DateTime $expires
      */
     public function __construct(
         $authorizationCode,
         OAuthApplication $application,
-        AccountEntity $account,
+        AccountInterface $account,
         $redirectUri,
         DateTime $expires
     ) {
@@ -98,7 +98,7 @@ class OAuthAuthorizationCode
     }
 
     /**
-     * @return AccountEntity
+     * @return AccountInterface
      */
     public function getAccount()
     {
