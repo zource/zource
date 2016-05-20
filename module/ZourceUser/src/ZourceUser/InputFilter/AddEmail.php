@@ -7,33 +7,31 @@
  * @license https://raw.githubusercontent.com/zource/zource/master/LICENSE MIT
  */
 
-namespace ZourceUser\Form;
+namespace ZourceUser\InputFilter;
 
-use Zend\Form\Form as BaseForm;
+use Zend\InputFilter\InputFilter;
 
-class AddEmail extends BaseForm
+class AddEmail extends InputFilter
 {
     public function init()
     {
         $this->add([
-            'type' => 'Csrf',
             'name' => 'token',
+            'required' => true,
         ]);
 
         $this->add([
-            'type' => 'Text',
             'name' => 'emailAddress',
-            'options' => [
-                'label' => 'addEmailFormAddress',
-                'description' => 'addEmailFormAddressDesc',
+            'required' => true,
+            'filters' => [
+                [
+                    'name' => 'Zend\Filter\StringTrim',
+                ],
             ],
-        ]);
-
-        $this->add([
-            'type' => 'Submit',
-            'name' => 'submit',
-            'attributes' => [
-                'value' => 'addEmailFormSubmit',
+            'validators' => [
+                [
+                    'name' => 'Zend\\Validator\\EmailAddress',
+                ],
             ],
         ]);
     }

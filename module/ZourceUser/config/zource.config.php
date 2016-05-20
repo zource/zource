@@ -18,13 +18,16 @@ use ZourceUser\Authentication\Service\AuthenticationServiceFactory;
 use ZourceUser\Authorization\Condition\Service\UserHasIdentityFactory;
 use ZourceUser\Authorization\Condition\Service\UserHasRoleFactory;
 use ZourceUser\Form\Account as AccountForm;
+use ZourceUser\Form\AddEmail as AddEmailForm;
 use ZourceUser\Form\Authenticate as AuthenticateForm;
 use ZourceUser\Form\CreateApplication as CreateApplicationForm;
 use ZourceUser\Form\Profile as ProfileForm;
 use ZourceUser\Form\RequestPassword as RequestPasswordForm;
 use ZourceUser\Form\ResetPassword as ResetPasswordForm;
 use ZourceUser\Form\VerifyCode as VerifyCodeForm;
+use ZourceUser\Form\VerifyEmail as VerifyEmailForm;
 use ZourceUser\InputFilter\Account as AccountInputFilter;
+use ZourceUser\InputFilter\AddEmail as AddEmailInputFilter;
 use ZourceUser\InputFilter\Authenticate as AuthenticateInputFilter;
 use ZourceUser\InputFilter\CreateApplication as CreateApplicationInputFilter;
 use ZourceUser\InputFilter\Profile as ProfileInputFilter;
@@ -32,6 +35,7 @@ use ZourceUser\InputFilter\RequestPassword as RequestPasswordInputFilter;
 use ZourceUser\InputFilter\ResetPassword as ResetPasswordInputFilter;
 use ZourceUser\InputFilter\Service\AuthenticateFactory as AuthenticateInputFilterFactory;
 use ZourceUser\InputFilter\VerifyCode as VerifyCodeInputFilter;
+use ZourceUser\InputFilter\VerifyEmail as VerifyEmailInputFilter;
 use ZourceUser\Mvc\Controller\Account;
 use ZourceUser\Mvc\Controller\Application;
 use ZourceUser\Mvc\Controller\Authenticate;
@@ -58,9 +62,11 @@ use ZourceUser\Mvc\Controller\Service\SecurityFactory;
 use ZourceUser\Mvc\Controller\Service\TwoFactorAuthenticationFactory;
 use ZourceUser\Mvc\Controller\TwoFactorAuthentication;
 use ZourceUser\TaskService\Application as ApplicationService;
+use ZourceUser\TaskService\Email as EmailTaskService;
 use ZourceUser\TaskService\OAuth as OAuthTaskService;
 use ZourceUser\TaskService\PasswordChanger;
 use ZourceUser\TaskService\Service\ApplicationFactory as ApplicationServiceFactory;
+use ZourceUser\TaskService\Service\EmailFactory as EmailTaskServiceFactory;
 use ZourceUser\TaskService\Service\OAuthFactory as OAuthTaskServiceFactory;
 use ZourceUser\TaskService\Service\PasswordChangerFactory;
 use ZourceUser\TaskService\Service\TwoFactorAuthenticationFactory as TwoFactorAuthenticationServiceFactory;
@@ -69,6 +75,8 @@ use ZourceUser\Validator\Directory;
 use ZourceUser\Validator\IdentityNotExists;
 use ZourceUser\Validator\Service\DirectoryFactory;
 use ZourceUser\Validator\Service\IdentityNotExistsFactory;
+use ZourceUser\Validator\Service\VerifyEmailCodeFactory;
+use ZourceUser\Validator\VerifyEmailCode;
 
 return [
     'controllers' => [
@@ -119,6 +127,11 @@ return [
             'hydrator' => 'ClassMethods',
             'input_filter' => AccountInputFilter::class,
         ],
+        AddEmailForm::class => [
+            'type' => AddEmailForm::class,
+            'hydrator' => 'ClassMethods',
+            'input_filter' => AddEmailInputFilter::class,
+        ],
         AuthenticateForm::class => [
             'type' => AuthenticateForm::class,
             'hydrator' => 'ClassMethods',
@@ -154,6 +167,11 @@ return [
             'hydrator' => 'ClassMethods',
             'input_filter' => VerifyCodeInputFilter::class,
         ],
+        VerifyEmailForm::class => [
+            'type' => VerifyEmailForm::class,
+            'hydrator' => 'ClassMethods',
+            'input_filter' => VerifyEmailInputFilter::class,
+        ],
     ],
     'input_filters' => [
         'factories' => [
@@ -161,11 +179,13 @@ return [
         ],
         'invokables' => [
             AccountInputFilter::class => AccountInputFilter::class,
+            AddEmailInputFilter::class => AddEmailInputFilter::class,
             CreateApplicationInputFilter::class => CreateApplicationInputFilter::class,
             ProfileInputFilter::class => ProfileInputFilter::class,
             RequestPasswordInputFilter::class => RequestPasswordInputFilter::class,
             ResetPasswordInputFilter::class => ResetPasswordInputFilter::class,
             VerifyCodeInputFilter::class => VerifyCodeInputFilter::class,
+            VerifyEmailInputFilter::class => VerifyEmailInputFilter::class,
         ],
     ],
     'router' => [
@@ -254,7 +274,7 @@ return [
                                 'action' => 'reset-password',
                             ],
                             'constraints' => [
-                                'code' => '[a-z0-9]{32}',
+                                'code' => '[a-zA-Z0-9]{32}',
                             ],
                         ],
                     ],
@@ -330,6 +350,52 @@ return [
                             'defaults' => [
                                 'controller' => Email::class,
                                 'action' => 'index',
+                            ],
+                        ],
+                        'may_terminate' => true,
+                        'child_routes' => [
+                            'add' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => '/add',
+                                    'defaults' => [
+                                        'controller' => Email::class,
+                                        'action' => 'add',
+                                    ],
+                                ],
+                            ],
+                            'primary' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => '/primary/:id',
+                                    'defaults' => [
+                                        'controller' => Email::class,
+                                        'action' => 'primary',
+                                    ],
+                                ],
+                            ],
+                            'verify' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => '/verify/:id[/:code]',
+                                    'defaults' => [
+                                        'controller' => Email::class,
+                                        'action' => 'verify',
+                                    ],
+                                    'constraints' => [
+                                        'code' => '[a-zA-Z0-9]{32}',
+                                    ],
+                                ],
+                            ],
+                            'delete' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => '/delete/:id',
+                                    'defaults' => [
+                                        'controller' => Email::class,
+                                        'action' => 'delete',
+                                    ],
+                                ],
                             ],
                         ],
                     ],
@@ -433,6 +499,7 @@ return [
         'factories' => [
             AuthenticationService::class => AuthenticationServiceFactory::class,
             ApplicationService::class => ApplicationServiceFactory::class,
+            EmailTaskService::class => EmailTaskServiceFactory::class,
             OAuthTaskService::class => OAuthTaskServiceFactory::class,
             PasswordChanger::class => PasswordChangerFactory::class,
             Storage::class => StorageFactory::class,
@@ -459,6 +526,7 @@ return [
         'factories' => [
             Directory::class => DirectoryFactory::class,
             IdentityNotExists::class => IdentityNotExistsFactory::class,
+            VerifyEmailCode::class => VerifyEmailCodeFactory::class,
         ],
     ],
     'view_manager' => [
@@ -469,7 +537,9 @@ return [
             'zource-user/authenticate/login-tfa' => __DIR__ . '/../view/zource-user/authenticate/login-tfa.phtml',
             'zource-user/developer-application/create' => __DIR__ . '/../view/zource-user/developer-application/create.phtml',
             'zource-user/developer-application/update' => __DIR__ . '/../view/zource-user/developer-application/update.phtml',
+            'zource-user/email/add' => __DIR__ . '/../view/zource-user/email/add.phtml',
             'zource-user/email/index' => __DIR__ . '/../view/zource-user/email/index.phtml',
+            'zource-user/email/verify' => __DIR__ . '/../view/zource-user/email/verify.phtml',
             'zource-user/notification/index' => __DIR__ . '/../view/zource-user/notification/index.phtml',
             'zource-user/o-auth/authorize' => __DIR__ . '/../view/zource-user/o-auth/authorize.phtml',
             'zource-user/o-auth/receive-code' => __DIR__ . '/../view/zource-user/o-auth/receive-code.phtml',
@@ -542,14 +612,14 @@ return [
                                 'label' => 'topBarProfileMenuHeader',
                             ],
                         ],
-                        'profile' => [
+                        /*'profile' => [
                             'type' => 'label',
                             'priority' => 200,
                             'options' => [
                                 'label' => 'topBarProfileMenuViewProfile',
                                 'route' => 'settings/profile',
                             ],
-                        ],
+                        ],*/
                         'settings' => [
                             'type' => 'label',
                             'priority' => 300,

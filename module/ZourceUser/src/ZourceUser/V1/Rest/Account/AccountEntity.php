@@ -15,6 +15,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
+use ZourceUser\V1\Rest\Email\EmailEntity;
 
 /**
  * @ORM\Entity
@@ -80,6 +81,12 @@ class AccountEntity
     private $groups;
 
     /**
+     * @ORM\OneToMany(targetEntity="ZourceUser\V1\Rest\Email\EmailEntity", mappedBy="account")
+     * @var EmailEntity
+     */
+    private $emailAddresses;
+
+    /**
      * Initializes a new instance of this class.
      */
     public function __construct()
@@ -88,6 +95,7 @@ class AccountEntity
         $this->creationDate = new DateTime();
         $this->status = self::STATUS_ACTIVE;
         $this->groups = new ArrayCollection();
+        $this->emailAddresses = new ArrayCollection();
     }
 
     /**
@@ -208,6 +216,17 @@ class AccountEntity
         return $this->groups;
     }
 
+    /**
+     * @return Collection
+     */
+    public function getEmailAddresses()
+    {
+        return $this->emailAddresses;
+    }
+
+    /**
+     * @return string
+     */
     public function getDisplayName()
     {
         return 'Walter Tamboer';

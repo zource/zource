@@ -9,20 +9,26 @@
 
 namespace ZourceUser\Mvc\Controller\Service;
 
-use Zend\Authentication\AuthenticationService;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use ZourceUser\Form\AddEmail;
+use ZourceUser\Form\VerifyEmail;
 use ZourceUser\Mvc\Controller\Email;
+use ZourceUser\TaskService\Email as EmailTaskService;
 
 class EmailFactory implements FactoryInterface
 {
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        /** @var AuthenticationService $authenticationService */
-        $authenticationService = $serviceLocator->getServiceLocator()->get(
-            'Zend\\Authentication\\AuthenticationService'
-        );
+        /** @var EmailTaskService $emailTaskService */
+        $emailTaskService = $serviceLocator->getServiceLocator()->get(EmailTaskService::class);
 
-        return new Email($authenticationService);
+        /** @var AddEmail $emailForm */
+        $emailForm = $serviceLocator->getServiceLocator()->get(AddEmail::class);
+
+        /** @var VerifyEmail $verifyForm */
+        $verifyForm = $serviceLocator->getServiceLocator()->get(VerifyEmail::class);
+
+        return new Email($emailTaskService, $emailForm, $verifyForm);
     }
 }

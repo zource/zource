@@ -16,6 +16,10 @@ return [
     'accountFormConfirmPasswordDesc' => 'Confirm your new password.',
     'accountFormSubmit' => 'Change',
 
+    'addEmailFormAddress' => 'E-mail address',
+    'addEmailFormAddressDesc' => 'The e-mail address you would like to add.',
+    'addEmailFormSubmit' => 'Add',
+
     'applicationFormName' => 'Name',
     'applicationFormNameDesc' => 'The name that is displayed to users when they authorize.',
     'applicationFormDescription' => 'Description',
@@ -26,7 +30,7 @@ return [
     'applicationFormRedirectUriDesc' => 'Your application\'s callback URL.',
     'applicationFormSubmit' => 'Save',
     'applicationFormCancel' => 'Cancel',
-    'updateApplicationFormDelete' => 'Delete',
+    'applicationFormDelete' => 'Delete',
 
     'layoutTopMenuLogin' => 'Log in',
     'layoutTopMenuProfile' => 'Profile',
@@ -80,14 +84,27 @@ return [
     'resetPasswordFormCancel' => 'Back to the login screen',
 
     'pageUserCreateApplicationTitle' => 'Create Application',
+
     'pageUserUpdateApplicationTitle' => 'Update Application',
 
     'pageUserApplicationTitle' => 'Applications',
+
     'pageUserAccountTitle' => 'Account',
+
     'pageUserEmailTitle' => 'Email',
+    'pageUserEmailAddDesc' => 'You will receive an e-mail message in your inbox. This message contains a link which you need to click to verify the e-mail address is yours. It\'s always possible to delete unverified e-mail addresses.<br />Adding an e-mail address also means you can use it to login to your account.',
+    'pageUserEmailVerified' => 'Verified',
+    'pageUserEmailNotVerified' => 'Not verified',
+
     'pageUserAddEmailTitle' => 'Add Email Address',
+
+    'pageUserVerifyEmailTitle' => 'Verify E-mail Address',
+    'pageUserVerifyEmailDesc' => 'Verify e-mail addresses that you have added to your account. The code you need to enter has been sent to your e-mail address.',
+
     'pageUserNotificationTitle' => 'Notifications',
+
     'pageUserProfileTitle' => 'Profile',
+
     'pageUserSecurityTitle' => 'Security',
 
     'profileFormName' => 'Name',
@@ -108,4 +125,9 @@ return [
     'verifyCodeFormSubmit' => 'Verify',
 
     'verifyCodeInputFilterCodeMessage' => 'Two-factor authentication failed.',
+
+    'verifyEmailFormCode' => 'Code',
+    'verifyEmailFormCodeDesc' => 'The activation code which you can find in the e-mail message.',
+    'verifyEmailFormSubmit' => 'Verify',
+    'verifyEmailFormCancel' => 'Cancel',
 ];

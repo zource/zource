@@ -102,7 +102,7 @@ class EmailEntity
      *
      * @return boolean
      */
-    public function getPrimary()
+    public function getIsPrimary()
     {
         return $this->isPrimary;
     }

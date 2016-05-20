@@ -1,0 +1,32 @@
+<?php
+
+$this->layout('layout/page-header');
+
+$this->placeholder('layout')->pageTitle = $this->translate('layoutUserProfileTitle');
+$this->placeholder('layout')->pageMenu = 'user-settings';
+
+?>
+
+<h2><?php echo $this->translate('pageUserVerifyEmailTitle'); ?></h2>
+
+<p>
+    <?php echo $this->translate('pageUserVerifyEmailDesc'); ?>
+</p>
+
+<?php echo $this->form()->openTag($this->verifyForm); ?>
+<?php echo $this->formHidden($this->verifyForm->get('token')); ?>
+
+<div class="zui-field-group">
+    <?php echo $this->formLabel($this->verifyForm->get('code')); ?>
+    <?php echo $this->formText($this->verifyForm->get('code')); ?>
+    <?php echo $this->zourceFormDescription($this->verifyForm->get('code')); ?>
+    <?php echo $this->formElementErrors($this->verifyForm->get('code')); ?>
+</div>
+
+<div class="zui-buttons-container">
+    <div class="zui-buttons">
+        <?php echo $this->formSubmit($this->verifyForm->get('submit')); ?>
+        <a href="<?php echo $this->url('settings/email'); ?>"><?php echo $this->translate('verifyEmailFormCancel'); ?></a>
+    </div>
+</div>
+<?php echo $this->form()->closeTag(); ?>

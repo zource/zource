@@ -11,7 +11,7 @@ namespace ZourceUser\Form;
 
 use Zend\Form\Form as BaseForm;
 
-class AddEmail extends BaseForm
+class VerifyEmail extends BaseForm
 {
     public function init()
     {
@@ -22,10 +22,10 @@ class AddEmail extends BaseForm
 
         $this->add([
             'type' => 'Text',
-            'name' => 'emailAddress',
+            'name' => 'code',
             'options' => [
-                'label' => 'addEmailFormAddress',
-                'description' => 'addEmailFormAddressDesc',
+                'label' => 'verifyEmailFormCode',
+                'description' => 'verifyEmailFormCodeDesc',
             ],
         ]);
 
@@ -33,7 +33,7 @@ class AddEmail extends BaseForm
             'type' => 'Submit',
             'name' => 'submit',
             'attributes' => [
-                'value' => 'addEmailFormSubmit',
+                'value' => 'verifyEmailFormSubmit',
             ],
         ]);
     }

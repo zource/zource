@@ -5,6 +5,33 @@ $this->layout('layout/page-header');
 $this->placeholder('layout')->pageTitle = $this->translate('layoutUserProfileTitle');
 $this->placeholder('layout')->pageMenu = 'user-settings';
 
+$this->emailForm->setAttribute('action', $this->url('settings/email/add'));
+$this->emailForm->setAttribute('method', 'post');
+$this->emailForm->prepare();
+
 ?>
 
 <h2><?php echo $this->translate('pageUserAddEmailTitle'); ?></h2>
+
+<p>
+    <?php echo $this->translate('pageUserEmailAddDesc'); ?>
+</p>
+
+<?php echo $this->form()->openTag($this->emailForm); ?>
+<?php echo $this->formHidden($this->emailForm->get('token')); ?>
+
+<div class="zui-field-group">
+    <?php echo $this->formLabel($this->emailForm->get('emailAddress')); ?>
+    <?php echo $this->formText($this->emailForm->get('emailAddress')); ?>
+    <?php echo $this->zourceFormDescription($this->emailForm->get('emailAddress')); ?>
+    <?php echo $this->formElementErrors($this->emailForm->get('emailAddress')); ?>
+</div>
+
+<div class="zui-buttons-container">
+    <div class="zui-buttons">
+        <?php echo $this->formSubmit($this->emailForm->get('submit')); ?>
+        <a href="<?php echo $this->url('settings/email'); ?>">Cancel</a>
+    </div>
+</div>
+<?php echo $this->form()->closeTag(); ?>
+
