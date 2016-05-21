@@ -49,16 +49,21 @@ cp config/autoload/doctrine.orm.global.php config/autoload/doctrine.orm.local.ph
 vi config/autoload/doctrine.orm.local.php
 ```
 
-6. Create a user account:
+6. Create the database schema:
+```bash
+php public/index.php orm:schema-tool:create
+```
+
+7. Create a user account:
 ```bash
 php public/index.php zource:account:create
 Account created with id xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
 ```
 
-7. Create an identity for your account to login with:
+8. Create an identity for your account to login with:
 ```bash
 php public/index.php zource:identity:create xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx username AwesomeUser
 ```
 *Note that you can replace `AwesomeUser` with anything you would like as your username.*
 
-8. You're done, visit Zource and login with your credentials.
+9. You're done, visit Zource and login with your credentials.
