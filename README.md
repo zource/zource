@@ -23,47 +23,50 @@ curl -s https://raw.githubusercontent.com/zource/zource-installer/master/install
 ## Manual Installation
 
 1. Clone the project and enter its directory.
-```bash
-git clone https://github.com/zource/zource.git
-cd zource
-```
+
+ ```bash
+ git clone https://github.com/zource/zource.git
+ cd zource
+ ```
 
 2. Install the PHP dependencies:
-```bash
-composer install --no-dev -o
-```
 
-3. Install the Node.JS dependencies:
-```bash
-npm install
-```
+ ```bash
+ composer install --no-dev -o
+ ```
 
-4. Run Grunt to deploy the CSS and JavaScript:
-```bash
-grunt
-```
+3. Install the Node.JS dependencies and run Grunt:
 
-5. Setup the database connection and fill in the correct data:
-```bash
-cp config/autoload/doctrine.orm.global.php config/autoload/doctrine.orm.local.php
-vi config/autoload/doctrine.orm.local.php
-```
+ ```bash
+ npm install
+ grunt
+ ```
 
-6. Create the database schema:
-```bash
-php public/index.php orm:schema-tool:create
-```
+4. Setup the database connection and fill in the correct data:
 
-7. Create a user account:
-```bash
-php public/index.php zource:account:create
-Account created with id xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
-```
+ ```bash
+ cp config/autoload/doctrine.orm.global.php config/autoload/doctrine.orm.local.php
+ vi config/autoload/doctrine.orm.local.php
+ ```
 
-8. Create an identity for your account to login with:
-```bash
-php public/index.php zource:identity:create xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx username AwesomeUser
-```
-*Note that you can replace `AwesomeUser` with anything you would like as your username.*
+5. Create the database schema:
 
-9. You're done, visit Zource and login with your credentials.
+ ```bash
+ php public/index.php orm:schema-tool:create
+ ```
+
+6. Create a user account:
+
+ ```bash
+ php public/index.php zource:account:create
+ Account created with id xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+ ```
+
+7. Create an identity for your account to login with:
+
+ ```bash
+ php public/index.php zource:identity:create xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx username AwesomeUser
+ ```
+ *Note that you can replace `AwesomeUser` with anything you would like as your username.*
+
+8. You're done, visit Zource and login with your credentials.
