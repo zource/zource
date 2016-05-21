@@ -10,10 +10,9 @@
 namespace ZourceUser\Validator;
 
 use Doctrine\ORM\EntityManager;
-use Ramsey\Uuid\Uuid;
 use Zend\Validator\AbstractValidator;
 use ZourceUser\Authentication\AuthenticationService;
-use ZourceUser\V1\Rest\Email\EmailEntity;
+use ZourceUser\Entity\Email;
 
 class VerifyEmailCode extends AbstractValidator
 {
@@ -74,7 +73,7 @@ class VerifyEmailCode extends AbstractValidator
     public function isValid($value, $context = null)
     {
         $account = $this->getAuthenticationService()->getAccountInterface();
-        $repository = $this->getEntityManager()->getRepository(EmailEntity::class);
+        $repository = $this->getEntityManager()->getRepository(Email::class);
 
         $qb = $repository->createQueryBuilder('e');
         $qb->select('COUNT(e) AS amount');

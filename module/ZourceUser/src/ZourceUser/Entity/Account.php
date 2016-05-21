@@ -15,7 +15,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
-use ZourceUser\V1\Rest\Email\EmailEntity;
+use ZourceUser\Entity\Email;
 
 /**
  * @ORM\Entity
@@ -78,7 +78,7 @@ class Account implements AccountInterface
 
     /**
      * @ORM\OneToMany(targetEntity="ZourceUser\Entity\Email", mappedBy="account")
-     * @var EmailEntity
+     * @var Email
      */
     private $emailAddresses;
 

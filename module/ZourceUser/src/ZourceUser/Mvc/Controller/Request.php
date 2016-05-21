@@ -9,14 +9,10 @@
 
 namespace ZourceUser\Mvc\Controller;
 
-use Doctrine\ORM\EntityManager;
 use Zend\Form\FormInterface;
-use Zend\Math\Rand;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use ZourceUser\TaskService\PasswordChanger;
-use ZourceUser\Entity\AccountInterface;
-use ZourceUser\V1\Rest\Email\EmailEntity;
 
 class Request extends AbstractActionController
 {

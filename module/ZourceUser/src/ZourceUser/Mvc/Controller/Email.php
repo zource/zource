@@ -13,7 +13,7 @@ use Zend\Form\FormInterface;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use ZourceUser\TaskService\Email as EmailTaskService;
-use ZourceUser\V1\Rest\Email\EmailEntity;
+use ZourceUser\Entity\Email as EmailEntity;
 
 class Email extends AbstractActionController
 {

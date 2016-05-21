@@ -9,12 +9,10 @@
 
 namespace ZourceUser\TaskService;
 
-use Base32\Base32;
 use Doctrine\ORM\EntityManager;
 use Zend\Math\Rand;
-use Zend\Session\Container;
 use ZourceUser\Entity\AccountInterface;
-use ZourceUser\V1\Rest\Email\EmailEntity;
+use ZourceUser\Entity\Email as EmailEntity;
 
 class Email
 {
