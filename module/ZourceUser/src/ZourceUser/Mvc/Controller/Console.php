@@ -14,10 +14,10 @@ use Exception;
 use Zend\Console\Prompt\Password;
 use Zend\Crypt\Password\PasswordInterface;
 use Zend\Mvc\Controller\AbstractConsoleController;
-use ZF\MvcAuth\Identity\IdentityInterface;
 use ZourceUser\Entity\Account;
 use ZourceUser\Entity\AccountInterface;
-use ZourceUser\Entity\IdentityEntity;
+use ZourceUser\Entity\Identity;
+use ZourceUser\Entity\IdentityInterface;
 
 class Console extends AbstractConsoleController
 {
@@ -78,7 +78,7 @@ class Console extends AbstractConsoleController
             return 1;
         }
 
-        $identity = new IdentityEntity($account, $this->params('directory'), $this->params('identity'));
+        $identity = new Identity($account, $this->params('directory'), $this->params('identity'));
 
         $this->entityManager->persist($identity);
         $this->entityManager->flush($identity);
