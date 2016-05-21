@@ -12,7 +12,7 @@ namespace ZourceUser\Mvc\Controller\Plugin;
 use Doctrine\ORM\EntityManager;
 use Zend\Mvc\Controller\Plugin\AbstractPlugin;
 use ZourceUser\Authentication\AuthenticationService;
-use ZourceUser\V1\Rest\Identity\IdentityEntity;
+use ZourceUser\Entity\Identity as IdentityEntity;
 
 class Identity extends AbstractPlugin
 {

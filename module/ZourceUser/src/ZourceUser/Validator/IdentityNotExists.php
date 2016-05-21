@@ -11,7 +11,7 @@ namespace ZourceUser\Validator;
 
 use Doctrine\ORM\EntityManager;
 use Zend\Validator\AbstractValidator;
-use ZourceUser\V1\Rest\Identity\IdentityEntity;
+use ZourceUser\Entity\Identity as IdentityEntity;
 
 class IdentityNotExists extends AbstractValidator
 {

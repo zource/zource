@@ -20,6 +20,7 @@ use ZourceUser\Authorization\Condition\Service\UserHasIdentityFactory;
 use ZourceUser\Authorization\Condition\Service\UserHasRoleFactory;
 use ZourceUser\Entity\Account as AccountEntity;
 use ZourceUser\Entity\AccountInterface;
+use ZourceUser\Entity\Identity as IdentityEntity;
 use ZourceUser\Form\Account as AccountForm;
 use ZourceUser\Form\AddEmail as AddEmailForm;
 use ZourceUser\Form\Authenticate as AuthenticateForm;
@@ -76,7 +77,6 @@ use ZourceUser\TaskService\Service\OAuthFactory as OAuthTaskServiceFactory;
 use ZourceUser\TaskService\Service\PasswordChangerFactory;
 use ZourceUser\TaskService\Service\TwoFactorAuthenticationFactory as TwoFactorAuthenticationServiceFactory;
 use ZourceUser\TaskService\TwoFactorAuthentication as TwoFactorAuthenticationService;
-use ZourceUser\V1\Rest\Identity\IdentityEntity;
 use ZourceUser\Validator\Directory;
 use ZourceUser\Validator\IdentityNotExists;
 use ZourceUser\Validator\Service\DirectoryFactory;
@@ -158,7 +158,6 @@ return [
                     __DIR__ . '/../src/' . __NAMESPACE__ . '/Entity',
                     __DIR__ . '/../src/' . __NAMESPACE__ . '/V1/Rest/Email',
                     __DIR__ . '/../src/' . __NAMESPACE__ . '/V1/Rest/Group',
-                    __DIR__ . '/../src/' . __NAMESPACE__ . '/V1/Rest/Identity',
                     __DIR__ . '/../src/' . __NAMESPACE__ . '/V1/Rest/Session',
                 ],
             ],

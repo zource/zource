@@ -17,7 +17,7 @@ use Zend\Mvc\Controller\AbstractConsoleController;
 use ZF\MvcAuth\Identity\IdentityInterface;
 use ZourceUser\Entity\Account;
 use ZourceUser\Entity\AccountInterface;
-use ZourceUser\V1\Rest\Identity\IdentityEntity;
+use ZourceUser\Entity\IdentityEntity;
 
 class Console extends AbstractConsoleController
 {

@@ -10,13 +10,10 @@
 namespace ZourceUser\Authentication\Adapter;
 
 use Doctrine\ORM\EntityManager;
-use Ramsey\Uuid\UuidInterface;
 use Zend\Authentication\Adapter\ValidatableAdapterInterface;
 use Zend\Authentication\Result;
-use Zend\Crypt\Password\Bcrypt;
 use Zend\Crypt\Password\PasswordInterface;
-use ZourceUser\Entity\AccountInterface;
-use ZourceUser\V1\Rest\Identity\IdentityEntity;
+use ZourceUser\Entity\Identity as IdentityEntity;
 
 class Zource implements ValidatableAdapterInterface
 {

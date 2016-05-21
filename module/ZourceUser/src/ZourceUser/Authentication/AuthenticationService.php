@@ -13,7 +13,7 @@ use Doctrine\ORM\EntityManager;
 use Zend\Authentication\Adapter\AdapterInterface;
 use Zend\Authentication\AuthenticationService as BaseAuthenticationService;
 use Zend\Authentication\Storage\StorageInterface;
-use ZourceUser\V1\Rest\Identity\IdentityEntity;
+use ZourceUser\Entity\Identity as IdentityEntity;
 
 class AuthenticationService extends BaseAuthenticationService
 {
