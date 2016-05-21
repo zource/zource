@@ -225,6 +225,6 @@ class Account implements AccountInterface
      */
     public function getDisplayName()
     {
-        return 'Walter Tamboer';
+        return 'TODO';
     }
 }

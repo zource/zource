@@ -38,7 +38,7 @@ class Account extends AbstractPlugin
             return $this->getEntity($id);
         }
 
-        return $this->authenticationService->getAccountInterface();
+        return $this->authenticationService->getAccountEntity();
     }
 
     private function getEntity($id)

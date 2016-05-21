@@ -47,7 +47,7 @@ class RecoveryCodes extends AbstractActionController
 
     public function indexAction()
     {
-        $account = $this->authenticationService->getAccountInterface();
+        $account = $this->authenticationService->getAccountEntity();
         
         return new ViewModel([
             'account' => $account,

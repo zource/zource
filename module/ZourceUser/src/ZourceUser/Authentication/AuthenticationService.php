@@ -51,7 +51,7 @@ class AuthenticationService extends BaseAuthenticationService
         return $this->cachedIdentity;
     }
 
-    public function getAccountInterface()
+    public function getAccountEntity()
     {
         if (!$this->cachedAccount) {
             $identity = $this->getIdentityEntity();

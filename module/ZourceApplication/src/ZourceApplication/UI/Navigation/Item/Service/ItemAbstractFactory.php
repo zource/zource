@@ -17,7 +17,7 @@ class ItemAbstractFactory implements AbstractFactoryInterface
 {
     public function canCreateServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
     {
-        return strpos($requestedName, 'ZourceApplication\\UI\\Navigation\\Item\\') === 0;
+        return preg_match('/^Zource[a-zA-Z]+\\\\UI\\\\Navigation\\\\Item\\\\/', $requestedName) !==  false;
     }
 
     public function createServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)

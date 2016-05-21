@@ -77,6 +77,8 @@ use ZourceUser\TaskService\Service\OAuthFactory as OAuthTaskServiceFactory;
 use ZourceUser\TaskService\Service\PasswordChangerFactory;
 use ZourceUser\TaskService\Service\TwoFactorAuthenticationFactory as TwoFactorAuthenticationServiceFactory;
 use ZourceUser\TaskService\TwoFactorAuthentication as TwoFactorAuthenticationService;
+use ZourceUser\UI\Navigation\Item\LoggedInAs;
+use ZourceUser\UI\Navigation\Item\Service\LoggedInAsFactory;
 use ZourceUser\Validator\Directory;
 use ZourceUser\Validator\IdentityNotExists;
 use ZourceUser\Validator\Service\DirectoryFactory;
@@ -657,16 +659,29 @@ return [
                         ],
                     ],
                     'child_items' => [
-                        'header' => [
+                        'loggedInAsHeader' => [
                             'type' => 'header',
                             'priority' => 100,
+                            'options' => [
+                                'label' => 'topBarProfileMenuLoggedInAsHeader',
+                            ],
+                        ],
+                        'loggedInAsText' => [
+                            'type' => 'logged-in-as',
+                            'priority' => 200,
+                            'options' => [
+                            ],
+                        ],
+                        'profileHeader' => [
+                            'type' => 'header',
+                            'priority' => 300,
                             'options' => [
                                 'label' => 'topBarProfileMenuHeader',
                             ],
                         ],
                         /*'profile' => [
                             'type' => 'label',
-                            'priority' => 200,
+                            'priority' => 400,
                             'options' => [
                                 'label' => 'topBarProfileMenuViewProfile',
                                 'route' => 'settings/profile',
@@ -674,7 +689,7 @@ return [
                         ],*/
                         'settings' => [
                             'type' => 'label',
-                            'priority' => 300,
+                            'priority' => 500,
                             'options' => [
                                 'label' => 'topBarProfileMenuSettings',
                                 'route' => 'settings/profile',
@@ -682,7 +697,7 @@ return [
                         ],
                         'admin' => [
                             'type' => 'label',
-                            'priority' => 400,
+                            'priority' => 600,
                             'options' => [
                                 'label' => 'topBarProfileMenuAdministration',
                                 'route' => 'logout',
@@ -698,11 +713,11 @@ return [
                         ],
                         'separator' => [
                             'type' => 'separator',
-                            'priority' => 500,
+                            'priority' => 700,
                         ],
                         'logout' => [
                             'type' => 'label',
-                            'priority' => 600,
+                            'priority' => 800,
                             'options' => [
                                 'label' => 'topBarProfileMenuLogout',
                                 'route' => 'logout',
@@ -777,6 +792,14 @@ return [
             'access_lifetime' => 3600,
             'allow_implicit' => true,
             'enforce_state' => true,
+        ],
+    ],
+    'zource_ui_nav_items' => [
+        'aliases' => [
+            'logged-in-as' => LoggedInAs::class,
+        ],
+        'factories' => [
+            LoggedInAs::class => LoggedInAsFactory::class,
         ],
     ],
     'zf-oauth2' => [

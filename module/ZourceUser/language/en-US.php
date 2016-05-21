@@ -39,19 +39,6 @@ return [
     'loginTfaFormDesc' => 'Open the two-factor authentication app on your device to view your authentication code and verify your identity.',
     'loginTfaFormNoPhone' => 'If you do not have access to your phone, you can enter a recovery code to retrieve access to your account.',
 
-    'topBarProfileMenuHeader' => 'Profile',
-    'topBarProfileMenuViewProfile' => 'View profile',
-    'topBarProfileMenuSettings' => 'Settings',
-    'topBarProfileMenuAdministration' => 'Administration',
-    'topBarProfileMenuLogout' => 'Log out',
-
-    'userSettingsMenuProfile' => 'Profile',
-    'userSettingsMenuAccount' => 'Account',
-    'userSettingsMenuEmails' => 'E-mails',
-    'userSettingsMenuNotifications' => 'Notifications',
-    'userSettingsMenuSecurity' => 'Security',
-    'userSettingsMenuApplications' => 'Applications',
-
     'loginFormTitle' => 'Login',
     'loginFormRequestPassword' => 'Do you have trouble logging in?',
 
@@ -119,6 +106,20 @@ return [
     'requestPasswordFormEmailDesc' => 'Your e-mail address',
     'requestPasswordFormSubmit' => 'Send',
     'requestPasswordFormCancel' => 'Did you suddenly remember?',
+
+    'topBarProfileMenuHeader' => 'Profile',
+    'topBarProfileMenuLoggedInAsHeader' => 'Logged in as',
+    'topBarProfileMenuViewProfile' => 'View profile',
+    'topBarProfileMenuSettings' => 'Settings',
+    'topBarProfileMenuAdministration' => 'Administration',
+    'topBarProfileMenuLogout' => 'Log out',
+
+    'userSettingsMenuProfile' => 'Profile',
+    'userSettingsMenuAccount' => 'Account',
+    'userSettingsMenuEmails' => 'E-mails',
+    'userSettingsMenuNotifications' => 'Notifications',
+    'userSettingsMenuSecurity' => 'Security',
+    'userSettingsMenuApplications' => 'Applications',
 
     'verifyCodeFormCode' => 'Code',
     'verifyCodeFormCodeDesc' => 'Enter the six-digit code from the application.',
