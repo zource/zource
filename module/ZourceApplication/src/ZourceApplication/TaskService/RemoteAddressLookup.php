@@ -26,6 +26,7 @@ class RemoteAddressLookup
 
     public function lookup($remoteAddress)
     {
+        return null;//
         $query = "SELECT * FROM `ip2location_db3` WHERE INET_ATON(:ip) <= ip_to LIMIT 1";
 
         $result = $this->connection->fetchAssoc($query, [

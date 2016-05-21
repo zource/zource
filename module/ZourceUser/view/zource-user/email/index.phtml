@@ -13,6 +13,10 @@ $this->placeholder('layout')->pageMenu = 'user-settings';
     <p>
         No e-mail addresses added yet.
     </p>
+
+    <p>
+        <a href="<?php echo $this->url('settings/email/add'); ?>" class="zui-button">Add e-mail address</a>
+    </p>
 <?php } else { ?>
     <table class="zui-table-striped">
         <thead>
