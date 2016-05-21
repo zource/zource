@@ -6,8 +6,6 @@ The open source company management application.
 
 This application is still work in progress.
 
-* The installer is not working yet.
-
 ## Installation
 
 **WARNING: THIS IS STILL WORK IN PROGRESS AND DOES NOT WORK YET**
