@@ -12,6 +12,7 @@ namespace ZourceUser;
 use Zend\Authentication\AuthenticationService;
 use Zend\Crypt\Password\Bcrypt;
 use Zend\Crypt\Password\PasswordInterface;
+use ZF\MvcAuth\Identity\IdentityInterface;
 use ZourceUser\Authentication\OAuth\Service\StorageFactory;
 use ZourceUser\Authentication\OAuth\Storage;
 use ZourceUser\Authentication\Service\AuthenticationServiceFactory;
@@ -41,6 +42,7 @@ use ZourceUser\InputFilter\VerifyEmail as VerifyEmailInputFilter;
 use ZourceUser\Mvc\Controller\Account;
 use ZourceUser\Mvc\Controller\Application;
 use ZourceUser\Mvc\Controller\Authenticate;
+use ZourceUser\Mvc\Controller\Console as ConsoleController;
 use ZourceUser\Mvc\Controller\DeveloperApplication;
 use ZourceUser\Mvc\Controller\Email;
 use ZourceUser\Mvc\Controller\Notification;
@@ -54,6 +56,7 @@ use ZourceUser\Mvc\Controller\Security;
 use ZourceUser\Mvc\Controller\Service\AccountFactory;
 use ZourceUser\Mvc\Controller\Service\ApplicationFactory;
 use ZourceUser\Mvc\Controller\Service\AuthenticateFactory;
+use ZourceUser\Mvc\Controller\Service\ConsoleFactory as ConsoleControllerFactory;
 use ZourceUser\Mvc\Controller\Service\DeveloperApplicationFactory;
 use ZourceUser\Mvc\Controller\Service\EmailFactory;
 use ZourceUser\Mvc\Controller\Service\NotificationFactory;
@@ -73,6 +76,7 @@ use ZourceUser\TaskService\Service\OAuthFactory as OAuthTaskServiceFactory;
 use ZourceUser\TaskService\Service\PasswordChangerFactory;
 use ZourceUser\TaskService\Service\TwoFactorAuthenticationFactory as TwoFactorAuthenticationServiceFactory;
 use ZourceUser\TaskService\TwoFactorAuthentication as TwoFactorAuthenticationService;
+use ZourceUser\V1\Rest\Identity\IdentityEntity;
 use ZourceUser\Validator\Directory;
 use ZourceUser\Validator\IdentityNotExists;
 use ZourceUser\Validator\Service\DirectoryFactory;
@@ -81,11 +85,54 @@ use ZourceUser\Validator\Service\VerifyEmailCodeFactory;
 use ZourceUser\Validator\VerifyEmailCode;
 
 return [
+    'console' => [
+        'router' => [
+            'routes' => [
+                'account-create' => [
+                    'options' => [
+                        'route' => 'zource:account:create [--credential=]',
+                        'defaults' => [
+                            'controller' => ConsoleController::class,
+                            'action' => 'accountCreate',
+                        ],
+                    ],
+                ],
+                'account-delete' => [
+                    'options' => [
+                        'route' => 'zource:account:delete <id>',
+                        'defaults' => [
+                            'controller' => ConsoleController::class,
+                            'action' => 'accountDelete',
+                        ],
+                    ],
+                ],
+                'identity-create' => [
+                    'options' => [
+                        'route' => 'zource:identity:create <account> <directory> <identity>',
+                        'defaults' => [
+                            'controller' => ConsoleController::class,
+                            'action' => 'identityCreate',
+                        ],
+                    ],
+                ],
+                'identity-delete' => [
+                    'options' => [
+                        'route' => 'zource:identity:delete <id>',
+                        'defaults' => [
+                            'controller' => ConsoleController::class,
+                            'action' => 'identityDelete',
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
     'controllers' => [
         'factories' => [
             Account::class => AccountFactory::class,
             Application::class => ApplicationFactory::class,
             Authenticate::class => AuthenticateFactory::class,
+            ConsoleController::class => ConsoleControllerFactory::class,
             DeveloperApplication::class => DeveloperApplicationFactory::class,
             Email::class => EmailFactory::class,
             Notification::class => NotificationFactory::class,
@@ -125,6 +172,7 @@ return [
             'orm_default' => [
                 'resolvers' => [
                     AccountInterface::class => AccountEntity::class,
+                    IdentityInterface::class => IdentityEntity::class,
                 ],
             ],
         ],

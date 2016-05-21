@@ -9,6 +9,8 @@
 
 namespace ZourceApplication;
 
+use Zend\ModuleManager\Feature\ConsoleBannerProviderInterface;
+use Zend\Console\Adapter\AdapterInterface as ConsoleAdapter;
 use Zend\Console\Console;
 use Zend\ModuleManager\Listener\ServiceListener;
 use Zend\ModuleManager\ModuleManager;
@@ -20,7 +22,7 @@ use ZF\Apigility\Provider\ApigilityProviderInterface;
 use ZourceApplication\Authorization\Condition\Service\PluginManager as AuthorizationConditionPluginManager;
 use ZourceApplication\Ui\Navigation\Item\Service\PluginManager as UiNavigationItemPluginManager;
 
-class Module implements ApigilityProviderInterface
+class Module implements ApigilityProviderInterface, ConsoleBannerProviderInterface
 {
     public function getConfig()
     {
@@ -28,6 +30,11 @@ class Module implements ApigilityProviderInterface
             include __DIR__ . '/../../config/module.config.php',
             include __DIR__ . '/../../config/zource.config.php'
         );
+    }
+
+    public function getConsoleBanner(ConsoleAdapter $console)
+    {
+        return 'Zource';
     }
 
     public function init(ModuleManager $moduleManager)

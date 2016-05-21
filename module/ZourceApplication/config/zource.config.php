@@ -9,12 +9,15 @@
 
 namespace ZourceApplication;
 
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\UnderscoreNamingStrategy;
 use Zend\Cache\Service\StorageCacheAbstractServiceFactory;
 use Zend\Db\Adapter\AdapterAbstractServiceFactory;
 use Zend\Form\FormAbstractServiceFactory;
 use Zend\InputFilter\InputFilterAbstractServiceFactory;
 use Zend\Log\LoggerAbstractServiceFactory;
+use Zend\ServiceManager\Proxy\LazyServiceFactory;
+use Zend\ServiceManager\Proxy\LazyServiceFactoryFactory;
 use Zend\Session\Config\ConfigInterface;
 use Zend\Session\ManagerInterface;
 use Zend\Session\SaveHandler\SaveHandlerInterface;
@@ -74,6 +77,11 @@ return [
             InputFilterAbstractServiceFactory::class,
         ),
     ),
+    'lazy_services' => [
+        'class_map' => [
+            'doctrine.entitymanager.orm_default' => EntityManager::class,
+        ],
+    ],
     'router' => [
         'routes' => [
             'zf-apigility' => [
@@ -101,8 +109,14 @@ return [
             LoggerAbstractServiceFactory::class,
             StorageCacheAbstractServiceFactory::class,
         ],
+        'delegators' => [
+            'doctrine.entitymanager.orm_default' => [
+                'LazyServiceFactory',
+            ],
+        ],
         'factories' => [
             ConfigInterface::class => SessionConfigFactory::class,
+            'LazyServiceFactory' => LazyServiceFactoryFactory::class,
             ManagerInterface::class => SessionManagerFactory::class,
             RemoteAddressLookup::class => RemoteAddressLookupFactory::class,
             Session::class => SessionFactory::class,
@@ -160,6 +174,7 @@ return [
             'error/404' => __DIR__ . '/../view/error/404.phtml',
             'error/500' => __DIR__ . '/../view/error/500.phtml',
             'layout/dialog' => __DIR__ . '/../view/layout/dialog.phtml',
+            'layout/layout' => __DIR__ . '/../view/layout/layout.phtml',
             'layout/page-header' => __DIR__ . '/../view/layout/page-header.phtml',
             'zource-application/index/index' => __DIR__ . '/../view/zource-application/index/index.phtml',
         ],

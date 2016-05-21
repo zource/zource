@@ -46,4 +46,20 @@ return [
             ],
         ],
     ],
+    'zf-mvc-auth' => [
+        'authentication' => [
+            'adapters' => [
+                'oauth2' => [
+                    'adapter' => 'ZF\\MvcAuth\\Authentication\\OAuth2Adapter',
+                    'storage' => [
+                        'adapter' => 'pdo',
+                        'dsn' => 'mysql:host=localhost;dbname=zource',
+                        'route' => '',
+                        'username' => '',
+                        'password' => '',
+                    ],
+                ],
+            ],
+        ],
+    ],
 ];

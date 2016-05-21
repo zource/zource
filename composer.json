@@ -1,5 +1,6 @@
 {
     "name": "zource/zource",
+    "type": "project",
     "description": "The open source company management application.",
     "license": "MIT",
     "require": {
@@ -32,6 +33,7 @@
             "ZourceApplication\\": "module/ZourceApplication/src/",
             "ZourceCalendar\\": "module/ZourceCalendar/src/",
             "ZourceContact\\": "module/ZourceContact/src/",
+            "ZourceInstaller\\": "module/ZourceInstaller/src/",
             "ZourceIssue\\": "module/ZourceIssue/src/",
             "ZourceProject\\": "module/ZourceProject/src/",
             "ZourceUser\\": "module/ZourceUser/src/"
@@ -42,6 +44,7 @@
             "ZourceApplicationTest\\": "module/ZourceApplication/tests/",
             "ZourceCalendarTest\\": "module/ZourceCalendar/tests/",
             "ZourceContactTest\\": "module/ZourceContact/tests/",
+            "ZourceInstallerTest\\": "module/ZourceInstaller/tests/",
             "ZourceIssueTest\\": "module/ZourceIssue/tests/",
             "ZourceProjectTest\\": "module/ZourceProject/tests/",
             "ZourceUserTest\\": "module/ZourceUser/tests/"

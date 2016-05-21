@@ -9,6 +9,7 @@
 
 return [
     'modules' => [
+        'AssetManager',
         'ZendDeveloperTools',
         'ZF\\Apigility\\Admin',
     ],

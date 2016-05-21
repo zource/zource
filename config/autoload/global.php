@@ -14,4 +14,10 @@ return [
             ],
         ],
     ],
+    'zf-oauth2' => [
+        'allow_implicit' => true,
+        'options' => [
+            'always_issue_new_refresh_token' => true,
+        ],
+    ],
 ];
