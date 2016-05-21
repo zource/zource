@@ -73,7 +73,7 @@ class Nav extends AbstractHelper
 
             if ($renderer->isPartOfList() && $renderedItemCount === 0) {
                 $result .= '<ul class="' . $this->ulClass . '">' . "\n";
-            } else if (!$renderer->isPartOfList() && $renderedItemCount > 0) {
+            } elseif (!$renderer->isPartOfList() && $renderedItemCount > 0) {
                 $result .= '</ul>' . "\n";
                 $renderedItemCount = 0;
             }
