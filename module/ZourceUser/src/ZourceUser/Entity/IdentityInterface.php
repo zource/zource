@@ -14,7 +14,8 @@ use Ramsey\Uuid\UuidInterface;
 use ZourceUser\Entity\AccountInterface;
 
 interface IdentityInterface
-{   /**
+{
+    /**
      * Gets the id of the identity.
      *
      * @return UuidInterface

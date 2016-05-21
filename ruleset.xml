@@ -13,5 +13,7 @@
     <exclude-pattern>module/ZourceUser/config/</exclude-pattern>
     <exclude-pattern>vendor/</exclude-pattern>
 
-    <rule ref="PSR2" />
+    <rule ref="PSR2">
+        <exclude name="Generic.Files.LineLength" />
+    </rule>
 </ruleset>

@@ -134,7 +134,7 @@ class EmailEntity
 
     /**
      * Checks if the email address is verified.
-     * 
+     *
      * @return bool
      */
     public function isVerified()
