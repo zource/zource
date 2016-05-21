@@ -1,10 +1,22 @@
 # zource
 
+[![Latest Version on Packagist][ico-version]][link-packagist]
+[![Software License][ico-license]](LICENSE)
+[![Build Status][ico-travis]][link-travis]
+[![Coverage Status][ico-scrutinizer]][link-scrutinizer]
+[![Quality Score][ico-code-quality]][link-code-quality]
+[![Total Downloads][ico-downloads]][link-downloads]
+
 The open source company management application.
 
 ## Work In Progress
 
 This application is still work in progress.
+
+## License
+
+Zource is released under a proprietary license.
+Please see [License File](LICENSE.md) for more information.
 
 ## Installation
 
@@ -70,3 +82,29 @@ curl -s https://raw.githubusercontent.com/zource/zource-installer/master/install
  *Note that you can replace `AwesomeUser` with anything you would like as your username.*
 
 8. You're done, visit Zource and login with your credentials.
+
+## Contributing
+
+Please see [CONTRIBUTING](CONTRIBUTING.md) and [CONDUCT](CONDUCT.md) for details.
+
+## Security
+
+If you discover any security related issues, please email :author_email instead of using the issue tracker.
+
+## Credits
+
+- [All Contributors][link-contributors]
+
+[ico-version]: https://img.shields.io/packagist/v/zource/zource.svg?style=flat-square
+[ico-license]: https://img.shields.io/badge/license-proprietary-brightgreen.svg?style=flat-square
+[ico-travis]: https://img.shields.io/travis/zource/zource/master.svg?style=flat-square
+[ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/zource/zource.svg?style=flat-square
+[ico-code-quality]: https://img.shields.io/scrutinizer/g/zource/zource.svg?style=flat-square
+[ico-downloads]: https://img.shields.io/packagist/dt/zource/zource.svg?style=flat-square
+
+[link-packagist]: https://packagist.org/packages/zource/zource
+[link-travis]: https://travis-ci.org/zource/zource
+[link-scrutinizer]: https://scrutinizer-ci.com/g/zource/zource/code-structure
+[link-code-quality]: https://scrutinizer-ci.com/g/zource/zource
+[link-downloads]: https://packagist.org/packages/zource/zource
+[link-contributors]: ../../contributors
