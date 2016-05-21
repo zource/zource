@@ -71,7 +71,7 @@ class AccountEntity
     private $twoFactorAuthenticationCode;
 
     /**
-     * @ORM\ManyToMany(targetEntity="ZourceUser\V1\Rest\Group\GroupEntity", inversedBy="users")
+     * @ORM\ManyToMany(targetEntity="ZourceUser\Entity\Group", inversedBy="users")
      * @ORM\JoinTable(name="user_account_group",
      *     joinColumns={@ORM\JoinColumn(onDelete="CASCADE")},
      *     inverseJoinColumns={@ORM\JoinColumn(onDelete="CASCADE")}

@@ -9,17 +9,9 @@
 
 namespace ZourceUser\V1\Rest\Session;
 
-use Doctrine\ORM\Mapping as ORM;
-
-/**
- * @ORM\Entity
- * @ORM\Table(name="user_session")
- */
 class SessionEntity
 {
     /**
-     * @ORM\Id
-     * @ORM\Column(type="string", length=32)
      * @var string
      */
     private $sessionId;

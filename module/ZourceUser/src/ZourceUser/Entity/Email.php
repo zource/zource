@@ -7,13 +7,18 @@
  * @license https://raw.githubusercontent.com/zource/zource/master/LICENSE MIT
  */
 
-namespace ZourceUser\V1\Rest\Email;
+namespace ZourceUser\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 use ZourceUser\Entity\AccountInterface;
 
-class EmailEntity
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="user_email")
+ */
+class Email
 {
     /**
      * @ORM\Id

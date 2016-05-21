@@ -274,7 +274,7 @@ return array(
     ),
     'zf-hal' => array(
         'metadata_map' => array(
-            'ZourceUser\\V1\\Rest\\Account\\AccountInterface' => array(
+            'ZourceUser\\V1\\Rest\\Account\\AccountEntity' => array(
                 'entity_identifier_name' => 'id',
                 'route_name' => 'zource-user.rest.account',
                 'route_identifier_name' => 'account_id',

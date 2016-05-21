@@ -67,7 +67,7 @@ class Account implements AccountInterface
     private $twoFactorAuthenticationCode;
 
     /**
-     * @ORM\ManyToMany(targetEntity="ZourceUser\V1\Rest\Group\GroupEntity", inversedBy="users")
+     * @ORM\ManyToMany(targetEntity="ZourceUser\Entity\Group", inversedBy="users")
      * @ORM\JoinTable(name="user_account_group",
      *     joinColumns={@ORM\JoinColumn(onDelete="CASCADE")},
      *     inverseJoinColumns={@ORM\JoinColumn(onDelete="CASCADE")}
@@ -77,7 +77,7 @@ class Account implements AccountInterface
     private $groups;
 
     /**
-     * @ORM\OneToMany(targetEntity="ZourceUser\V1\Rest\Email\EmailEntity", mappedBy="account")
+     * @ORM\OneToMany(targetEntity="ZourceUser\Entity\Email", mappedBy="account")
      * @var EmailEntity
      */
     private $emailAddresses;

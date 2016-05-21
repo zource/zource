@@ -7,14 +7,19 @@
  * @license https://raw.githubusercontent.com/zource/zource/master/LICENSE MIT
  */
 
-namespace ZourceUser\V1\Rest\Group;
+namespace ZourceUser\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
-class GroupEntity
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="user_group")
+ */
+class Group
 {
     /**
      * @ORM\Id

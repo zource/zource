@@ -8,7 +8,7 @@ use ZF\ApiProblem\ApiProblem;
 use ZF\ApiProblem\ApiProblemResponse;
 use ZF\ContentNegotiation\ViewModel;
 use ZourceUser\Entity\AccountInterface;
-use ZourceUser\V1\Rest\Group\GroupEntity;
+use ZourceUser\Entity\Group;
 
 class GroupMembershipController extends AbstractActionController
 {
@@ -30,8 +30,8 @@ class GroupMembershipController extends AbstractActionController
             return new ApiProblem(404, 'The account could not be found.');
         }
 
-        /** @var GroupEntity $group */
-        $group = $this->entityManager->getRepository(GroupEntity::class)->find($this->bodyParam('group'));
+        /** @var Group $group */
+        $group = $this->entityManager->getRepository(Group::class)->find($this->bodyParam('group'));
         if (!$group) {
             return new ApiProblem(404, 'The group could not be found.');
         }

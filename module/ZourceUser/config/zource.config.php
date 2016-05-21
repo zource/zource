@@ -156,9 +156,6 @@ return [
                 'cache' => 'array',
                 'paths' => [
                     __DIR__ . '/../src/' . __NAMESPACE__ . '/Entity',
-                    __DIR__ . '/../src/' . __NAMESPACE__ . '/V1/Rest/Email',
-                    __DIR__ . '/../src/' . __NAMESPACE__ . '/V1/Rest/Group',
-                    __DIR__ . '/../src/' . __NAMESPACE__ . '/V1/Rest/Session',
                 ],
             ],
             'orm_default' => [
