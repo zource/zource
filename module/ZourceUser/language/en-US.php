@@ -32,6 +32,10 @@ return [
     'applicationFormCancel' => 'Cancel',
     'applicationFormDelete' => 'Delete',
 
+    'changeIdentityFormIdentity' => 'Username',
+    'changeIdentityFormIdentityDesc' => 'Enter your new username',
+    'changeIdentityFormSubmit' => 'Change',
+
     'layoutTopMenuLogin' => 'Log in',
     'layoutTopMenuProfile' => 'Profile',
 
@@ -77,6 +81,7 @@ return [
     'pageUserApplicationTitle' => 'Applications',
 
     'pageUserAccountTitle' => 'Account',
+    'pageUserChangeIdentityTitle' => 'Change Username',
 
     'pageUserEmailTitle' => 'Email',
     'pageUserEmailAddDesc' => 'You will receive an e-mail message in your inbox. This message contains a link which you need to click to verify the e-mail address is yours. It\'s always possible to delete unverified e-mail addresses.<br />Adding an e-mail address also means you can use it to login to your account.',

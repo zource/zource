@@ -70,6 +70,36 @@ class Console extends AbstractConsoleController
         return 0;
     }
 
+    public function accountListAction()
+    {
+        $accountRepository = $this->entityManager->getRepository(AccountInterface::class);
+
+        $page = 1;
+        $limit = 25;
+
+        do {
+            $offset = $page * $limit - $limit;
+            
+            $accounts = $accountRepository->findBy([], [], $limit, $offset);
+            if (count($accounts) === 0) {
+                break;
+            }
+            
+            /** @var AccountInterface $account */
+            foreach ($accounts as $account) {
+                $this->getConsole()->writeLine(sprintf(
+                    '%s - Created on: %s',
+                    $account->getId()->toString(),
+                    $account->getCreationDate()->format('Y-m-d H:i:s')
+                ));
+            }
+
+            $page++;
+        } while (count($accounts) !== 0);
+
+        return 0;
+    }
+
     public function identityCreateAction()
     {
         $account = $this->getAccount($this->params('account'));

@@ -9,6 +9,7 @@
 
 namespace ZourceUser\Entity;
 
+use DateTime;
 use Doctrine\Common\Collections\Collection;
 use Ramsey\Uuid\UuidInterface;
 
@@ -35,6 +36,13 @@ interface AccountInterface
      * @return UuidInterface
      */
     public function getId();
+
+    /**
+     * Gets the date and time of when the account was created.
+     *
+     * @return DateTime
+     */
+    public function getCreationDate();
 
     /**
      * Gets the credential for this account.

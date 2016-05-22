@@ -12,6 +12,8 @@ namespace ZourceUser\Mvc\Controller\Service;
 use Zend\Authentication\AuthenticationService;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use ZourceUser\Form\Account as AccountForm;
+use ZourceUser\Form\ChangeIdentity as ChangeIdentityForm;
 use ZourceUser\Mvc\Controller\Account;
 use ZourceUser\TaskService\PasswordChanger;
 
@@ -24,12 +26,15 @@ class AccountFactory implements FactoryInterface
             'Zend\\Authentication\\AuthenticationService'
         );
 
-        /** @var Account $accountForm */
-        $accountForm = $serviceLocator->getServiceLocator()->get('ZourceUser\\Form\\Account');
+        /** @var AccountForm $accountForm */
+        $accountForm = $serviceLocator->getServiceLocator()->get(AccountForm::class);
+
+        /** @var ChangeIdentityForm $changeIdentityForm */
+        $changeIdentityForm = $serviceLocator->getServiceLocator()->get(ChangeIdentityForm::class);
 
         /** @var PasswordChanger $passwordChanger */
         $passwordChanger = $serviceLocator->getServiceLocator()->get(PasswordChanger::class);
 
-        return new Account($authenticationService, $accountForm, $passwordChanger);
+        return new Account($authenticationService, $accountForm, $changeIdentityForm, $passwordChanger);
     }
 }

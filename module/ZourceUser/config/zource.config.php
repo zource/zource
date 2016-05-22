@@ -12,7 +12,6 @@ namespace ZourceUser;
 use Zend\Authentication\AuthenticationService;
 use Zend\Crypt\Password\Bcrypt;
 use Zend\Crypt\Password\PasswordInterface;
-use ZF\MvcAuth\Identity\IdentityInterface;
 use ZourceUser\Authentication\OAuth\Service\StorageFactory;
 use ZourceUser\Authentication\OAuth\Storage;
 use ZourceUser\Authentication\Service\AuthenticationServiceFactory;
@@ -21,9 +20,11 @@ use ZourceUser\Authorization\Condition\Service\UserHasRoleFactory;
 use ZourceUser\Entity\Account as AccountEntity;
 use ZourceUser\Entity\AccountInterface;
 use ZourceUser\Entity\Identity as IdentityEntity;
+use ZourceUser\Entity\IdentityInterface;
 use ZourceUser\Form\Account as AccountForm;
 use ZourceUser\Form\AddEmail as AddEmailForm;
 use ZourceUser\Form\Authenticate as AuthenticateForm;
+use ZourceUser\Form\ChangeIdentity as ChangeIdentityForm;
 use ZourceUser\Form\CreateApplication as CreateApplicationForm;
 use ZourceUser\Form\Profile as ProfileForm;
 use ZourceUser\Form\RequestPassword as RequestPasswordForm;
@@ -33,6 +34,7 @@ use ZourceUser\Form\VerifyEmail as VerifyEmailForm;
 use ZourceUser\InputFilter\Account as AccountInputFilter;
 use ZourceUser\InputFilter\AddEmail as AddEmailInputFilter;
 use ZourceUser\InputFilter\Authenticate as AuthenticateInputFilter;
+use ZourceUser\InputFilter\ChangeIdentity as ChangeIdentityInputFilter;
 use ZourceUser\InputFilter\CreateApplication as CreateApplicationInputFilter;
 use ZourceUser\InputFilter\Profile as ProfileInputFilter;
 use ZourceUser\InputFilter\RequestPassword as RequestPasswordInputFilter;
@@ -105,6 +107,15 @@ return [
                         'defaults' => [
                             'controller' => ConsoleController::class,
                             'action' => 'accountDelete',
+                        ],
+                    ],
+                ],
+                'account-list' => [
+                    'options' => [
+                        'route' => 'zource:account:list',
+                        'defaults' => [
+                            'controller' => ConsoleController::class,
+                            'action' => 'accountList',
                         ],
                     ],
                 ],
@@ -191,6 +202,11 @@ return [
             'hydrator' => 'ClassMethods',
             'input_filter' => AuthenticateInputFilter::class,
         ],
+        ChangeIdentityForm::class => [
+            'type' => ChangeIdentityForm::class,
+            'hydrator' => 'ClassMethods',
+            'input_filter' => ChangeIdentityInputFilter::class,
+        ],
         CreateApplicationForm::class => [
             'type' => CreateApplicationForm::class,
             'hydrator' => [
@@ -234,6 +250,7 @@ return [
         'invokables' => [
             AccountInputFilter::class => AccountInputFilter::class,
             AddEmailInputFilter::class => AddEmailInputFilter::class,
+            ChangeIdentityInputFilter::class => ChangeIdentityInputFilter::class,
             CreateApplicationInputFilter::class => CreateApplicationInputFilter::class,
             ProfileInputFilter::class => ProfileInputFilter::class,
             RequestPasswordInputFilter::class => RequestPasswordInputFilter::class,
@@ -351,6 +368,29 @@ return [
                             'defaults' => [
                                 'controller' => Account::class,
                                 'action' => 'index',
+                            ],
+                        ],
+                        'may_terminate' => true,
+                        'child_routes' => [
+                            'change-credential' => [
+                                'type' => 'Literal',
+                                'options' => [
+                                    'route' => '/change/credential',
+                                    'defaults' => [
+                                        'controller' => Account::class,
+                                        'action' => 'changeCredential',
+                                    ],
+                                ],
+                            ],
+                            'change-identity' => [
+                                'type' => 'Literal',
+                                'options' => [
+                                    'route' => '/change/identity',
+                                    'defaults' => [
+                                        'controller' => Account::class,
+                                        'action' => 'changeIdentity',
+                                    ],
+                                ],
                             ],
                         ],
                     ],

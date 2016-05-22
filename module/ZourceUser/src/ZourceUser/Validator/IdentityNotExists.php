@@ -27,38 +27,30 @@ class IdentityNotExists extends AbstractValidator
     ];
 
     /**
-     * @var EntityManager
+     * @var array
      */
-    private $entityManager;
-
-    /**
-     * @return EntityManager
-     */
-    public function getEntityManager()
-    {
-        return $this->entityManager;
-    }
-
-    /**
-     * @param EntityManager $entityManager
-     */
-    public function setEntityManager(EntityManager $entityManager)
-    {
-        $this->entityManager = $entityManager;
-    }
+    protected $options = [
+        'directory' => null,
+        'entity_manager' => null,
+    ];
 
     /**
      * {@inheritDoc}
      */
     public function isValid($value, $context = null)
     {
-        $directory = $context['directory'];
+        if (array_key_exists('directory', $context)) {
+            $directory = $context['directory'];
+        } else {
+            $directory = $this->options['directory'];
+        }
+
         if (!$directory) {
             $this->error(self::DIRECTORY_MISSING);
             return false;
         }
 
-        $repository = $this->entityManager->getRepository(IdentityEntity::class);
+        $repository = $this->options['entity_manager']->getRepository(IdentityEntity::class);
 
         $qb = $repository->createQueryBuilder('i');
         $qb->select('count(i.account)');

@@ -10,6 +10,7 @@
 namespace ZourceUser\Mvc\Controller;
 
 use Zend\Form\Form;
+use Zend\Form\FormInterface;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use ZourceUser\Authentication\AuthenticationService;
@@ -19,19 +20,22 @@ class Account extends AbstractActionController
 {
     private $authenticationService;
     private $accountForm;
+    private $changeIdentityForm;
     private $passwordChanger;
 
     public function __construct(
         AuthenticationService $authenticationService,
-        Form $accountForm,
+        FormInterface $accountForm,
+        FormInterface $changeIdentityForm,
         PasswordChanger $passwordChanger
     ) {
         $this->authenticationService = $authenticationService;
         $this->accountForm = $accountForm;
+        $this->changeIdentityForm = $changeIdentityForm;
         $this->passwordChanger = $passwordChanger;
     }
 
-    public function indexAction()
+    public function changeCredentialAction()
     {
         if ($this->getRequest()->isPost()) {
             $this->accountForm->setData(array_merge_recursive(
@@ -50,8 +54,52 @@ class Account extends AbstractActionController
             }
         }
 
+        $viewModel = new ViewModel([
+            'accountForm' => $this->accountForm,
+            'changeIdentityForm' => $this->changeIdentityForm,
+        ]);
+
+        $viewModel->setTemplate('zource-user/account/index');
+
+        return $viewModel;
+    }
+
+    public function changeIdentityAction()
+    {
+        if ($this->getRequest()->isPost()) {
+            $this->changeIdentityForm->setData(array_merge_recursive(
+                $this->getRequest()->getPost()->toArray(),
+                $this->getRequest()->getFiles()->toArray()
+            ));
+
+            if ($this->changeIdentityForm->isValid()) {
+                $data = $this->changeIdentityForm->getData();
+
+                $account = $this->authenticationService->getAccountEntity();
+
+                $this->passwordChanger->changeIdentity($account, 'username', $data['identity']);
+
+                $this->authenticationService->clearIdentity();
+
+                return $this->redirect()->toRoute('settings/profile');
+            }
+        }
+
+        $viewModel = new ViewModel([
+            'accountForm' => $this->accountForm,
+            'changeIdentityForm' => $this->changeIdentityForm,
+        ]);
+
+        $viewModel->setTemplate('zource-user/account/index');
+
+        return $viewModel;
+    }
+
+    public function indexAction()
+    {
         return new ViewModel([
-            'form' => $this->accountForm,
+            'accountForm' => $this->accountForm,
+            'changeIdentityForm' => $this->changeIdentityForm,
         ]);
     }
 }

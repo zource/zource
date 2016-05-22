@@ -11,7 +11,6 @@ namespace ZourceUser\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
-use ZourceUser\Entity\AccountInterface;
 
 interface IdentityInterface
 {

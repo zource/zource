@@ -5,42 +5,68 @@ $this->layout('layout/page-header');
 $this->placeholder('layout')->pageTitle = $this->translate('layoutUserProfileTitle');
 $this->placeholder('layout')->pageMenu = 'user-settings';
 
-$this->form->setAttribute('action', $this->url('settings/account'));
-$this->form->setAttribute('method', 'post');
-$this->form->prepare();
+$this->accountForm->setAttribute('action', $this->url('settings/account/change-credential'));
+$this->accountForm->setAttribute('method', 'post');
+$this->accountForm->prepare();
+
+$this->changeIdentityForm->setAttribute('action', $this->url('settings/account/change-identity'));
+$this->changeIdentityForm->setAttribute('method', 'post');
+$this->changeIdentityForm->prepare();
 
 ?>
 
 <h2><?php echo $this->translate('pageUserAccountTitle'); ?></h2>
 
-<?php echo $this->form()->openTag($this->form); ?>
-    <?php echo $this->formHidden($this->form->get('token')); ?>
-<?php echo $this->formElementErrors($this->form->get('token')); ?>
+<?php echo $this->form()->openTag($this->accountForm); ?>
+<?php echo $this->formHidden($this->accountForm->get('token')); ?>
+<?php echo $this->formElementErrors($this->accountForm->get('token')); ?>
 
-    <div class="zui-field-group">
-        <?php echo $this->formLabel($this->form->get('currentPassword')); ?>
-        <?php echo $this->formPassword($this->form->get('currentPassword')); ?>
-        <?php echo $this->zourceFormDescription($this->form->get('currentPassword')); ?>
-        <?php echo $this->formElementErrors($this->form->get('currentPassword')); ?>
-    </div>
+<div class="zui-field-group">
+    <?php echo $this->formLabel($this->accountForm->get('currentPassword')); ?>
+    <?php echo $this->formPassword($this->accountForm->get('currentPassword')); ?>
+    <?php echo $this->zourceFormDescription($this->accountForm->get('currentPassword')); ?>
+    <?php echo $this->formElementErrors($this->accountForm->get('currentPassword')); ?>
+</div>
 
-    <div class="zui-field-group">
-        <?php echo $this->formLabel($this->form->get('newPassword')); ?>
-        <?php echo $this->formPassword($this->form->get('newPassword')); ?>
-        <?php echo $this->zourceFormDescription($this->form->get('newPassword')); ?>
-        <?php echo $this->formElementErrors($this->form->get('newPassword')); ?>
-    </div>
+<div class="zui-field-group">
+    <?php echo $this->formLabel($this->accountForm->get('newPassword')); ?>
+    <?php echo $this->formPassword($this->accountForm->get('newPassword')); ?>
+    <?php echo $this->zourceFormDescription($this->accountForm->get('newPassword')); ?>
+    <?php echo $this->formElementErrors($this->accountForm->get('newPassword')); ?>
+</div>
 
-    <div class="zui-field-group">
-        <?php echo $this->formLabel($this->form->get('confirmPassword')); ?>
-        <?php echo $this->formPassword($this->form->get('confirmPassword')); ?>
-        <?php echo $this->zourceFormDescription($this->form->get('confirmPassword')); ?>
-        <?php echo $this->formElementErrors($this->form->get('confirmPassword')); ?>
-    </div>
+<div class="zui-field-group">
+    <?php echo $this->formLabel($this->accountForm->get('confirmPassword')); ?>
+    <?php echo $this->formPassword($this->accountForm->get('confirmPassword')); ?>
+    <?php echo $this->zourceFormDescription($this->accountForm->get('confirmPassword')); ?>
+    <?php echo $this->formElementErrors($this->accountForm->get('confirmPassword')); ?>
+</div>
 
-    <div class="zui-buttons-container">
-        <div class="zui-buttons">
-            <?php echo $this->formSubmit($this->form->get('submit')); ?>
-        </div>
+<div class="zui-buttons-container">
+    <div class="zui-buttons">
+        <?php echo $this->formSubmit($this->accountForm->get('submit')); ?>
     </div>
+</div>
+<?php echo $this->form()->closeTag(); ?>
+
+<hr>
+
+<h2><?php echo $this->translate('pageUserChangeIdentityTitle'); ?></h2>
+
+<?php echo $this->form()->openTag($this->changeIdentityForm); ?>
+<?php echo $this->formHidden($this->changeIdentityForm->get('token')); ?>
+<?php echo $this->formElementErrors($this->changeIdentityForm->get('token')); ?>
+
+<div class="zui-field-group">
+    <?php echo $this->formLabel($this->changeIdentityForm->get('identity')); ?>
+    <?php echo $this->formText($this->changeIdentityForm->get('identity')); ?>
+    <?php echo $this->zourceFormDescription($this->changeIdentityForm->get('identity')); ?>
+    <?php echo $this->formElementErrors($this->changeIdentityForm->get('identity')); ?>
+</div>
+
+<div class="zui-buttons-container">
+    <div class="zui-buttons">
+        <?php echo $this->formSubmit($this->changeIdentityForm->get('submit')); ?>
+    </div>
+</div>
 <?php echo $this->form()->closeTag(); ?>

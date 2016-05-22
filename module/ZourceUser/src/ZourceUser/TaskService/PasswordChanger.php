@@ -12,6 +12,8 @@ namespace ZourceUser\TaskService;
 use Doctrine\ORM\EntityManager;
 use Zend\Crypt\Password\PasswordInterface;
 use ZourceUser\Entity\AccountInterface;
+use ZourceUser\Entity\Identity;
+use ZourceUser\Entity\IdentityInterface;
 
 class PasswordChanger
 {
@@ -32,6 +34,25 @@ class PasswordChanger
 
         $this->entityManager->persist($account);
         $this->entityManager->flush($account);
+    }
+
+    public function changeIdentity(AccountInterface $account, $directory, $identity)
+    {
+        $identityRepository = $this->entityManager->getRepository(IdentityInterface::class);
+        $identityEntity = $identityRepository->findOneBy([
+            'directory' => $directory,
+            'account' => $account,
+        ]);
+
+        if ($identityEntity) {
+            $this->entityManager->remove($identityEntity);
+            $this->entityManager->flush($identityEntity);
+        }
+
+        $newIdentity = new Identity($account, $directory, $identity);
+
+        $this->entityManager->persist($newIdentity);
+        $this->entityManager->flush($newIdentity);
     }
 
     public function assignResetCredentialCode($emailAddress)
