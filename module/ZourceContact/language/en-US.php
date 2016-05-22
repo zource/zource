@@ -15,4 +15,9 @@ return [
     'contactsMenuAllContacts' => 'All contacts',
     'contactsMenuCompanies' => 'Companies',
     'contactsMenuPeople' => 'People',
+
+    'contactViewMenuContactOptions' => 'Contact Options',
+    'contactViewMenuDetails' => 'View details',
+    'contactViewMenuActivityStream' => 'Activity stream',
+    'contactViewMenuVCard' => 'vCard',
 ];

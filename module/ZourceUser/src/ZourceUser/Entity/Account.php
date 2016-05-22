@@ -38,7 +38,7 @@ class Account implements AccountInterface
     private $creationDate;
 
     /**
-     * @ORM\ManyToOne(targetEntity="ZourceContact\Entity\Person", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="ZourceContact\Entity\Person", cascade={"persist"}, fetch="EAGER")
      * @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
      * @var Person
      */

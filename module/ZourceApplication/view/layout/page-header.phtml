@@ -37,6 +37,13 @@
     <section id="zource-content" role="main">
         <div id="zui-page-header" class="page-header">
             <div class="zui-page-header-inner">
+
+                <?php if (isset($this->placeholder('layout')->pageImage)) { ?>
+                <div class="zui-page-header-image">
+                    <img src="<?php echo $this->escapeHtmlAttr($this->placeholder('layout')->pageImage); ?>" class="zui-image-round">
+                </div>
+                <?php } ?>
+
                 <div class="zui-page-header-main">
                     <h1><?php echo $this->placeholder('layout')->pageTitle; ?></h1>
                 </div>

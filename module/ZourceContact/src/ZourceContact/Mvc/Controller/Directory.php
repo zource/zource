@@ -9,11 +9,11 @@
 
 namespace ZourceContact\Mvc\Controller;
 
-use RuntimeException;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Paginator\Paginator;
 use Zend\View\Model\ViewModel;
 use ZourceContact\TaskService\Contact as ContactTaskService;
+use ZourceContact\ValueObject\ContactEntry;
 
 class Directory extends AbstractActionController
 {
@@ -29,55 +29,27 @@ class Directory extends AbstractActionController
 
     public function indexAction()
     {
-        /** @var Paginator $contactsPaginator */
-        $contactsPaginator = $this->contactService->getOverviewPaginator();
-        $contactsPaginator->setCurrentPageNumber($this->params()->fromQuery('page', 1));
-        $contactsPaginator->setItemCountPerPage(50);
-
-        return new ViewModel([
-            'contactsPaginator' => $contactsPaginator,
-        ]);
-    }
-
-    public function filterAction()
-    {
-        $filterName = $this->params('name');
-
-        /** @var Paginator $contactsPaginator */
-        $contactsPaginator = $this->contactService->getFilterPaginator($filterName);
-        $contactsPaginator->setCurrentPageNumber($this->params()->fromQuery('page', 1));
-        $contactsPaginator->setItemCountPerPage(50);
-
-        return new ViewModel([
-            'contactsPaginator' => $contactsPaginator,
-        ]);
-    }
-
-    public function viewAction()
-    {
-        $contact = $this->contactService->findContact($this->params('type'), $this->params('id'));
-
-        if (!$contact) {
-            return $this->notFoundAction();
-        }
-
-        $viewModel = new ViewModel();
-
-        switch ($this->params('type')) {
-            case 'company':
-                $viewModel->setVariable('company', $contact);
-                $viewModel->setTemplate('zource-contact/directory/view-company');
+        switch ($this->params()->fromQuery('filter')) {
+            case 'companies':
+                $filter = ContactEntry::TYPE_COMPANY;
                 break;
 
-            case 'person':
-                $viewModel->setVariable('person', $contact);
-                $viewModel->setTemplate('zource-contact/directory/view-person');
+            case 'people':
+                $filter = ContactEntry::TYPE_PERSON;
                 break;
 
             default:
-                throw new RuntimeException('Invalid type provided.');
+                $filter = null;
+                break;
         }
 
-        return $viewModel;
+        /** @var Paginator $contactsPaginator */
+        $contactsPaginator = $this->contactService->getOverviewPaginator($filter);
+        $contactsPaginator->setCurrentPageNumber($this->params()->fromQuery('page', 1));
+        $contactsPaginator->setItemCountPerPage(50);
+
+        return new ViewModel([
+            'contactsPaginator' => $contactsPaginator,
+        ]);
     }
 }

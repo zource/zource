@@ -7,9 +7,13 @@ $this->placeholder('layout')->pageMenu = 'contacts-directory';
 
 <div id="zource-contacts-directory">
     <?php if ($this->contactsPaginator->count() === 0) { ?>
-        <p>
-            No contacts found.
-        </p>
+        <div class="zui-alert">
+            <p>
+                <?php echo $this->translate('No contacts found.'); ?>
+            </p>
+
+            <span class="zui-icon zui-icon-x" role="button" tabindex="0"></span>
+        </div>
     <?php } else { ?>
         <ul>
             <?php foreach ($this->contactsPaginator as $contact) { ?>

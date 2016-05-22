@@ -1,8 +1,21 @@
-module.exports = function(grunt) {
+module.exports = function (grunt) {
     "use strict";
 
     grunt.initConfig({
         pkg: grunt.file.readJSON("package.json"),
+        copy: {
+            main: {
+                files: [
+                    {
+                        dest: 'public/img/avatars/',
+                        expand: true,
+                        filter: 'isFile',
+                        flatten: true,
+                        src: ['assets/images/avatars/*']
+                    },
+                ],
+            },
+        },
         sass: {
             dist: {
                 options: {
@@ -12,7 +25,7 @@ module.exports = function(grunt) {
                     ]
                 },
                 files: {
-                    'public/css/zource.css': 'scss/zource.scss'
+                    'public/css/zource.css': 'assets/scss/zource.scss'
                 }
             }
         },
@@ -27,8 +40,9 @@ module.exports = function(grunt) {
         }
     });
 
+    grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-sass');
     grunt.loadNpmTasks('grunt-contrib-watch');
 
-    grunt.registerTask('default', ['sass']);
+    grunt.registerTask('default', ['sass', 'copy']);
 };

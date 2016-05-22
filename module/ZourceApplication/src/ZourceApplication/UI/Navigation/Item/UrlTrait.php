@@ -21,7 +21,10 @@ trait UrlTrait
 
         $routeParams = empty($options['route_params']) ? [] : $options['route_params'];
         $routeOptions = empty($options['route_options']) ? [] : $options['route_options'];
+        $routeReuseMatchedParams = empty($options['route_reuse_matched_params'])
+            ? false
+            : $options['route_reuse_matched_params'];
 
-        return $this->getView()->url($options['route'], $routeParams, $routeOptions);
+        return $this->getView()->url($options['route'], $routeParams, $routeOptions, $routeReuseMatchedParams);
     }
 }

@@ -9,14 +9,19 @@
 
 namespace ZourceContact\View\Helper;
 
+use Ramsey\Uuid\UuidInterface;
 use Zend\View\Helper\AbstractHelper;
 use ZourceContact\ValueObject\ContactEntry;
 
 class ContactAvatar extends AbstractHelper
 {
-    public function __invoke(ContactEntry $contact)
+    public function __invoke(ContactEntry $contact = null)
     {
-        $src = $this->getView()->basePath('/img/avatars/' . $contact->getId()->toString());
+        if (!$contact) {
+            return $this;
+        }
+
+        $src = $this->getUrl($contact->getId());
         $alt = $contact->getDisplayName();
 
         return sprintf(
@@ -24,5 +29,18 @@ class ContactAvatar extends AbstractHelper
             $this->getView()->escapeHtmlAttr($src),
             $this->getView()->escapeHtmlAttr($alt)
         );
+    }
+
+    public function getUrl(UuidInterface $id)
+    {
+        $filePath = 'public/img/avatars/' . $id->toString();
+
+        if (is_file($filePath)) {
+            $src = $this->getView()->basePath('/img/avatars/' . $id->toString());
+        } else {
+            $src = $this->getView()->basePath('/img/avatars/placeholder.png');
+        }
+
+        return $src;
     }
 }

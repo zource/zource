@@ -12,6 +12,11 @@ body {
   padding-top: 40px;
 }
 
+.zui-page-header-image img {
+  height: 64px;
+  width: 64px;
+}
+
 a[disabled] {
   pointer-events: none;
 }

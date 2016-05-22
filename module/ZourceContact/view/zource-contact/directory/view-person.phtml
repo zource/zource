@@ -3,4 +3,6 @@ $this->layout('layout/page-header');
 
 $this->placeholder('layout')->pageTitle = $this->person->getFullName();
 $this->placeholder('layout')->pageMenu = 'view-contact';
+$this->placeholder('layout')->pageImage = $this->zourceContactAvatar()->getUrl($this->person->getId());
+
 ?>

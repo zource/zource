@@ -10,12 +10,11 @@
 namespace ZourceContact\TaskService;
 
 use Doctrine\ORM\EntityManager;
-use Ramsey\Uuid\Uuid;
 use RuntimeException;
-use Zend\Paginator\Adapter\Callback;
 use Zend\Paginator\Paginator;
 use ZourceContact\Entity\Company;
 use ZourceContact\Entity\Person;
+use ZourceContact\Paginator\Adapter\ContactOverview;
 use ZourceContact\ValueObject\ContactEntry;
 
 class Contact
@@ -33,11 +32,11 @@ class Contact
     public function findContact($type, $id)
     {
         switch ($type) {
-            case 'company':
+            case ContactEntry::TYPE_COMPANY:
                 $contact = $this->findCompany($id);
                 break;
 
-            case 'person':
+            case ContactEntry::TYPE_PERSON:
                 $contact = $this->findPerson($id);
                 break;
 
@@ -63,41 +62,10 @@ class Contact
         return $repository->find($id);
     }
 
-    public function getFilterPaginator($filterName)
+    public function getOverviewPaginator($filter)
     {
-        return $this->getOverviewPaginator();
-    }
+        $adapter = new ContactOverview($this->entityManager->getConnection(), $filter);
 
-    public function getOverviewPaginator()
-    {
-        $personSql = "SELECT 'person' AS type, id, CONCAT_WS(' ', name, family_name) AS display_name FROM contact_person";
-        $companySql = "SELECT 'company' AS type, id, name AS display_name FROM contact_company";
-        $unionSql = $personSql . ' UNION ' . $companySql;
-
-        $itemCallback = function ($offset, $itemCountPerPage) use ($unionSql) {
-            $unionSql .= " ORDER BY display_name ASC";
-            $unionSql .= sprintf(" LIMIT %d, %d", $offset, $itemCountPerPage);
-
-            $statement = $this->entityManager->getConnection()->executeQuery($unionSql);
-            $result = $statement->fetchAll();
-
-            return array_map(function ($item) {
-                return new ContactEntry(
-                    $item['type'],
-                    Uuid::fromBytes($item['id']),
-                    $item['display_name']
-                );
-            }, $result);
-        };
-
-        $countCallback = function () use ($unionSql) {
-            $countSql = "SELECT COUNT(1) AS amount FROM (" . $unionSql . ") AS c";
-
-            $statement = $this->entityManager->getConnection()->executeQuery($countSql);
-
-            return $statement->fetchColumn();
-        };
-
-        return new Paginator(new Callback($itemCallback, $countCallback));
+        return new Paginator($adapter);
     }
 }

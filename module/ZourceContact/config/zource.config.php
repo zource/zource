@@ -9,8 +9,10 @@
 
 namespace ZourceContact;
 
-use ZourceContact\Mvc\Controller\Directory;
-use ZourceContact\Mvc\Controller\Service\DirectoryFactory;
+use ZourceContact\Mvc\Controller\Contact as ContactController;
+use ZourceContact\Mvc\Controller\Directory as DirectoryController;
+use ZourceContact\Mvc\Controller\Service\ContactFactory as ContactControllerFactory;
+use ZourceContact\Mvc\Controller\Service\DirectoryFactory as DirectoryControllerFactory;
 use ZourceContact\TaskService\Contact as ContactTaskService;
 use ZourceContact\TaskService\Service\ContactFactory as ContactTaskServiceFactory;
 use ZourceContact\View\Helper\ContactAvatar;
@@ -18,7 +20,8 @@ use ZourceContact\View\Helper\ContactAvatar;
 return [
     'controllers' => [
         'factories' => [
-            Directory::class => DirectoryFactory::class,
+            ContactController::class => ContactControllerFactory::class,
+            DirectoryController::class => DirectoryControllerFactory::class,
         ],
     ],
     'doctrine' => [
@@ -44,32 +47,45 @@ return [
                 'options' => [
                     'route' => '/contacts',
                     'defaults' => [
-                        'controller' => Directory::class,
+                        'controller' => DirectoryController::class,
                         'action' => 'index',
                     ],
                 ],
                 'may_terminate' => true,
                 'child_routes' => [
-                    'filter' => [
-                        'type' => 'Segment',
-                        'options' => [
-                            'route' => '/filter/:name',
-                            'defaults' => [
-                                'controller' => Directory::class,
-                                'action' => 'filter',
-                            ],
-                        ],
-                    ],
                     'view' => [
                         'type' => 'Segment',
                         'options' => [
                             'route' => '/view/:type/:id',
                             'defaults' => [
-                                'controller' => Directory::class,
+                                'controller' => ContactController::class,
                                 'action' => 'view',
                             ],
                             'constraints' => [
                                 'type' => 'company|person',
+                            ],
+                        ],
+                        'may_terminate' => true,
+                        'child_routes' => [
+                            'activitystream' => [
+                                'type' => 'Literal',
+                                'options' => [
+                                    'route' => '/activity-stream',
+                                    'defaults' => [
+                                        'controller' => ContactController::class,
+                                        'action' => 'activityStream',
+                                    ],
+                                ],
+                            ],
+                            'vcard' => [
+                                'type' => 'Literal',
+                                'options' => [
+                                    'route' => '/vcard',
+                                    'defaults' => [
+                                        'controller' => ContactController::class,
+                                        'action' => 'vcard',
+                                    ],
+                                ],
                             ],
                         ],
                     ],
@@ -147,9 +163,11 @@ return [
                     'priority' => 7000,
                     'options' => [
                         'label' => 'contactsMenuCompanies',
-                        'route' => 'contacts/filter',
-                        'route_params' => [
-                            'name' => 'companies',
+                        'route' => 'contacts',
+                        'route_options' => [
+                            'query' => [
+                                'filter' => 'companies',
+                            ],
                         ],
                     ],
                 ],
@@ -158,9 +176,11 @@ return [
                     'priority' => 8000,
                     'options' => [
                         'label' => 'contactsMenuPeople',
-                        'route' => 'contacts/filter',
-                        'route_params' => [
-                            'name' => 'people',
+                        'route' => 'contacts',
+                        'route_options' => [
+                            'query' => [
+                                'filter' => 'people',
+                            ],
                         ],
                     ],
                 ],
@@ -186,8 +206,42 @@ return [
         ],
         'view-contact' => [
             'items' => [
-
+                'header-manage' => [
+                    'type' => 'header',
+                    'priority' => 1000,
+                    'options' => [
+                        'label' => 'contactViewMenuContactOptions',
+                    ],
+                ],
+                'details' => [
+                    'type' => 'label',
+                    'priority' => 2000,
+                    'options' => [
+                        'label' => 'contactViewMenuDetails',
+                        'route' => 'contacts/view',
+                        'route_reuse_matched_params' => true,
+                    ],
+                ],
+                'activity' => [
+                    'type' => 'label',
+                    'priority' => 3000,
+                    'options' => [
+                        'label' => 'contactViewMenuActivityStream',
+                        'route' => 'contacts/view/activitystream',
+                        'route_reuse_matched_params' => true,
+                    ],
+                ],
+                'vcard' => [
+                    'type' => 'label',
+                    'priority' => 4000,
+                    'options' => [
+                        'label' => 'contactViewMenuVCard',
+                        'route' => 'contacts/view/vcard',
+                        'route_reuse_matched_params' => true,
+                    ],
+                ],
             ],
+
         ],
     ],
     'view_helpers' => [
