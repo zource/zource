@@ -12,6 +12,12 @@ php:
   - hhvm
   - nightly
 
+matrix:
+  include:
+    - php: 5.6
+      env: 'UPLOAD_COVERAGE=true'
+  fast_finish: true
+
 before_install:
   - travis_retry composer self-update
 
@@ -22,6 +28,9 @@ script:
   - composer validate --strict
   - vendor/bin/phpcs --standard=ruleset.xml
   - vendor/bin/phpunit
+
+after_script:
+  - if [[ $UPLOAD_COVERAGE == 'true' ]]; then ./vendor/bin/ocular code-coverage:upload --format=php-clover build/logs/clover.xml ;
 
 notifications:
   email: false
