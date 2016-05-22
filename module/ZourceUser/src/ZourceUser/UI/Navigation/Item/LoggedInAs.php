@@ -12,6 +12,7 @@ namespace ZourceUser\UI\Navigation\Item;
 use Zend\View\Renderer\RendererInterface;
 use ZourceApplication\UI\Navigation\Item\Label;
 use ZourceUser\Authentication\AuthenticationService;
+use ZourceUser\Entity\AccountInterface;
 
 class LoggedInAs extends Label
 {
@@ -26,13 +27,22 @@ class LoggedInAs extends Label
 
     public function render(array $item)
     {
+        /** @var AccountInterface $account */
+        $account = $this->authenticationService->getAccountEntity();
+        
         $listAttr = [];
         $listAttr['role'] = 'presentation';
 
+        $url = $this->getView()->url('contacts/view', [
+            'type' => 'person',
+            'id' => $account->getContactPerson()->getId()->toString(),
+        ]);
+
         return sprintf(
-            '<li %s><a href="">%s</a></li>',
+            '<li %s><a href="%s">%s</a></li>',
             $this->createAttribs($listAttr),
-            $this->authenticationService->getAccountEntity()->getDisplayName()
+            $url,
+            $account->getDisplayName()
         );
     }
 }

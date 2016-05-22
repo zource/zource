@@ -37,4 +37,20 @@ abstract class AbstractContact
         $this->id = Uuid::uuid4();
         $this->creationDate = new DateTime();
     }
+
+    /**
+     * @return UuidInterface
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return DateTime
+     */
+    public function getCreationDate()
+    {
+        return $this->creationDate;
+    }
 }

@@ -11,9 +11,11 @@ namespace ZourceUser\Mvc\Controller;
 
 use Doctrine\ORM\EntityManager;
 use Exception;
+use Zend\Console\Prompt\Line;
 use Zend\Console\Prompt\Password;
 use Zend\Crypt\Password\PasswordInterface;
 use Zend\Mvc\Controller\AbstractConsoleController;
+use ZourceContact\Entity\Person;
 use ZourceUser\Entity\Account;
 use ZourceUser\Entity\AccountInterface;
 use ZourceUser\Entity\Identity;
@@ -32,8 +34,17 @@ class Console extends AbstractConsoleController
 
     public function accountCreateAction()
     {
-        $credential = $this->params('credential');
+        $name = $this->params('name');
+        if (!$name) {
+            $name = Line::prompt('Please enter the name of the person: ');
+        }
 
+        $familyName = $this->params('family-name');
+        if (!$familyName) {
+            $familyName = Line::prompt('Please enter the family name of the person: ');
+        }
+
+        $credential = $this->params('credential');
         if (!$credential) {
             $credential = Password::prompt('Please enter the credential of this new account: ');
             $verification = Password::prompt('Please enter the credential again to verify: ');
@@ -43,8 +54,10 @@ class Console extends AbstractConsoleController
                 return 1;
             }
         }
-
-        $account = new Account();
+        
+        $person = new Person($name, $familyName);
+        
+        $account = new Account($person);
         $account->setCredential($this->crypter->create($credential));
 
         $this->entityManager->persist($account);

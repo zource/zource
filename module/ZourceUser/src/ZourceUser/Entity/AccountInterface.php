@@ -12,6 +12,7 @@ namespace ZourceUser\Entity;
 use DateTime;
 use Doctrine\Common\Collections\Collection;
 use Ramsey\Uuid\UuidInterface;
+use ZourceContact\Entity\Person;
 
 /**
  * The interface that is implemented by accounts.
@@ -43,6 +44,11 @@ interface AccountInterface
      * @return DateTime
      */
     public function getCreationDate();
+
+    /**
+     * @return Person
+     */
+    public function getContactPerson();
 
     /**
      * Gets the credential for this account.

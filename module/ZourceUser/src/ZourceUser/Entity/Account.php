@@ -38,7 +38,7 @@ class Account implements AccountInterface
     private $creationDate;
 
     /**
-     * @ORM\ManyToOne(targetEntity="ZourceContact\Entity\Person")
+     * @ORM\ManyToOne(targetEntity="ZourceContact\Entity\Person", cascade={"persist"})
      * @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
      * @var Person
      */
@@ -92,11 +92,14 @@ class Account implements AccountInterface
 
     /**
      * Initializes a new instance of this class.
+     *
+     * @param Person $contactPerson The person to attach this account to.
      */
-    public function __construct()
+    public function __construct(Person $contactPerson)
     {
         $this->id = Uuid::uuid4();
         $this->creationDate = new DateTime();
+        $this->contactPerson = $contactPerson;
         $this->status = self::STATUS_ACTIVE;
         $this->groups = new ArrayCollection();
         $this->emailAddresses = new ArrayCollection();
@@ -118,6 +121,14 @@ class Account implements AccountInterface
     public function getCreationDate()
     {
         return $this->creationDate;
+    }
+
+    /**
+     * @return Person
+     */
+    public function getContactPerson()
+    {
+        return $this->contactPerson;
     }
 
     /**
@@ -233,6 +244,6 @@ class Account implements AccountInterface
      */
     public function getDisplayName()
     {
-        return 'TODO';
+        return $this->getContactPerson()->getFullName();
     }
 }
