@@ -40,7 +40,7 @@ class SaveHandler implements SaveHandlerInterface
     public function open($savePath, $name)
     {
         $this->name = $name;
-        $this->lifetime = ini_get('session.gc_maxlifetime');
+        $this->lifetime = (int)ini_get('session.gc_maxlifetime');
 
         return true;
     }
