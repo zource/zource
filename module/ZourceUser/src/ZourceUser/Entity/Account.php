@@ -15,6 +15,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
+use ZourceContact\Entity\Person;
 use ZourceUser\Entity\Email;
 
 /**
@@ -35,6 +36,13 @@ class Account implements AccountInterface
      * @var DateTime
      */
     private $creationDate;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="ZourceContact\Entity\Person")
+     * @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
+     * @var Person
+     */
+    private $contactPerson;
 
     /**
      * @ORM\Column(type="string", length=60)
