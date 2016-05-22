@@ -15,6 +15,7 @@ use Zend\Crypt\Password\PasswordInterface;
 use ZourceUser\Authentication\OAuth\Service\StorageFactory;
 use ZourceUser\Authentication\OAuth\Storage;
 use ZourceUser\Authentication\Service\AuthenticationServiceFactory;
+use ZourceUser\Authorization\Condition\Service\NotificationsExistFactory;
 use ZourceUser\Authorization\Condition\Service\UserHasIdentityFactory;
 use ZourceUser\Authorization\Condition\Service\UserHasRoleFactory;
 use ZourceUser\Entity\Account as AccountEntity;
@@ -647,6 +648,7 @@ return [
     ],
     'zource_conditions' => [
         'factories' => [
+            'NotificationsExist' => NotificationsExistFactory::class,
             'UserHasIdentity' => UserHasIdentityFactory::class,
             'UserHasRole' => UserHasRoleFactory::class,
         ],
@@ -807,6 +809,11 @@ return [
                         'label' => 'userSettingsMenuNotifications',
                         'route' => 'settings/notifications',
                     ],
+                    'conditions' => [
+                        'user-has-identity' => [
+                            'type' => 'NotificationsExist',
+                        ],
+                    ],
                 ],
                 'security' => [
                     'type' => 'label',
@@ -827,6 +834,7 @@ return [
             ],
         ],
     ],
+    'zource_notifications' => [],
     'zource_oauth' => [
         'server_options' => [
             'access_lifetime' => 3600,

@@ -10,6 +10,7 @@
 namespace ZourceApplication\View\Helper\UI;
 
 use InvalidArgumentException;
+use RuntimeException;
 use Zend\View\Helper\AbstractHelper;
 use ZourceApplication\Authorization\Condition\Service\PluginManager as ConditionPluginManager;
 use ZourceApplication\UI\Navigation\Item\ItemInterface;
@@ -109,7 +110,13 @@ class Nav extends AbstractHelper
     private function isAllowed(array $item)
     {
         foreach ($item['conditions'] as $key => $conditionItem) {
-            $condition = $this->conditionManager->get($conditionItem['type'], $conditionItem['options']);
+            if (!isset($conditionItem['type'])) {
+                throw new RuntimeException('The "type" is missing for condition.');
+            }
+
+            $options = isset($conditionItem['options']) ? $conditionItem['options'] : [];
+
+            $condition = $this->conditionManager->get($conditionItem['type'], $options);
             
             $valid = $condition->isValid();
 
