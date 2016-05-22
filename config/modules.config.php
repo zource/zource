@@ -23,7 +23,7 @@ return array(
     'DoctrineModule',
     'DoctrineORMModule',
     'ZourceApplication',
-    'ZourceCalendar',
+    //'ZourceCalendar',
     'ZourceContact',
     'ZourceUser',
 );
