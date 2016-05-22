@@ -1,0 +1,23 @@
+#zource-contacts-directory ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+#zource-contacts-directory li {
+  display: inline-block;
+  margin: 10px 40px 20px 0;
+  text-align: center;
+}
+
+#zource-contacts-directory li img {
+  width: 128px;
+}
+
+#zource-contacts-directory li h2 {
+  font-size: 1.8em;
+  height: 32px;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
+}

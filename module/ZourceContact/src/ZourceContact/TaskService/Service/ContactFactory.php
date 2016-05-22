@@ -7,16 +7,20 @@
  * @license https://raw.githubusercontent.com/zource/zource/master/LICENSE MIT
  */
 
-namespace ZourceContact\Mvc\Controller\Service;
+namespace ZourceContact\TaskService\Service;
 
+use Doctrine\ORM\EntityManager;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use ZourceContact\Mvc\Controller\Console;
+use ZourceContact\TaskService\Contact;
 
-class ConsoleFactory implements FactoryInterface
+class ContactFactory implements FactoryInterface
 {
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        return new Console();
+        /** @var EntityManager $entityManager */
+        $entityManager = $serviceLocator->get('doctrine.entitymanager.orm_default');
+
+        return new Contact($entityManager);
     }
 }

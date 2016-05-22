@@ -9,32 +9,18 @@
 
 namespace ZourceContact\Mvc\Controller\Service;
 
-use Zend\Authentication\AuthenticationService;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use ZourceContact\Form\Account as AccountForm;
-use ZourceContact\Form\ChangeIdentity as ChangeIdentityForm;
-use ZourceContact\Mvc\Controller\Account;
-use ZourceContact\TaskService\PasswordChanger;
+use ZourceContact\Mvc\Controller\Directory;
+use ZourceContact\TaskService\Contact as ContactTaskService;
 
 class DirectoryFactory implements FactoryInterface
 {
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        /** @var AuthenticationService $authenticationService */
-        $authenticationService = $serviceLocator->getServiceLocator()->get(
-            'Zend\\Authentication\\AuthenticationService'
-        );
+        /** @var ContactTaskService $contactTaskService */
+        $contactTaskService = $serviceLocator->getServiceLocator()->get(ContactTaskService::class);
 
-        /** @var AccountForm $accountForm */
-        $accountForm = $serviceLocator->getServiceLocator()->get(AccountForm::class);
-
-        /** @var ChangeIdentityForm $changeIdentityForm */
-        $changeIdentityForm = $serviceLocator->getServiceLocator()->get(ChangeIdentityForm::class);
-
-        /** @var PasswordChanger $passwordChanger */
-        $passwordChanger = $serviceLocator->getServiceLocator()->get(PasswordChanger::class);
-
-        return new Directory($authenticationService, $accountForm, $changeIdentityForm, $passwordChanger);
+        return new Directory($contactTaskService);
     }
 }

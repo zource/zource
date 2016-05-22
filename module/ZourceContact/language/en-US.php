@@ -9,4 +9,10 @@
 
 return [
     'layoutTopMenuContact' => 'Contacts',
+    
+    'pageContactsTitle' => 'Contacts',
+
+    'contactsMenuAllContacts' => 'All contacts',
+    'contactsMenuCompanies' => 'Companies',
+    'contactsMenuPeople' => 'People',
 ];

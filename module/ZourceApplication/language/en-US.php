@@ -9,7 +9,7 @@
 
 return [
     'headTitle' => 'Zource',
-    
+
     'layoutTopMenuTitle' => 'Zource',
 
     'layoutTopMenuDashboards' => 'Dashboards',
@@ -29,6 +29,6 @@ return [
     'error500NoExceptionAvailable' => 'No Exception available',
 
     'pageDashboardTitle' => 'Dashboard',
-    
+
     'pageUserSettingsTitle' => 'Settings',
 ];

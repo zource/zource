@@ -9,97 +9,75 @@
 
 namespace ZourceContact\Mvc\Controller;
 
-use Zend\Form\Form;
-use Zend\Form\FormInterface;
+use RuntimeException;
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Paginator\Paginator;
 use Zend\View\Model\ViewModel;
-use ZourceContact\Authentication\AuthenticationService;
-use ZourceContact\TaskService\PasswordChanger;
+use ZourceContact\TaskService\Contact as ContactTaskService;
 
 class Directory extends AbstractActionController
 {
-    private $authenticationService;
-    private $accountForm;
-    private $changeIdentityForm;
-    private $passwordChanger;
+    /**
+     * @var ContactTaskService
+     */
+    private $contactService;
 
-    public function __construct(
-        AuthenticationService $authenticationService,
-        FormInterface $accountForm,
-        FormInterface $changeIdentityForm,
-        PasswordChanger $passwordChanger
-    ) {
-        $this->authenticationService = $authenticationService;
-        $this->accountForm = $accountForm;
-        $this->changeIdentityForm = $changeIdentityForm;
-        $this->passwordChanger = $passwordChanger;
-    }
-
-    public function changeCredentialAction()
+    public function __construct(ContactTaskService $contactService)
     {
-        if ($this->getRequest()->isPost()) {
-            $this->accountForm->setData(array_merge_recursive(
-                $this->getRequest()->getPost()->toArray(),
-                $this->getRequest()->getFiles()->toArray()
-            ));
-
-            if ($this->accountForm->isValid()) {
-                $data = $this->accountForm->getData();
-
-                $account = $this->authenticationService->getAccountEntity();
-
-                $this->passwordChanger->changePassword($account, $data['newPassword']);
-
-                return $this->redirect()->toRoute('settings/profile');
-            }
-        }
-
-        $viewModel = new ViewModel([
-            'accountForm' => $this->accountForm,
-            'changeIdentityForm' => $this->changeIdentityForm,
-        ]);
-
-        $viewModel->setTemplate('zource-user/account/index');
-
-        return $viewModel;
-    }
-
-    public function changeIdentityAction()
-    {
-        if ($this->getRequest()->isPost()) {
-            $this->changeIdentityForm->setData(array_merge_recursive(
-                $this->getRequest()->getPost()->toArray(),
-                $this->getRequest()->getFiles()->toArray()
-            ));
-
-            if ($this->changeIdentityForm->isValid()) {
-                $data = $this->changeIdentityForm->getData();
-
-                $account = $this->authenticationService->getAccountEntity();
-
-                $this->passwordChanger->changeIdentity($account, 'username', $data['identity']);
-
-                $this->authenticationService->clearIdentity();
-
-                return $this->redirect()->toRoute('settings/profile');
-            }
-        }
-
-        $viewModel = new ViewModel([
-            'accountForm' => $this->accountForm,
-            'changeIdentityForm' => $this->changeIdentityForm,
-        ]);
-
-        $viewModel->setTemplate('zource-user/account/index');
-
-        return $viewModel;
+        $this->contactService = $contactService;
     }
 
     public function indexAction()
     {
+        /** @var Paginator $contactsPaginator */
+        $contactsPaginator = $this->contactService->getOverviewPaginator();
+        $contactsPaginator->setCurrentPageNumber($this->params()->fromQuery('page', 1));
+        $contactsPaginator->setItemCountPerPage(50);
+
         return new ViewModel([
-            'accountForm' => $this->accountForm,
-            'changeIdentityForm' => $this->changeIdentityForm,
+            'contactsPaginator' => $contactsPaginator,
         ]);
+    }
+
+    public function filterAction()
+    {
+        $filterName = $this->params('name');
+
+        /** @var Paginator $contactsPaginator */
+        $contactsPaginator = $this->contactService->getFilterPaginator($filterName);
+        $contactsPaginator->setCurrentPageNumber($this->params()->fromQuery('page', 1));
+        $contactsPaginator->setItemCountPerPage(50);
+
+        return new ViewModel([
+            'contactsPaginator' => $contactsPaginator,
+        ]);
+    }
+
+    public function viewAction()
+    {
+        $contact = $this->contactService->findContact($this->params('type'), $this->params('id'));
+
+        if (!$contact) {
+            return $this->notFoundAction();
+        }
+
+        $viewModel = new ViewModel();
+
+        switch ($this->params('type')) {
+            case 'company':
+                $viewModel->setVariable('company', $contact);
+                $viewModel->setTemplate('zource-contact/directory/view-company');
+                break;
+
+            case 'person':
+                $viewModel->setVariable('person', $contact);
+                $viewModel->setTemplate('zource-contact/directory/view-person');
+                break;
+
+            default:
+                throw new RuntimeException('Invalid type provided.');
+        }
+
+        return $viewModel;
     }
 }
