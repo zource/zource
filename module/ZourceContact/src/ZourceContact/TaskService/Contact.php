@@ -12,6 +12,7 @@ namespace ZourceContact\TaskService;
 use Doctrine\ORM\EntityManager;
 use RuntimeException;
 use Zend\Paginator\Paginator;
+use ZourceContact\Entity\AbstractContact;
 use ZourceContact\Entity\Company;
 use ZourceContact\Entity\Person;
 use ZourceContact\Paginator\Adapter\ContactOverview;
@@ -67,5 +68,31 @@ class Contact
         $adapter = new ContactOverview($this->entityManager->getConnection(), $filter);
 
         return new Paginator($adapter);
+    }
+
+    public function createCompany(array $data)
+    {
+        $company = new Company($data['name']);
+
+        $this->entityManager->persist($company);
+        $this->entityManager->flush($company);
+
+        return $company;
+    }
+
+    public function createPerson(array $data)
+    {
+        $person = new Person($data['name'], $data['familyName']);
+
+        $this->entityManager->persist($person);
+        $this->entityManager->flush($person);
+
+        return $person;
+    }
+
+    public function deleteContact(AbstractContact $contact)
+    {
+        $this->entityManager->remove($contact);
+        $this->entityManager->flush($contact);
     }
 }

@@ -16,6 +16,8 @@ use ZourceApplication\Authorization\Condition\ConditionInterface;
 
 class PluginManager extends AbstractPluginManager
 {
+    protected $shareByDefault = false;
+
     public function validatePlugin($instance)
     {
         if (!$instance instanceof ConditionInterface) {

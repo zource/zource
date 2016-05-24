@@ -48,7 +48,7 @@ interface AccountInterface
     /**
      * @return Person
      */
-    public function getContactPerson();
+    public function getContact();
 
     /**
      * Gets the credential for this account.
@@ -109,11 +109,4 @@ interface AccountInterface
      * @return Collection
      */
     public function getEmailAddresses();
-
-    /**
-     * Gets the display name for this account.
-     *
-     * @return string
-     */
-    public function getDisplayName();
 }

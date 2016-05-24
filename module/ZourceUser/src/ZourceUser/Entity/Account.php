@@ -42,7 +42,7 @@ class Account implements AccountInterface
      * @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
      * @var Person
      */
-    private $contactPerson;
+    private $contact;
 
     /**
      * @ORM\Column(type="string", length=60)
@@ -99,7 +99,7 @@ class Account implements AccountInterface
     {
         $this->id = Uuid::uuid4();
         $this->creationDate = new DateTime();
-        $this->contactPerson = $contactPerson;
+        $this->contact = $contactPerson;
         $this->status = self::STATUS_ACTIVE;
         $this->groups = new ArrayCollection();
         $this->emailAddresses = new ArrayCollection();
@@ -126,9 +126,9 @@ class Account implements AccountInterface
     /**
      * @return Person
      */
-    public function getContactPerson()
+    public function getContact()
     {
-        return $this->contactPerson;
+        return $this->contact;
     }
 
     /**
@@ -237,13 +237,5 @@ class Account implements AccountInterface
     public function getEmailAddresses()
     {
         return $this->emailAddresses;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDisplayName()
-    {
-        return $this->getContactPerson()->getFullName();
     }
 }

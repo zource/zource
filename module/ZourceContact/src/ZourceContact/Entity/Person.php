@@ -9,13 +9,8 @@
 
 namespace ZourceContact\Entity;
 
-use DateTime;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
-use Ramsey\Uuid\Uuid;
-use Ramsey\Uuid\UuidInterface;
-use ZourceUser\Entity\Email;
 
 /**
  * @ORM\Entity
@@ -23,6 +18,19 @@ use ZourceUser\Entity\Email;
  */
 class Person extends AbstractContact
 {
+    const GENDER_UNKNOWN = 0;
+    const GENDER_MALE = 1;
+    const GENDER_FEMALE = 2;
+    const GENDER_NA = 9;
+
+    /**
+     * The gender of this person. Format according ISO IEC_5218
+     *
+     * @ORM\Column(type="integer")
+     * @var int
+     */
+    private $gender;
+
     /**
      * @ORM\Column(type="string")
      * @var string
@@ -35,12 +43,43 @@ class Person extends AbstractContact
      */
     private $familyName;
 
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @var string|null
+     */
+    private $nickname;
+
+    /**
+     * @ORM\Column(type="date", nullable=true)
+     * @var DateTimeInterface|null
+     */
+    private $dateOfBirth;
+
     public function __construct($name, $familyName)
     {
         parent::__construct();
 
+        $this->gender = self::GENDER_UNKNOWN;
         $this->name = $name;
         $this->familyName = $familyName;
+    }
+
+    /**
+     * @return int
+     */
+    public function getGender()
+    {
+        return $this->gender;
+    }
+
+    /**
+     * @param int $gender
+     */
+    public function setGender($gender)
+    {
+        $this->makeDirty();
+
+        $this->gender = $gender;
     }
 
     /**
@@ -52,6 +91,16 @@ class Person extends AbstractContact
     }
 
     /**
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        $this->makeDirty();
+
+        $this->name = $name;
+    }
+
+    /**
      * @return string
      */
     public function getFamilyName()
@@ -60,10 +109,56 @@ class Person extends AbstractContact
     }
 
     /**
+     * @param string $familyName
+     */
+    public function setFamilyName($familyName)
+    {
+        $this->makeDirty();
+
+        $this->familyName = $familyName;
+    }
+
+    /**
      * @return string
      */
     public function getFullName()
     {
         return $this->getName() . ' ' . $this->getFamilyName();
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getNickname()
+    {
+        return $this->nickname;
+    }
+
+    /**
+     * @param null|string $nickname
+     */
+    public function setNickname($nickname)
+    {
+        $this->makeDirty();
+
+        $this->nickname = $nickname;
+    }
+
+    /**
+     * @return DateTimeInterface|null
+     */
+    public function getDateOfBirth()
+    {
+        return $this->dateOfBirth;
+    }
+
+    /**
+     * @param DateTimeInterface|null $dateOfBirth
+     */
+    public function setDateOfBirth(DateTimeInterface $dateOfBirth = null)
+    {
+        $this->makeDirty();
+
+        $this->dateOfBirth = $dateOfBirth;
     }
 }

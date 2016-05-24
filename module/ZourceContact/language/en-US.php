@@ -20,4 +20,7 @@ return [
     'contactViewMenuDetails' => 'View details',
     'contactViewMenuActivityStream' => 'Activity stream',
     'contactViewMenuVCard' => 'vCard',
+
+    'contactViewMenuUpdate' => 'Update',
+    'contactViewMenuDelete' => 'Delete',
 ];

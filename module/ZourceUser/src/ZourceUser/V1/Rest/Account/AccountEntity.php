@@ -222,12 +222,4 @@ class AccountEntity
     {
         return $this->emailAddresses;
     }
-
-    /**
-     * @return string
-     */
-    public function getDisplayName()
-    {
-        return 'Walter Tamboer';
-    }
 }

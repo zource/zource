@@ -9,6 +9,7 @@
 
 namespace ZourceUser\UI\Navigation\Item;
 
+use RuntimeException;
 use Zend\View\Renderer\RendererInterface;
 use ZourceApplication\UI\Navigation\Item\Label;
 use ZourceUser\Authentication\AuthenticationService;
@@ -29,20 +30,24 @@ class LoggedInAs extends Label
     {
         /** @var AccountInterface $account */
         $account = $this->authenticationService->getAccountEntity();
+
+        if (!$account) {
+            throw new RuntimeException('No account available.');
+        }
         
         $listAttr = [];
         $listAttr['role'] = 'presentation';
 
         $url = $this->getView()->url('contacts/view', [
             'type' => 'person',
-            'id' => $account->getContactPerson()->getId()->toString(),
+            'id' => $account->getContact()->getId()->toString(),
         ]);
 
         return sprintf(
             '<li %s><a href="%s">%s</a></li>',
             $this->createAttribs($listAttr),
             $url,
-            $account->getDisplayName()
+            $account->getContact()->getFullName()
         );
     }
 }

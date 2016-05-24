@@ -9,19 +9,32 @@
 
 namespace ZourceContact;
 
+use ZourceContact\Authorization\Condition\Service\ContactIsCurrentAccountFactory;
+use ZourceContact\Authorization\Condition\Service\ContactTypeFactory;
+use ZourceContact\Form\Company as CompanyForm;
+use ZourceContact\Form\Person as PersonForm;
+use ZourceContact\InputFilter\Company as CompanyInputFilter;
+use ZourceContact\InputFilter\Person as PersonInputFilter;
+use ZourceContact\Mvc\Controller\Company as CompanyController;
 use ZourceContact\Mvc\Controller\Contact as ContactController;
 use ZourceContact\Mvc\Controller\Directory as DirectoryController;
+use ZourceContact\Mvc\Controller\Person as PersonController;
+use ZourceContact\Mvc\Controller\Service\CompanyFactory as CompanyControllerFactory;
 use ZourceContact\Mvc\Controller\Service\ContactFactory as ContactControllerFactory;
 use ZourceContact\Mvc\Controller\Service\DirectoryFactory as DirectoryControllerFactory;
+use ZourceContact\Mvc\Controller\Service\PersonFactory as PersonControllerFactory;
 use ZourceContact\TaskService\Contact as ContactTaskService;
 use ZourceContact\TaskService\Service\ContactFactory as ContactTaskServiceFactory;
+use ZourceContact\ValueObject\ContactEntry;
 use ZourceContact\View\Helper\ContactAvatar;
 
 return [
     'controllers' => [
         'factories' => [
+            CompanyController::class => CompanyControllerFactory::class,
             ContactController::class => ContactControllerFactory::class,
             DirectoryController::class => DirectoryControllerFactory::class,
+            PersonController::class => PersonControllerFactory::class,
         ],
     ],
     'doctrine' => [
@@ -40,6 +53,22 @@ return [
             ],
         ],
     ],
+    'forms' => [
+        CompanyForm::class => [
+            'type' => CompanyForm::class,
+            'input_filter' => CompanyInputFilter::class,
+        ],
+        PersonForm::class => [
+            'type' => PersonForm::class,
+            'input_filter' => PersonInputFilter::class,
+        ],
+    ],
+    'input_filters' => [
+        'invokables' => [
+            CompanyInputFilter::class => CompanyInputFilter::class,
+            PersonInputFilter::class => PersonInputFilter::class,
+        ],
+    ],
     'router' => [
         'routes' => [
             'contacts' => [
@@ -53,6 +82,84 @@ return [
                 ],
                 'may_terminate' => true,
                 'child_routes' => [
+                    'company' => [
+                        'type' => 'Literal',
+                        'options' => [
+                            'route' => '/company',
+                        ],
+                        'may_terminate' => true,
+                        'child_routes' => [
+                            'create' => [
+                                'type' => 'Literal',
+                                'options' => [
+                                    'route' => '/create',
+                                    'defaults' => [
+                                        'controller' => CompanyController::class,
+                                        'action' => 'create',
+                                    ],
+                                ],
+                            ],
+                            'update' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => '/update/:id',
+                                    'defaults' => [
+                                        'controller' => CompanyController::class,
+                                        'action' => 'update',
+                                    ],
+                                ],
+                            ],
+                            'delete' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => '/delete/:id',
+                                    'defaults' => [
+                                        'controller' => CompanyController::class,
+                                        'action' => 'delete',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                    'person' => [
+                        'type' => 'Literal',
+                        'options' => [
+                            'route' => '/person',
+                        ],
+                        'may_terminate' => true,
+                        'child_routes' => [
+                            'create' => [
+                                'type' => 'Literal',
+                                'options' => [
+                                    'route' => '/create',
+                                    'defaults' => [
+                                        'controller' => PersonController::class,
+                                        'action' => 'create',
+                                    ],
+                                ],
+                            ],
+                            'update' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => '/update/:id',
+                                    'defaults' => [
+                                        'controller' => PersonController::class,
+                                        'action' => 'update',
+                                    ],
+                                ],
+                            ],
+                            'delete' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => '/delete/:id',
+                                    'defaults' => [
+                                        'controller' => PersonController::class,
+                                        'action' => 'delete',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
                     'view' => [
                         'type' => 'Segment',
                         'options' => [
@@ -107,6 +214,12 @@ return [
             ],
         ],
     ],
+    'zource_conditions' => [
+        'factories' => [
+            'ContactIsCurrentAccount' => ContactIsCurrentAccountFactory::class,
+            'ContactType' => ContactTypeFactory::class,
+        ],
+    ],
     'zource_guard' => [
         'identity' => [
             'contacts' => true,
@@ -128,15 +241,15 @@ return [
                     'priority' => 2000,
                     'options' => [
                         'label' => 'New company',
-                        'route' => 'contacts',
+                        'route' => 'contacts/company/create',
                     ],
                 ],
                 'add-person' => [
                     'type' => 'label',
                     'priority' => 3000,
                     'options' => [
-                        'label' => 'New Person',
-                        'route' => 'contacts',
+                        'label' => 'New person',
+                        'route' => 'contacts/person/create',
                     ],
                 ],
                 'header-filter' => [
@@ -240,6 +353,81 @@ return [
                         'route_reuse_matched_params' => true,
                     ],
                 ],
+                'separator' => [
+                    'type' => 'separator',
+                    'priority' => 5000,
+                ],
+                'update-company' => [
+                    'type' => 'label',
+                    'priority' => 6000,
+                    'options' => [
+                        'label' => 'contactViewMenuUpdate',
+                        'route' => 'contacts/company/update',
+                        'route_reuse_matched_params' => true,
+                    ],
+                    'conditions' => [
+                        'contact-type' => [
+                            'type' => 'ContactType',
+                            'options' => [
+                                'type' => ContactEntry::TYPE_COMPANY,
+                            ],
+                        ],
+                    ],
+                ],
+                'update-person' => [
+                    'type' => 'label',
+                    'priority' => 6000,
+                    'options' => [
+                        'label' => 'contactViewMenuUpdate',
+                        'route' => 'contacts/person/update',
+                        'route_reuse_matched_params' => true,
+                    ],
+                    'conditions' => [
+                        'contact-type' => [
+                            'type' => 'ContactType',
+                            'options' => [
+                                'type' => ContactEntry::TYPE_PERSON,
+                            ],
+                        ],
+                    ],
+                ],
+                'delete-company' => [
+                    'type' => 'label',
+                    'priority' => 7000,
+                    'options' => [
+                        'label' => 'contactViewMenuDelete',
+                        'route' => 'contacts/company/delete',
+                        'route_reuse_matched_params' => true,
+                    ],
+                    'conditions' => [
+                        'contact-type' => [
+                            'type' => 'ContactType',
+                            'options' => [
+                                'type' => ContactEntry::TYPE_COMPANY,
+                            ],
+                        ],
+                    ],
+                ],
+                'delete-person' => [
+                    'type' => 'label',
+                    'priority' => 7000,
+                    'options' => [
+                        'label' => 'contactViewMenuDelete',
+                        'route' => 'contacts/person/delete',
+                        'route_reuse_matched_params' => true,
+                    ],
+                    'conditions' => [
+                        'contact-type' => [
+                            'type' => 'ContactType',
+                            'options' => [
+                                'type' => ContactEntry::TYPE_PERSON,
+                            ],
+                        ],
+                        'contact-delete' => [
+                            'type' => 'ContactIsCurrentAccount',
+                        ],
+                    ],
+                ],
             ],
 
         ],
@@ -251,10 +439,11 @@ return [
     ],
     'view_manager' => [
         'template_map' => [
-            'zource-contact/directory/filter' => __DIR__ . '/../view/zource-contact/directory/filter.phtml',
+            'zource-contact/company/create' => __DIR__ . '/../view/zource-contact/company/create.phtml',
+            'zource-contact/company/view' => __DIR__ . '/../view/zource-contact/company/view.phtml',
             'zource-contact/directory/index' => __DIR__ . '/../view/zource-contact/directory/index.phtml',
-            'zource-contact/directory/view-company' => __DIR__ . '/../view/zource-contact/directory/view-company.phtml',
-            'zource-contact/directory/view-person' => __DIR__ . '/../view/zource-contact/directory/view-person.phtml',
+            'zource-contact/person/create' => __DIR__ . '/../view/zource-contact/person/create.phtml',
+            'zource-contact/person/view' => __DIR__ . '/../view/zource-contact/person/view.phtml',
         ],
     ],
 ];

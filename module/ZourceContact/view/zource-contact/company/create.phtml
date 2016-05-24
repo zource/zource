@@ -1,0 +1,32 @@
+<?php
+
+$this->layout('layout/page-header');
+
+$this->placeholder('layout')->pageTitle = $this->translate('pageContactsTitle');
+$this->placeholder('layout')->pageMenu = 'contacts-directory';
+
+$this->contactForm->setAttribute('action', $this->url('contacts/company/create'));
+$this->contactForm->setAttribute('method', 'post');
+$this->contactForm->prepare();
+
+?>
+
+<h2>Create Company</h2>
+
+<?php echo $this->form()->openTag($this->contactForm); ?>
+<?php echo $this->formHidden($this->contactForm->get('token')); ?>
+
+<div class="zui-field-group">
+    <?php echo $this->formLabel($this->contactForm->get('name')); ?>
+    <?php echo $this->formText($this->contactForm->get('name')); ?>
+    <?php echo $this->zourceFormDescription($this->contactForm->get('name')); ?>
+    <?php echo $this->formElementErrors($this->contactForm->get('name')); ?>
+</div>
+
+<div class="zui-buttons-container">
+    <div class="zui-buttons">
+        <?php echo $this->formSubmit($this->contactForm->get('submit')); ?>
+    </div>
+</div>
+
+<?php echo $this->form()->closeTag(); ?>

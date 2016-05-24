@@ -15,6 +15,7 @@ class ContactEntry
 {
     const TYPE_PERSON = 'person';
     const TYPE_COMPANY = 'company';
+    const TYPE_UNKNOWN = 'unknown';
 
     /**
      * @var string

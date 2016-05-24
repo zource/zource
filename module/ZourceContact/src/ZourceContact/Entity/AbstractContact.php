@@ -32,10 +32,23 @@ abstract class AbstractContact
      */
     private $creationDate;
 
+    /**
+     * @ORM\Column(type="datetime")
+     * @var DateTime
+     */
+    private $lastUpdated;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @var string|null
+     */
+    private $note;
+
     public function __construct()
     {
         $this->id = Uuid::uuid4();
         $this->creationDate = new DateTime();
+        $this->lastUpdated = new DateTime();
     }
 
     /**
@@ -52,5 +65,36 @@ abstract class AbstractContact
     public function getCreationDate()
     {
         return $this->creationDate;
+    }
+
+    /**
+     * @return DateTime
+     */
+    public function getLastUpdated()
+    {
+        return $this->lastUpdated;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getNote()
+    {
+        return $this->note;
+    }
+
+    /**
+     * @param null|string $note
+     */
+    public function setNote($note)
+    {
+        $this->makeDirty();
+
+        $this->note = $note;
+    }
+
+    protected function makeDirty()
+    {
+        $this->lastUpdated = new DateTime('now');
     }
 }
