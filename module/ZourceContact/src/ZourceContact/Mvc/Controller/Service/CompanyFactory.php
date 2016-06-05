@@ -23,8 +23,8 @@ class CompanyFactory implements FactoryInterface
         /** @var ContactTaskService $contactTaskService */
         $contactTaskService = $serviceLocator->getServiceLocator()->get(ContactTaskService::class);
 
-        /** @var FormInterface $companyForm */
-        $contactForm = $serviceLocator->getServiceLocator()->get(CompanyForm::class);
+        /** @var FormInterface $contactForm */
+        $contactForm = $serviceLocator->getServiceLocator()->get('ZourceContactCompanyForm');
 
         return new Company($contactTaskService, $contactForm);
     }

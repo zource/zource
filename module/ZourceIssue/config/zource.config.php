@@ -46,28 +46,4 @@ return [
             'ZourceIssue\\Validator\\FieldType' => 'ZourceIssue\\Validator\\Service\\FieldTypeFactory',
         ],
     ],
-    'zource' => [
-        'field-type' => [
-            [
-                'id' => 'date',
-                'name' => 'Date',
-                'description' => 'The representation of a date.'
-            ],
-            [
-                'id' => 'datetime',
-                'name' => 'Datetime',
-                'description' => 'The representation of a date and a time.'
-            ],
-            [
-                'id' => 'numeric',
-                'name' => 'Numeric',
-                'description' => 'The representation of a numeric value.'
-            ],
-            [
-                'id' => 'text',
-                'name' => 'Text',
-                'description' => 'The representation of a textual value.'
-            ],
-        ],
-    ],
 ];

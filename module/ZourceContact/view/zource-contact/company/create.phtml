@@ -15,13 +15,7 @@ $this->contactForm->prepare();
 
 <?php echo $this->form()->openTag($this->contactForm); ?>
 <?php echo $this->formHidden($this->contactForm->get('token')); ?>
-
-<div class="zui-field-group">
-    <?php echo $this->formLabel($this->contactForm->get('name')); ?>
-    <?php echo $this->formText($this->contactForm->get('name')); ?>
-    <?php echo $this->zourceFormDescription($this->contactForm->get('name')); ?>
-    <?php echo $this->formElementErrors($this->contactForm->get('name')); ?>
-</div>
+<?php echo $this->zourceContactForm($this->contactForm, 'company'); ?>
 
 <div class="zui-buttons-container">
     <div class="zui-buttons">

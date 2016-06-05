@@ -76,7 +76,7 @@ class TwoFactorAuthentication extends AbstractActionController
         /** @var AccountInterface $account */
         $account = $this->zourceAccount();
 
-        $oneTimePassword = new TOTP($account->getContact()->getDisplayName(), $this->tfaService->getSecret());
+        $oneTimePassword = new TOTP($account->getContact()->getFullName(), $this->tfaService->getSecret());
         $oneTimePassword->setIssuer('Zource');
         $oneTimePassword->setIssuerIncludedAsParameter(true);
         $oneTimePassword->setParameter('image', $this->url()->fromRoute('settings/security/tfa-image', [], [

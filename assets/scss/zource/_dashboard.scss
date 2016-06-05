@@ -1,5 +1,5 @@
 .gadget-column {
-    @include box-sizing(border-box);
+    @include zui-box-sizing(border-box);
 
     display: table-cell;
     vertical-align: top;
@@ -10,7 +10,7 @@
         margin-bottom: 20px;
 
         .gadget-header {
-            background-color: $color-primary;
+            background-color: $zui-color-primary;
             padding: 5px;
 
             h3 {

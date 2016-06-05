@@ -4,21 +4,21 @@
 @import "zui";
 
 body {
-  background: #F5F5F5;
+    background: $zui-footer-background-color;
 }
 
 .zui-layout-task #zource-content {
-  background-color: inherit;
-  padding-top: 40px;
+    background-color: inherit;
+    padding-top: 40px;
 }
 
 .zui-page-header-image img {
-  height: 64px;
-  width: 64px;
+    height: 64px;
+    width: 64px;
 }
 
 a[disabled] {
-  pointer-events: none;
+    pointer-events: none;
 }
 
 table > tbody > tr > td,
@@ -26,7 +26,7 @@ table > tbody > tr > th,
 table > tfoot > tr > td,
 table > thead > tr > td,
 table > thead > tr > th {
-  vertical-align: middle;
+    vertical-align: middle;
 }
 
 @import "zource/dashboard";
@@ -44,3 +44,29 @@ table > thead > tr > th {
 @import "zource/issues/modules";
 @import "zource/issues/search";
 @import "zource/issues/activity";
+
+.zui-field-group {
+    padding: 4px 0 4px 215px;
+
+    label {
+        margin-left: -215px;
+        width: 200px;
+    }
+}
+
+.zui-buttons-container {
+    padding: 4px 0 4px 215px;
+}
+
+fieldset.zui-group {
+    padding: 4px 0 4px 215px;
+}
+
+fieldset legend {
+    margin-left: -215px;
+    width: 200px;
+}
+
+textarea {
+    height: 150px;
+}

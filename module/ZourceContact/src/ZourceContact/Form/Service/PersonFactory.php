@@ -7,17 +7,17 @@
  * @license https://raw.githubusercontent.com/zource/zource/master/LICENSE MIT
  */
 
-namespace ZourceContact\InputFilter;
+namespace ZourceContact\Form\Service;
 
-use Zend\InputFilter\InputFilter as BsaeInputFilter;
-
-class Company extends BsaeInputFilter
+class PersonFactory extends AbstractFactory
 {
-    public function init()
+    protected function getConfigKey()
     {
-        $this->add([
-            'name' => 'name',
-            'required' => true,
-        ]);
+        return 'person';
+    }
+
+    protected function getInputFilterName()
+    {
+        return 'ZourceContactPersonInputFilter';
     }
 }

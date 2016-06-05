@@ -82,7 +82,7 @@ class Contact
 
     public function createPerson(array $data)
     {
-        $person = new Person($data['name'], $data['familyName']);
+        $person = new Person($data['first_name'], $data['last_name']);
 
         $this->entityManager->persist($person);
         $this->entityManager->flush($person);

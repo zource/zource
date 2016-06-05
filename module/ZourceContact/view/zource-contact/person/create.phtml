@@ -15,27 +15,7 @@ $this->contactForm->prepare();
 
 <?php echo $this->form()->openTag($this->contactForm); ?>
 <?php echo $this->formHidden($this->contactForm->get('token')); ?>
-
-<div class="zui-field-group">
-    <?php echo $this->formLabel($this->contactForm->get('name')); ?>
-    <?php echo $this->formText($this->contactForm->get('name')); ?>
-    <?php echo $this->zourceFormDescription($this->contactForm->get('name')); ?>
-    <?php echo $this->formElementErrors($this->contactForm->get('name')); ?>
-</div>
-
-<div class="zui-field-group">
-    <?php echo $this->formLabel($this->contactForm->get('middleName')); ?>
-    <?php echo $this->formText($this->contactForm->get('middleName')); ?>
-    <?php echo $this->zourceFormDescription($this->contactForm->get('middleName')); ?>
-    <?php echo $this->formElementErrors($this->contactForm->get('middleName')); ?>
-</div>
-
-<div class="zui-field-group">
-    <?php echo $this->formLabel($this->contactForm->get('familyName')); ?>
-    <?php echo $this->formText($this->contactForm->get('familyName')); ?>
-    <?php echo $this->zourceFormDescription($this->contactForm->get('familyName')); ?>
-    <?php echo $this->formElementErrors($this->contactForm->get('familyName')); ?>
-</div>
+<?php echo $this->zourceContactForm($this->contactForm, 'person'); ?>
 
 <div class="zui-buttons-container">
     <div class="zui-buttons">

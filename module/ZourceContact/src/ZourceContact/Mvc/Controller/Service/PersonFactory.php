@@ -23,8 +23,8 @@ class PersonFactory implements FactoryInterface
         /** @var ContactTaskService $contactTaskService */
         $contactTaskService = $serviceLocator->getServiceLocator()->get(ContactTaskService::class);
 
-        /** @var FormInterface $companyForm */
-        $contactForm = $serviceLocator->getServiceLocator()->get(PersonForm::class);
+        /** @var FormInterface $contactForm */
+        $contactForm = $serviceLocator->getServiceLocator()->get('ZourceContactPersonForm');
 
         return new Person($contactTaskService, $contactForm);
     }

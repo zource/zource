@@ -30,6 +30,8 @@ use Zend\Session\Validator\RemoteAddr;
 use ZF\Apigility\Admin\Module as ApigilityModule;
 use ZourceApplication\Authorization\Condition\ClassExists;
 use ZourceApplication\Authorization\Condition\Service\PluginManager as AuthorizationConditionPluginManager;
+use ZourceApplication\Form\Builder;
+use ZourceApplication\Form\Service\BuilderFactory;
 use ZourceApplication\Mvc\Controller\Index;
 use ZourceApplication\Session\Service\SaveHandlerFactory;
 use ZourceApplication\Session\Service\SessionStorageFactory;
@@ -115,6 +117,7 @@ return [
             ],
         ],
         'factories' => [
+            Builder::class => BuilderFactory::class,
             ConfigInterface::class => SessionConfigFactory::class,
             'LazyServiceFactory' => LazyServiceFactoryFactory::class,
             ManagerInterface::class => SessionManagerFactory::class,
@@ -182,6 +185,108 @@ return [
     'zource_conditions' => [
         'invokables' => [
             'ClassExists' => ClassExists::class,
+        ],
+    ],
+    'zource_field_types' => [
+        'avatar' => [
+            'id' => 'avatar',
+            'name' => 'Avatar',
+            'description' => 'The representation of an avatar.',
+            'form_element' => 'Zend\\Form\\Element\\Text',
+            'view_helper' => 'formText',
+        ],
+        'date' => [
+            'id' => 'date',
+            'name' => 'Date',
+            'description' => 'The representation of a date.',
+            'form_element' => 'Zend\\Form\\Element\\Date',
+            'view_helper' => 'formText',
+        ],
+        'datetime' => [
+            'id' => 'datetime',
+            'name' => 'Datetime',
+            'description' => 'The representation of a date and a time.',
+            'form_element' => 'Zend\\Form\\Element\\DateTime',
+            'view_helper' => 'formText',
+        ],
+        'color' => [
+            'id' => 'color',
+            'name' => 'Color',
+            'description' => 'The representation of a color value.',
+            'form_element' => 'Zend\\Form\\Element\\Color',
+            'view_helper' => 'formText',
+        ],
+        'email_address' => [
+            'id' => 'company',
+            'name' => 'Company',
+            'description' => 'The representation of a company.',
+            'form_element' => 'Zend\\Form\\Element\\Text',
+            'view_helper' => 'formText',
+        ],
+        'gender' => [
+            'id' => 'gender',
+            'name' => 'Gender',
+            'description' => 'The representation of a gender.',
+            'form_element' => 'Zend\\Form\\Element\\Radio',
+            'form_element_options' => [
+                'value_options' => [
+                    // According to https://en.wikipedia.org/wiki/ISO/IEC_5218
+                    0 => 'Not known',
+                    1 => 'Male',
+                    2 => 'Female',
+                    9 => 'Not applicable',
+                ],
+            ],
+            'view_helper' => 'formRadio',
+        ],
+        'longtext' => [
+            'id' => 'text',
+            'name' => 'Text',
+            'description' => 'The representation of a textual value which can be up to 4.294.967.295 bytes.',
+            'form_element' => 'Zend\\Form\\Element\\Textarea',
+            'view_helper' => 'formTextarea',
+        ],
+        'mediumtext' => [
+            'id' => 'text',
+            'name' => 'Text',
+            'description' => 'The representation of a textual value which can be up to 16,777,215 bytes.',
+            'form_element' => 'Zend\\Form\\Element\\Textarea',
+            'view_helper' => 'formTextarea',
+        ],
+        'numeric' => [
+            'id' => 'numeric',
+            'name' => 'Numeric',
+            'description' => 'The representation of a numeric value.',
+            'form_element' => 'Zend\\Form\\Element\\Text',
+            'view_helper' => 'formText',
+        ],
+        'phone_number' => [
+            'id' => 'company',
+            'name' => 'Company',
+            'description' => 'The representation of a company.',
+            'form_element' => 'Zend\\Form\\Element\\Text',
+            'view_helper' => 'formText',
+        ],
+        'text' => [
+            'id' => 'text',
+            'name' => 'Text',
+            'description' => 'The representation of a textual value which can be up to 65.535 bytes.',
+            'form_element' => 'Zend\\Form\\Element\\Textarea',
+            'view_helper' => 'formTextarea',
+        ],
+        'tinytext' => [
+            'id' => 'tinytext',
+            'name' => 'TinyText',
+            'description' => 'The representation of a textual value which can be up to 255 bytes.',
+            'form_element' => 'Zend\\Form\\Element\\Text',
+            'view_helper' => 'formText',
+        ],
+        'url' => [
+            'id' => 'company',
+            'name' => 'Company',
+            'description' => 'The representation of a company.',
+            'form_element' => 'Zend\\Form\\Element\\Text',
+            'view_helper' => 'formUrl',
         ],
     ],
     'zource_guard' => [

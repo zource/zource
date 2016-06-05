@@ -11,10 +11,10 @@ namespace ZourceContact;
 
 use ZourceContact\Authorization\Condition\Service\ContactIsCurrentAccountFactory;
 use ZourceContact\Authorization\Condition\Service\ContactTypeFactory;
-use ZourceContact\Form\Company as CompanyForm;
-use ZourceContact\Form\Person as PersonForm;
-use ZourceContact\InputFilter\Company as CompanyInputFilter;
-use ZourceContact\InputFilter\Person as PersonInputFilter;
+use ZourceContact\Form\Service\CompanyFactory as CompanyFormFactory;
+use ZourceContact\Form\Service\PersonFactory as PersonFormFactory;
+use ZourceContact\InputFilter\Service\CompanyFactory as CompanyFactoryInputFilter;
+use ZourceContact\InputFilter\Service\PersonFactory as PersonFactoryInputFilter;
 use ZourceContact\Mvc\Controller\Company as CompanyController;
 use ZourceContact\Mvc\Controller\Contact as ContactController;
 use ZourceContact\Mvc\Controller\Directory as DirectoryController;
@@ -26,7 +26,9 @@ use ZourceContact\Mvc\Controller\Service\PersonFactory as PersonControllerFactor
 use ZourceContact\TaskService\Contact as ContactTaskService;
 use ZourceContact\TaskService\Service\ContactFactory as ContactTaskServiceFactory;
 use ZourceContact\ValueObject\ContactEntry;
+use ZourceContact\View\Helper\CompanySelection;
 use ZourceContact\View\Helper\ContactAvatar;
+use ZourceContact\View\Helper\Service\ContactFormFactory;
 
 return [
     'controllers' => [
@@ -53,20 +55,10 @@ return [
             ],
         ],
     ],
-    'forms' => [
-        CompanyForm::class => [
-            'type' => CompanyForm::class,
-            'input_filter' => CompanyInputFilter::class,
-        ],
-        PersonForm::class => [
-            'type' => PersonForm::class,
-            'input_filter' => PersonInputFilter::class,
-        ],
-    ],
     'input_filters' => [
-        'invokables' => [
-            CompanyInputFilter::class => CompanyInputFilter::class,
-            PersonInputFilter::class => PersonInputFilter::class,
+        'factories' => [
+            'ZourceContactCompanyInputFilter' => CompanyFactoryInputFilter::class,
+            'ZourceContactPersonInputFilter' => PersonFactoryInputFilter::class,
         ],
     ],
     'router' => [
@@ -203,6 +195,8 @@ return [
     'service_manager' => [
         'factories' => [
             ContactTaskService::class => ContactTaskServiceFactory::class,
+            'ZourceContactCompanyForm' => CompanyFormFactory::class,
+            'ZourceContactPersonForm' => PersonFormFactory::class,
         ],
     ],
     'translator' => [
@@ -214,10 +208,305 @@ return [
             ],
         ],
     ],
+    'view_helpers' => [
+        'invokables' => [
+            'zourceContactAvatar' => ContactAvatar::class,
+            'zourceFormCompanySelection' => CompanySelection::class,
+        ],
+        'factories' => [
+            'zourceContactForm' => ContactFormFactory::class,
+        ],
+    ],
+    'view_manager' => [
+        'template_map' => [
+            'zource-contact/company/create' => __DIR__ . '/../view/zource-contact/company/create.phtml',
+            'zource-contact/company/view' => __DIR__ . '/../view/zource-contact/company/view.phtml',
+            'zource-contact/directory/index' => __DIR__ . '/../view/zource-contact/directory/index.phtml',
+            'zource-contact/person/create' => __DIR__ . '/../view/zource-contact/person/create.phtml',
+            'zource-contact/person/view' => __DIR__ . '/../view/zource-contact/person/view.phtml',
+        ],
+    ],
     'zource_conditions' => [
         'factories' => [
             'ContactIsCurrentAccount' => ContactIsCurrentAccountFactory::class,
             'ContactType' => ContactTypeFactory::class,
+        ],
+    ],
+    'zource_contact_fields' => [
+        'company' => [
+            'name' => [
+                'type' => 'tinytext',
+                'form_element_options' => [
+                    'label' => 'Name',
+                    'description' => 'The name of the company.',
+                ],
+                'input_filter_options' => [
+                    'required' => true,
+                ],
+            ],
+        ],
+        'person' => [
+            'avatar' => [
+                'type' => 'avatar',
+                'form_element_options' => [
+                    'label' => 'Avatar',
+                ],
+                'input_filter_options' => [
+                    'required' => false,
+                ],
+            ],
+            'gender' => [
+                'type' => 'gender',
+                'form_element_options' => [
+                    'label' => 'Gender',
+                ],
+                'input_filter_options' => [
+                    'required' => true,
+                ],
+            ],
+            'prefix' => [
+                'type' => 'tinytext',
+                'category' => 'names',
+                'form_element_options' => [
+                    'label' => 'Prefix',
+                ],
+                'input_filter_options' => [
+                    'required' => false,
+                ],
+            ],
+            'first_name' => [
+                'type' => 'tinytext',
+                'category' => 'names',
+                'form_element_options' => [
+                    'label' => 'First name',
+                ],
+                'input_filter_options' => [
+                    'required' => true,
+                ],
+            ],
+            'phonetic_first_name' => [
+                'type' => 'tinytext',
+                'category' => 'names',
+                'form_element_options' => [
+                    'label' => 'Phonetic first name',
+                ],
+                'input_filter_options' => [
+                    'required' => false,
+                ],
+            ],
+            'pronunciation_first_name' => [
+                'type' => 'tinytext',
+                'category' => 'names',
+                'form_element_options' => [
+                    'label' => 'Pronunciation first name',
+                ],
+                'input_filter_options' => [
+                    'required' => false,
+                ],
+            ],
+            'middle_name' => [
+                'type' => 'tinytext',
+                'category' => 'names',
+                'form_element_options' => [
+                    'label' => 'Middle name',
+                ],
+                'input_filter_options' => [
+                    'required' => false,
+                ],
+            ],
+            'phonetic_middle_name' => [
+                'type' => 'tinytext',
+                'category' => 'names',
+                'form_element_options' => [
+                    'label' => 'Phonetic middle name',
+                ],
+                'input_filter_options' => [
+                    'required' => false,
+                ],
+            ],
+            'last_name' => [
+                'type' => 'tinytext',
+                'category' => 'names',
+                'form_element_options' => [
+                    'label' => 'Last name',
+                ],
+                'input_filter_options' => [
+                    'required' => true,
+                ],
+            ],
+            'phonetic_last_name' => [
+                'type' => 'tinytext',
+                'category' => 'names',
+                'form_element_options' => [
+                    'label' => 'Phonetic last name',
+                ],
+                'input_filter_options' => [
+                    'required' => false,
+                ],
+            ],
+            'pronunciation_last_name' => [
+                'type' => 'tinytext',
+                'category' => 'names',
+                'form_element_options' => [
+                    'label' => 'Pronunciation last name',
+                ],
+                'input_filter_options' => [
+                    'required' => false,
+                ],
+            ],
+            'maiden_name' => [
+                'type' => 'tinytext',
+                'category' => 'names',
+                'form_element_options' => [
+                    'label' => 'Maiden name',
+                ],
+                'input_filter_options' => [
+                    'required' => false,
+                ],
+            ],
+            'suffix' => [
+                'type' => 'tinytext',
+                'category' => 'names',
+                'form_element_options' => [
+                    'label' => 'Suffix',
+                ],
+                'input_filter_options' => [
+                    'required' => false,
+                ],
+            ],
+            'nickname' => [
+                'type' => 'tinytext',
+                'category' => 'names',
+                'form_element_options' => [
+                    'label' => 'Nickname',
+                ],
+                'input_filter_options' => [
+                    'required' => false,
+                ],
+            ],
+            'job_title' => [
+                'type' => 'tinytext',
+                'category' => 'names',
+                'form_element_options' => [
+                    'label' => 'Job title',
+                ],
+                'input_filter_options' => [
+                    'required' => false,
+                ],
+            ],
+            'department' => [
+                'type' => 'tinytext',
+                'category' => 'names',
+                'form_element_options' => [
+                    'label' => 'Department',
+                ],
+                'input_filter_options' => [
+                    'required' => false,
+                ],
+            ],
+            'company' => [
+                'type' => 'company',
+                'category' => 'names',
+                'form_element_options' => [
+                    'label' => 'Company',
+                ],
+                'input_filter_options' => [
+                    'required' => false,
+                ],
+            ],
+            'phone_number' => [
+                'type' => 'phone_number',
+                'category' => 'phone_number',
+                'options' => [
+                    'custom_label_allowed' => true,
+                    'types' => [
+                        'home',
+                        'work',
+                        'mobile',
+                        'main',
+                        'home fax',
+                        'work fax',
+                        'pager',
+                        'other',
+                    ],
+                ],
+                'form_element_options' => [
+                    'label' => 'Phone number',
+                ],
+                'input_filter_options' => [
+                    'required' => false,
+                ],
+
+            ],
+            'email_address' => [
+                'type' => 'email_address',
+                'category' => 'email_address',
+                'options' => [
+                    'custom_label_allowed' => true,
+                    'types' => [
+                        'home',
+                        'work',
+                        'other',
+                    ],
+                ],
+                'form_element_options' => [
+                    'label' => 'E-mail address',
+                ],
+                'input_filter_options' => [
+                    'required' => false,
+                ],
+            ],
+            'url' => [
+                'type' => 'url',
+                'category' => 'url',
+                'options' => [
+                    'custom_label_allowed' => true,
+                    'types' => [
+                        'homepage',
+                        'home',
+                        'work',
+                        'other',
+                    ],
+                ],
+                'form_element_options' => [
+                    'label' => 'URL',
+                ],
+                'input_filter_options' => [
+                    'required' => false,
+                ],
+            ],
+            'dates' => [
+                'type' => 'date',
+                'category' => 'dates',
+                'options' => [
+                    'date_of_birth',
+                    'date_of_death',
+                ],
+                'form_element_options' => [
+                    'label' => 'Dates',
+                ],
+                'input_filter_options' => [
+                    'required' => false,
+                ],
+            ],
+            'note' => [
+                'type' => 'longtext',
+                'form_element_options' => [
+                    'label' => 'Notes',
+                ],
+                'input_filter_options' => [
+                    'required' => false,
+                ],
+            ],
+        ],
+    ],
+    'zource_field_types' => [
+        'company' => [
+            'id' => 'company',
+            'name' => 'Company',
+            'description' => 'The representation of a company.',
+            'form_element' => 'ZourceContact\\Form\\Element\\CompanySelection',
+            'view_helper' => 'zourceFormCompanySelection',
         ],
     ],
     'zource_guard' => [
@@ -429,21 +718,6 @@ return [
                     ],
                 ],
             ],
-
-        ],
-    ],
-    'view_helpers' => [
-        'invokables' => [
-            'zourceContactAvatar' => ContactAvatar::class,
-        ],
-    ],
-    'view_manager' => [
-        'template_map' => [
-            'zource-contact/company/create' => __DIR__ . '/../view/zource-contact/company/create.phtml',
-            'zource-contact/company/view' => __DIR__ . '/../view/zource-contact/company/view.phtml',
-            'zource-contact/directory/index' => __DIR__ . '/../view/zource-contact/directory/index.phtml',
-            'zource-contact/person/create' => __DIR__ . '/../view/zource-contact/person/create.phtml',
-            'zource-contact/person/view' => __DIR__ . '/../view/zource-contact/person/view.phtml',
         ],
     ],
 ];
