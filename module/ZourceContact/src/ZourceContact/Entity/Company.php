@@ -33,7 +33,7 @@ class Company extends AbstractContact
     {
         parent::__construct();
 
-        $this->name = $name;
+        $this->setName($name);
     }
 
     /**
@@ -42,5 +42,13 @@ class Company extends AbstractContact
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
     }
 }

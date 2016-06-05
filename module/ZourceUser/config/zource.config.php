@@ -95,7 +95,7 @@ return [
             'routes' => [
                 'account-create' => [
                     'options' => [
-                        'route' => 'zource:account:create [--name=] [--family-name=] [--credential=]',
+                        'route' => 'zource:account:create [--first-name=] [--family-name=] [--credential=]',
                         'defaults' => [
                             'controller' => ConsoleController::class,
                             'action' => 'accountCreate',

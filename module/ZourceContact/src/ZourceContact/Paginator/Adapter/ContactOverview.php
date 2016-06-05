@@ -85,6 +85,6 @@ class ContactOverview implements AdapterInterface
 
     private function getPersonSql()
     {
-        return "SELECT 'person' AS type, id, CONCAT_WS(' ', name, family_name) AS display_name FROM contact_person";
+        return "SELECT 'person' AS type, id, CONCAT_WS(' ', first_name, last_name) AS display_name FROM contact_person";
     }
 }

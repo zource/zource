@@ -30,7 +30,9 @@ class Module implements ApigilityProviderInterface
     public function getConsoleUsage()
     {
         return [
-            'zource:account:create [--credential=]' => 'Creates a new account',
+            'zource:account:create [--first-name=] [--family-name=] [--credential=]' => 'Creates a new account',
+            ['first-name', 'The first name of the person that owns the account.'],
+            ['last-name', 'The last name of the person that owns the account.'],
             ['credential', 'The plain text credential to set.'],
 
             'zource:account:delete <id>' => 'Deletes the account with the given id',

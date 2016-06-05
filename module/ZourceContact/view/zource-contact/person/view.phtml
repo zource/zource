@@ -1,8 +1,132 @@
 <?php
 $this->layout('layout/page-header');
 
-$this->placeholder('layout')->pageTitle = $this->person->getFullName();
+$this->placeholder('layout')->pageTitle = $person->getFullName();
 $this->placeholder('layout')->pageMenu = 'view-contact';
-$this->placeholder('layout')->pageImage = $this->zourceContactAvatar()->getUrl($this->person->getId());
+$this->placeholder('layout')->pageImage = $this->zourceContactAvatar()->getUrl($person->getId());
+
+/** @var \ZourceContact\Entity\Person $person */
+$person = $this->person;
 
 ?>
+
+<table class="zui-table-list">
+    <tbody>
+        <tr>
+            <td>Created on</td>
+            <td><?php echo $this->escapeHtml($person->getCreationDate()->format('r')); ?></td>
+        </tr>
+        <tr>
+            <td>Last updated on</td>
+            <td><?php echo $this->escapeHtml($person->getLastUpdated()->format('r')); ?></td>
+        </tr>
+        <tr>
+            <td>Gender</td>
+            <td>
+                <?php
+
+                switch ($person->getGender()) {
+                    case 0:
+                        echo $this->translate('Unknown');
+                        break;
+
+                    case 1:
+                        echo $this->translate('Male');
+                        break;
+
+                    case 2:
+                        echo $this->translate('Female');
+                        break;
+
+                    case 9:
+                        echo $this->translate('Not applicable');
+                        break;
+
+                    default:
+                        throw new RuntimeException('Invalid gender value: ' . $person->getGender());
+                }
+
+                ?></td>
+        </tr>
+        <tr>
+            <td>Prefix</td>
+            <td><?php echo $this->escapeHtml($person->getPrefix()); ?></td>
+        </tr>
+        <tr>
+            <td>First name</td>
+            <td><?php echo $this->escapeHtml($person->getFirstName()); ?></td>
+        </tr>
+        <tr>
+            <td>Phonetic first name</td>
+            <td><?php echo $this->escapeHtml($person->getPhoneticFirstName()); ?></td>
+        </tr>
+        <tr>
+            <td>Pronunciation first name</td>
+            <td><?php echo $this->escapeHtml($person->getPronunciationFirstName()); ?></td>
+        </tr>
+        <tr>
+            <td>Middle name</td>
+            <td><?php echo $this->escapeHtml($person->getMiddleName()); ?></td>
+        </tr>
+        <tr>
+            <td>Phonetic middle name</td>
+            <td><?php echo $this->escapeHtml($person->getPhoneticMiddleName()); ?></td>
+        </tr>
+        <tr>
+            <td>Last name</td>
+            <td><?php echo $this->escapeHtml($person->getLastName()); ?></td>
+        </tr>
+        <tr>
+            <td>Phonetic last name</td>
+            <td><?php echo $this->escapeHtml($person->getPhoneticLastName()); ?></td>
+        </tr>
+        <tr>
+            <td>Pronunciation last name</td>
+            <td><?php echo $this->escapeHtml($person->getPronunciationLastName()); ?></td>
+        </tr>
+        <tr>
+            <td>Maiden name</td>
+            <td><?php echo $this->escapeHtml($person->getMaidenName()); ?></td>
+        </tr>
+        <tr>
+            <td>Suffix</td>
+            <td><?php echo $this->escapeHtml($person->getSuffix()); ?></td>
+        </tr>
+        <tr>
+            <td>Nickname</td>
+            <td><?php echo $this->escapeHtml($person->getNickname()); ?></td>
+        </tr>
+        <tr>
+            <td>Job title</td>
+            <td><?php echo $this->escapeHtml($person->getJobTitle()); ?></td>
+        </tr>
+        <tr>
+            <td>Department</td>
+            <td><?php echo $this->escapeHtml($person->getDepartment()); ?></td>
+        </tr>
+        <tr>
+            <td>Company</td>
+            <td><?php echo $this->escapeHtml($person->getCompany()); ?></td>
+        </tr>
+        <tr>
+            <td>Phone numbers</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>E-mail addresses</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Links</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Dates</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Notes</td>
+            <td><?php echo $this->escapeHtml($person->getNotes()); ?></td>
+        </tr>
+    </tbody>
+</table>

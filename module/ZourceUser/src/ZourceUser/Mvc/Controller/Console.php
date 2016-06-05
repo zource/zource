@@ -34,14 +34,14 @@ class Console extends AbstractConsoleController
 
     public function accountCreateAction()
     {
-        $name = $this->params('name');
-        if (!$name) {
-            $name = Line::prompt('Please enter the name of the person: ');
+        $firstName = $this->params('first-name');
+        if (!$firstName) {
+            $firstName = Line::prompt('Please enter the first name of the person: ');
         }
 
-        $familyName = $this->params('family-name');
-        if (!$familyName) {
-            $familyName = Line::prompt('Please enter the family name of the person: ');
+        $lastName = $this->params('last-name');
+        if (!$lastName) {
+            $lastName = Line::prompt('Please enter the last name of the person: ');
         }
 
         $credential = $this->params('credential');
@@ -55,7 +55,7 @@ class Console extends AbstractConsoleController
             }
         }
         
-        $person = new Person($name, $familyName);
+        $person = new Person($firstName, $lastName);
         
         $account = new Account($person);
         $account->setCredential($this->crypter->create($credential));

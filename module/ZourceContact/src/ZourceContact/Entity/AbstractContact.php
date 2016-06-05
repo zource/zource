@@ -10,12 +10,18 @@
 namespace ZourceContact\Entity;
 
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
 /**
- * @ORM\MappedSuperclass
+ * @ORM\Entity
+ * @ORM\Table(name="contact")
+ * @ORM\InheritanceType("JOINED")
+ * @ORM\DiscriminatorColumn(name="contact_type", type="string")
+ * @ORM\DiscriminatorMap({"company" = "Company", "person" = "Person"})
  */
 abstract class AbstractContact
 {
@@ -42,13 +48,23 @@ abstract class AbstractContact
      * @ORM\Column(type="string", nullable=true)
      * @var string|null
      */
-    private $note;
+    private $notes;
 
+    /**
+     * @ORM\OneToMany(targetEntity="ImppAddress", mappedBy="contact")
+     * @var Collection
+     */
+    private $imppAddresses;
+
+    /**
+     * Initializes a new instance of this class.
+     */
     public function __construct()
     {
         $this->id = Uuid::uuid4();
         $this->creationDate = new DateTime();
         $this->lastUpdated = new DateTime();
+        $this->imppAddresses = new ArrayCollection();
     }
 
     /**
@@ -78,23 +94,16 @@ abstract class AbstractContact
     /**
      * @return null|string
      */
-    public function getNote()
+    public function getNotes()
     {
-        return $this->note;
+        return $this->notes;
     }
 
     /**
-     * @param null|string $note
+     * @param null|string $notes
      */
-    public function setNote($note)
+    public function setNotes($notes)
     {
-        $this->makeDirty();
-
-        $this->note = $note;
-    }
-
-    protected function makeDirty()
-    {
-        $this->lastUpdated = new DateTime('now');
+        $this->notes = $notes;
     }
 }

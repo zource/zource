@@ -34,16 +34,16 @@ class VCardBuilder
         $data['REV'] = $person->getLastUpdated()->format(self::DATE_FORMAT);
         $data['FN'] = $person->getFullName();
         $data['KIND'] = 'individual';
-        $data['N'] = [$person->getName(), $person->getFamilyName()];
+        $data['N'] = [$person->getFirstName(), $person->getLastName()];
 
-        if ($person->getDateOfBirth() !== null) {
-            $data['BDAY'] = $person->getDateOfBirth()->format('Ymd');
-        }
+        //if ($person->getDateOfBirth() !== null) {
+        //    $data['BDAY'] = $person->getDateOfBirth()->format('Ymd');
+        //}
 
         $data['BIRTHPLACE'] = '';
         $data['DEATHDATE'] = '';
         $data['DEATHPLACE'] = '';
-        $data['	IMPP:aim'] = 'johndoe@aol.com';
+        $data['IMPP:aim'] = 'johndoe@aol.com';
 
         switch ($person->getGender()) {
             case Person::GENDER_FEMALE:
@@ -62,8 +62,8 @@ class VCardBuilder
             $data['NICKNAME'] = $person->getNickname();
         }
 
-        if ($person->getNote() !== null) {
-            $data['NOTE'] = $person->getNote();
+        if ($person->getNotes() !== null) {
+            $data['NOTE'] = $person->getNotes();
         }
 
         //if ($person->getRole() !== null) {

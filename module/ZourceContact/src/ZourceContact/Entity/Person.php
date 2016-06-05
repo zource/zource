@@ -32,16 +32,70 @@ class Person extends AbstractContact
     private $gender;
 
     /**
-     * @ORM\Column(type="string")
-     * @var string
+     * @ORM\Column(type="string", nullable=true)
+     * @var string|null
      */
-    private $name;
+    private $prefix;
 
     /**
      * @ORM\Column(type="string")
      * @var string
      */
-    private $familyName;
+    private $firstName;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @var string|null
+     */
+    private $phoneticFirstName;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @var string|null
+     */
+    private $pronunciationFirstName;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @var string|null
+     */
+    private $middleName;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @var string|null
+     */
+    private $phoneticMiddleName;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @var string|null
+     */
+    private $lastName;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @var string|null
+     */
+    private $phoneticLastName;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @var string|null
+     */
+    private $pronunciationLastName;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @var string|null
+     */
+    private $maidenName;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @var string|null
+     */
+    private $suffix;
 
     /**
      * @ORM\Column(type="string", nullable=true)
@@ -50,18 +104,30 @@ class Person extends AbstractContact
     private $nickname;
 
     /**
-     * @ORM\Column(type="date", nullable=true)
-     * @var DateTimeInterface|null
+     * @ORM\Column(type="string", nullable=true)
+     * @var string|null
      */
-    private $dateOfBirth;
+    private $jobTitle;
 
-    public function __construct($name, $familyName)
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @var string|null
+     */
+    private $department;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @var string|null
+     */
+    private $company;
+
+    public function __construct($firstName, $lastName)
     {
         parent::__construct();
 
-        $this->gender = self::GENDER_UNKNOWN;
-        $this->name = $name;
-        $this->familyName = $familyName;
+        $this->setGender(self::GENDER_UNKNOWN);
+        $this->setFirstName($firstName);
+        $this->setLastName($lastName);
     }
 
     /**
@@ -77,45 +143,183 @@ class Person extends AbstractContact
      */
     public function setGender($gender)
     {
-        $this->makeDirty();
-
         $this->gender = $gender;
     }
 
     /**
-     * @return mixed
+     * @return null|string
      */
-    public function getName()
+    public function getPrefix()
     {
-        return $this->name;
+        return $this->prefix;
     }
 
     /**
-     * @param string $name
+     * @param null|string $prefix
      */
-    public function setName($name)
+    public function setPrefix($prefix)
     {
-        $this->makeDirty();
-
-        $this->name = $name;
+        $this->prefix = $prefix;
     }
 
     /**
      * @return string
      */
-    public function getFamilyName()
+    public function getFirstName()
     {
-        return $this->familyName;
+        return $this->firstName;
     }
 
     /**
-     * @param string $familyName
+     * @param string $firstName
      */
-    public function setFamilyName($familyName)
+    public function setFirstName($firstName)
     {
-        $this->makeDirty();
+        $this->firstName = $firstName;
+    }
 
-        $this->familyName = $familyName;
+    /**
+     * @return null|string
+     */
+    public function getPhoneticFirstName()
+    {
+        return $this->phoneticFirstName;
+    }
+
+    /**
+     * @param null|string $phoneticFirstName
+     */
+    public function setPhoneticFirstName($phoneticFirstName)
+    {
+        $this->phoneticFirstName = $phoneticFirstName;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getPronunciationFirstName()
+    {
+        return $this->pronunciationFirstName;
+    }
+
+    /**
+     * @param null|string $pronunciationFirstName
+     */
+    public function setPronunciationFirstName($pronunciationFirstName)
+    {
+        $this->pronunciationFirstName = $pronunciationFirstName;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getMiddleName()
+    {
+        return $this->middleName;
+    }
+
+    /**
+     * @param null|string $middleName
+     */
+    public function setMiddleName($middleName)
+    {
+        $this->middleName = $middleName;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getPhoneticMiddleName()
+    {
+        return $this->phoneticMiddleName;
+    }
+
+    /**
+     * @param null|string $phoneticMiddleName
+     */
+    public function setPhoneticMiddleName($phoneticMiddleName)
+    {
+        $this->phoneticMiddleName = $phoneticMiddleName;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getLastName()
+    {
+        return $this->lastName;
+    }
+
+    /**
+     * @param null|string $lastName
+     */
+    public function setLastName($lastName)
+    {
+        $this->lastName = $lastName;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getPhoneticLastName()
+    {
+        return $this->phoneticLastName;
+    }
+
+    /**
+     * @param null|string $phoneticLastName
+     */
+    public function setPhoneticLastName($phoneticLastName)
+    {
+        $this->phoneticLastName = $phoneticLastName;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getPronunciationLastName()
+    {
+        return $this->pronunciationLastName;
+    }
+
+    /**
+     * @param null|string $pronunciationLastName
+     */
+    public function setPronunciationLastName($pronunciationLastName)
+    {
+        $this->pronunciationLastName = $pronunciationLastName;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getMaidenName()
+    {
+        return $this->maidenName;
+    }
+
+    /**
+     * @param null|string $maidenName
+     */
+    public function setMaidenName($maidenName)
+    {
+        $this->maidenName = $maidenName;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getSuffix()
+    {
+        return $this->suffix;
+    }
+
+    /**
+     * @param null|string $suffix
+     */
+    public function setSuffix($suffix)
+    {
+        $this->suffix = $suffix;
     }
 
     /**
@@ -123,7 +327,7 @@ class Person extends AbstractContact
      */
     public function getFullName()
     {
-        return $this->getName() . ' ' . $this->getFamilyName();
+        return $this->getFirstName() . ' ' . $this->getLastName();
     }
 
     /**
@@ -139,26 +343,54 @@ class Person extends AbstractContact
      */
     public function setNickname($nickname)
     {
-        $this->makeDirty();
-
         $this->nickname = $nickname;
     }
 
     /**
-     * @return DateTimeInterface|null
+     * @return null|string
      */
-    public function getDateOfBirth()
+    public function getJobTitle()
     {
-        return $this->dateOfBirth;
+        return $this->jobTitle;
     }
 
     /**
-     * @param DateTimeInterface|null $dateOfBirth
+     * @param null|string $jobTitle
      */
-    public function setDateOfBirth(DateTimeInterface $dateOfBirth = null)
+    public function setJobTitle($jobTitle)
     {
-        $this->makeDirty();
+        $this->jobTitle = $jobTitle;
+    }
 
-        $this->dateOfBirth = $dateOfBirth;
+    /**
+     * @return null|string
+     */
+    public function getDepartment()
+    {
+        return $this->department;
+    }
+
+    /**
+     * @param null|string $department
+     */
+    public function setDepartment($department)
+    {
+        $this->department = $department;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getCompany()
+    {
+        return $this->company;
+    }
+
+    /**
+     * @param null|string $company
+     */
+    public function setCompany($company)
+    {
+        $this->company = $company;
     }
 }

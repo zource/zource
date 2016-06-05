@@ -46,7 +46,6 @@ class Contact
         }
 
         return $contact;
-
     }
 
     public function findCompany($id)
