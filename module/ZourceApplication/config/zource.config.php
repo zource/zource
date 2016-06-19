@@ -30,8 +30,6 @@ use Zend\Session\Validator\RemoteAddr;
 use ZF\Apigility\Admin\Module as ApigilityModule;
 use ZourceApplication\Authorization\Condition\ClassExists;
 use ZourceApplication\Authorization\Condition\Service\PluginManager as AuthorizationConditionPluginManager;
-use ZourceApplication\Form\Builder;
-use ZourceApplication\Form\Service\BuilderFactory;
 use ZourceApplication\Mvc\Controller\Index;
 use ZourceApplication\Session\Service\SaveHandlerFactory;
 use ZourceApplication\Session\Service\SessionStorageFactory;
@@ -49,6 +47,7 @@ use ZourceApplication\UI\Navigation\Item\Service\ItemAbstractFactory;
 use ZourceApplication\UI\Navigation\Item\Service\PluginManager as UiNavigationItemPluginManager;
 use ZourceApplication\Validator\Service\UuidFactory;
 use ZourceApplication\Validator\Uuid;
+use ZourceApplication\View\Helper\FormAvatar;
 use ZourceApplication\View\Helper\FormDescription;
 use ZourceApplication\View\Helper\UI\Service\NavFactory;
 
@@ -166,6 +165,7 @@ return [
             'zourceUiNav' => NavFactory::class,
         ],
         'invokables' => [
+            'zourceFormAvatar' => FormAvatar::class,
             'zourceFormDescription' => FormDescription::class,
         ],
     ],
@@ -193,21 +193,21 @@ return [
             'name' => 'Avatar',
             'description' => 'The representation of an avatar.',
             'form_element' => 'Zend\\Form\\Element\\Text',
-            'view_helper' => 'formText',
+            'view_helper' => 'zourceFormAvatar',
         ],
         'date' => [
             'id' => 'date',
             'name' => 'Date',
             'description' => 'The representation of a date.',
             'form_element' => 'Zend\\Form\\Element\\Date',
-            'view_helper' => 'formText',
+            'view_helper' => 'formDate',
         ],
         'datetime' => [
             'id' => 'datetime',
             'name' => 'Datetime',
             'description' => 'The representation of a date and a time.',
             'form_element' => 'Zend\\Form\\Element\\DateTime',
-            'view_helper' => 'formText',
+            'view_helper' => 'formDateTime',
         ],
         'color' => [
             'id' => 'color',

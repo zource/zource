@@ -8,15 +8,12 @@
  */
 
 namespace ZourceContact\Entity;
-
-use DateTimeInterface;
-use Doctrine\ORM\Mapping as ORM;
+use InvalidArgumentException;
 
 /**
- * @ORM\Entity
- * @ORM\Table(name="contact_person")
+ * The representation of a person.
  */
-class Person extends AbstractContact
+final class Person extends AbstractContact
 {
     const GENDER_UNKNOWN = 0;
     const GENDER_MALE = 1;
@@ -26,101 +23,81 @@ class Person extends AbstractContact
     /**
      * The gender of this person. Format according ISO IEC_5218
      *
-     * @ORM\Column(type="integer")
      * @var int
      */
     private $gender;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
      * @var string|null
      */
     private $prefix;
 
     /**
-     * @ORM\Column(type="string")
      * @var string
      */
     private $firstName;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
      * @var string|null
      */
     private $phoneticFirstName;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
-     * @var string|null
-     */
-    private $pronunciationFirstName;
-
-    /**
-     * @ORM\Column(type="string", nullable=true)
      * @var string|null
      */
     private $middleName;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
      * @var string|null
      */
     private $phoneticMiddleName;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
      * @var string|null
      */
     private $lastName;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
      * @var string|null
      */
     private $phoneticLastName;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
-     * @var string|null
-     */
-    private $pronunciationLastName;
-
-    /**
-     * @ORM\Column(type="string", nullable=true)
      * @var string|null
      */
     private $maidenName;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
      * @var string|null
      */
     private $suffix;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
      * @var string|null
      */
     private $nickname;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
      * @var string|null
      */
     private $jobTitle;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
      * @var string|null
      */
     private $department;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
      * @var string|null
      */
     private $company;
 
+    /**
+     * Initializes a new instance of this class.
+     *
+     * @param string $firstName The first name of the person.
+     * @param string $lastName The last name of the person.
+     */
     public function __construct($firstName, $lastName)
     {
         parent::__construct();
@@ -143,7 +120,17 @@ class Person extends AbstractContact
      */
     public function setGender($gender)
     {
-        $this->gender = $gender;
+        switch ($gender) {
+            case self::GENDER_UNKNOWN:
+            case self::GENDER_FEMALE:
+            case self::GENDER_MALE:
+            case self::GENDER_NA:
+                $this->gender = (int)$gender;
+                break;
+
+            default:
+                throw new InvalidArgumentException('An invalid argument was provided.');
+        }
     }
 
     /**
@@ -159,7 +146,7 @@ class Person extends AbstractContact
      */
     public function setPrefix($prefix)
     {
-        $this->prefix = $prefix;
+        $this->prefix = self::stringOrNull($prefix);
     }
 
     /**
@@ -175,7 +162,7 @@ class Person extends AbstractContact
      */
     public function setFirstName($firstName)
     {
-        $this->firstName = $firstName;
+        $this->firstName = self::stringOrNull($firstName);
     }
 
     /**
@@ -191,23 +178,7 @@ class Person extends AbstractContact
      */
     public function setPhoneticFirstName($phoneticFirstName)
     {
-        $this->phoneticFirstName = $phoneticFirstName;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getPronunciationFirstName()
-    {
-        return $this->pronunciationFirstName;
-    }
-
-    /**
-     * @param null|string $pronunciationFirstName
-     */
-    public function setPronunciationFirstName($pronunciationFirstName)
-    {
-        $this->pronunciationFirstName = $pronunciationFirstName;
+        $this->phoneticFirstName = self::stringOrNull($phoneticFirstName);
     }
 
     /**
@@ -223,7 +194,7 @@ class Person extends AbstractContact
      */
     public function setMiddleName($middleName)
     {
-        $this->middleName = $middleName;
+        $this->middleName = self::stringOrNull($middleName);
     }
 
     /**
@@ -239,7 +210,7 @@ class Person extends AbstractContact
      */
     public function setPhoneticMiddleName($phoneticMiddleName)
     {
-        $this->phoneticMiddleName = $phoneticMiddleName;
+        $this->phoneticMiddleName = self::stringOrNull($phoneticMiddleName);
     }
 
     /**
@@ -255,7 +226,7 @@ class Person extends AbstractContact
      */
     public function setLastName($lastName)
     {
-        $this->lastName = $lastName;
+        $this->lastName = self::stringOrNull($lastName);
     }
 
     /**
@@ -271,23 +242,7 @@ class Person extends AbstractContact
      */
     public function setPhoneticLastName($phoneticLastName)
     {
-        $this->phoneticLastName = $phoneticLastName;
-    }
-
-    /**
-     * @return null|string
-     */
-    public function getPronunciationLastName()
-    {
-        return $this->pronunciationLastName;
-    }
-
-    /**
-     * @param null|string $pronunciationLastName
-     */
-    public function setPronunciationLastName($pronunciationLastName)
-    {
-        $this->pronunciationLastName = $pronunciationLastName;
+        $this->phoneticLastName = self::stringOrNull($phoneticLastName);
     }
 
     /**
@@ -303,7 +258,7 @@ class Person extends AbstractContact
      */
     public function setMaidenName($maidenName)
     {
-        $this->maidenName = $maidenName;
+        $this->maidenName = self::stringOrNull($maidenName);
     }
 
     /**
@@ -319,7 +274,7 @@ class Person extends AbstractContact
      */
     public function setSuffix($suffix)
     {
-        $this->suffix = $suffix;
+        $this->suffix = self::stringOrNull($suffix);
     }
 
     /**
@@ -343,7 +298,7 @@ class Person extends AbstractContact
      */
     public function setNickname($nickname)
     {
-        $this->nickname = $nickname;
+        $this->nickname = self::stringOrNull($nickname);
     }
 
     /**
@@ -359,7 +314,7 @@ class Person extends AbstractContact
      */
     public function setJobTitle($jobTitle)
     {
-        $this->jobTitle = $jobTitle;
+        $this->jobTitle = self::stringOrNull($jobTitle);
     }
 
     /**
@@ -375,7 +330,7 @@ class Person extends AbstractContact
      */
     public function setDepartment($department)
     {
-        $this->department = $department;
+        $this->department = self::stringOrNull($department);
     }
 
     /**
@@ -391,6 +346,17 @@ class Person extends AbstractContact
      */
     public function setCompany($company)
     {
-        $this->company = $company;
+        $this->company = self::stringOrNull($company);
+    }
+
+    private static function stringOrNull($value)
+    {
+        if ($value === '') {
+            $value = null;
+        } else {
+            $value = (string)$value;
+        }
+
+        return $value;
     }
 }

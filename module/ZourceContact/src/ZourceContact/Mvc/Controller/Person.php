@@ -55,6 +55,34 @@ class Person extends AbstractActionController
         ]);
     }
 
+    public function updateAction()
+    {
+        $person = $this->contactService->findPerson($this->params('id'));
+        if (!$person) {
+            return $this->notFoundAction();
+        }
+
+        $this->contactForm->bind($person);
+
+        if ($this->getRequest()->isPost()) {
+            $this->contactForm->setData($this->getRequest()->getPost());
+
+            if ($this->contactForm->isValid()) {
+                $person = $this->contactService->persistContact($this->contactForm->getData());
+
+                return $this->redirect()->toRoute('contacts/view', [
+                    'type' => ContactEntry::TYPE_PERSON,
+                    'id' => $person->getId()->toString(),
+                ]);
+            }
+        }
+
+        return new ViewModel([
+            'person' => $person,
+            'contactForm' => $this->contactForm,
+        ]);
+    }
+
     public function deleteAction()
     {
         $person = $this->contactService->findPerson($this->params('id'));

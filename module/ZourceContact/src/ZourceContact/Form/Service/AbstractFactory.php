@@ -11,6 +11,8 @@ namespace ZourceContact\Form\Service;
 
 use RuntimeException;
 use Zend\Form\Factory;
+use Zend\Form\FormInterface;
+use Zend\Hydrator\HydratorPluginManager;
 use Zend\InputFilter\InputFilterPluginManager;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -26,15 +28,22 @@ abstract class AbstractFactory implements FactoryInterface
         $config = $serviceLocator->get('Config');
         $types = $config['zource_contact_fields'][$this->getConfigKey()];
 
+        /** @var HydratorPluginManager $hydratorManager */
+        $hydratorManager = $serviceLocator->get('HydratorManager');
+        $hydrator = $hydratorManager->get($this->getHydratorName());
+
         $formFactory = new Factory($serviceLocator->get('FormElementManager'));
 
+        /** @var FormInterface $form */
         $form = $formFactory->createForm($this->createSpec($types, $config['zource_field_types']));
         $form->setInputFilter($inputFilterManager->get($this->getInputFilterName()));
+        $form->setHydrator($hydrator);
 
         return $form;
     }
 
     abstract protected function getConfigKey();
+    abstract protected function getHydratorName();
     abstract protected function getInputFilterName();
 
     private function createSpec($types, $fieldTypes)

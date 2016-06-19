@@ -9,6 +9,7 @@
 
 namespace ZourceContact;
 
+use Zend\Hydrator\ClassMethods;
 use ZourceContact\Authorization\Condition\Service\ContactIsCurrentAccountFactory;
 use ZourceContact\Authorization\Condition\Service\ContactTypeFactory;
 use ZourceContact\Form\Service\CompanyFactory as CompanyFormFactory;
@@ -28,6 +29,7 @@ use ZourceContact\TaskService\Service\ContactFactory as ContactTaskServiceFactor
 use ZourceContact\ValueObject\ContactEntry;
 use ZourceContact\View\Helper\CompanySelection;
 use ZourceContact\View\Helper\ContactAvatar;
+use ZourceContact\View\Helper\ContactDates;
 use ZourceContact\View\Helper\Service\ContactFormFactory;
 
 return [
@@ -42,10 +44,10 @@ return [
     'doctrine' => [
         'driver' => [
             __NAMESPACE__ => [
-                'class' => 'Doctrine\\ORM\\Mapping\\Driver\\AnnotationDriver',
+                'class' => 'Doctrine\\ORM\\Mapping\\Driver\\XmlDriver',
                 'cache' => 'array',
                 'paths' => [
-                    __DIR__ . '/../src/' . __NAMESPACE__ . '/Entity',
+                    __DIR__ . '/doctrine',
                 ],
             ],
             'orm_default' => [
@@ -53,6 +55,12 @@ return [
                     __NAMESPACE__ => __NAMESPACE__
                 ],
             ],
+        ],
+    ],
+    'hydrators' => [
+        'invokables' => [
+            'ZourceContactCompanyHydrator' => ClassMethods::class,
+            'ZourceContactPersonHydrator' => ClassMethods::class,
         ],
     ],
     'input_filters' => [
@@ -212,6 +220,7 @@ return [
         'invokables' => [
             'zourceContactAvatar' => ContactAvatar::class,
             'zourceFormCompanySelection' => CompanySelection::class,
+            'zourceFormContactDates' => ContactDates::class,
         ],
         'factories' => [
             'zourceContactForm' => ContactFormFactory::class,
@@ -220,9 +229,11 @@ return [
     'view_manager' => [
         'template_map' => [
             'zource-contact/company/create' => __DIR__ . '/../view/zource-contact/company/create.phtml',
+            'zource-contact/company/update' => __DIR__ . '/../view/zource-contact/company/update.phtml',
             'zource-contact/company/view' => __DIR__ . '/../view/zource-contact/company/view.phtml',
             'zource-contact/directory/index' => __DIR__ . '/../view/zource-contact/directory/index.phtml',
             'zource-contact/person/create' => __DIR__ . '/../view/zource-contact/person/create.phtml',
+            'zource-contact/person/update' => __DIR__ . '/../view/zource-contact/person/update.phtml',
             'zource-contact/person/view' => __DIR__ . '/../view/zource-contact/person/view.phtml',
         ],
     ],
@@ -234,6 +245,15 @@ return [
     ],
     'zource_contact_fields' => [
         'company' => [
+            'avatar' => [
+                'type' => 'avatar',
+                'form_element_options' => [
+                    'label' => 'Avatar',
+                ],
+                'input_filter_options' => [
+                    'required' => true,
+                ],
+            ],
             'name' => [
                 'type' => 'tinytext',
                 'form_element_options' => [
@@ -252,7 +272,7 @@ return [
                     'label' => 'Avatar',
                 ],
                 'input_filter_options' => [
-                    'required' => false,
+                    'required' => true,
                 ],
             ],
             'gender' => [
@@ -294,16 +314,6 @@ return [
                     'required' => false,
                 ],
             ],
-            'pronunciation_first_name' => [
-                'type' => 'tinytext',
-                'category' => 'names',
-                'form_element_options' => [
-                    'label' => 'Pronunciation first name',
-                ],
-                'input_filter_options' => [
-                    'required' => false,
-                ],
-            ],
             'middle_name' => [
                 'type' => 'tinytext',
                 'category' => 'names',
@@ -339,16 +349,6 @@ return [
                 'category' => 'names',
                 'form_element_options' => [
                     'label' => 'Phonetic last name',
-                ],
-                'input_filter_options' => [
-                    'required' => false,
-                ],
-            ],
-            'pronunciation_last_name' => [
-                'type' => 'tinytext',
-                'category' => 'names',
-                'form_element_options' => [
-                    'label' => 'Pronunciation last name',
                 ],
                 'input_filter_options' => [
                     'required' => false,
@@ -476,7 +476,7 @@ return [
                 ],
             ],
             'dates' => [
-                'type' => 'date',
+                'type' => 'contact_dates',
                 'category' => 'dates',
                 'options' => [
                     'date_of_birth',
@@ -489,7 +489,7 @@ return [
                     'required' => false,
                 ],
             ],
-            'note' => [
+            'notes' => [
                 'type' => 'longtext',
                 'form_element_options' => [
                     'label' => 'Notes',
@@ -507,6 +507,13 @@ return [
             'description' => 'The representation of a company.',
             'form_element' => 'ZourceContact\\Form\\Element\\CompanySelection',
             'view_helper' => 'zourceFormCompanySelection',
+        ],
+        'contact_dates' => [
+            'id' => 'contact_dates',
+            'name' => 'Contact Dates',
+            'description' => 'The representation of dates for a contact.',
+            'form_element' => 'ZourceContact\\Form\\Element\\ContactDates',
+            'view_helper' => 'zourceFormContactDates',
         ],
     ],
     'zource_guard' => [
@@ -612,43 +619,28 @@ return [
                     'type' => 'header',
                     'priority' => 1000,
                     'options' => [
-                        'label' => 'contactViewMenuContactOptions',
+                        'label' => 'Manage',
                     ],
                 ],
-                'details' => [
+                'add-company' => [
                     'type' => 'label',
                     'priority' => 2000,
                     'options' => [
-                        'label' => 'contactViewMenuDetails',
-                        'route' => 'contacts/view',
-                        'route_reuse_matched_params' => true,
+                        'label' => 'New company',
+                        'route' => 'contacts/company/create',
                     ],
                 ],
-                'activity' => [
+                'add-person' => [
                     'type' => 'label',
                     'priority' => 3000,
                     'options' => [
-                        'label' => 'contactViewMenuActivityStream',
-                        'route' => 'contacts/view/activitystream',
-                        'route_reuse_matched_params' => true,
+                        'label' => 'New person',
+                        'route' => 'contacts/person/create',
                     ],
-                ],
-                'vcard' => [
-                    'type' => 'label',
-                    'priority' => 4000,
-                    'options' => [
-                        'label' => 'contactViewMenuVCard',
-                        'route' => 'contacts/view/vcard',
-                        'route_reuse_matched_params' => true,
-                    ],
-                ],
-                'separator' => [
-                    'type' => 'separator',
-                    'priority' => 5000,
                 ],
                 'update-company' => [
                     'type' => 'label',
-                    'priority' => 6000,
+                    'priority' => 4000,
                     'options' => [
                         'label' => 'contactViewMenuUpdate',
                         'route' => 'contacts/company/update',
@@ -665,7 +657,7 @@ return [
                 ],
                 'update-person' => [
                     'type' => 'label',
-                    'priority' => 6000,
+                    'priority' => 4000,
                     'options' => [
                         'label' => 'contactViewMenuUpdate',
                         'route' => 'contacts/person/update',
@@ -682,7 +674,7 @@ return [
                 ],
                 'delete-company' => [
                     'type' => 'label',
-                    'priority' => 7000,
+                    'priority' => 5000,
                     'options' => [
                         'label' => 'contactViewMenuDelete',
                         'route' => 'contacts/company/delete',
@@ -699,7 +691,7 @@ return [
                 ],
                 'delete-person' => [
                     'type' => 'label',
-                    'priority' => 7000,
+                    'priority' => 5000,
                     'options' => [
                         'label' => 'contactViewMenuDelete',
                         'route' => 'contacts/person/delete',
@@ -715,6 +707,40 @@ return [
                         'contact-delete' => [
                             'type' => 'ContactIsCurrentAccount',
                         ],
+                    ],
+                ],
+                'header-options' => [
+                    'type' => 'header',
+                    'priority' => 6000,
+                    'options' => [
+                        'label' => 'contactViewMenuContactOptions',
+                    ],
+                ],
+                'details' => [
+                    'type' => 'label',
+                    'priority' => 7000,
+                    'options' => [
+                        'label' => 'contactViewMenuDetails',
+                        'route' => 'contacts/view',
+                        'route_reuse_matched_params' => true,
+                    ],
+                ],
+                'activity' => [
+                    'type' => 'label',
+                    'priority' => 8000,
+                    'options' => [
+                        'label' => 'contactViewMenuActivityStream',
+                        'route' => 'contacts/view/activitystream',
+                        'route_reuse_matched_params' => true,
+                    ],
+                ],
+                'vcard' => [
+                    'type' => 'label',
+                    'priority' => 9000,
+                    'options' => [
+                        'label' => 'contactViewMenuVCard',
+                        'route' => 'contacts/view/vcard',
+                        'route_reuse_matched_params' => true,
                     ],
                 ],
             ],

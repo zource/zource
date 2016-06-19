@@ -16,6 +16,11 @@ class CompanyFactory extends AbstractFactory
         return 'company';
     }
 
+    protected function getHydratorName()
+    {
+        return 'ZourceContactCompanyHydrator';
+    }
+
     protected function getInputFilterName()
     {
         return 'ZourceContactCompanyInputFilter';

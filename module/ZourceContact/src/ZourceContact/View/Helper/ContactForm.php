@@ -9,6 +9,7 @@
 
 namespace ZourceContact\View\Helper;
 
+use Exception;
 use RuntimeException;
 use Zend\Form\Element\Radio;
 use Zend\Form\ElementInterface;
@@ -71,7 +72,12 @@ class ContactForm extends AbstractHelper
                 $result .= $this->getView()->formLabel($element);
             }
 
-            $result .= $plugin($element);
+            try {
+                $result .= $plugin($element);
+            } catch (Exception $e) {
+                throw new RuntimeException(sprintf('Failed to render element "%s"', $element->getName()), null, $e);
+            }
+
             $result .= $this->getView()->zourceFormDescription($element);
             $result .= $this->getView()->formElementErrors($element);
             $result .= '</div>';

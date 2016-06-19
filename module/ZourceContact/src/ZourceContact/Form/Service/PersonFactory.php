@@ -16,6 +16,11 @@ class PersonFactory extends AbstractFactory
         return 'person';
     }
 
+    protected function getHydratorName()
+    {
+        return 'ZourceContactPersonHydrator';
+    }
+
     protected function getInputFilterName()
     {
         return 'ZourceContactPersonInputFilter';

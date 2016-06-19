@@ -11,6 +11,7 @@ namespace ZourceContact\TaskService;
 
 use Doctrine\ORM\EntityManager;
 use RuntimeException;
+use Zend\Hydrator\ClassMethods;
 use Zend\Paginator\Paginator;
 use ZourceContact\Entity\AbstractContact;
 use ZourceContact\Entity\Company;
@@ -73,20 +74,25 @@ class Contact
     {
         $company = new Company($data['name']);
 
-        $this->entityManager->persist($company);
-        $this->entityManager->flush($company);
-
-        return $company;
+        return $this->persistContact($company);
     }
 
     public function createPerson(array $data)
     {
         $person = new Person($data['first_name'], $data['last_name']);
 
-        $this->entityManager->persist($person);
-        $this->entityManager->flush($person);
+        $hydrator = new ClassMethods();
+        $hydrator->hydrate($data, $person);
 
-        return $person;
+        return $this->persistContact($person);
+    }
+
+    public function persistContact(AbstractContact $contact)
+    {
+        $this->entityManager->persist($contact);
+        $this->entityManager->flush($contact);
+
+        return $contact;
     }
 
     public function deleteContact(AbstractContact $contact)

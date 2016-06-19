@@ -9,35 +9,25 @@
 
 namespace ZourceContact\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-
-final class Company extends AbstractContact
+abstract class AbstractString extends AbstractValue
 {
     /**
      * @var string
      */
-    private $name;
-    
-    public function __construct($name)
-    {
-        parent::__construct();
+    protected $value;
 
-        $this->name = $name;
+    public function __construct($type, $value)
+    {
+        parent::__construct($type);
+
+        $this->value = $value;
     }
 
     /**
      * @return string
      */
-    public function getName()
+    public function getValue()
     {
-        return $this->name;
-    }
-
-    /**
-     * @param string $name
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
+        return $this->value;
     }
 }

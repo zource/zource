@@ -31,4 +31,9 @@ return [
     'pageDashboardTitle' => 'Dashboard',
 
     'pageUserSettingsTitle' => 'Settings',
+
+    'formSelectAvatarDialogTitle' => 'Select Avatar',
+    'formSelectAvatarDialogDescription' => 'Click on the thumbnail to select the avatar.',
+    'formSelectAvatarDialogButtonCancel' => 'Cancel',
+    'formSelectAvatarDialogSelectFile' => 'Select this file',
 ];

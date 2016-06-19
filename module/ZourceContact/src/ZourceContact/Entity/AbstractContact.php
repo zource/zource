@@ -16,45 +16,48 @@ use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
-/**
- * @ORM\Entity
- * @ORM\Table(name="contact")
- * @ORM\InheritanceType("JOINED")
- * @ORM\DiscriminatorColumn(name="contact_type", type="string")
- * @ORM\DiscriminatorMap({"company" = "Company", "person" = "Person"})
- */
 abstract class AbstractContact
 {
     /**
      * @ORM\Id
-     * @ORM\Column(type="uuid_binary")
      * @var UuidInterface
      */
-    private $id;
+    protected $id;
 
     /**
-     * @ORM\Column(type="datetime")
      * @var DateTime
      */
-    private $creationDate;
+    protected $creationDate;
 
     /**
-     * @ORM\Column(type="datetime")
      * @var DateTime
      */
-    private $lastUpdated;
+    protected $lastUpdated;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
      * @var string|null
      */
-    private $notes;
+    protected $notes;
 
     /**
-     * @ORM\OneToMany(targetEntity="ImppAddress", mappedBy="contact")
      * @var Collection
      */
-    private $imppAddresses;
+    protected $emailAddresses;
+
+    /**
+     * @var Collection
+     */
+    protected $imppAddresses;
+
+    /**
+     * @var Collection
+     */
+    protected $phoneNumbers;
+
+    /**
+     * @var Collection
+     */
+    protected $dates;
 
     /**
      * Initializes a new instance of this class.
@@ -64,7 +67,10 @@ abstract class AbstractContact
         $this->id = Uuid::uuid4();
         $this->creationDate = new DateTime();
         $this->lastUpdated = new DateTime();
+        $this->emailAddresses = new ArrayCollection();
         $this->imppAddresses = new ArrayCollection();
+        $this->phoneNumbers = new ArrayCollection();
+        $this->dates = new ArrayCollection();
     }
 
     /**
@@ -105,5 +111,37 @@ abstract class AbstractContact
     public function setNotes($notes)
     {
         $this->notes = $notes;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getEmailAddresses()
+    {
+        return $this->emailAddresses;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getImppAddresses()
+    {
+        return $this->imppAddresses;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getPhoneNumbers()
+    {
+        return $this->phoneNumbers;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getDates()
+    {
+        return $this->dates;
     }
 }

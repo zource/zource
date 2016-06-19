@@ -1,0 +1,28 @@
+<?php
+
+$this->layout('layout/page-header');
+
+$this->placeholder('layout')->pageTitle = $this->translate('pageContactsTitle');
+$this->placeholder('layout')->pageMenu = 'contacts-directory';
+
+$this->contactForm->setAttribute('action', $this->url('contacts/person/update', [
+    'id' => $this->person->getId()->toString(),
+]));
+$this->contactForm->setAttribute('method', 'post');
+$this->contactForm->prepare();
+
+?>
+
+<h2>Edit details of <?php echo $this->escapeHtml($this->person->getFullName()); ?></h2>
+
+<?php echo $this->form()->openTag($this->contactForm); ?>
+<?php echo $this->formHidden($this->contactForm->get('token')); ?>
+<?php echo $this->zourceContactForm($this->contactForm, 'person'); ?>
+
+<div class="zui-buttons-container">
+    <div class="zui-buttons">
+        <?php echo $this->formSubmit($this->contactForm->get('submit')); ?>
+    </div>
+</div>
+
+<?php echo $this->form()->closeTag(); ?>
