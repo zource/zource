@@ -11,7 +11,7 @@ namespace ZourceContact\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-final class Company extends AbstractContact
+class Company extends AbstractContact
 {
     /**
      * @var string

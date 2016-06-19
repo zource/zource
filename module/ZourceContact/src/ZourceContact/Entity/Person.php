@@ -13,7 +13,7 @@ use InvalidArgumentException;
 /**
  * The representation of a person.
  */
-final class Person extends AbstractContact
+class Person extends AbstractContact
 {
     const GENDER_UNKNOWN = 0;
     const GENDER_MALE = 1;
