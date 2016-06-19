@@ -22,7 +22,7 @@ class Profile extends BaseForm
 
         $this->add([
             'type' => 'Text',
-            'name' => 'name',
+            'name' => 'first_name',
             'options' => [
                 'label' => 'profileFormName',
                 'description' => 'profileFormNameDesc',
@@ -31,7 +31,7 @@ class Profile extends BaseForm
 
         $this->add([
             'type' => 'Text',
-            'name' => 'middleName',
+            'name' => 'middle_name',
             'options' => [
                 'label' => 'profileFormMiddleName',
                 'description' => 'profileFormMiddleNameDesc',
@@ -40,7 +40,7 @@ class Profile extends BaseForm
 
         $this->add([
             'type' => 'Text',
-            'name' => 'surname',
+            'name' => 'last_name',
             'options' => [
                 'label' => 'profileFormSurname',
                 'description' => 'profileFormSurnameDesc',

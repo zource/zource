@@ -12,21 +12,30 @@ namespace ZourceUser\Mvc\Controller;
 use Zend\Authentication\AuthenticationService;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use ZourceContact\TaskService\Contact;
 use ZourceUser\Form\Profile as ProfileForm;
 
 class Profile extends AbstractActionController
 {
     private $authenticationService;
+    private $contactTaskService;
     private $profileForm;
 
-    public function __construct(AuthenticationService $authenticationService, ProfileForm $profileForm)
-    {
+    public function __construct(
+        AuthenticationService $authenticationService,
+        Contact $contactTaskService,
+        ProfileForm $profileForm
+    ) {
         $this->authenticationService = $authenticationService;
+        $this->contactTaskService = $contactTaskService;
         $this->profileForm = $profileForm;
     }
 
     public function indexAction()
     {
+        $contact = $this->zourceAccount()->getContact();
+        $this->profileForm->bind($contact);
+
         if ($this->getRequest()->isPost()) {
             $this->profileForm->setData(array_merge_recursive(
                 $this->getRequest()->getPost()->toArray(),
@@ -34,8 +43,7 @@ class Profile extends AbstractActionController
             ));
 
             if ($this->profileForm->isValid()) {
-                var_dump($this->profileForm->getData());
-                exit;
+                $this->contactTaskService->persistContact($this->profileForm->getData());
 
                 return $this->redirect()->toRoute('settings/profile');
             }

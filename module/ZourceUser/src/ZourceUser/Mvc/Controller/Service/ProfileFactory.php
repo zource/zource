@@ -11,6 +11,7 @@ namespace ZourceUser\Mvc\Controller\Service;
 
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use ZourceContact\TaskService\Contact as ContactTaskService;
 use ZourceUser\Authentication\AuthenticationService;
 use ZourceUser\Form\Profile as ProfileForm;
 use ZourceUser\Mvc\Controller\Profile;
@@ -24,11 +25,14 @@ class ProfileFactory implements FactoryInterface
             'Zend\\Authentication\\AuthenticationService'
         );
 
+        /** @var ContactTaskService $contactTaskService */
+        $contactTaskService = $serviceLocator->getServiceLocator()->get(ContactTaskService::class);
+
         /** @var ProfileForm $profileForm */
         $profileForm = $serviceLocator->getServiceLocator()->get(
             ProfileForm::class
         );
 
-        return new Profile($authenticationService, $profileForm);
+        return new Profile($authenticationService, $contactTaskService, $profileForm);
     }
 }

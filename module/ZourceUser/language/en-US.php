@@ -114,9 +114,11 @@ return [
 
     'topBarProfileMenuHeader' => 'Profile',
     'topBarProfileMenuLoggedInAsHeader' => 'Logged in as',
-    'topBarProfileMenuViewProfile' => 'View profile',
-    'topBarProfileMenuSettings' => 'Settings',
-    'topBarProfileMenuAdministration' => 'Administration',
+    'topBarProfileMenuProfile' => 'Profile',
+    'topBarProfileMenuAccount' => 'Account',
+    'topBarProfileMenuEmail' => 'E-mails',
+    'topBarProfileMenuSecurity' => 'Security',
+    'topBarProfileMenuApplications' => 'Applications',
     'topBarProfileMenuLogout' => 'Log out',
 
     'userSettingsMenuProfile' => 'Profile',

@@ -21,17 +21,17 @@ class Profile extends InputFilter
         ]);
 
         $this->add([
-            'name' => 'name',
+            'name' => 'first_name',
             'required' => true,
         ]);
 
         $this->add([
-            'name' => 'middleName',
+            'name' => 'middle_name',
             'required' => false,
         ]);
 
         $this->add([
-            'name' => 'surname',
+            'name' => 'last_name',
             'required' => true,
         ]);
     }

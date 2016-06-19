@@ -721,45 +721,53 @@ return [
                                 'label' => 'topBarProfileMenuHeader',
                             ],
                         ],
-                        /*'profile' => [
+                        'profile' => [
                             'type' => 'label',
                             'priority' => 400,
                             'options' => [
-                                'label' => 'topBarProfileMenuViewProfile',
-                                'route' => 'settings/profile',
-                            ],
-                        ],*/
-                        'settings' => [
-                            'type' => 'label',
-                            'priority' => 500,
-                            'options' => [
-                                'label' => 'topBarProfileMenuSettings',
+                                'label' => 'topBarProfileMenuProfile',
                                 'route' => 'settings/profile',
                             ],
                         ],
-                        'admin' => [
+                        'account' => [
+                            'type' => 'label',
+                            'priority' => 500,
+                            'options' => [
+                                'label' => 'topBarProfileMenuAccount',
+                                'route' => 'settings/account',
+                            ],
+                        ],
+                        'email' => [
                             'type' => 'label',
                             'priority' => 600,
                             'options' => [
-                                'label' => 'topBarProfileMenuAdministration',
-                                'route' => 'logout',
+                                'label' => 'topBarProfileMenuEmail',
+                                'route' => 'settings/email',
                             ],
-                            'conditions' => [
-                                'user-has-identity' => [
-                                    'type' => 'UserHasRole',
-                                    'options' => [
-                                        'role' => 'admin',
-                                    ],
-                                ],
+                        ],
+                        'security' => [
+                            'type' => 'label',
+                            'priority' => 700,
+                            'options' => [
+                                'label' => 'topBarProfileMenuSecurity',
+                                'route' => 'settings/security',
+                            ],
+                        ],
+                        'applications' => [
+                            'type' => 'label',
+                            'priority' => 800,
+                            'options' => [
+                                'label' => 'topBarProfileMenuApplications',
+                                'route' => 'settings/applications',
                             ],
                         ],
                         'separator' => [
                             'type' => 'separator',
-                            'priority' => 700,
+                            'priority' => 900,
                         ],
                         'logout' => [
                             'type' => 'label',
-                            'priority' => 800,
+                            'priority' => 1000,
                             'options' => [
                                 'label' => 'topBarProfileMenuLogout',
                                 'route' => 'logout',
