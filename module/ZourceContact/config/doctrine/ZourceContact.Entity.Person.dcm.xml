@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xmlns:gedmo="http://gediminasm.org/schemas/orm/doctrine-extensions-mapping"
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
     <entity name="ZourceContact\Entity\Person" table="contact_person">
-        <id name="id" type="uuid_binary" />
-        <field name="creationDate" type="datetime" />
-        <field name="lastUpdated" type="datetime" />
+
         <field name="gender" type="integer" />
         <field name="prefix" type="string" nullable="true" />
         <field name="firstName" type="string" />
@@ -20,50 +19,5 @@
         <field name="jobTitle" type="string" nullable="true" />
         <field name="department" type="string" nullable="true" />
         <field name="company" type="string" nullable="true" />
-        <field name="notes" type="text" nullable="true" />
-
-        <many-to-many target-entity="ZourceContact\Entity\Date" field="dates">
-            <join-table name="contact_person_date">
-                <join-columns>
-                    <join-column on-delete="CASCADE" />
-                </join-columns>
-                <inverse-join-columns>
-                    <join-column on-delete="CASCADE" />
-                </inverse-join-columns>
-            </join-table>
-        </many-to-many>
-
-        <many-to-many target-entity="ZourceContact\Entity\EmailAddress" field="emailAddresses">
-            <join-table name="contact_person_email">
-                <join-columns>
-                    <join-column on-delete="CASCADE" />
-                </join-columns>
-                <inverse-join-columns>
-                    <join-column on-delete="CASCADE" />
-                </inverse-join-columns>
-            </join-table>
-        </many-to-many>
-
-        <many-to-many target-entity="ZourceContact\Entity\Impp" field="imppAddresses">
-            <join-table name="contact_person_impp">
-                <join-columns>
-                    <join-column on-delete="CASCADE" />
-                </join-columns>
-                <inverse-join-columns>
-                    <join-column on-delete="CASCADE" />
-                </inverse-join-columns>
-            </join-table>
-        </many-to-many>
-
-        <many-to-many target-entity="ZourceContact\Entity\PhoneNumber" field="phoneNumbers">
-            <join-table name="contact_person_phonenumber">
-                <join-columns>
-                    <join-column on-delete="CASCADE" />
-                </join-columns>
-                <inverse-join-columns>
-                    <join-column on-delete="CASCADE" />
-                </inverse-join-columns>
-            </join-table>
-        </many-to-many>
     </entity>
 </doctrine-mapping>

@@ -47,6 +47,18 @@
                 <div class="zui-page-header-main">
                     <h1><?php echo $this->placeholder('layout')->pageTitle; ?></h1>
                 </div>
+
+                <?php if (isset($this->placeholder('layout')->pageHeaderMenu)) { ?>
+                <div class="zui-page-header-actions">
+                    <div class="zui-button-group">
+                        <?php foreach ($this->placeholder('layout')->pageHeaderMenu as $url => $label) { ?>
+                        <a href="<?php echo $this->escapeHtmlAttr($url); ?>" class="zui-button">
+                            <?php echo $this->escapeHtml($this->translate($label)); ?>
+                        </a>
+                        <?php } ?>
+                    </div>
+                </div>
+                <?php } ?>
             </div>
         </div>
 

@@ -12,7 +12,7 @@ namespace ZourceApplication\View\Helper;
 use Zend\Form\Element;
 use Zend\View\Helper\AbstractHelper;
 
-class FormAvatar extends AbstractHelper
+class FormAvatar extends AbstractHelper implements AdditionalRenderer
 {
     public function __invoke(Element $element)
     {
@@ -20,10 +20,9 @@ class FormAvatar extends AbstractHelper
         $default = $view->escapeHtmlAttr($view->basePath('img/avatars/placeholder.png'));
 
         $id = uniqid('dialog-', false);
+        $element->setOption('dialog_id', $id);
+
         $name = $view->escapeHtmlAttr($element->getName());
-        $title = $view->translate('formSelectAvatarDialogTitle');
-        $description = $view->translate('formSelectAvatarDialogDescription');
-        $buttonCancel = $view->translate('formSelectAvatarDialogButtonCancel');
 
         $html = <<<EOT
 <div class="zource-avatar-selection zui-file-selection-trigger-container" data-zui-file-selection-trigger="#file-selection-$id">
@@ -33,7 +32,22 @@ class FormAvatar extends AbstractHelper
         <img src="$default" alt="Avatar" tabindex="1" class="zui-file-selection-trigger-thumb">
     </p>
 </div>
+EOT;
 
+        return $html;
+    }
+
+    public function renderAdditional(array $data)
+    {
+        $view = $this->getView();
+        $element = $data['element'];
+
+        $id = $element->getOption('dialog_id');
+        $title = $view->translate('formSelectAvatarDialogTitle');
+        $description = $view->translate('formSelectAvatarDialogDescription');
+        $buttonCancel = $view->translate('formSelectAvatarDialogButtonCancel');
+
+        $html = <<<EOT
 <div class="zui-file-selection zui-dialog zui-dialog-small" id="file-selection-$id">
     <div class="zui-dialog-header">
         <h2>$title</h2>
@@ -45,6 +59,7 @@ class FormAvatar extends AbstractHelper
             <div class="zui-dialog-panel zui-dialog-panel-no-padding">
                 <ul class="zui-file-selection-items">
 EOT;
+
         for ($i = 0; $i < 10; ++$i) {
             $html .= $this->renderListItem($i);
         }

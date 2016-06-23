@@ -1,28 +1,28 @@
 <?php
 
-use ZourceContact\Entity\Person;
+use ZourceContact\Entity\Company;
 
 $this->layout('layout/page-header');
 
-/** @var Person $person */
-$person = $this->person;
+/** @var Company $company */
+$company = $this->company;
 
 $this->placeholder('layout')->pageTitle = $this->translate('pageContactsTitle');
 $this->placeholder('layout')->pageMenu = 'contacts-directory';
 
-$this->contactForm->setAttribute('action', $this->url('contacts/person/update', [
-    'id' => $this->person->getId()->toString(),
+$this->contactForm->setAttribute('action', $this->url('contacts/company/update', [
+    'id' => $this->company->getId()->toString(),
 ]));
 $this->contactForm->setAttribute('method', 'post');
 $this->contactForm->prepare();
 
 ?>
 
-<h2>Edit details of <?php echo $this->escapeHtml($person->getDisplayName()); ?></h2>
+<h2>Edit details of <?php echo $this->escapeHtml($company->getDisplayName()); ?></h2>
 
 <?php echo $this->form()->openTag($this->contactForm); ?>
 <?php echo $this->formHidden($this->contactForm->get('token')); ?>
-<?php echo $this->zourceContactForm()->render($this->contactForm, 'person'); ?>
+<?php echo $this->zourceContactForm()->render($this->contactForm, 'company'); ?>
 
 <div class="zui-buttons-container">
     <div class="zui-buttons">
@@ -31,4 +31,4 @@ $this->contactForm->prepare();
 </div>
 
 <?php echo $this->form()->closeTag(); ?>
-<?php echo $this->zourceContactForm()->renderAdditional($this->contactForm, 'person'); ?>
+<?php echo $this->zourceContactForm()->renderAdditional($this->contactForm, 'company'); ?>

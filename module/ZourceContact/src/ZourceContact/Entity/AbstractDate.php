@@ -18,9 +18,9 @@ abstract class AbstractDate extends AbstractValue
      */
     protected $value;
 
-    public function __construct($type, DateTimeInterface $value)
+    public function __construct(AbstractContact $contact, $type, DateTimeInterface $value)
     {
-        parent::__construct($type);
+        parent::__construct($contact, $type);
 
         $this->value = $value;
     }

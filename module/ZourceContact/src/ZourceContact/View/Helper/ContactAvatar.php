@@ -10,6 +10,7 @@
 namespace ZourceContact\View\Helper;
 
 use Ramsey\Uuid\UuidInterface;
+use Zend\Form\Element;
 use Zend\View\Helper\AbstractHelper;
 use ZourceContact\ValueObject\ContactEntry;
 

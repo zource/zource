@@ -51,7 +51,7 @@ class Contact
 
     public function findCompany($id)
     {
-        $repository = $this->entityManager->getRepository(Company::class);
+        $repository = $this->entityManager->getRepository(AbstractContact::class);
 
         return $repository->find($id);
     }
@@ -73,6 +73,9 @@ class Contact
     public function createCompany(array $data)
     {
         $company = new Company($data['name']);
+
+        $hydrator = new ClassMethods();
+        $hydrator->hydrate($data, $person);
 
         return $this->persistContact($company);
     }

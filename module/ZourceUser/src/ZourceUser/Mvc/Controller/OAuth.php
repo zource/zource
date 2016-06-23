@@ -9,15 +9,24 @@
 
 namespace ZourceUser\Mvc\Controller;
 
+use Ramsey\Uuid\Uuid;
 use Zend\Authentication\AuthenticationService;
 use Zend\Http\Request;
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 use ZourceUser\TaskService\OAuth as OAuthTaskService;
 
 class OAuth extends AbstractActionController
 {
+    /**
+     * @var OAuthTaskService
+     */
     private $oauthServer;
+
+    /**
+     * @var AuthenticationService
+     */
     private $authenticationService;
 
     public function __construct(OAuthTaskService $oauthServer, AuthenticationService $authenticationService)
@@ -44,6 +53,15 @@ class OAuth extends AbstractActionController
             );
         }
 
+        if ($this->oauthServer->isApplicationAuthorized($application, $this->authenticationService->getIdentity())) {
+            return $this->oauthServer->handleAuthorizeRequest(
+                $request,
+                $this->getResponse(),
+                true,
+                $this->authenticationService->getIdentity()
+            );
+        }
+
         $isAllowed = $this->getRequest()->getPost('allow') !== null;
         $isDenied = $this->getRequest()->getPost('deny') !== null;
 
@@ -52,6 +70,11 @@ class OAuth extends AbstractActionController
                 'application' => $application,
             ]);
         }
+
+        $this->oauthServer->authorizeApplication(
+            $application,
+            $this->authenticationService->getIdentity()
+        );
 
         return $this->oauthServer->handleAuthorizeRequest(
             $request,
@@ -70,5 +93,22 @@ class OAuth extends AbstractActionController
         }
 
         return $this->oauthServer->handleTokenRequest($request, $this->getResponse());
+    }
+
+    public function resourceAction()
+    {
+        $request = $this->getRequest();
+        $response = $this->oauthServer->verifyResourceRequest($request);
+
+        if (!$response->isOk()) {
+            return $response;
+        }
+
+        $accessToken = $this->oauthServer->getAccessToken($request);
+
+        return new JsonModel([
+            'id' => $accessToken['user_id'],
+            'scope' => $accessToken['scope'],
+        ]);
     }
 }

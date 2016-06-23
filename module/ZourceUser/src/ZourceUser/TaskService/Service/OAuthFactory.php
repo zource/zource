@@ -10,6 +10,7 @@
 namespace ZourceUser\TaskService\Service;
 
 use Closure;
+use Doctrine\ORM\EntityManager;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use ZourceUser\TaskService\OAuth;
@@ -21,6 +22,9 @@ class OAuthFactory implements FactoryInterface
         /** @var Closure $server */
         $server = $serviceLocator->get('ZF\OAuth2\Service\OAuth2Server');
 
-        return new OAuth($server());
+        /** @var EntityManager $entityManager */
+        $entityManager = $serviceLocator->get('doctrine.entitymanager.orm_default');
+
+        return new OAuth($server(), $entityManager);
     }
 }

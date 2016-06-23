@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xmlns:gedmo="http://gediminasm.org/schemas/orm/doctrine-extensions-mapping"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
+    <entity name="ZourceContact\Entity\AbstractContact" table="contact" inheritance-type="JOINED">
+        <discriminator-column name="contact_type" type="string" />
+
+        <discriminator-map>
+            <discriminator-mapping value="company" class="ZourceContact\Entity\Company" />
+            <discriminator-mapping value="person" class="ZourceContact\Entity\Person" />
+        </discriminator-map>
+
+        <id name="id" type="uuid_binary" />
+
+        <field name="creationDate" type="datetime">
+            <gedmo:timestampable on="create" />
+        </field>
+
+        <field name="lastUpdated" type="datetime">
+            <gedmo:timestampable on="update" />
+        </field>
+
+        <field name="displayName" type="string" nullable="true" />
+
+        <field name="notes" type="text" nullable="true" />
+
+        <one-to-many target-entity="ZourceContact\Entity\Date" mapped-by="contact" field="dates">
+            <cascade>persist</cascade>
+        </one-to-many>
+
+        <one-to-many target-entity="ZourceContact\Entity\EmailAddress" mapped-by="contact" field="emailAddresses">
+            <cascade>persist</cascade>
+        </one-to-many>
+
+        <one-to-many target-entity="ZourceContact\Entity\Impp" mapped-by="contact" field="imppAddresses">
+            <cascade>persist</cascade>
+        </one-to-many>
+
+        <one-to-many target-entity="ZourceContact\Entity\PhoneNumber" mapped-by="contact" field="phoneNumbers">
+            <cascade>persist</cascade>
+        </one-to-many>
+
+        <one-to-many target-entity="ZourceContact\Entity\Property" mapped-by="contact" field="properties">
+            <cascade>persist</cascade>
+        </one-to-many>
+    </entity>
+</doctrine-mapping>

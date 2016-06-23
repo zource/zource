@@ -55,6 +55,34 @@ class Company extends AbstractActionController
         ]);
     }
 
+    public function updateAction()
+    {
+        $company = $this->contactService->findCompany($this->params('id'));
+        if (!$company) {
+            return $this->notFoundAction();
+        }
+
+        $this->contactForm->bind($company);
+
+        if ($this->getRequest()->isPost()) {
+            $this->contactForm->setData($this->getRequest()->getPost());
+
+            if ($this->contactForm->isValid()) {
+                $company = $this->contactService->persistContact($this->contactForm->getData());
+
+                return $this->redirect()->toRoute('contacts/view', [
+                    'type' => ContactEntry::TYPE_COMPANY,
+                    'id' => $company->getId()->toString(),
+                ]);
+            }
+        }
+
+        return new ViewModel([
+            'company' => $company,
+            'contactForm' => $this->contactForm,
+        ]);
+    }
+
     public function deleteAction()
     {
         $company = $this->contactService->findCompany($this->params('id'));

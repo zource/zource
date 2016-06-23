@@ -319,6 +319,15 @@ return [
                             ],
                         ],
                     ],
+                    'resource' => [
+                        'type' => 'Literal',
+                        'options' => [
+                            'route' => '/resource',
+                            'defaults' => [
+                                'action' => 'resource',
+                            ],
+                        ],
+                    ],
                 ],
             ],
             'request' => [
@@ -660,6 +669,7 @@ return [
             'logout' => true,
             'oauth/authorize' => true,
             'oauth/token' => false,
+            'oauth/resource' => false,
             'oauth' => false,
             'request/password' => false,
             'request/reset-password' => false,

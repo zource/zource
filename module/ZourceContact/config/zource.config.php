@@ -249,6 +249,7 @@ return [
                 'type' => 'avatar',
                 'form_element_options' => [
                     'label' => 'Avatar',
+                    'description' => 'The avatar of this company',
                 ],
                 'input_filter_options' => [
                     'required' => true,
@@ -264,12 +265,98 @@ return [
                     'required' => true,
                 ],
             ],
+            'phone_number' => [
+                'type' => 'phone_number',
+                'category' => 'phone_number',
+                'options' => [
+                    'custom_label_allowed' => true,
+                    'types' => [
+                        'home',
+                        'work',
+                        'mobile',
+                        'main',
+                        'home fax',
+                        'work fax',
+                        'pager',
+                        'other',
+                    ],
+                ],
+                'form_element_options' => [
+                    'label' => 'Phone number',
+                ],
+                'input_filter_options' => [
+                    'required' => false,
+                ],
+
+            ],
+            'email_address' => [
+                'type' => 'email_address',
+                'category' => 'email_address',
+                'options' => [
+                    'custom_label_allowed' => true,
+                    'types' => [
+                        'home',
+                        'work',
+                        'other',
+                    ],
+                ],
+                'form_element_options' => [
+                    'label' => 'E-mail address',
+                ],
+                'input_filter_options' => [
+                    'required' => false,
+                ],
+            ],
+            'url' => [
+                'type' => 'url',
+                'category' => 'url',
+                'options' => [
+                    'custom_label_allowed' => true,
+                    'types' => [
+                        'homepage',
+                        'home',
+                        'work',
+                        'other',
+                    ],
+                ],
+                'form_element_options' => [
+                    'label' => 'URL',
+                ],
+                'input_filter_options' => [
+                    'required' => false,
+                ],
+            ],
+            'dates' => [
+                'type' => 'contact_dates',
+                'category' => 'dates',
+                'options' => [
+                    'date_of_birth',
+                    'date_of_death',
+                ],
+                'form_element_options' => [
+                    'label' => 'Dates',
+                ],
+                'input_filter_options' => [
+                    'required' => false,
+                ],
+            ],
+            'notes' => [
+                'type' => 'longtext',
+                'form_element_options' => [
+                    'label' => 'Notes',
+                    'description' => 'Additional notes about this company.',
+                ],
+                'input_filter_options' => [
+                    'required' => false,
+                ],
+            ],
         ],
         'person' => [
             'avatar' => [
                 'type' => 'avatar',
                 'form_element_options' => [
                     'label' => 'Avatar',
+                    'description' => 'The avatar of this person.',
                 ],
                 'input_filter_options' => [
                     'required' => true,
@@ -279,6 +366,7 @@ return [
                 'type' => 'gender',
                 'form_element_options' => [
                     'label' => 'Gender',
+                    'description' => 'The gender of this person.',
                 ],
                 'input_filter_options' => [
                     'required' => true,
@@ -289,6 +377,7 @@ return [
                 'category' => 'names',
                 'form_element_options' => [
                     'label' => 'Prefix',
+                    'description' => 'The title for this person.',
                 ],
                 'input_filter_options' => [
                     'required' => false,
@@ -299,6 +388,7 @@ return [
                 'category' => 'names',
                 'form_element_options' => [
                     'label' => 'First name',
+                    'description' => 'The first name of this person.',
                 ],
                 'input_filter_options' => [
                     'required' => true,
@@ -309,6 +399,7 @@ return [
                 'category' => 'names',
                 'form_element_options' => [
                     'label' => 'Phonetic first name',
+                    'description' => 'The phonetic first name of this person.',
                 ],
                 'input_filter_options' => [
                     'required' => false,
@@ -319,6 +410,7 @@ return [
                 'category' => 'names',
                 'form_element_options' => [
                     'label' => 'Middle name',
+                    'description' => 'The middle name of this person.',
                 ],
                 'input_filter_options' => [
                     'required' => false,
@@ -329,6 +421,7 @@ return [
                 'category' => 'names',
                 'form_element_options' => [
                     'label' => 'Phonetic middle name',
+                    'description' => 'The phonetic middle name of this person.',
                 ],
                 'input_filter_options' => [
                     'required' => false,
@@ -339,6 +432,7 @@ return [
                 'category' => 'names',
                 'form_element_options' => [
                     'label' => 'Last name',
+                    'description' => 'The last name of this person.',
                 ],
                 'input_filter_options' => [
                     'required' => true,
@@ -349,6 +443,7 @@ return [
                 'category' => 'names',
                 'form_element_options' => [
                     'label' => 'Phonetic last name',
+                    'description' => 'The phonetic last name of this person.',
                 ],
                 'input_filter_options' => [
                     'required' => false,
@@ -359,6 +454,7 @@ return [
                 'category' => 'names',
                 'form_element_options' => [
                     'label' => 'Maiden name',
+                    'description' => 'The maiden name of this person.',
                 ],
                 'input_filter_options' => [
                     'required' => false,
@@ -369,6 +465,7 @@ return [
                 'category' => 'names',
                 'form_element_options' => [
                     'label' => 'Suffix',
+                    'description' => 'The suffix of this person.',
                 ],
                 'input_filter_options' => [
                     'required' => false,
@@ -379,6 +476,7 @@ return [
                 'category' => 'names',
                 'form_element_options' => [
                     'label' => 'Nickname',
+                    'description' => 'The nickname of this person.',
                 ],
                 'input_filter_options' => [
                     'required' => false,
@@ -389,6 +487,7 @@ return [
                 'category' => 'names',
                 'form_element_options' => [
                     'label' => 'Job title',
+                    'description' => 'The job title of this person.',
                 ],
                 'input_filter_options' => [
                     'required' => false,
@@ -399,6 +498,7 @@ return [
                 'category' => 'names',
                 'form_element_options' => [
                     'label' => 'Department',
+                    'description' => 'The department that this person works at.',
                 ],
                 'input_filter_options' => [
                     'required' => false,
@@ -409,6 +509,7 @@ return [
                 'category' => 'names',
                 'form_element_options' => [
                     'label' => 'Company',
+                    'description' => 'The company that this person works at.',
                 ],
                 'input_filter_options' => [
                     'required' => false,
@@ -493,6 +594,7 @@ return [
                 'type' => 'longtext',
                 'form_element_options' => [
                     'label' => 'Notes',
+                    'description' => 'Additional notes about this person.',
                 ],
                 'input_filter_options' => [
                     'required' => false,

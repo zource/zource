@@ -15,7 +15,7 @@ $this->contactForm->prepare();
 
 <?php echo $this->form()->openTag($this->contactForm); ?>
 <?php echo $this->formHidden($this->contactForm->get('token')); ?>
-<?php echo $this->zourceContactForm($this->contactForm, 'person'); ?>
+<?php echo $this->zourceContactForm()->render($this->contactForm, 'person'); ?>
 
 <div class="zui-buttons-container">
     <div class="zui-buttons">
@@ -24,3 +24,4 @@ $this->contactForm->prepare();
 </div>
 
 <?php echo $this->form()->closeTag(); ?>
+<?php echo $this->zourceContactForm()->renderAdditional($this->contactForm, 'person'); ?>

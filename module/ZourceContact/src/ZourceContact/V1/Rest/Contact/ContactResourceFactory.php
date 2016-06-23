@@ -5,6 +5,8 @@ class ContactResourceFactory
 {
     public function __invoke($services)
     {
-        return new ContactResource();
+        $entityManager = $services->get('doctrine.entitymanager.orm_default');
+
+        return new ContactResource($entityManager);
     }
 }

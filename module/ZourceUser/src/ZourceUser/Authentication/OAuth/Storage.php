@@ -105,7 +105,8 @@ class Storage implements
         $expireDate = new DateTime();
         $expireDate->setTimestamp($expires);
 
-        $accessToken = new OAuthAccessToken($oauthToken, $application, $account, $expireDate);
+        $accessToken = new OAuthAccessToken($oauthToken, $application, $expireDate);
+        $accessToken->setAccount($account);
         $accessToken->setScope($scope);
 
         $this->entityManager->persist($accessToken);

@@ -9,6 +9,6 @@
 
 namespace ZourceContact\Entity;
 
-final class PersonProperty extends AbstractString
+final class Property extends AbstractString
 {
 }

@@ -11,6 +11,9 @@ namespace ZourceContact\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+/**
+ * The representation of a company.
+ */
 class Company extends AbstractContact
 {
     /**
@@ -39,5 +42,16 @@ class Company extends AbstractContact
     public function setName($name)
     {
         $this->name = $name;
+    }
+
+    public function getDisplayName()
+    {
+        $displayName = parent::getDisplayName();
+
+        if (!$displayName) {
+            $displayName = $this->getName();
+        }
+
+        return $displayName;
     }
 }

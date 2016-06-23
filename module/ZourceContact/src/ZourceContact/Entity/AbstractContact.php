@@ -37,6 +37,11 @@ abstract class AbstractContact
     /**
      * @var string|null
      */
+    protected $displayName;
+
+    /**
+     * @var string|null
+     */
     protected $notes;
 
     /**
@@ -60,6 +65,11 @@ abstract class AbstractContact
     protected $dates;
 
     /**
+     * @var Collection
+     */
+    protected $properties;
+
+    /**
      * Initializes a new instance of this class.
      */
     public function __construct()
@@ -71,6 +81,7 @@ abstract class AbstractContact
         $this->imppAddresses = new ArrayCollection();
         $this->phoneNumbers = new ArrayCollection();
         $this->dates = new ArrayCollection();
+        $this->properties = new ArrayCollection();
     }
 
     /**
@@ -100,6 +111,22 @@ abstract class AbstractContact
     /**
      * @return null|string
      */
+    public function getDisplayName()
+    {
+        return $this->displayName;
+    }
+
+    /**
+     * @param null|string $displayName
+     */
+    public function setDisplayName($displayName)
+    {
+        $this->displayName = self::stringOrNull($displayName);
+    }
+
+    /**
+     * @return null|string
+     */
     public function getNotes()
     {
         return $this->notes;
@@ -110,7 +137,7 @@ abstract class AbstractContact
      */
     public function setNotes($notes)
     {
-        $this->notes = $notes;
+        $this->notes = self::stringOrNull($notes);
     }
 
     /**
@@ -143,5 +170,24 @@ abstract class AbstractContact
     public function getDates()
     {
         return $this->dates;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getProperties()
+    {
+        return $this->properties;
+    }
+
+    protected static function stringOrNull($value)
+    {
+        if ($value === '') {
+            $value = null;
+        } else {
+            $value = (string)$value;
+        }
+
+        return $value;
     }
 }

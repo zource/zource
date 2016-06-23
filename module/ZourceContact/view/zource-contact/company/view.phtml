@@ -2,11 +2,12 @@
 
 $this->layout('layout/page-header');
 
-$this->placeholder('layout')->pageTitle = $this->company->getName();
-$this->placeholder('layout')->pageMenu = 'view-contact';
-
 /** @var \ZourceContact\Entity\Company $company */
 $company = $this->company;
+
+$this->placeholder('layout')->pageTitle = $company->getDisplayName();
+$this->placeholder('layout')->pageMenu = 'view-contact';
+$this->placeholder('layout')->pageImage = $this->zourceContactAvatar()->getUrl($company->getId());
 
 ?>
 
@@ -19,6 +20,10 @@ $company = $this->company;
         <tr>
             <td>Last updated on</td>
             <td><?php echo $this->escapeHtml($company->getLastUpdated()->format('r')); ?></td>
+        </tr>
+        <tr>
+            <td>Display name</td>
+            <td><?php echo $this->escapeHtml($company->getDisplayName()); ?></td>
         </tr>
         <tr>
             <td>Name</td>

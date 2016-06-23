@@ -15,6 +15,7 @@ use Zend\Form\Element\Radio;
 use Zend\Form\ElementInterface;
 use Zend\Form\FormInterface;
 use Zend\View\Helper\AbstractHelper;
+use ZourceApplication\View\Helper\AdditionalRenderer;
 
 class ContactForm extends AbstractHelper
 {
@@ -27,20 +28,34 @@ class ContactForm extends AbstractHelper
         $this->contactTypes = $contactTypes;
     }
 
-    public function __invoke(FormInterface $form, $type)
+    public function __invoke()
     {
-        $fields = $this->contactTypes[$type];
+        return $this;
+    }
 
+    public function render(FormInterface $form, $type)
+    {
         $result = '';
 
-        foreach ($fields as $fieldName => $fieldOptions) {
-            $result .= $this->renderElement($form->get($fieldName), $fieldOptions);
+        foreach ($this->contactTypes[$type] as $fieldName => $fieldOptions) {
+            $result .= $this->renderElement($form->get($fieldName), $fieldOptions, false);
         }
 
         return $result;
     }
 
-    private function renderElement(ElementInterface $element, array $fieldOptions)
+    public function renderAdditional(FormInterface $form, $type)
+    {
+        $result = '';
+
+        foreach ($this->contactTypes[$type] as $fieldName => $fieldOptions) {
+            $result .= $this->renderElement($form->get($fieldName), $fieldOptions, true);
+        }
+
+        return $result;
+    }
+
+    private function renderElement(ElementInterface $element, array $fieldOptions, $additional)
     {
         $fieldType = $this->fieldTypes[$fieldOptions['type']];
 
@@ -60,28 +75,41 @@ class ContactForm extends AbstractHelper
             $fieldOptions['form_element_options'] = [];
         }
 
-
         if (strtolower($viewHelperName) === 'formradio') {
-            $result = $this->renderRadio($element);
-        } else {
-            $plugin = $this->getView()->plugin($viewHelperName);
-
-            $result = '<div class="zui-field-group">';
-
-            if (array_key_exists('label', $fieldOptions['form_element_options'])) {
-                $result .= $this->getView()->formLabel($element);
+            if ($additional) {
+                return '';
+            } else {
+                return $this->renderRadio($element);
             }
-
-            try {
-                $result .= $plugin($element);
-            } catch (Exception $e) {
-                throw new RuntimeException(sprintf('Failed to render element "%s"', $element->getName()), null, $e);
-            }
-
-            $result .= $this->getView()->zourceFormDescription($element);
-            $result .= $this->getView()->formElementErrors($element);
-            $result .= '</div>';
         }
+
+        $plugin = $this->getView()->plugin($viewHelperName);
+
+        if ($plugin instanceof AdditionalRenderer && $additional) {
+            return $plugin->renderAdditional([
+                'element' => $element,
+                'field_type' => $fieldType,
+                'field_options' => $fieldOptions,
+            ]);
+        } elseif ($additional) {
+            return '';
+        }
+
+        $result = '<div class="zui-field-group">';
+
+        if (array_key_exists('label', $fieldOptions['form_element_options'])) {
+            $result .= $this->getView()->formLabel($element);
+        }
+
+        try {
+            $result .= $plugin->__invoke($element);
+        } catch (Exception $e) {
+            throw new RuntimeException(sprintf('Failed to render element "%s"', $element->getName()), null, $e);
+        }
+
+        $result .= $this->getView()->zourceFormDescription($element);
+        $result .= $this->getView()->formElementErrors($element);
+        $result .= '</div>';
 
         return $result;
     }

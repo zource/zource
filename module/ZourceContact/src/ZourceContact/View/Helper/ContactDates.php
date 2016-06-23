@@ -16,35 +16,6 @@ class ContactDates extends AbstractHelper
 {
     public function __invoke(ContactDatesElement $element)
     {
-        $result = '<table class="zui-table-list">';
-        $result .= '<thead>';
-        $result .= '<tr>';
-        $result .= '<th>Type</th>';
-        $result .= '<th>Date</th>';
-        $result .= '<th></th>';
-        $result .= '</tr>';
-        $result .= '</thead>';
-        $result .= '<tbody>';
-
-        for ($i = 0; $i < 5; ++$i) {
-            $result .= '<tr>';
-            $result .= '<td>';
-            $result .= '<select>';
-            $result .= '<option value="">Birthday</option>';
-            $result .= '<option value="">Deathday</option>';
-            $result .= '</select>';
-            $result .= '</td>';
-            $result .= '<td><input type="text" value="2016-06-08" /></td>';
-            $result .= '<td class="zui-text-right">';
-            $result .= '<a href="" class="zui-button zui-button-link">Edit</a> - ';
-            $result .= '<a href="" class="zui-button zui-button-link">Remove</a>';
-            $result .= '</td>';
-            $result .= '</tr>';
-        }
-
-        $result .= '</tbody>';
-        $result .= '</table>';
-
-        return $result . '<p><a href="" class="zui-button">Add</a></p>';
+        return '<p><a href="" class="zui-button">Add date</a></p>';
     }
 }

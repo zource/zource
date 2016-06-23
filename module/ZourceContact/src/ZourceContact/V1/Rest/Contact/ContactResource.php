@@ -1,11 +1,23 @@
 <?php
 namespace ZourceContact\V1\Rest\Contact;
 
+use Doctrine\ORM\EntityManager;
 use ZF\ApiProblem\ApiProblem;
 use ZF\Rest\AbstractResourceListener;
+use ZourceContact\ValueObject\ContactEntry;
 
 class ContactResource extends AbstractResourceListener
 {
+    /**
+     * @var EntityManager
+     */
+    private $entityManager;
+
+    public function __construct(EntityManager $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
+
     /**
      * Create a resource
      *
@@ -58,7 +70,7 @@ class ContactResource extends AbstractResourceListener
      */
     public function fetchAll($params = array())
     {
-        return new ApiProblem(405, 'The GET method has not been defined for collections');
+        return [];
     }
 
     /**

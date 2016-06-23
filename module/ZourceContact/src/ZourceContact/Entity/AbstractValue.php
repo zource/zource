@@ -20,6 +20,11 @@ abstract class AbstractValue
     protected $id;
 
     /**
+     * @var AbstractContact
+     */
+    protected $contact;
+
+    /**
      * @var DateTimeInterface
      */
     protected $creationDate;
@@ -34,9 +39,10 @@ abstract class AbstractValue
      *
      * @param string $type The type.
      */
-    public function __construct($type)
+    public function __construct(AbstractContact $contact, $type)
     {
         $this->id = Uuid::uuid4();
+        $this->contact = $contact;
         $this->creationDate = new DateTime();
         $this->type = $type;
     }

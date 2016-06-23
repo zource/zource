@@ -1,12 +1,13 @@
 <?php
-$this->layout('layout/page-header');
 
-$this->placeholder('layout')->pageTitle = $person->getFullName();
-$this->placeholder('layout')->pageMenu = 'view-contact';
-$this->placeholder('layout')->pageImage = $this->zourceContactAvatar()->getUrl($person->getId());
+$this->layout('layout/page-header');
 
 /** @var \ZourceContact\Entity\Person $person */
 $person = $this->person;
+
+$this->placeholder('layout')->pageTitle = $person->getDisplayName();
+$this->placeholder('layout')->pageMenu = 'view-contact';
+$this->placeholder('layout')->pageImage = $this->zourceContactAvatar()->getUrl($person->getId());
 
 ?>
 
@@ -19,6 +20,10 @@ $person = $this->person;
         <tr>
             <td>Last updated on</td>
             <td><?php echo $this->escapeHtml($person->getLastUpdated()->format('r')); ?></td>
+        </tr>
+        <tr>
+            <td>Display name</td>
+            <td><?php echo $this->escapeHtml($person->getDisplayName()); ?></td>
         </tr>
         <tr>
             <td>Gender</td>

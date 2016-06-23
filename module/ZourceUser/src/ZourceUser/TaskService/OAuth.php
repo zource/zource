@@ -9,16 +9,20 @@
 
 namespace ZourceUser\TaskService;
 
+use Doctrine\ORM\EntityManager;
 use OAuth2\Request as OAuthRequest;
 use OAuth2\Response as OAuthResponse;
 use OAuth2\Server;
+use Ramsey\Uuid\Uuid;
 use RuntimeException;
 use SimpleXMLElement;
 use Zend\Http\PhpEnvironment\Request as PhpEnvironmentRequest;
 use Zend\Http\Request as HttpRequest;
 use Zend\Http\Response as HttpResponse;
-use ZF\ApiProblem\ApiProblem;
-use ZF\ApiProblem\ApiProblemResponse;
+use ZourceUser\Entity\AccountInterface;
+use ZourceUser\Entity\Identity;
+use ZourceUser\Entity\OAuthApplication;
+use ZourceUser\Entity\OAuthAuthorizedApplication;
 
 class OAuth
 {
@@ -27,14 +31,78 @@ class OAuth
      */
     private $server;
 
-    public function __construct(Server $server)
+    /**
+     * @var EntityManager
+     */
+    private $entityManager;
+    
+    public function __construct(Server $server, EntityManager $entityManager)
     {
         $this->server = $server;
+        $this->entityManager = $entityManager;
     }
 
     public function getApplication($clientId)
     {
         return $this->server->getStorage('client')->getApplication($clientId);
+    }
+
+    public function getAccessToken(HttpRequest $httpRequest)
+    {
+        $oauthRequest = $this->buildRequest($httpRequest);
+
+        return $this->server->getAccessTokenData($oauthRequest);
+    }
+
+    public function isApplicationAuthorized(OAuthApplication $application, $identityId)
+    {
+        $qb = $this->entityManager->createQueryBuilder();
+        $qb->select('COUNT(e.application)');
+        $qb->from(OAuthAuthorizedApplication::class, 'e');
+        $qb->join(Identity::class, 'i', 'WITH', 'i.account = e.account');
+        $qb->where($qb->expr()->eq('e.application', ':application'));
+        $qb->andWhere($qb->expr()->eq('i.id', ':identity'));
+        $qb->setParameter(':application', $application->getClientId()->getBytes());
+        $qb->setParameter(':identity', Uuid::fromString($identityId)->getBytes());
+
+        return $qb->getQuery()->getSingleScalarResult() == 1;
+    }
+
+    public function authorizeApplication(OAuthApplication $application, $identityId)
+    {
+        if ($this->isApplicationAuthorized($application, $identityId)) {
+            return;
+        }
+
+        $repository = $this->entityManager->getRepository(Identity::class);
+
+        $identity = $repository->find($identityId);
+        if (!$identity) {
+            throw new RuntimeException('Invalid identity id provided.');
+        }
+
+        $account = $identity->getAccount();
+        if (!$account) {
+            throw new RuntimeException('No account found for identity.');
+        }
+
+        $authorizedAppplication = new OAuthAuthorizedApplication($account, $application, null);
+
+        $this->entityManager->persist($authorizedAppplication);
+        $this->entityManager->flush($authorizedAppplication);
+    }
+
+    public function verifyResourceRequest(HttpRequest $httpRequest)
+    {
+        $oauthRequest = $this->buildRequest($httpRequest);
+
+        $this->server->verifyResourceRequest($oauthRequest, null);
+
+        return $this->buildResponse(
+            $this->determineFormat($httpRequest),
+            new HttpResponse(),
+            $this->server->getResponse()
+        );
     }
 
     public function handleAuthorizeRequest(HttpRequest $httpRequest, HttpResponse $httpResponse, $isAuthorized, $userId)

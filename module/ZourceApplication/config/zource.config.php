@@ -16,7 +16,6 @@ use Zend\Db\Adapter\AdapterAbstractServiceFactory;
 use Zend\Form\FormAbstractServiceFactory;
 use Zend\InputFilter\InputFilterAbstractServiceFactory;
 use Zend\Log\LoggerAbstractServiceFactory;
-use Zend\ServiceManager\Proxy\LazyServiceFactory;
 use Zend\ServiceManager\Proxy\LazyServiceFactoryFactory;
 use Zend\Session\Config\ConfigInterface;
 use Zend\Session\ManagerInterface;
@@ -30,6 +29,7 @@ use Zend\Session\Validator\RemoteAddr;
 use ZF\Apigility\Admin\Module as ApigilityModule;
 use ZourceApplication\Authorization\Condition\ClassExists;
 use ZourceApplication\Authorization\Condition\Service\PluginManager as AuthorizationConditionPluginManager;
+use ZourceApplication\Doctrine\Listener\LastModified;
 use ZourceApplication\Mvc\Controller\Index;
 use ZourceApplication\Session\Service\SaveHandlerFactory;
 use ZourceApplication\Session\Service\SessionStorageFactory;
@@ -69,6 +69,13 @@ return [
             'orm_default' => [
                 'drivers' => [
                     __NAMESPACE__ => __NAMESPACE__
+                ],
+            ],
+        ],
+        'eventmanager' => [
+            'orm_default' => [
+                'subscribers' => [
+                    'Gedmo\\Timestampable\TimestampableListener',
                 ],
             ],
         ],

@@ -10,7 +10,7 @@ return array(
             'zource-contact.rest.contact' => array(
                 'type' => 'Segment',
                 'options' => array(
-                    'route' => '/contact[/:contact_id]',
+                    'route' => '/api/contacts[/:contact_id]',
                     'defaults' => array(
                         'controller' => 'ZourceContact\\V1\\Rest\\Contact\\Controller',
                     ),

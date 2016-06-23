@@ -11,6 +11,7 @@ namespace ZourceApplication\Entity;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use ZourceUser\Entity\AccountInterface;
 
 /**
@@ -39,12 +40,14 @@ class Session
     private $data;
 
     /**
+     * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime")
      * @var DateTime
      */
     private $creationDate;
 
     /**
+     * @Gedmo\Timestampable(on="update")
      * @ORM\Column(type="datetime")
      * @var DateTime
      */

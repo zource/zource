@@ -21,7 +21,8 @@
         "bacon/bacon-qr-code": "^1.0",
         "spomky-labs/otphp": "^7.0",
         "swiftmailer/swiftmailer": "^5.4",
-        "sabre/vobject": "^4.1"
+        "sabre/vobject": "^4.1",
+        "gedmo/doctrine-extensions": "^2.4"
     },
     "require-dev": {
         "zfcampus/zf-apigility-admin": "^1.4.1",

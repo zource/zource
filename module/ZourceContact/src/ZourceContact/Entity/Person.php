@@ -301,6 +301,17 @@ class Person extends AbstractContact
         $this->nickname = self::stringOrNull($nickname);
     }
 
+    public function getDisplayName()
+    {
+        $displayName = parent::getDisplayName();
+
+        if (!$displayName) {
+            $displayName = $this->getFullName();
+        }
+
+        return $displayName;
+    }
+
     /**
      * @return null|string
      */
@@ -347,16 +358,5 @@ class Person extends AbstractContact
     public function setCompany($company)
     {
         $this->company = self::stringOrNull($company);
-    }
-
-    private static function stringOrNull($value)
-    {
-        if ($value === '') {
-            $value = null;
-        } else {
-            $value = (string)$value;
-        }
-
-        return $value;
     }
 }

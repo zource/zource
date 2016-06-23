@@ -34,13 +34,18 @@ class LoggedInAs extends Label
         if (!$account) {
             throw new RuntimeException('No account available.');
         }
+
+        $contact = $account->getContact();
+        if (!$contact) {
+            throw new RuntimeException('No contact available.');
+        }
         
         $listAttr = [];
         $listAttr['role'] = 'presentation';
 
         $url = $this->getView()->url('contacts/view', [
             'type' => 'person',
-            'id' => $account->getContact()->getId()->toString(),
+            'id' => $contact->getId()->toString(),
         ]);
 
         return sprintf(
