@@ -47,7 +47,7 @@ $this->placeholder('layout')->pageImage = $this->zourceContactAvatar()->getUrl($
         </tr>
         <tr>
             <td>Notes</td>
-            <td><?php echo $this->escapeHtml($company->getNotes()); ?></td>
+            <td><?php echo nl2br($this->escapeHtml($company->getNotes())); ?></td>
         </tr>
     </tbody>
 </table>

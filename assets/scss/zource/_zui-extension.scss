@@ -1,0 +1,55 @@
+body {
+    background: $zui-footer-background-color;
+}
+
+.zui-layout-task #zource-content {
+    background-color: inherit;
+    padding-top: 40px;
+}
+
+.zui-page-header-image img {
+    height: 64px;
+    width: 64px;
+}
+
+a[disabled] {
+    pointer-events: none;
+}
+
+table > tbody > tr > td,
+table > tbody > tr > th,
+table > tfoot > tr > td,
+table > thead > tr > td,
+table > thead > tr > th {
+    vertical-align: middle;
+}
+
+.zui-field-group {
+    padding: 4px 0 4px 215px;
+
+    label {
+        margin-left: -215px;
+        width: 200px;
+    }
+}
+
+.zui-buttons-container {
+    padding: 4px 0 4px 215px;
+}
+
+fieldset.zui-group {
+    padding: 4px 0 4px 215px;
+}
+
+fieldset legend {
+    margin-left: -215px;
+    width: 200px;
+}
+
+textarea {
+    height: 150px;
+}
+
+.zui-table-list td {
+    vertical-align: top;
+}
