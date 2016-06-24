@@ -186,6 +186,7 @@ return [
             'layout/dialog' => __DIR__ . '/../view/layout/dialog.phtml',
             'layout/layout' => __DIR__ . '/../view/layout/layout.phtml',
             'layout/page-header' => __DIR__ . '/../view/layout/page-header.phtml',
+            'partial/paginator' => __DIR__ . '/../view/partial/paginator.phtml',
             'zource-application/index/index' => __DIR__ . '/../view/zource-application/index/index.phtml',
         ],
     ],

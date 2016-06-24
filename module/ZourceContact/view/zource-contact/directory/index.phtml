@@ -35,6 +35,12 @@ $this->placeholder('layout')->pageMenu = 'contacts-directory';
             <?php } ?>
         </ul>
 
-        <?php echo $this->pagination(); ?>
+        <?php
+
+        echo $this->paginationControl($this->contactsPaginator, 'sliding', 'partial/paginator', [
+            'route' => 'contacts'
+        ]);
+
+        ?>
     <?php } ?>
 </div>

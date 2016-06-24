@@ -53,6 +53,8 @@ class ContactOverview implements AdapterInterface
         }
 
         $qb->orderBy('c.displayName', 'ASC');
+        $qb->setFirstResult($offset);
+        $qb->setMaxResults($itemCountPerPage);
 
         return $qb->getQuery()->getResult();
     }

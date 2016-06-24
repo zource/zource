@@ -1,0 +1,36 @@
+<?php if ($this->pageCount): ?>
+    <div class="zui-pagination">
+        <div class="zui-pagination-primary">
+            <?php if (isset($this->previous)) { ?>
+                <a href="<?php echo $this->url($this->route); ?>?page=<?php echo $this->previous; ?>">Previous</a>
+            <?php } else { ?>
+                <a href="" class="disabled">Previous</a>
+            <?php } ?>
+
+            <?php foreach ($this->pagesInRange as $page) { ?>
+                <?php if ($page != $this->current) { ?>
+                    <a href="<?php echo $this->url($this->route); ?>?page=<?php echo $page; ?>"><?php echo $page; ?></a>
+                <?php } else { ?>
+                    <a href="<?php echo $this->url($this->route); ?>?page=<?php echo $page; ?>" class="selected"><?php echo $page; ?></a>
+                <?php } ?>
+            <?php } ?>
+
+            <?php if (isset($this->next)) { ?>
+                <a href="<?php echo $this->url($this->route); ?>?page=<?php echo $this->next; ?>">Next</a>
+            <?php } else { ?>
+                <a href="" class="disabled">Next</a>
+            <?php } ?>
+        </div>
+
+        <div class="zui-pagination-secondary">
+            <span class="zui-pagination-count">
+                <span class="zui-pagination-from"><?php echo $this->firstItemNumber; ?></span>
+                -
+                <span class="zui-pagination-till"><?php echo $this->lastItemNumber; ?></span>
+                of
+                <span class="zui-pagination-total"><?php echo $this->totalItemCount; ?></span>
+            </span>
+        </div>
+    </div>
+<?php endif; ?>
+
