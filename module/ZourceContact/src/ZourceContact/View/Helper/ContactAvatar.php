@@ -12,17 +12,23 @@ namespace ZourceContact\View\Helper;
 use Ramsey\Uuid\UuidInterface;
 use Zend\Form\Element;
 use Zend\View\Helper\AbstractHelper;
+use ZourceContact\Entity\AbstractContact;
 use ZourceContact\ValueObject\ContactEntry;
 
 class ContactAvatar extends AbstractHelper
 {
-    public function __invoke(ContactEntry $contact = null)
+    public function __invoke(AbstractContact $contact = null)
     {
         if (!$contact) {
             return $this;
         }
 
-        $src = $this->getUrl($contact->getId());
+        return $this->render($contact);
+    }
+
+    public function render(AbstractContact $contact)
+    {
+        $src = $this->getUrl($contact);
         $alt = $contact->getDisplayName();
 
         return sprintf(
@@ -32,16 +38,18 @@ class ContactAvatar extends AbstractHelper
         );
     }
 
-    public function getUrl(UuidInterface $id)
+    public function getUrl(AbstractContact $contact)
     {
-        $filePath = 'public/img/avatars/' . $id->toString();
-
-        if (is_file($filePath)) {
-            $src = $this->getView()->basePath('/img/avatars/' . $id->toString());
+        if ($contact->getAvatar()) {
+            $src = 'img/avatars/' . $contact->getAvatar() . '.png';
         } else {
-            $src = $this->getView()->basePath('/img/avatars/placeholder.png');
+            $src = 'img/avatars/' . $contact->getId()->toString() . '.png';
         }
 
-        return $src;
+        if (!is_file('public/' . $src)) {
+            $src = 'img/avatars/default.png';
+        }
+
+        return $this->getView()->basePath($src);
     }
 }

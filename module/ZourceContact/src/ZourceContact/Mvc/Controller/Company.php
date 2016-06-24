@@ -37,6 +37,8 @@ class Company extends AbstractActionController
 
     public function createAction()
     {
+        $this->contactForm->get('avatar')->setValue('building');
+
         if ($this->getRequest()->isPost()) {
             $this->contactForm->setData($this->getRequest()->getPost());
 

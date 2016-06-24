@@ -37,6 +37,11 @@ abstract class AbstractContact
     /**
      * @var string|null
      */
+    protected $avatar;
+
+    /**
+     * @var string|null
+     */
     protected $displayName;
 
     /**
@@ -106,6 +111,22 @@ abstract class AbstractContact
     public function getLastUpdated()
     {
         return $this->lastUpdated;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getAvatar()
+    {
+        return $this->avatar;
+    }
+
+    /**
+     * @param null|string $avatar
+     */
+    public function setAvatar($avatar)
+    {
+        $this->avatar = $avatar;
     }
 
     /**

@@ -31,41 +31,44 @@ class Contact
         $this->entityManager = $entityManager;
     }
 
-    public function findContact($type, $id)
+    public function find($id)
     {
-        switch ($type) {
-            case ContactEntry::TYPE_COMPANY:
-                $contact = $this->findCompany($id);
-                break;
+        try {
+            $repository = $this->entityManager->getRepository(AbstractContact::class);
 
-            case ContactEntry::TYPE_PERSON:
-                $contact = $this->findPerson($id);
-                break;
+            return $repository->find($id);
+        } catch (\Exception $e) {
 
-            default:
-                throw new RuntimeException('Invalid type provided.');
+        }
+
+        return null;
+    }
+
+    public function findCompany($id)
+    {
+        $contact = $this->find($id);
+
+        if (!$contact instanceof Company) {
+            throw new RuntimeException('No company found for this id.');
         }
 
         return $contact;
     }
 
-    public function findCompany($id)
-    {
-        $repository = $this->entityManager->getRepository(AbstractContact::class);
-
-        return $repository->find($id);
-    }
-
     public function findPerson($id)
     {
-        $repository = $this->entityManager->getRepository(Person::class);
+        $contact = $this->find($id);
 
-        return $repository->find($id);
+        if (!$contact instanceof Person) {
+            throw new RuntimeException('No person found for this id.');
+        }
+
+        return $contact;
     }
 
     public function getOverviewPaginator($filter)
     {
-        $adapter = new ContactOverview($this->entityManager->getConnection(), $filter);
+        $adapter = new ContactOverview($this->entityManager, $filter);
 
         return new Paginator($adapter);
     }
@@ -75,7 +78,7 @@ class Contact
         $company = new Company($data['name']);
 
         $hydrator = new ClassMethods();
-        $hydrator->hydrate($data, $person);
+        $hydrator->hydrate($data, $company);
 
         return $this->persistContact($company);
     }

@@ -22,7 +22,7 @@ class VCardBuilder
     public function buildCompany(Company $company)
     {
         $data = [];
-        $data['REV'] = $person->getLastUpdated()->format(self::DATE_FORMAT);
+        $data['REV'] = $company->getLastUpdated()->format(self::DATE_FORMAT);
         $data['KIND'] = 'organization';
 
         return $this->buildObject($data);

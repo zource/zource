@@ -16,8 +16,14 @@ class FormAvatar extends AbstractHelper implements AdditionalRenderer
 {
     public function __invoke(Element $element)
     {
+        $value = $element->getValue();
+
+        if (!$value) {
+            $value = 'default';
+        }
+
         $view = $this->getView();
-        $default = $view->escapeHtmlAttr($view->basePath('img/avatars/placeholder.png'));
+        $default = $view->escapeHtmlAttr($view->basePath('img/avatars/' . $value . '.png'));
 
         $id = uniqid('dialog-', false);
         $element->setOption('dialog_id', $id);
@@ -26,7 +32,7 @@ class FormAvatar extends AbstractHelper implements AdditionalRenderer
 
         $html = <<<EOT
 <div class="zource-avatar-selection zui-file-selection-trigger-container" data-zui-file-selection-trigger="#file-selection-$id">
-    <input type="hidden" name="$name" value="placeholder">
+    <input type="hidden" name="$name" value="$value">
 
     <p>
         <img src="$default" alt="Avatar" tabindex="1" class="zui-file-selection-trigger-thumb">
@@ -59,11 +65,10 @@ EOT;
             <div class="zui-dialog-panel zui-dialog-panel-no-padding">
                 <ul class="zui-file-selection-items">
 EOT;
-
-        for ($i = 0; $i < 10; ++$i) {
-            $html .= $this->renderListItem($i);
-        }
-
+        $html .= $this->renderListItem('default');
+        $html .= $this->renderListItem('building');
+        $html .= $this->renderListItem('male');
+        $html .= $this->renderListItem('female');
         $html .= <<<EOT
                 </ul>
             </div>
@@ -87,18 +92,19 @@ EOT;
         return $html;
     }
 
-    private function renderListItem($i)
+    private function renderListItem($name)
     {
         $view = $this->getView();
         $selectFile = $view->escapeHtmlAttr($view->translate('formSelectAvatarDialogSelectFile'));
-        $id = $i;
-        $path = $view->escapeHtmlAttr($view->basePath('img/avatars/placeholder.png'));
+
+        $id = $name;
+        $path = $view->escapeHtmlAttr($view->basePath('img/avatars/' . $name . '.png'));
         $thumbnail = $path;
 
 
         $html = <<<EOT
                     <li title="$selectFile">
-                        <button tabindex="1" data-zui-file-selection-id="placeholder" data-zui-file-selection-preview="$path">
+                        <button tabindex="1" data-zui-file-selection-id="$id" data-zui-file-selection-preview="$path">
                             <img src="$thumbnail" alt="$selectFile">
                         </button>
                     </li>

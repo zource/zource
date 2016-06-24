@@ -7,7 +7,7 @@ $company = $this->company;
 
 $this->placeholder('layout')->pageTitle = $company->getDisplayName();
 $this->placeholder('layout')->pageMenu = 'view-contact';
-$this->placeholder('layout')->pageImage = $this->zourceContactAvatar()->getUrl($company->getId());
+$this->placeholder('layout')->pageImage = $this->zourceContactAvatar()->getUrl($company);
 
 ?>
 

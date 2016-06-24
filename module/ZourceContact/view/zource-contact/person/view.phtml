@@ -7,7 +7,7 @@ $person = $this->person;
 
 $this->placeholder('layout')->pageTitle = $person->getDisplayName();
 $this->placeholder('layout')->pageMenu = 'view-contact';
-$this->placeholder('layout')->pageImage = $this->zourceContactAvatar()->getUrl($person->getId());
+$this->placeholder('layout')->pageImage = $this->zourceContactAvatar()->getUrl($person);
 
 ?>
 

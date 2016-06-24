@@ -45,7 +45,7 @@ class Account implements AccountInterface
     private $contact;
 
     /**
-     * @ORM\Column(type="string", length=60)
+     * @ORM\Column(type="string", length=60, nullable=true)
      * @var string|null
      */
     private $credential;

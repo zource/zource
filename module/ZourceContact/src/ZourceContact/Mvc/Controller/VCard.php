@@ -21,7 +21,7 @@ use ZourceContact\TaskService\Contact as ContactTaskService;
 use ZourceContact\TaskService\VCardBuilder;
 use ZourceContact\ValueObject\ContactEntry;
 
-class Contact extends AbstractActionController
+class VCard extends AbstractActionController
 {
     /**
      * @var ContactTaskService
@@ -33,31 +33,39 @@ class Contact extends AbstractActionController
         $this->contactService = $contactService;
     }
 
-    public function viewAction()
+    public function vCardAction()
     {
         $contact = $this->contactService->find($this->params('id'));
-
         if (!$contact) {
             return $this->notFoundAction();
         }
 
-        $viewModel = new ViewModel();
+        $builder = new VCardBuilder();
 
         switch (true) {
             case $contact instanceof Company:
-                $viewModel->setVariable('company', $contact);
-                $viewModel->setTemplate('zource-contact/company/view');
+                $vcard = $builder->buildCompany($contact);
                 break;
 
             case $contact instanceof Person:
-                $viewModel->setVariable('person', $contact);
-                $viewModel->setTemplate('zource-contact/person/view');
+                $vcard = $builder->buildPerson($contact);
                 break;
 
             default:
                 throw new RuntimeException('Invalid type provided.');
         }
 
-        return $viewModel;
+        $data = $vcard->serialize();
+
+        $response = new Response();
+        $response->setStatusCode(Response::STATUS_CODE_200);
+        $response->setContent($data);
+
+        $headers = $response->getHeaders();
+        //$headers->addHeaderLine('Content-Disposition', 'attachment; filename="' . $contact->getFullName() . '.vcf"');
+        $headers->addHeaderLine('Content-Length', strlen($data));
+        $headers->addHeaderLine('Content-Type', 'text/plain');
+
+        return $response;
     }
 }

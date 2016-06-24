@@ -1,10 +1,11 @@
 <?php
+
 $this->layout('layout/page-header');
 
 $this->placeholder('layout')->pageTitle = $this->translate('pageContactsTitle');
 $this->placeholder('layout')->pageMenu = 'contacts-directory';
-?>
 
+?>
 <div id="zource-contacts-directory">
     <?php if ($this->contactsPaginator->count() === 0) { ?>
         <div class="zui-alert">
@@ -15,10 +16,9 @@ $this->placeholder('layout')->pageMenu = 'contacts-directory';
     <?php } else { ?>
         <ul>
             <?php foreach ($this->contactsPaginator as $contact) { ?>
-                <li>
+                <li style="width: 250px;">
                     <h2>
                         <a href="<?php echo $this->url('contacts/view', [
-                            'type' => $contact->getType(),
                             'id' => $contact->getId()->toString(),
                         ]); ?>">
                             <?php echo $this->escapeHtml($contact->getDisplayName()); ?>
@@ -26,7 +26,6 @@ $this->placeholder('layout')->pageMenu = 'contacts-directory';
                     </h2>
                     <p>
                         <a href="<?php echo $this->url('contacts/view', [
-                            'type' => $contact->getType(),
                             'id' => $contact->getId()->toString(),
                         ]); ?>">
                             <?php echo $this->zourceContactAvatar($contact); ?>
@@ -35,5 +34,7 @@ $this->placeholder('layout')->pageMenu = 'contacts-directory';
                 </li>
             <?php } ?>
         </ul>
+
+        <?php echo $this->pagination(); ?>
     <?php } ?>
 </div>

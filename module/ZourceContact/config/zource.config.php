@@ -20,10 +20,12 @@ use ZourceContact\Mvc\Controller\Company as CompanyController;
 use ZourceContact\Mvc\Controller\Contact as ContactController;
 use ZourceContact\Mvc\Controller\Directory as DirectoryController;
 use ZourceContact\Mvc\Controller\Person as PersonController;
+use ZourceContact\Mvc\Controller\VCard as VCardController;
 use ZourceContact\Mvc\Controller\Service\CompanyFactory as CompanyControllerFactory;
 use ZourceContact\Mvc\Controller\Service\ContactFactory as ContactControllerFactory;
 use ZourceContact\Mvc\Controller\Service\DirectoryFactory as DirectoryControllerFactory;
 use ZourceContact\Mvc\Controller\Service\PersonFactory as PersonControllerFactory;
+use ZourceContact\Mvc\Controller\Service\VCardFactory as VCardControllerFactory;
 use ZourceContact\TaskService\Contact as ContactTaskService;
 use ZourceContact\TaskService\Service\ContactFactory as ContactTaskServiceFactory;
 use ZourceContact\ValueObject\ContactEntry;
@@ -39,6 +41,7 @@ return [
             ContactController::class => ContactControllerFactory::class,
             DirectoryController::class => DirectoryControllerFactory::class,
             PersonController::class => PersonControllerFactory::class,
+            VCardController::class => VCardControllerFactory::class,
         ],
     ],
     'doctrine' => [
@@ -55,6 +58,9 @@ return [
                     __NAMESPACE__ => __NAMESPACE__
                 ],
             ],
+        ],
+        'fixture' => [
+            __NAMESPACE__ => __DIR__ . '/../src/' . __NAMESPACE__ . '/Fixture',
         ],
     ],
     'hydrators' => [
@@ -87,7 +93,6 @@ return [
                         'options' => [
                             'route' => '/company',
                         ],
-                        'may_terminate' => true,
                         'child_routes' => [
                             'create' => [
                                 'type' => 'Literal',
@@ -126,7 +131,6 @@ return [
                         'options' => [
                             'route' => '/person',
                         ],
-                        'may_terminate' => true,
                         'child_routes' => [
                             'create' => [
                                 'type' => 'Literal',
@@ -163,36 +167,20 @@ return [
                     'view' => [
                         'type' => 'Segment',
                         'options' => [
-                            'route' => '/view/:type/:id',
+                            'route' => '/view/:id',
                             'defaults' => [
                                 'controller' => ContactController::class,
                                 'action' => 'view',
                             ],
-                            'constraints' => [
-                                'type' => 'company|person',
-                            ],
                         ],
-                        'may_terminate' => true,
-                        'child_routes' => [
-                            'activitystream' => [
-                                'type' => 'Literal',
-                                'options' => [
-                                    'route' => '/activity-stream',
-                                    'defaults' => [
-                                        'controller' => ContactController::class,
-                                        'action' => 'activityStream',
-                                    ],
-                                ],
-                            ],
-                            'vcard' => [
-                                'type' => 'Literal',
-                                'options' => [
-                                    'route' => '/vcard',
-                                    'defaults' => [
-                                        'controller' => ContactController::class,
-                                        'action' => 'vcard',
-                                    ],
-                                ],
+                    ],
+                    'vcard' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => '/vcard/:id',
+                            'defaults' => [
+                                'controller' => VCardController::class,
+                                'action' => 'vcard',
                             ],
                         ],
                     ],
@@ -827,21 +815,12 @@ return [
                         'route_reuse_matched_params' => true,
                     ],
                 ],
-                'activity' => [
+                'vcard' => [
                     'type' => 'label',
                     'priority' => 8000,
                     'options' => [
-                        'label' => 'contactViewMenuActivityStream',
-                        'route' => 'contacts/view/activitystream',
-                        'route_reuse_matched_params' => true,
-                    ],
-                ],
-                'vcard' => [
-                    'type' => 'label',
-                    'priority' => 9000,
-                    'options' => [
                         'label' => 'contactViewMenuVCard',
-                        'route' => 'contacts/view/vcard',
+                        'route' => 'contacts/vcard',
                         'route_reuse_matched_params' => true,
                     ],
                 ],

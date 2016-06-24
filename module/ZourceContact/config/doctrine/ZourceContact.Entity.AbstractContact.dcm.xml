@@ -21,6 +21,8 @@
             <gedmo:timestampable on="update" />
         </field>
 
+        <field name="avatar" type="string" nullable="true" />
+
         <field name="displayName" type="string" nullable="true" />
 
         <field name="notes" type="text" nullable="true" />

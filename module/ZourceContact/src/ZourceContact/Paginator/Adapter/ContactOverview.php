@@ -9,82 +9,74 @@
 
 namespace ZourceContact\Paginator\Adapter;
 
-use Doctrine\DBAL\Connection;
-use Ramsey\Uuid\Uuid;
+use Doctrine\ORM\EntityManager;
 use Zend\Paginator\Adapter\AdapterInterface;
-use ZourceContact\ValueObject\ContactEntry;
+use ZourceContact\Entity\AbstractContact;
+use ZourceContact\Entity\Company;
+use ZourceContact\Entity\Person;
 
 class ContactOverview implements AdapterInterface
 {
     /**
-     * @var Connection
+     * @var EntityManager
      */
-    private $connection;
+    private $entityManager;
 
     /**
      * @var string
      */
     private $filter;
 
-    public function __construct(Connection $connection, $filter = null)
+    public function __construct(EntityManager $entityManager, $filter = null)
     {
-        $this->connection = $connection;
+        $this->entityManager = $entityManager;
         $this->filter = $filter;
     }
 
     public function getItems($offset, $itemCountPerPage)
     {
-        $sql = $this->getSql();
-        $sql .= " ORDER BY display_name ASC";
-        $sql .= sprintf(" LIMIT %d, %d", $offset, $itemCountPerPage);
+        $repository = $this->entityManager->getRepository(AbstractContact::class);
 
-        $statement = $this->connection->executeQuery($sql);
-        $result = $statement->fetchAll();
+        $qb = $repository->createQueryBuilder('c');
 
-        return array_map(function ($item) {
-            return new ContactEntry(
-                $item['type'],
-                Uuid::fromBytes($item['id']),
-                $item['display_name']
-            );
-        }, $result);
+        switch ($this->filter) {
+            case 'company':
+                $qb->where($qb->expr()->isInstanceOf('c', Company::class));
+                break;
+
+            case 'person':
+                $qb->where($qb->expr()->isInstanceOf('c', Person::class));
+                break;
+
+            default:
+                break;
+        }
+
+        $qb->orderBy('c.displayName', 'ASC');
+
+        return $qb->getQuery()->getResult();
     }
 
     public function count()
     {
-        $sql = "SELECT COUNT(1) AS amount FROM (" . $this->getSql() . ") AS c";
+        $repository = $this->entityManager->getRepository(AbstractContact::class);
 
-        $statement = $this->connection->executeQuery($sql);
+        $qb = $repository->createQueryBuilder('c');
+        $qb->select('COUNT(c.id)');
 
-        return $statement->fetchColumn();
-    }
-
-    private function getSql()
-    {
         switch ($this->filter) {
-            case ContactEntry::TYPE_COMPANY:
-                $sql = $this->getCompanySql();
+            case 'company':
+                $qb->where($qb->expr()->isInstanceOf('c', Company::class));
                 break;
 
-            case ContactEntry::TYPE_PERSON:
-                $sql = $this->getPersonSql();
+            case 'person':
+                $qb->where($qb->expr()->isInstanceOf('c', Person::class));
                 break;
 
             default:
-                $sql = $this->getPersonSql() . ' UNION ' . $this->getCompanySql();
                 break;
         }
 
-        return $sql;
-    }
-
-    private function getCompanySql()
-    {
-        return "SELECT 'company' AS type, id, name AS display_name FROM contact_company";
-    }
-
-    private function getPersonSql()
-    {
-        return "SELECT 'person' AS type, id, CONCAT_WS(' ', first_name, last_name) AS display_name FROM contact_person";
+        return $qb->getQuery()->getSingleScalarResult();
     }
 }

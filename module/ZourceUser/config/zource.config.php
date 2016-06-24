@@ -186,6 +186,9 @@ return [
                 ],
             ],
         ],
+        'fixture' => [
+            __NAMESPACE__ => __DIR__ . '/../src/' . __NAMESPACE__ . '/Fixture',
+        ],
     ],
     'forms' => [
         AccountForm::class => [

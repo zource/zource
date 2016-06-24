@@ -22,7 +22,8 @@
         "spomky-labs/otphp": "^7.0",
         "swiftmailer/swiftmailer": "^5.4",
         "sabre/vobject": "^4.1",
-        "gedmo/doctrine-extensions": "^2.4"
+        "gedmo/doctrine-extensions": "^2.4",
+        "hounddog/doctrine-data-fixture-module": "dev-master"
     },
     "require-dev": {
         "zfcampus/zf-apigility-admin": "^1.4.1",
