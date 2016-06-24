@@ -62,7 +62,7 @@ class VCard extends AbstractActionController
         $response->setContent($data);
 
         $headers = $response->getHeaders();
-        //$headers->addHeaderLine('Content-Disposition', 'attachment; filename="' . $contact->getFullName() . '.vcf"');
+        $headers->addHeaderLine('Content-Disposition', 'attachment; filename="' . $contact->getDisplayName() . '.vcf"');
         $headers->addHeaderLine('Content-Length', strlen($data));
         $headers->addHeaderLine('Content-Type', 'text/plain');
 

@@ -25,6 +25,9 @@ class VCardBuilder
         $data['REV'] = $company->getLastUpdated()->format(self::DATE_FORMAT);
         $data['KIND'] = 'organization';
 
+        $data['FN'] = $company->getName();
+        $data['N'] = [$company->getName()];
+
         return $this->buildObject($data);
     }
 
@@ -32,18 +35,7 @@ class VCardBuilder
     {
         $data = [];
         $data['REV'] = $person->getLastUpdated()->format(self::DATE_FORMAT);
-        $data['FN'] = $person->getFullName();
         $data['KIND'] = 'individual';
-        $data['N'] = [$person->getFirstName(), $person->getLastName()];
-
-        //if ($person->getDateOfBirth() !== null) {
-        //    $data['BDAY'] = $person->getDateOfBirth()->format('Ymd');
-        //}
-
-        $data['BIRTHPLACE'] = '';
-        $data['DEATHDATE'] = '';
-        $data['DEATHPLACE'] = '';
-        $data['IMPP:aim'] = 'johndoe@aol.com';
 
         switch ($person->getGender()) {
             case Person::GENDER_FEMALE:
@@ -58,6 +50,18 @@ class VCardBuilder
                 break;
         }
 
+        $data['FN'] = $person->getFullName();
+        $data['N'] = [$person->getFirstName(), $person->getLastName(), null, $person->getPrefix()];
+
+        //if ($person->getDateOfBirth() !== null) {
+        //    $data['BDAY'] = $person->getDateOfBirth()->format('Ymd');
+        //}
+
+        //$data['BIRTHPLACE'] = '';
+        //$data['DEATHDATE'] = '';
+        //$data['DEATHPLACE'] = '';
+        //$data['IMPP:aim'] = 'johndoe@aol.com';
+
         if ($person->getNickname() !== null) {
             $data['NICKNAME'] = $person->getNickname();
         }
@@ -70,7 +74,7 @@ class VCardBuilder
         //    $data['ROLE'] = $person->getRole();
         //}
 
-        $data['TEL;TYPE=cell'] = '(123) 555-5832';
+        //$data['TEL;TYPE=cell'] = '(123) 555-5832';
 
         return $this->buildObject($data);
     }
