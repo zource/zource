@@ -1,15 +1,15 @@
-.gadget-column {
+.zui-gadget-column {
     @include zui-box-sizing(border-box);
 
     display: table-cell;
     vertical-align: top;
     width: 100%;
 
-    .gadget {
+    .zui-gadget {
         border: 1px solid #CCC;
         margin-bottom: 20px;
 
-        .gadget-header {
+        .zui-gadget-header {
             background-color: $zui-color-primary;
             padding: 5px;
 
@@ -23,48 +23,48 @@
     }
 }
 
-.gadget-column + .gadget-column {
+.zui-gadget-column + .zui-gadget-column {
     padding-left: 20px;
 }
 
-.gadget-1col-2col {
-    .gadget-column {
+.zui-gadget-1col-2col {
+    .zui-gadget-column {
         display: table-cell;
         vertical-align: top;
         width: 30%;
     }
 
-    .gadget-column + .gadget-column {
+    .zui-gadget-column + .zui-gadget-column {
         display: table-cell;
         vertical-align: top;
         width: 70%;
     }
 }
 
-.gadget-2col {
-    .gadget-column {
+.zui-gadget-2col {
+    .zui-gadget-column {
         display: table-cell;
         vertical-align: top;
         width: 49%;
     }
 }
 
-.gadget-2col-1col {
-    .gadget-column {
+.zui-gadget-2col-1col {
+    .zui-gadget-column {
         display: table-cell;
         vertical-align: top;
         width: 70%;
     }
 
-    .gadget-column + .gadget-column {
+    .zui-gadget-column + .zui-gadget-column {
         display: table-cell;
         vertical-align: top;
         width: 30%;
     }
 }
 
-.gadget-3col {
-    .gadget-column {
+.zui-gadget-3col {
+    .zui-gadget-column {
         display: table-cell;
         vertical-align: top;
         width: 33%;

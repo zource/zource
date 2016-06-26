@@ -35,21 +35,7 @@
                     </div>
                 </div>
 
-                <div class="zui-page-panel">
-                    <?php if (!empty($this->placeholder('layout')->pageMenu)) { ?>
-                        <div class="zui-page-sidebar zui-page-sidebar-left">
-                            <nav class="zui-navgroup zui-navgroup-vertical">
-                                <div class="zui-navgroup-inner">
-                                    <?php echo $this->zourceUiNav($this->placeholder('layout')->pageMenu); ?>
-                                </div>
-                            </nav>
-                        </div>
-                    <?php } ?>
-
-                    <div class="zui-page-content">
-                        <?php echo $this->content; ?>
-                    </div>
-                </div>
+                <?php echo $this->content; ?>
             </section>
 
             <?php echo $this->partial('partial/footer'); ?>

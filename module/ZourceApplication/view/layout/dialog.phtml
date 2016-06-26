@@ -1,64 +1,24 @@
 <?php echo $this->doctype(); ?>
 <html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <head>
+        <?php echo $this->partial('partial/head'); ?>
+    </head>
+    <body class="zui-layout-task">
 
-    <?php echo $this->headTitle('headTitle'); ?>
+        <div id="wrapper">
+            <?php echo $this->partial('partial/top-bar'); ?>
 
-    <link href="<?php echo $this->basePath('css/zource.css'); ?>" media="screen" rel="stylesheet" type="text/css">
-    <?php
-    echo $this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0');
-    echo $this->headLink(array('rel' => 'icon', 'type' => 'image/png', 'href' => $this->basePath('/img/favicon.png')));
-    echo $this->headScript();
-    ?>
-</head>
-<body class="zui-layout-task">
+            <section id="zource-content" role="main">
+                <div class="zui-page-panel">
+                    <div class="zui-page-content">
+                        <?php echo $this->content; ?>
+                    </div>
+                </div>
+            </section>
 
-<div id="wrapper">
-    <header class="zui-top-bar" id="top-bar" role="banner">
-        <nav role="navigation">
-            <div class="zui-header-primary">
-                <h1 class="zui-top-bar-logo">
-                    <a href="<?php echo $this->url('dashboard'); ?>">
-                        <?php echo $this->translate('layoutTopMenuTitle'); ?>
-                    </a>
-                </h1>
-            </div>
-
-            <?php echo $this->zourceUiNav('top-bar-primary'); ?>
-
-            <div class="zui-top-bar-secondary">
-                <?php echo $this->zourceUiNav('top-bar-secondary'); ?>
-            </div>
-        </nav>
-    </header>
-
-    <section id="zource-content" role="main">
-        <div class="zui-page-panel">
-            <div class="zui-page-content">
-                <?php echo $this->content; ?>
-            </div>
+            <?php echo $this->partial('partial/footer'); ?>
         </div>
-    </section>
 
-    <footer>
-        <ul>
-            <li><a href="http://github.com/zource"><?php echo $this->translate('layoutFooterMenuZource'); ?></a></li>
-            <li><a href="http://github.com/zource"><?php echo $this->translate('layoutFooterMenuAbout'); ?></a></li>
-            <li><a href="http://github.com/zource"><?php echo $this->translate('layoutFooterMenuHelp'); ?></a></li>
-        </ul>
-
-        <ul>
-            <li><a href="http://github.com/zource"><?php echo $this->translate('layoutFooterPoweredByLicenseOpenSource'); ?></a></li>
-        </ul>
-    </footer>
-</div>
-
-<script type="text/javascript" src="<?php echo $this->basePath('/vendor/jquery/dist/jquery.min.js'); ?>"></script>
-<script type="text/javascript" src="<?php echo $this->basePath('/vendor/jquery-ui/jquery-ui.min.js'); ?>"></script>
-<script type="text/javascript" src="<?php echo $this->basePath('/vendor/zource-zui/dist/js/zui.min.js'); ?>"></script>
-<script type="text/javascript" src="<?php echo $this->basePath('/js/zource.min.js'); ?>"></script>
-<?php echo $this->inlineScript() ?>
-</body>
+        <?php echo $this->partial('partial/scripts'); ?>
+    </body>
 </html>

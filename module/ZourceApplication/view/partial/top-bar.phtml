@@ -1,0 +1,17 @@
+<header class="zui-top-bar" id="top-bar" role="banner">
+    <nav role="navigation">
+        <div class="zui-header-primary">
+            <h1 class="zui-top-bar-logo">
+                <a href="<?php echo $this->url('dashboard'); ?>">
+                    <?php echo $this->translate('layoutTopMenuTitle'); ?>
+                </a>
+            </h1>
+        </div>
+
+        <?php echo $this->zourceUiNav('top-bar-primary'); ?>
+
+        <div class="zui-top-bar-secondary">
+            <?php echo $this->zourceUiNav('top-bar-secondary'); ?>
+        </div>
+    </nav>
+</header>

@@ -1,0 +1,326 @@
+<?php
+
+$this->layout('layout/page-structure');
+
+$this->placeholder('layout')->pageTitle = $this->translate('API Overview');
+
+?>
+
+
+<div class="zui-page-panel">
+    <div class="zui-page-sidebar zui-page-sidebar-left">
+        <nav class="zui-navgroup zui-navgroup-vertical">
+            <div class="zui-navgroup-inner">
+                <div class="zui-nav-heading"><strong>Overview</strong></div>
+
+                <ul class="zui-nav">
+                    <li role="presentation"><a href="#current-version" title="Current Version">Current Version</a></li>
+                    <li role="presentation"><a href="#schema" title="Schema">Schema</a></li>
+                    <li role="presentation"><a href="#http-errors" title="HTTP Errors">HTTP Errors</a></li>
+                    <li role="presentation"><a href="#http-redirects" title="">HTTP Redirects</a></li>
+                    <li role="presentation"><a href="#http-verbs" title="">HTTP Verbs</a></li>
+                    <li role="presentation"><a href="#authentication" title="">Authentication</a></li>
+                    <li role="presentation"><a href="#user-agent" title="">User Agent</a></li>
+                    <li role="presentation"><a href="#parameters" title="Parameters">Parameters</a></li>
+                    <li role="presentation"><a href="#dates" title="">Dates</a></li>
+                    <li role="presentation"><a href="#pagination" title="">Pagination</a></li>
+                </ul>
+
+                <div class="zui-nav-heading"><strong>API List</strong></div>
+
+                <ul class="zui-nav">
+                    <?php
+
+                    foreach ($this->apis as $api) {
+                        foreach ($api['versions'] as $version) {
+                            ?>
+                            <li role="presentation">
+                                <a href="<?php echo $this->url(
+                                    'zf-apigility/documentation',
+                                    [
+                                        'api' => $api['name'],
+                                        'version' => $version,
+                                    ]
+                                ); ?>" title="All contacts">
+                                    <?php echo $this->escapeHtml($api['name']); ?>
+                                </a>
+                            </li>
+                            <?php
+                        }
+                    }
+
+                    ?>
+                </ul>
+            </div>
+        </nav>
+    </div>
+
+    <div class="zui-page-content">
+        <p>
+            The Zource API is thoroughly documented. If you still have any problems, do not hesitate to
+            <a href="https://github.com/zource/zource/issues/new">open an issue in our issue tracker</a>.
+        </p>
+
+        <h2 id="current-version">Current Version</h2>
+
+        <p>
+            By default, all requests receive the <strong>v1</strong> version of the API.
+            We encourage you to explicitly request this version via the <code>Accept</code> header</a>.
+        </p>
+
+        <pre><code>Accept: application/vnd.zource.v1+json</code></pre>
+
+        <h2 id="schema">Schema</h2>
+
+        <p>
+            All API access should be over HTTPS, and must be accessed via <code><?php echo $this->serverUrl('/api'); ?></code>.
+            All data is sent and received as JSON.
+        </p>
+
+        <div class="zui-example">
+<pre class="zui-example-code-cli"><span class="zui-example-code-cli-command">curl -i <?php echo $this->url('zource-user.rest.account', [], [
+            'force_canonical' => true,
+        ]); ?></span>
+
+<span class="zui-example-code-cli-output">HTTP/1.1 403 Forbidden</span>
+<span class="zui-example-code-cli-output">Date: Sun, 26 Jun 2016 08:06:49 GMT</span>
+<span class="zui-example-code-cli-output">Server: Apache/2.4.18 (Fedora) PHP/5.6.22</span>
+<span class="zui-example-code-cli-output">X-Powered-By: PHP/5.6.22</span>
+<span class="zui-example-code-cli-output">Set-Cookie: zource=6n9e235ohj5vktdqu3n5q3if36; path=/</span>
+<span class="zui-example-code-cli-output">Expires: Thu, 19 Nov 1981 08:52:00 GMT</span>
+<span class="zui-example-code-cli-output">Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0</span>
+<span class="zui-example-code-cli-output">Pragma: no-cache</span>
+<span class="zui-example-code-cli-output">WWW-Authenticate: Bearer realm="Service"</span>
+<span class="zui-example-code-cli-output">Content-Length: 119</span>
+<span class="zui-example-code-cli-output">Content-Type: application/problem+json</span>
+
+<span class="zui-example-code-cli-output">{"type":"http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html","title":"Forbidden","status":403,"detail":"Forbidden"}</span>
+</pre>
+        </div>
+
+        <p>Blank fields are included as <code>null</code> instead of being omitted.</p>
+
+        <h3>Summary Representations</h3>
+
+        <p>
+            When you fetch a list of resources, the response includes a <em>subset</em> of the attributes for that
+            resource. This is the "summary" representation of the resource. (Some attributes are computationally
+            expensive for the API to provide. For performance reasons, the summary representation excludes those
+            attributes. To obtain those attributes, fetch the "detailed" representation.)
+        </p>
+
+        <p>
+            <strong>Example</strong>: When you get a list of accounts, you get the summary representation of each
+            account. Here, we fetch the list of accounts that exist within this application:
+        </p>
+
+        <pre><code>GET <?php echo $this->url('zource-user.rest.account'); ?></code></pre>
+
+        <h3>Detailed Representations</h3>
+
+        <p>
+            When you fetch an individual resource, the response typically includes <em>all</em> attributes for that
+            resource. This is the "detailed" representation of the resource. (Note that authorization sometimes
+            influences the amount of detail included in the representation.)
+        </p>
+
+        <p>
+            <strong>Example</strong>: When you get an individual account, you get the detailed representation of the
+            account. Here, we fetch your account:
+        </p>
+
+        <pre><code>GET <?php echo $this->url('zource-user.rest.account', [
+            'account_id' => $this->identity(),
+        ]); ?></code></pre>
+
+        <p>
+            The documentation provides an example response for each API method. The example response illustrates all
+            attributes that are returned by that method.
+        </p>
+
+        <h2 id="http-errors">HTTP Errors</h2>
+
+        <p>
+            There are three possible types of client errors on API calls that receive request bodies:
+        </p>
+
+        <ol>
+            <li>
+                <p>
+                    Sending invalid JSON will result in a <code>400 Bad Request</code> response.
+                </p>
+
+                <div class="zui-example">
+
+<pre class="zui-example-code-cli"><code><span class="zui-example-code-cli-command">curl -i -H "Content-Type: application/json" -X POST -d "{" <?php echo $this->url('zource-contact.rest.contact', [], [
+            'force_canonical' => true,
+        ]); ?></span>
+
+<span class="zui-example-code-cli-output">HTTP/1.1 400 Bad Request</span>
+<span class="zui-example-code-cli-output">Content-Length: 161</span>
+<span class="zui-example-code-cli-output">Content-Type: application/problem+json</span>
+
+<span class="zui-example-code-cli-output">{"type":"http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html","title":"Bad Request","status":400,"detail":"JSON decoding error: Syntax error, malformed JSON"}</span>
+</code></pre>
+
+                </div>
+            </li>
+            <li>
+                <p>
+                    Sending the wrong type of JSON values will result in a <code>400 Bad Request</code> response.
+                </p>
+            </li>
+            <li>
+                <p>
+                    Sending invalid fields will result in a <code>422 Unprocessable Entity</code> response.
+                </p>
+            </li>
+        </ol>
+
+        <h2 id="http-redirects">HTTP Redirects</h2>
+
+        <p>
+            The API uses HTTP redirection where appropriate. Clients should assume that any request may result in a
+            redirection. Receiving an HTTP redirection is <em>not</em> an error and clients should follow that redirect.
+            Redirect responses will have a <code>Location</code> header field which contains the URI of the resource to
+            which the client should repeat the requests.
+        </p>
+
+        <table class="zui-table">
+            <thead>
+                <tr>
+                    <th>Status Code</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>301</code></td>
+                    <td>Permanent redirection. The URI you used to make the request has been superseded by the one
+                        specified in
+                        the <code>Location</code> header field. This and all future requests to this resource should be
+                        directed
+                        to the new URI.
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <code>302</code>, <code>307</code>
+                    </td>
+                    <td>Temporary redirection. The request should be repeated verbatim to the URI specified in the
+                        <code>Location</code>
+                        header field but clients should continue to use the original URI for future requests.
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p>
+            Other redirection status codes may be used in accordance with the HTTP 1.1 spec.
+        </p>
+
+        <h2 id="http-verbs">HTTP Verbs</h2>
+
+        <p>
+            The API uses the appropriate HTTP verbs for each action.
+        </p>
+
+        <table class="zui-table zui-table-striped">
+            <thead>
+                <tr>
+                    <th>Verb</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>HEAD</code></td>
+                    <td>Can be issued against any resource to get just the HTTP header info.</td>
+                </tr>
+                <tr>
+                    <td><code>GET</code></td>
+                    <td>Used for retrieving resources.</td>
+                </tr>
+                <tr>
+                    <td><code>POST</code></td>
+                    <td>Used for creating resources.</td>
+                </tr>
+                <tr>
+                    <td><code>PATCH</code></td>
+                    <td>
+                        Used for updating resources with partial JSON data. For instance, an Issue resource has
+                        <code>title</code> and <code>body</code> attributes. A PATCH request may accept one or more of
+                        the attributes to update the resource.
+                    </td>
+                </tr>
+                <tr>
+                    <td><code>PUT</code></td>
+                    <td>
+                        Used for replacing resources or collections. For <code>PUT</code> requests with no
+                        <code>body</code> attribute, be sure to set the <code>Content-Length</code> header to zero.
+                    </td>
+                </tr>
+                <tr>
+                    <td><code>DELETE</code></td>
+                    <td>Used for deleting resources.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2 id="authentication">Authentication</h2>
+
+        <p>
+            Authentication should be done using OAuth2. Requests that require authentication will return
+            a <code>403 Forbidden</code> error. Failed authentication will result in a <code>401 Unauthorized</code>
+            error.
+        </p>
+
+        <h2 id="user-agent">User Agent</h2>
+
+        <p>
+            All API requests MUST include a valid <code>User-Agent</code> header. Requests with no
+            <code>User-Agent</code> header will be rejected. We request that you use the name of your application, for
+            the <code>User-Agent</code> header value.
+        </p>
+
+        <p>
+            If you provide an invalid <code>User-Agent</code> header, you will receive a <code>403 Forbidden</code>
+            response.
+        </p>
+
+        <h2 id="parameters">Parameters</h2>
+
+        <p>
+            Many API methods take optional parameters. For GET requests, any parameters not specified as a segment in
+            the path can be passed as an HTTP query string parameter.
+        </p>
+
+        <p>
+            For POST, PATCH, PUT, and DELETE requests, parameters not included in the URL should be encoded as JSON
+            with a Content-Type of 'application/json':
+        </p>
+
+        <h2>Dates</h2>
+
+        <p>All timestamps are returned in ISO 8601 format:</p>
+
+        <pre><code>YYYY-MM-DDTHH:MM:SSZ</code></pre>
+
+        <h2 id="pagination">Pagination</h2>
+
+        <p>
+            Requests that return multiple items will be paginated to 25 items by default. You can specify further pages 
+            with the <code>?page</code> parameter. For some resources, you can also set a custom page size up to 100 
+            with the <code>?page_size</code> parameter.
+        </p>
+
+        <pre class="zui-example-code-cli"><span class="zui-example-code-cli-command">curl '<?php echo $this->url('zource-contact.rest.contact', [], [
+                    'force_canonical' => true,
+                ]); ?>?page=3&page_size=10'</span></pre>
+
+        <p>
+            Note that page numbering is 1-based and that omitting the <code>?page</code>
+            parameter will return the first page.
+        </p>
+    </div>
+</div>

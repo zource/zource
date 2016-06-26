@@ -41,7 +41,7 @@ return array(
             ),
             'collection_query_whitelist' => array(),
             'page_size' => 25,
-            'page_size_param' => null,
+            'page_size_param' => 'page_size',
             'entity_class' => 'ZourceContact\\V1\\Rest\\Contact\\ContactEntity',
             'collection_class' => 'ZourceContact\\V1\\Rest\\Contact\\ContactCollection',
             'service_name' => 'Contact',

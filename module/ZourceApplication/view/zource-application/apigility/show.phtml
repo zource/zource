@@ -1,0 +1,13 @@
+<?php
+
+if ($this->type === 'apiList') {
+    echo $this->render('zource-application/apigility/list', $this->vars());
+}
+
+if ($this->type === 'api') {
+    echo $this->render('zource-application/apigility/api', ['api' => $this->documentation]);
+}
+
+if ($this->type === 'service') {
+    echo $this->render('zource-application/apigility/service', ['service' => $this->documentation]);
+}

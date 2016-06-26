@@ -19,6 +19,7 @@ return [
     'layoutFooterMenuZource' => 'Zource',
     'layoutFooterMenuAbout' => 'About',
     'layoutFooterMenuHelp' => 'Help',
+    'layoutFooterMenuApi' => 'API',
 
     'layoutFooterPoweredByLicenseOpenSource' => 'Powered by a free open source license for Zource.',
 
