@@ -4,11 +4,9 @@ $service = $this->service;
 $generalFields = $service->getFields('input_filter');
 $httpMethodFields = $service->getFields($operation->getHttpMethod());
 $isEntity = $this->isEntity;
-$collapseParent = $this->escapeHtmlAttr(sprintf('ops-accordion-%s-%s%s', $service->getName(), $operation->getHttpMethod(), ($isEntity ? '-entity' : '')));
-$collapseId = $this->escapeHtmlAttr(sprintf('ops-collapse-%s-%s%s', $service->getName(), $operation->getHttpMethod(), ($isEntity ? '-entity' : '')));
 ?>
 
-<h3>
+<h3 id="<?php echo $this->escapeHtmlAttr($isEntity ? 'entity-' . $operation->getHttpMethod() : 'collection-' . $operation->getHttpMethod()); ?>">
     <span><?php echo $this->escapeHtml($operation->getHttpMethod()) ?></span>
 
     <?php echo $this->escapeHtml($isEntity ? $service->getRoute() : $this->agServicePath($service, $operation)); ?>

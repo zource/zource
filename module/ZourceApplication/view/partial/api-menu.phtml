@@ -1,0 +1,108 @@
+<div class="zui-page-sidebar zui-page-sidebar-left">
+    <nav class="zui-navgroup zui-navgroup-vertical">
+        <div class="zui-navgroup-inner">
+            <div class="zui-nav-heading"><strong>Overview</strong></div>
+
+            <ul class="zui-nav">
+                <li role="presentation"><a href="<?php echo $this->url('zf-apigility/documentation'); ?>#current-version" title="Current Version">Current Version</a></li>
+                <li role="presentation"><a href="<?php echo $this->url('zf-apigility/documentation'); ?>#schema" title="Schema">Schema</a></li>
+                <li role="presentation"><a href="<?php echo $this->url('zf-apigility/documentation'); ?>#http-errors" title="HTTP Errors">HTTP Errors</a></li>
+                <li role="presentation"><a href="<?php echo $this->url('zf-apigility/documentation'); ?>#http-redirects" title="">HTTP Redirects</a></li>
+                <li role="presentation"><a href="<?php echo $this->url('zf-apigility/documentation'); ?>#http-verbs" title="">HTTP Verbs</a></li>
+                <li role="presentation"><a href="<?php echo $this->url('zf-apigility/documentation'); ?>#authentication" title="">Authentication</a></li>
+                <li role="presentation"><a href="<?php echo $this->url('zf-apigility/documentation'); ?>#user-agent" title="">User Agent</a></li>
+                <li role="presentation"><a href="<?php echo $this->url('zf-apigility/documentation'); ?>#parameters" title="Parameters">Parameters</a></li>
+                <li role="presentation"><a href="<?php echo $this->url('zf-apigility/documentation'); ?>#dates" title="">Dates</a></li>
+                <li role="presentation"><a href="<?php echo $this->url('zf-apigility/documentation'); ?>#pagination" title="">Pagination</a></li>
+            </ul>
+
+            <?php if (isset($this->apis)) { ?>
+                <div class="zui-nav-heading"><strong>API List</strong></div>
+
+                <ul class="zui-nav">
+                    <?php
+
+                    foreach ($this->apis as $api) {
+                        foreach ($api['versions'] as $version) {
+                            ?>
+                            <li role="presentation">
+                                <a href="<?php echo $this->url(
+                                    'zf-apigility/documentation',
+                                    [
+                                        'api' => $api['name'],
+                                        'version' => $version,
+                                    ]
+                                ); ?>" title="All contacts">
+                                    <?php echo $this->escapeHtml($api['name']); ?>
+                                </a>
+                            </li>
+                            <?php
+                        }
+                    }
+
+                    ?>
+                </ul>
+            <?php } elseif ($this->documentation instanceof \ZF\Apigility\Documentation\Api) { ?>
+                <div class="zui-nav-heading"><strong>API Services</strong></div>
+
+                <ul class="zui-nav">
+                    <?php foreach ($this->documentation->getServices() as $service) { ?>
+                        <li role="presentation">
+                            <a href="<?php echo $this->url('zf-apigility/documentation',
+                                [
+                                    'api' => $this->documentation->getName(),
+                                    'version' => $this->documentation->getVersion(),
+                                    'service' => $service->getName(),
+                                ]
+                            ); ?>" title="<?php echo $this->escapeHtmlAttr($service->getName()); ?>">
+                                <?php echo $this->escapeHtml($service->getName()); ?>
+                            </a>
+                        </li>
+                    <?php } ?>
+                </ul>
+            <?php } elseif ($this->documentation instanceof \ZF\Apigility\Documentation\Service) { ?>
+                <div class="zui-nav-heading"><strong>API Services</strong></div>
+
+                <ul class="zui-nav">
+                    <?php foreach ($this->documentation->getApi()->getServices() as $service) { ?>
+                        <li role="presentation">
+                            <a href="<?php echo $this->url('zf-apigility/documentation',
+                                [
+                                    'api' => $this->documentation->getApi()->getName(),
+                                    'version' => $this->documentation->getApi()->getVersion(),
+                                    'service' => $service->getName(),
+                                ]
+                            ); ?>" title="<?php echo $this->escapeHtmlAttr($service->getName()); ?>">
+                                <?php echo $this->escapeHtml($service->getName()); ?>
+                            </a>
+                        </li>
+                    <?php } ?>
+                </ul>
+
+                <div class="zui-nav-heading"><strong>Collection Operations</strong></div>
+
+                <ul class="zui-nav">
+                    <?php foreach ($this->documentation->getOperations() as $operation) { ?>
+                        <li role="presentation">
+                            <a href="#collection-<?php echo $this->escapeHtmlAttr($operation->getHttpMethod()); ?>" title="<?php echo $this->escapeHtmlAttr($operation->getHttpMethod()); ?>">
+                                <?php echo $this->escapeHtml($operation->getHttpMethod()); ?>
+                            </a>
+                        </li>
+                    <?php } ?>
+                </ul>
+
+                <div class="zui-nav-heading"><strong>Entity Operations</strong></div>
+
+                <ul class="zui-nav">
+                    <?php foreach ($this->documentation->getEntityOperations() as $operation) { ?>
+                        <li role="presentation">
+                            <a href="#entity-<?php echo $this->escapeHtmlAttr($operation->getHttpMethod()); ?>" title="<?php echo $this->escapeHtmlAttr($operation->getHttpMethod()); ?>">
+                                <?php echo $this->escapeHtml($operation->getHttpMethod()); ?>
+                            </a>
+                        </li>
+                    <?php } ?>
+                </ul>
+            <?php } ?>
+        </div>
+    </nav>
+</div>

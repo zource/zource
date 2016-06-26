@@ -187,6 +187,7 @@ return [
             'layout/layout' => __DIR__ . '/../view/layout/layout.phtml',
             'layout/page-header' => __DIR__ . '/../view/layout/page-header.phtml',
             'layout/page-structure' => __DIR__ . '/../view/layout/page-structure.phtml',
+            'partial/api-menu' => __DIR__ . '/../view/partial/api-menu.phtml',
             'partial/footer' => __DIR__ . '/../view/partial/footer.phtml',
             'partial/head' => __DIR__ . '/../view/partial/head.phtml',
             'partial/paginator' => __DIR__ . '/../view/partial/paginator.phtml',

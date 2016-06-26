@@ -2,8 +2,6 @@
 
 $api = $this->api;
 
-$this->layout('layout/page-header');
-
 $this->placeholder('layout')->pageTitle = $api->getName() . ' (v' . $this->escapeHtml($api->getVersion()) . ')';
 
 foreach ($api->getServices() as $service) {

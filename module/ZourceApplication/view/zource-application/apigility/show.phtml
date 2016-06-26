@@ -1,13 +1,29 @@
 <?php
 
-if ($this->type === 'apiList') {
-    echo $this->render('zource-application/apigility/list', $this->vars());
-}
+$this->layout('layout/page-structure');
 
-if ($this->type === 'api') {
-    echo $this->render('zource-application/apigility/api', ['api' => $this->documentation]);
-}
+$this->placeholder('layout')->pageTitle = $this->translate('API Overview');
 
-if ($this->type === 'service') {
-    echo $this->render('zource-application/apigility/service', ['service' => $this->documentation]);
-}
+?>
+
+<div class="zui-page-panel">
+    <?php echo $this->partial('partial/api-menu'); ?>
+
+    <div class="zui-page-content">
+        <?php
+
+        if ($this->type === 'apiList') {
+            echo $this->render('zource-application/apigility/list', $this->vars());
+        }
+
+        if ($this->type === 'api') {
+            echo $this->render('zource-application/apigility/api', ['api' => $this->documentation]);
+        }
+
+        if ($this->type === 'service') {
+            echo $this->render('zource-application/apigility/service', ['service' => $this->documentation]);
+        }
+
+        ?>
+    </div>
+</div>
