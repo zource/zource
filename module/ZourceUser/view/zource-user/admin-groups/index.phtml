@@ -1,0 +1,40 @@
+<?php
+
+$this->layout('layout/page-header');
+
+$this->placeholder('layout')->pageTitle = $this->translate('pageAdminTitle');
+$this->placeholder('layout')->pageMenu = 'admin-users';
+$this->placeholder('layout')->pageNavGroupPrimary = 'admin-navgroup';
+
+?>
+
+<h2>Groups</h2>
+
+<?php if (count($this->groups) === 0) { ?>
+    <div class="zui-alert">
+        <p>
+            No groups found.
+        </p>
+    </div>
+<?php } else { ?>
+<table class="zui-table zui-table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Operations</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Role</td>
+            <td>This is a role.</td>
+            <td>
+                <a href="">Edit</a>
+                -
+                <a href="">Delete</a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<?php } ?>

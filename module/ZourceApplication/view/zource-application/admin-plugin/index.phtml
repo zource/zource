@@ -1,0 +1,71 @@
+<?php
+
+$this->layout('layout/page-header');
+
+$this->placeholder('layout')->pageTitle = $this->translate('pageAdminTitle');
+$this->placeholder('layout')->pageMenu = 'admin-system';
+$this->placeholder('layout')->pageNavGroupPrimary = 'admin-navgroup';
+
+$this->installForm->setAttribute('action', $this->url('admin/system/plugins'));
+$this->installForm->setAttribute('method', 'post');
+$this->installForm->prepare();
+
+?>
+
+<h2><?php echo $this->translate('pageAdminTitlePlugin'); ?></h2>
+
+<?php if (count($this->plugins) !== 0) { ?>
+<table class="zui-table zui-table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Version</th>
+            <th class="zui-text-right">Operations</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($this->plugins as $plugin) { ?>
+        <tr>
+            <td>
+                <?php echo $this->escapeHtml($plugin->getName()); ?><br />
+                <small><?php echo $this->escapeHtml($plugin->getDescription()); ?></small>
+            </td>
+            <td><?php echo $this->escapeHtml($plugin->getVersion()); ?></td>
+            <td class="zui-text-right">
+                <a href="<?php echo $this->url('admin/system/plugins/update', [
+                    'id' => $plugin->getId(),
+                ]); ?>">Update</a>
+                -
+                <a href="<?php echo $this->url('admin/system/plugins/uninstall', [
+                    'id' => $plugin->getId(),
+                ]); ?>">Uninstall</a>
+            </td>
+        </tr>
+        <?php } ?>
+    </tbody>
+</table>
+<?php } else { ?>
+    <p>
+        No plugins installed.
+    </p>
+<?php } ?>
+
+<h3>Install Plugin</h3>
+
+<?php echo $this->form()->openTag($this->installForm); ?>
+    <?php echo $this->formHidden($this->installForm->get('token')); ?>
+
+    <div class="zui-field-group">
+        <?php echo $this->formLabel($this->installForm->get('name')); ?>
+        <?php echo $this->formText($this->installForm->get('name')); ?>
+        <?php echo $this->zourceFormDescription($this->installForm->get('name')); ?>
+        <?php echo $this->formElementErrors($this->installForm->get('name')); ?>
+    </div>
+
+    <div class="zui-buttons-container">
+        <div class="zui-buttons">
+            <?php echo $this->formSubmit($this->installForm->get('submit')); ?>
+        </div>
+    </div>
+<?php echo $this->form()->closeTag(); ?>
+

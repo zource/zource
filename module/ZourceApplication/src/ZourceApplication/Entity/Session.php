@@ -14,60 +14,45 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use ZourceUser\Entity\AccountInterface;
 
-/**
- * @ORM\Entity
- * @ORM\Table(name="application_session")
- */
 class Session
 {
     /**
-     * @ORM\Id
-     * @ORM\Column(type="string", length=32)
      * @var string
      */
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="ZourceUser\Entity\AccountInterface")
      * @var AccountInterface|null
      */
     private $account;
 
     /**
-     * @ORM\Column(type="text")
      * @var string
      */
     private $data;
 
     /**
-     * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(type="datetime")
      * @var DateTime
      */
     private $creationDate;
 
     /**
-     * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(type="datetime")
      * @var DateTime
      */
     private $lastModified;
 
     /**
-     * @ORM\Column(type="integer")
      * @var int
      */
     private $lifetime;
 
     /**
-     * @ORM\Column(type="string")
      * @var string
      */
     private $userAgent;
 
     /**
      * TODO: We can probably save the IP address in a more friendly way like an integer?
-     * @ORM\Column(type="string", length=15)
      * @var string
      */
     private $remoteAddress;

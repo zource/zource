@@ -1,0 +1,34 @@
+<?php
+
+$this->layout('layout/page-header');
+
+$this->placeholder('layout')->pageTitle = $this->translate('pageAdminTitle');
+$this->placeholder('layout')->pageMenu = 'admin-users';
+$this->placeholder('layout')->pageNavGroupPrimary = 'admin-navgroup';
+
+$this->accountForm->setAttribute('action', $this->url('admin/usermanagement/accounts/update', [
+    'id' => $this->role->getId(),
+]));
+$this->accountForm->setAttribute('method', 'post');
+
+?>
+
+<h2>Update Account</h2>
+
+<?php echo $this->form()->openTag($this->accountForm); ?>
+<?php echo $this->formHidden($this->accountForm->get('token')); ?>
+
+<div class="zui-field-group">
+    <?php echo $this->formLabel($this->accountForm->get('name')); ?>
+    <?php echo $this->formText($this->accountForm->get('name')); ?>
+    <?php echo $this->zourceFormDescription($this->accountForm->get('name')); ?>
+    <?php echo $this->formElementErrors($this->accountForm->get('name')); ?>
+</div>
+
+<div class="zui-buttons-container">
+    <div class="zui-buttons">
+        <input type="submit" value="Save">
+    </div>
+</div>
+
+<?php echo $this->form()->closeTag(); ?>

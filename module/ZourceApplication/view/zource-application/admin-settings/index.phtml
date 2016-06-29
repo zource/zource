@@ -1,0 +1,32 @@
+<?php
+
+$this->layout('layout/page-header');
+
+$this->placeholder('layout')->pageTitle = $this->translate('pageAdminTitle');
+$this->placeholder('layout')->pageMenu = 'admin-system';
+$this->placeholder('layout')->pageNavGroupPrimary = 'admin-navgroup';
+
+$this->settingsForm->setAttribute('action', $this->url('admin/system/settings'));
+$this->settingsForm->setAttribute('method', 'post');
+$this->settingsForm->prepare();
+
+?>
+
+<h2><?php echo $this->translate('pageAdminTitleSettings'); ?></h2>
+
+<?php echo $this->form()->openTag($this->settingsForm); ?>
+<?php echo $this->formHidden($this->settingsForm->get('token')); ?>
+
+<div class="zui-field-group">
+    <?php echo $this->formLabel($this->settingsForm->get('applicationTitle')); ?>
+    <?php echo $this->formText($this->settingsForm->get('applicationTitle')); ?>
+    <?php echo $this->zourceFormDescription($this->settingsForm->get('applicationTitle')); ?>
+    <?php echo $this->formElementErrors($this->settingsForm->get('applicationTitle')); ?>
+</div>
+
+<div class="zui-buttons-container">
+    <div class="zui-buttons">
+        <?php echo $this->formSubmit($this->settingsForm->get('submit')); ?>
+    </div>
+</div>
+<?php echo $this->form()->closeTag(); ?>

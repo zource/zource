@@ -4,16 +4,27 @@
             <div class="zui-nav-heading"><strong>Overview</strong></div>
 
             <ul class="zui-nav">
-                <li role="presentation"><a href="<?php echo $this->url('zf-apigility/documentation'); ?>#current-version" title="Current Version">Current Version</a></li>
-                <li role="presentation"><a href="<?php echo $this->url('zf-apigility/documentation'); ?>#schema" title="Schema">Schema</a></li>
-                <li role="presentation"><a href="<?php echo $this->url('zf-apigility/documentation'); ?>#http-errors" title="HTTP Errors">HTTP Errors</a></li>
-                <li role="presentation"><a href="<?php echo $this->url('zf-apigility/documentation'); ?>#http-redirects" title="">HTTP Redirects</a></li>
-                <li role="presentation"><a href="<?php echo $this->url('zf-apigility/documentation'); ?>#http-verbs" title="">HTTP Verbs</a></li>
-                <li role="presentation"><a href="<?php echo $this->url('zf-apigility/documentation'); ?>#authentication" title="">Authentication</a></li>
-                <li role="presentation"><a href="<?php echo $this->url('zf-apigility/documentation'); ?>#user-agent" title="">User Agent</a></li>
-                <li role="presentation"><a href="<?php echo $this->url('zf-apigility/documentation'); ?>#parameters" title="Parameters">Parameters</a></li>
-                <li role="presentation"><a href="<?php echo $this->url('zf-apigility/documentation'); ?>#dates" title="">Dates</a></li>
-                <li role="presentation"><a href="<?php echo $this->url('zf-apigility/documentation'); ?>#pagination" title="">Pagination</a></li>
+                <li role="presentation"><a
+                        href="<?php echo $this->url('zf-apigility/documentation'); ?>#current-version"
+                        title="Current Version">Current Version</a></li>
+                <li role="presentation"><a href="<?php echo $this->url('zf-apigility/documentation'); ?>#schema"
+                                           title="Schema">Schema</a></li>
+                <li role="presentation"><a href="<?php echo $this->url('zf-apigility/documentation'); ?>#http-errors"
+                                           title="HTTP Errors">HTTP Errors</a></li>
+                <li role="presentation"><a href="<?php echo $this->url('zf-apigility/documentation'); ?>#http-redirects"
+                                           title="">HTTP Redirects</a></li>
+                <li role="presentation"><a href="<?php echo $this->url('zf-apigility/documentation'); ?>#http-verbs"
+                                           title="">HTTP Verbs</a></li>
+                <li role="presentation"><a href="<?php echo $this->url('zf-apigility/documentation'); ?>#authentication"
+                                           title="">Authentication</a></li>
+                <li role="presentation"><a href="<?php echo $this->url('zf-apigility/documentation'); ?>#user-agent"
+                                           title="">User Agent</a></li>
+                <li role="presentation"><a href="<?php echo $this->url('zf-apigility/documentation'); ?>#parameters"
+                                           title="Parameters">Parameters</a></li>
+                <li role="presentation"><a href="<?php echo $this->url('zf-apigility/documentation'); ?>#dates"
+                                           title="">Dates</a></li>
+                <li role="presentation"><a href="<?php echo $this->url('zf-apigility/documentation'); ?>#pagination"
+                                           title="">Pagination</a></li>
             </ul>
 
             <?php if (isset($this->apis)) { ?>
@@ -79,29 +90,35 @@
                     <?php } ?>
                 </ul>
 
-                <div class="zui-nav-heading"><strong>Collection Operations</strong></div>
+                <?php if ($this->documentation->getOperations()) { ?>
+                    <div class="zui-nav-heading"><strong>Collection Operations</strong></div>
 
-                <ul class="zui-nav">
-                    <?php foreach ($this->documentation->getOperations() as $operation) { ?>
-                        <li role="presentation">
-                            <a href="#collection-<?php echo $this->escapeHtmlAttr($operation->getHttpMethod()); ?>" title="<?php echo $this->escapeHtmlAttr($operation->getHttpMethod()); ?>">
-                                <?php echo $this->escapeHtml($operation->getHttpMethod()); ?>
-                            </a>
-                        </li>
-                    <?php } ?>
-                </ul>
+                    <ul class="zui-nav">
+                        <?php foreach ($this->documentation->getOperations() as $operation) { ?>
+                            <li role="presentation">
+                                <a href="#collection-<?php echo $this->escapeHtmlAttr($operation->getHttpMethod()); ?>"
+                                   title="<?php echo $this->escapeHtmlAttr($operation->getHttpMethod()); ?>">
+                                    <?php echo $this->escapeHtml($operation->getHttpMethod()); ?>
+                                </a>
+                            </li>
+                        <?php } ?>
+                    </ul>
+                <?php } ?>
 
-                <div class="zui-nav-heading"><strong>Entity Operations</strong></div>
+                <?php if ($this->documentation->getEntityOperations()) { ?>
+                    <div class="zui-nav-heading"><strong>Entity Operations</strong></div>
 
-                <ul class="zui-nav">
-                    <?php foreach ($this->documentation->getEntityOperations() as $operation) { ?>
-                        <li role="presentation">
-                            <a href="#entity-<?php echo $this->escapeHtmlAttr($operation->getHttpMethod()); ?>" title="<?php echo $this->escapeHtmlAttr($operation->getHttpMethod()); ?>">
-                                <?php echo $this->escapeHtml($operation->getHttpMethod()); ?>
-                            </a>
-                        </li>
-                    <?php } ?>
-                </ul>
+                    <ul class="zui-nav">
+                        <?php foreach ($this->documentation->getEntityOperations() as $operation) { ?>
+                            <li role="presentation">
+                                <a href="#entity-<?php echo $this->escapeHtmlAttr($operation->getHttpMethod()); ?>"
+                                   title="<?php echo $this->escapeHtmlAttr($operation->getHttpMethod()); ?>">
+                                    <?php echo $this->escapeHtml($operation->getHttpMethod()); ?>
+                                </a>
+                            </li>
+                        <?php } ?>
+                    </ul>
+                <?php } ?>
             <?php } ?>
         </div>
     </nav>

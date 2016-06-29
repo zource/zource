@@ -1,0 +1,55 @@
+<?php
+
+$this->layout('layout/page-header');
+
+$this->placeholder('layout')->pageTitle = $this->translate('pageAdminTitle');
+$this->placeholder('layout')->pageMenu = 'admin-users';
+$this->placeholder('layout')->pageNavGroupPrimary = 'admin-navgroup';
+
+?>
+
+<div class="zui-toolbar">
+    <div class="zui-toolbar-primary">
+        <h2>Roles</h2>
+
+    </div>
+
+    <div class="zui-toolbar-secondary">
+        <div class="zui-button-group">
+            <a href="<?php echo $this->url('admin/usermanagement/roles/create'); ?>" class="zui-button">Create</a>
+        </div>
+    </div>
+</div>
+
+<?php if (count($this->roles) === 0) { ?>
+    <div class="zui-alert">
+        <p>
+            No roles found.
+        </p>
+    </div>
+<?php } else { ?>
+<table class="zui-table zui-table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th class="zui-text-right">Operations</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($this->roles as $role) { ?>
+        <tr>
+            <td><?php echo $this->escapeHtml($role->getName()); ?></td>
+            <td class="zui-text-right">
+                <a href="<?php echo $this->url('admin/usermanagement/roles/update', [
+                    'id' => $role->getId(),
+                ]); ?>">Update</a>
+                -
+                <a href="<?php echo $this->url('admin/usermanagement/roles/delete', [
+                    'id' => $role->getId(),
+                ]); ?>">Delete</a>
+            </td>
+        </tr>
+        <?php } ?>
+    </tbody>
+</table>
+<?php } ?>

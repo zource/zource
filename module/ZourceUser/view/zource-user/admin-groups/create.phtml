@@ -1,0 +1,32 @@
+<?php
+
+$this->layout('layout/page-header');
+
+$this->placeholder('layout')->pageTitle = $this->translate('pageAdminTitle');
+$this->placeholder('layout')->pageMenu = 'admin-users';
+$this->placeholder('layout')->pageNavGroupPrimary = 'admin-navgroup';
+
+$this->groupForm->setAttribute('action', $this->url());
+$this->groupForm->setAttribute('method', 'post');
+
+?>
+
+<h2>Create Account</h2>
+
+<?php echo $this->form()->openTag($this->groupForm); ?>
+<?php echo $this->formHidden($this->groupForm->get('token')); ?>
+
+<div class="zui-field-group">
+    <?php echo $this->formLabel($this->groupForm->get('name')); ?>
+    <?php echo $this->formText($this->groupForm->get('name')); ?>
+    <?php echo $this->zourceFormDescription($this->groupForm->get('name')); ?>
+    <?php echo $this->formElementErrors($this->groupForm->get('name')); ?>
+</div>
+
+<div class="zui-buttons-container">
+    <div class="zui-buttons">
+        <input type="submit" value="Save">
+    </div>
+</div>
+
+<?php echo $this->form()->closeTag(); ?>

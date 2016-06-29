@@ -24,6 +24,7 @@ use ZourceUser\Entity\Identity as IdentityEntity;
 use ZourceUser\Entity\IdentityInterface;
 use ZourceUser\Form\Account as AccountForm;
 use ZourceUser\Form\AddEmail as AddEmailForm;
+use ZourceUser\Form\AdminRole;
 use ZourceUser\Form\Authenticate as AuthenticateForm;
 use ZourceUser\Form\ChangeIdentity as ChangeIdentityForm;
 use ZourceUser\Form\CreateApplication as CreateApplicationForm;
@@ -44,6 +45,9 @@ use ZourceUser\InputFilter\Service\AuthenticateFactory as AuthenticateInputFilte
 use ZourceUser\InputFilter\VerifyCode as VerifyCodeInputFilter;
 use ZourceUser\InputFilter\VerifyEmail as VerifyEmailInputFilter;
 use ZourceUser\Mvc\Controller\Account;
+use ZourceUser\Mvc\Controller\AdminAccounts as AdminAccountsController;
+use ZourceUser\Mvc\Controller\AdminGroups as AdminGroupsController;
+use ZourceUser\Mvc\Controller\AdminRoles as AdminRolesController;
 use ZourceUser\Mvc\Controller\Application;
 use ZourceUser\Mvc\Controller\Authenticate;
 use ZourceUser\Mvc\Controller\Console as ConsoleController;
@@ -58,6 +62,9 @@ use ZourceUser\Mvc\Controller\RecoveryCodes;
 use ZourceUser\Mvc\Controller\Request;
 use ZourceUser\Mvc\Controller\Security;
 use ZourceUser\Mvc\Controller\Service\AccountFactory;
+use ZourceUser\Mvc\Controller\Service\AdminAccountsFactory;
+use ZourceUser\Mvc\Controller\Service\AdminGroupsFactory;
+use ZourceUser\Mvc\Controller\Service\AdminRolesFactory;
 use ZourceUser\Mvc\Controller\Service\ApplicationFactory;
 use ZourceUser\Mvc\Controller\Service\AuthenticateFactory;
 use ZourceUser\Mvc\Controller\Service\ConsoleFactory as ConsoleControllerFactory;
@@ -74,10 +81,12 @@ use ZourceUser\TaskService\Application as ApplicationService;
 use ZourceUser\TaskService\Email as EmailTaskService;
 use ZourceUser\TaskService\OAuth as OAuthTaskService;
 use ZourceUser\TaskService\PasswordChanger;
+use ZourceUser\TaskService\Roles;
 use ZourceUser\TaskService\Service\ApplicationFactory as ApplicationServiceFactory;
 use ZourceUser\TaskService\Service\EmailFactory as EmailTaskServiceFactory;
 use ZourceUser\TaskService\Service\OAuthFactory as OAuthTaskServiceFactory;
 use ZourceUser\TaskService\Service\PasswordChangerFactory;
+use ZourceUser\TaskService\Service\RolesFactory;
 use ZourceUser\TaskService\Service\TwoFactorAuthenticationFactory as TwoFactorAuthenticationServiceFactory;
 use ZourceUser\TaskService\TwoFactorAuthentication as TwoFactorAuthenticationService;
 use ZourceUser\UI\Navigation\Item\LoggedInAs;
@@ -144,6 +153,9 @@ return [
     'controllers' => [
         'factories' => [
             Account::class => AccountFactory::class,
+            AdminAccountsController::class => AdminAccountsFactory::class,
+            AdminGroupsController::class => AdminGroupsFactory::class,
+            AdminRolesController::class => AdminRolesFactory::class,
             Application::class => ApplicationFactory::class,
             Authenticate::class => AuthenticateFactory::class,
             ConsoleController::class => ConsoleControllerFactory::class,
@@ -200,6 +212,21 @@ return [
             'type' => AddEmailForm::class,
             'hydrator' => 'ClassMethods',
             'input_filter' => AddEmailInputFilter::class,
+        ],
+        Form\AdminAccount::class => [
+            'type' => Form\AdminGroup::class,
+            'hydrator' => 'ClassMethods',
+            'input_filter' => InputFilter\AdminAccount::class,
+        ],
+        Form\AdminGroup::class => [
+            'type' => Form\AdminGroup::class,
+            'hydrator' => 'ClassMethods',
+            'input_filter' => InputFilter\AdminGroup::class,
+        ],
+        AdminRole::class => [
+            'type' => AdminRole::class,
+            'hydrator' => 'ClassMethods',
+            'input_filter' => InputFilter\AdminRole::class,
         ],
         AuthenticateForm::class => [
             'type' => AuthenticateForm::class,
@@ -259,12 +286,149 @@ return [
             ProfileInputFilter::class => ProfileInputFilter::class,
             RequestPasswordInputFilter::class => RequestPasswordInputFilter::class,
             ResetPasswordInputFilter::class => ResetPasswordInputFilter::class,
+            InputFilter\Role::class => InputFilter\Role::class,
             VerifyCodeInputFilter::class => VerifyCodeInputFilter::class,
             VerifyEmailInputFilter::class => VerifyEmailInputFilter::class,
         ],
     ],
     'router' => [
         'routes' => [
+            'admin' => [
+                'type' => 'Literal',
+                'options' => [
+                    'route' => '/administration',
+                ],
+                'child_routes' => [
+                    'usermanagement' => [
+                        'type' => 'Literal',
+                        'options' => [
+                            'route' => '/usermanagement',
+                        ],
+                        'child_routes' => [
+                            'accounts' => [
+                                'type' => 'Literal',
+                                'options' => [
+                                    'route' => '/accounts',
+                                    'defaults' => [
+                                        'controller' => AdminAccountsController::class,
+                                        'action' => 'index',
+                                    ],
+                                ],
+                                'may_terminate' => true,
+                                'child_routes' => [
+                                    'create' => [
+                                        'type' => 'Literal',
+                                        'options' => [
+                                            'route' => '/create',
+                                            'defaults' => [
+                                                'action' => 'create',
+                                            ],
+                                        ],
+                                    ],
+                                    'update' => [
+                                        'type' => 'Segment',
+                                        'options' => [
+                                            'route' => '/update/:id',
+                                            'defaults' => [
+                                                'action' => 'update',
+                                            ],
+                                        ],
+                                    ],
+                                    'delete' => [
+                                        'type' => 'Segment',
+                                        'options' => [
+                                            'route' => '/delete/:id',
+                                            'defaults' => [
+                                                'action' => 'delete',
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                            'groups' => [
+                                'type' => 'Literal',
+                                'options' => [
+                                    'route' => '/groups',
+                                    'defaults' => [
+                                        'controller' => AdminGroupsController::class,
+                                        'action' => 'index',
+                                    ],
+                                ],
+                                'may_terminate' => true,
+                                'child_routes' => [
+                                    'create' => [
+                                        'type' => 'Literal',
+                                        'options' => [
+                                            'route' => '/create',
+                                            'defaults' => [
+                                                'action' => 'create',
+                                            ],
+                                        ],
+                                    ],
+                                    'update' => [
+                                        'type' => 'Segment',
+                                        'options' => [
+                                            'route' => '/update/:id',
+                                            'defaults' => [
+                                                'action' => 'update',
+                                            ],
+                                        ],
+                                    ],
+                                    'delete' => [
+                                        'type' => 'Segment',
+                                        'options' => [
+                                            'route' => '/delete/:id',
+                                            'defaults' => [
+                                                'action' => 'delete',
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                            'roles' => [
+                                'type' => 'Literal',
+                                'options' => [
+                                    'route' => '/roles',
+                                    'defaults' => [
+                                        'controller' => AdminRolesController::class,
+                                        'action' => 'index',
+                                    ],
+                                ],
+                                'may_terminate' => true,
+                                'child_routes' => [
+                                    'create' => [
+                                        'type' => 'Literal',
+                                        'options' => [
+                                            'route' => '/create',
+                                            'defaults' => [
+                                                'action' => 'create',
+                                            ],
+                                        ],
+                                    ],
+                                    'update' => [
+                                        'type' => 'Segment',
+                                        'options' => [
+                                            'route' => '/update/:id',
+                                            'defaults' => [
+                                                'action' => 'update',
+                                            ],
+                                        ],
+                                    ],
+                                    'delete' => [
+                                        'type' => 'Segment',
+                                        'options' => [
+                                            'route' => '/delete/:id',
+                                            'defaults' => [
+                                                'action' => 'delete',
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
             'login' => [
                 'type' => 'Literal',
                 'options' => [
@@ -604,11 +768,13 @@ return [
     ],
     'service_manager' => [
         'factories' => [
+            TaskService\Account::class => TaskService\Service\AccountFactory::class,
             AuthenticationService::class => AuthenticationServiceFactory::class,
             ApplicationService::class => ApplicationServiceFactory::class,
             EmailTaskService::class => EmailTaskServiceFactory::class,
             OAuthTaskService::class => OAuthTaskServiceFactory::class,
             PasswordChanger::class => PasswordChangerFactory::class,
+            Roles::class => RolesFactory::class,
             Storage::class => StorageFactory::class,
             TwoFactorAuthenticationService::class => TwoFactorAuthenticationServiceFactory::class,
         ],
@@ -639,6 +805,13 @@ return [
     'view_manager' => [
         'template_map' => [
             'zource-user/account/index' => __DIR__ . '/../view/zource-user/account/index.phtml',
+            'zource-user/admin-accounts/create' => __DIR__ . '/../view/zource-user/admin-accounts/create.phtml',
+            'zource-user/admin-accounts/index' => __DIR__ . '/../view/zource-user/admin-accounts/index.phtml',
+            'zource-user/admin-accounts/update' => __DIR__ . '/../view/zource-user/admin-accounts/update.phtml',
+            'zource-user/admin-groups/index' => __DIR__ . '/../view/zource-user/admin-groups/index.phtml',
+            'zource-user/admin-roles/create' => __DIR__ . '/../view/zource-user/admin-roles/create.phtml',
+            'zource-user/admin-roles/index' => __DIR__ . '/../view/zource-user/admin-roles/index.phtml',
+            'zource-user/admin-roles/update' => __DIR__ . '/../view/zource-user/admin-roles/update.phtml',
             'zource-user/application/index' => __DIR__ . '/../view/zource-user/application/index.phtml',
             'zource-user/authenticate/login' => __DIR__ . '/../view/zource-user/authenticate/login.phtml',
             'zource-user/authenticate/login-tfa' => __DIR__ . '/../view/zource-user/authenticate/login-tfa.phtml',
@@ -677,12 +850,58 @@ return [
             'request/password' => false,
             'request/reset-password' => false,
             'settings/*' => true,
-            'zf-apigility/*' => false,
         ],
         'routes' => [
         ],
     ],
     'zource_nav' => [
+        'admin-navgroup' => [
+            'items' => [
+                'users' => [
+                    'type' => 'label',
+                    'priority' => 2000,
+                    'options' => [
+                        'label' => 'Users',
+                        'route' => 'admin/usermanagement/accounts',
+                    ],
+                ],
+            ],
+        ],
+        'admin-users' => [
+            'items' => [
+                'header-manage' => [
+                    'type' => 'header',
+                    'priority' => 1000,
+                    'options' => [
+                        'label' => 'User Management',
+                    ],
+                ],
+                'accounts' => [
+                    'type' => 'label',
+                    'priority' => 2000,
+                    'options' => [
+                        'label' => 'Accounts',
+                        'route' => 'admin/usermanagement/accounts',
+                    ],
+                ],
+                'groups' => [
+                    'type' => 'label',
+                    'priority' => 3000,
+                    'options' => [
+                        'label' => 'Groups',
+                        'route' => 'admin/usermanagement/groups',
+                    ],
+                ],
+                'roles' => [
+                    'type' => 'label',
+                    'priority' => 4000,
+                    'options' => [
+                        'label' => 'Roles',
+                        'route' => 'admin/usermanagement/roles',
+                    ],
+                ],
+            ],
+        ],
         'top-bar-secondary' => [
             'items' => [
                 'login' => [
@@ -700,9 +919,21 @@ return [
                         ],
                     ],
                 ],
+                'admin' => [
+                    'child_items' => [
+                        'users' => [
+                            'type' => 'label',
+                            'priority' => 300,
+                            'options' => [
+                                'label' => 'topBarAdministrationMenuUsers',
+                                'route' => 'admin/usermanagement/accounts',
+                            ],
+                        ],
+                    ],
+                ],
                 'profile' => [
                     'type' => 'dropdown',
-                    'priority' => 1000,
+                    'priority' => 5000,
                     'options' => [
                         'label' => 'layoutTopMenuProfile',
                         'route' => 'dashboard',

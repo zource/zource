@@ -1,30 +1,65 @@
 <?php
 
 $service = $this->service;
-$entityOperations = $service->getEntityOperations();
+
+if ($this->showDetails === null) {
+    $this->showDetails = true;
+}
 
 ?>
 
-<h2 class="panel-title"><?php echo $this->escapeHtml($service->getName()) ?></h2>
+<h2><a href="<?php echo $this->url('zf-apigility/documentation',
+    [
+        'api' => $this->service->getApi()->getName(),
+        'version' => $this->service->getApi()->getVersion(),
+        'service' => $service->getName(),
+    ]
+); ?>"><?php echo $this->escapeHtml($service->getName()) ?></a></h2>
 
 <p>
     <?php echo $this->escapeHtml($service->getDescription()) ?>
 </p>
 
-<?php foreach ($service->getOperations() as $operation) {
-    echo $this->render('zource-application/apigility/operation', array(
-        'operation' => $operation,
-        'service' => $service,
-        'isEntity' => false,
-    ));
-} ?>
+<?php
 
-<?php if ($entityOperations) {
-    foreach ($entityOperations as $j => $operation) {
-        echo $this->render('zource-application/apigility/operation', array(
+if (!$this->showDetails) {
+    echo '<ul>';
+    foreach ($service->getOperations() as $operation) {
+        echo sprintf(
+            '<li><span>%s</span> %s</li>',
+            $this->escapeHtml($operation->getHttpMethod()),
+            $this->escapeHtml($this->agServicePath($service, $operation))
+        );
+    }
+    echo '</ul>';
+
+    if ($service->getEntityOperations()) {
+        echo '<ul>';
+        foreach ($service->getEntityOperations() as $operation) {
+            echo sprintf(
+                '<li><span>%s</span> %s</li>',
+                $this->escapeHtml($operation->getHttpMethod()),
+                $this->escapeHtml($service->getRoute())
+            );
+        }
+        echo '</ul>';
+    }
+} else {
+    foreach ($service->getOperations() as $operation) {
+        echo $this->render('zource-application/apigility/operation', [
             'operation' => $operation,
             'service' => $service,
-            'isEntity' => true,
-        ));
+            'isEntity' => false,
+        ]);
     }
-} ?>
+
+    if ($service->getEntityOperations()) {
+        foreach ($service->getEntityOperations() as $j => $operation) {
+            echo $this->render('zource-application/apigility/operation', [
+                'operation' => $operation,
+                'service' => $service,
+                'isEntity' => true,
+            ]);
+        }
+    }
+}

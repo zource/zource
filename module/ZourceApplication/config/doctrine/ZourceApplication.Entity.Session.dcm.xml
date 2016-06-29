@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xmlns:gedmo="http://gediminasm.org/schemas/orm/doctrine-extensions-mapping"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
+    <entity name="ZourceApplication\Entity\Session" table="application_session">
+        <id name="id" type="string" length="32" />
+
+        <field name="creationDate" type="datetime">
+            <gedmo:timestampable on="create" />
+        </field>
+
+        <field name="lastModified" type="datetime">
+            <gedmo:timestampable on="update" />
+        </field>
+
+        <field name="data" type="text" />
+        <field name="lifetime" type="integer" />
+        <field name="userAgent" type="string" />
+
+        <!-- TODO: Store the IP address as an integer -->
+        <field name="remoteAddress" type="string" length="15" />
+
+        <many-to-one target-entity="ZourceUser\Entity\AccountInterface" field="account" fetch="EAGER">
+            <join-column on-delete="CASCADE" />
+        </many-to-one>
+    </entity>
+</doctrine-mapping>

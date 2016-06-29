@@ -7,15 +7,17 @@
  * @license https://raw.githubusercontent.com/zource/zource/master/LICENSE MIT
  */
 
-namespace ZourceApplication\Mvc\Controller;
+namespace ZourceApplication\InputFilter;
 
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
+use Zend\InputFilter\InputFilter;
 
-class Index extends AbstractActionController
+class ApplicationSettings extends InputFilter
 {
-    public function indexAction()
+    public function init()
     {
-        return new ViewModel();
+        $this->add([
+            'name' => 'applicationTitle',
+            'required' => true,
+        ]);
     }
 }

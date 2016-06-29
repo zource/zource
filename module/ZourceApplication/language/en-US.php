@@ -8,10 +8,16 @@
  */
 
 return [
+    'formSelectAvatarDialogTitle' => 'Select Avatar',
+    'formSelectAvatarDialogDescription' => 'Click on the thumbnail to select the avatar.',
+    'formSelectAvatarDialogButtonCancel' => 'Cancel',
+    'formSelectAvatarDialogSelectFile' => 'Select this file',
+
     'headTitle' => 'Zource',
 
     'layoutTopMenuTitle' => 'Zource',
 
+    'layoutTopMenuAdministration' => 'Administration',
     'layoutTopMenuDashboards' => 'Dashboards',
     'layoutTopMenuDashboardsAvailable' => 'Available',
     'layoutTopMenuDashboardsManage' => 'Manage',
@@ -31,10 +37,13 @@ return [
 
     'pageDashboardTitle' => 'Dashboard',
 
+    'pageAdminTitle' => 'Administration',
+    'pageAdminTitlePlugin' => 'Plugins',
+    'pageAdminTitleSettings' => 'Settings',
+
     'pageUserSettingsTitle' => 'Settings',
 
-    'formSelectAvatarDialogTitle' => 'Select Avatar',
-    'formSelectAvatarDialogDescription' => 'Click on the thumbnail to select the avatar.',
-    'formSelectAvatarDialogButtonCancel' => 'Cancel',
-    'formSelectAvatarDialogSelectFile' => 'Select this file',
+    'topBarAdministrationMenuHeader' => 'Administration',
+    'topBarAdministrationMenuSystem' => 'System',
+    'topBarAdministrationMenuUsers' => 'Users',
 ];

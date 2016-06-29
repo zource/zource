@@ -18,7 +18,7 @@ $isEntity = $this->isEntity;
 
 <?php if (!empty($generalFields) || !empty($httpMethodFields)): ?>
     <h4>Fields</h4>
-    <table class="table table-striped table-bordered">
+    <table class="zui-table zui-table-striped zui-table-bordered">
         <thead>
             <tr>
                 <th>Field</th>
@@ -60,97 +60,91 @@ $isEntity = $this->isEntity;
     </table>
 <?php endif ?>
 
-<div class="panel-info">
-    <div class="panel-heading"><h4 class="panel-title">Request</h4></div>
+<h4>Request</h4>
 
-    <div class="panel-body">
-        <h4>Headers</h4>
+<div class="panel-body">
+    <h5>Headers</h5>
 
-        <table class="zui-table zui-table-striped zui-table-list">
-            <thead>
-                <tr>
-                    <th>Header</th>
-                    <th>Value</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Accept</td>
-                    <td class="list-group"><?php echo $this->agAcceptHeaders($service, $this) ?></td>
-                </tr>
-                <?php if (in_array($operation->getHttpMethod(), array('POST', 'PUT', 'PATCH'))): ?>
-                    <tr>
-                        <td>Content-Type</td>
-                        <td class="list-group"><?php echo $this->agContentTypeHeaders($service, $this) ?></td>
-                    </tr>
-                <?php endif ?>
-                <?php if ($operation->requiresAuthorization()): ?>
-                    <tr>
-                        <td>Authorization</td>
-                        <td class="text-muted">HTTP Basic, HTTP Digest, or OAuth2 Bearer token (check
-                            API provider for details)
-                        </td>
-                    </tr>
-                <?php endif ?>
-        </table>
-
-        <?php if (!in_array($operation->getHttpMethod(), array('GET', 'DELETE'))): ?>
-            <h4>Body</h4>
-            <pre class="pre-scrollable"><?php echo $operation->getRequestDescription() ?></pre>
-        <?php endif ?>
-    </div>
-</div>
-
-<div class="panel-info">
-    <h3 class="panel-title">Response</h3>
-
-    <div class="panel-body">
-        <h4>Status Codes</h4>
-
-        <table class="zui-table zui-table-striped zui-table-list">
-            <thead>
-                <tr>
-                    <th>Code</th>
-                    <th>Message</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($operation->getResponseStatusCodes() as $statusCode) { ?>
-                    <tr>
-                        <td><span
-                                class="zui-status zui-status-subtle"><?php echo $this->escapeHtml($statusCode['code']); ?></span>
-                        </td>
-                        <td><?php echo $this->escapeHtml($statusCode['message']); ?></td>
-                    </tr>
-                <?php } ?>
-            </tbody>
-        </table>
-
-        <h4>Headers</h4>
-
-        <table class="zui-table zui-table-striped zui-table-list">
-            <thead>
-                <tr>
-                    <th>Header</th>
-                    <th>Value</th>
-                </tr>
-            </thead>
-            <tbody>
+    <table class="zui-table zui-table-striped zui-table-list zui-table-bordered">
+        <thead>
+            <tr>
+                <th>Header</th>
+                <th>Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Accept</td>
+                <td class="list-group"><?php echo $this->agAcceptHeaders($service, $this) ?></td>
+            </tr>
+            <?php if (in_array($operation->getHttpMethod(), array('POST', 'PUT', 'PATCH'))): ?>
                 <tr>
                     <td>Content-Type</td>
-                    <td class="list-group"><?php echo $this->agAcceptHeaders($service, $this) ?></td>
+                    <td class="list-group"><?php echo $this->agContentTypeHeaders($service, $this) ?></td>
                 </tr>
+            <?php endif ?>
+            <?php if ($operation->requiresAuthorization()): ?>
                 <tr>
-                    <td>Allow</td>
-                    <td class="text-muted">Comma-separated list of all HTTP methods allowed</td>
+                    <td>Authorization</td>
+                    <td class="text-muted">HTTP Basic, HTTP Digest, or OAuth2 Bearer token (check
+                        API provider for details)
+                    </td>
                 </tr>
-        </table>
+            <?php endif ?>
+    </table>
 
-        <?php if ($operation->getHttpMethod() !== 'DELETE'): ?>
-            <h4>Body</h4>
-            <p>
-            <pre><?php echo $operation->getResponseDescription() ?></pre>
-            </p>
-        <?php endif ?>
-    </div>
+    <?php if (!in_array($operation->getHttpMethod(), array('GET', 'DELETE'))): ?>
+        <h5>Body</h5>
+        <pre class="pre-scrollable"><?php echo $operation->getRequestDescription() ?></pre>
+    <?php endif ?>
 </div>
+
+<h4>Response</h4>
+
+
+<h5>Status Codes</h5>
+
+<table class="zui-table zui-table-striped zui-table-list zui-table-bordered">
+    <thead>
+        <tr>
+            <th>Code</th>
+            <th>Message</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($operation->getResponseStatusCodes() as $statusCode) { ?>
+            <tr>
+                <td><span
+                        class="zui-status zui-status-subtle"><?php echo $this->escapeHtml($statusCode['code']); ?></span>
+                </td>
+                <td><?php echo $this->escapeHtml($statusCode['message']); ?></td>
+            </tr>
+        <?php } ?>
+    </tbody>
+</table>
+
+<h4>Headers</h4>
+
+<table class="zui-table zui-table-striped zui-table-list zui-table-bordered">
+    <thead>
+        <tr>
+            <th>Header</th>
+            <th>Value</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Content-Type</td>
+            <td class="list-group"><?php echo $this->agAcceptHeaders($service, $this) ?></td>
+        </tr>
+        <tr>
+            <td>Allow</td>
+            <td class="text-muted">Comma-separated list of all HTTP methods allowed</td>
+        </tr>
+</table>
+
+<?php if ($operation->getHttpMethod() !== 'DELETE'): ?>
+    <h5>Body</h5>
+
+    <pre><?php echo $operation->getResponseDescription(); ?></pre>
+<?php endif ?>

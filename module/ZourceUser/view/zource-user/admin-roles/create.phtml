@@ -1,0 +1,32 @@
+<?php
+
+$this->layout('layout/page-header');
+
+$this->placeholder('layout')->pageTitle = $this->translate('pageAdminTitle');
+$this->placeholder('layout')->pageMenu = 'admin-users';
+$this->placeholder('layout')->pageNavGroupPrimary = 'admin-navgroup';
+
+$this->roleForm->setAttribute('action', $this->url());
+$this->roleForm->setAttribute('method', 'post');
+
+?>
+
+<h2>Create Role</h2>
+
+<?php echo $this->form()->openTag($this->roleForm); ?>
+<?php echo $this->formHidden($this->roleForm->get('token')); ?>
+
+<div class="zui-field-group">
+    <?php echo $this->formLabel($this->roleForm->get('name')); ?>
+    <?php echo $this->formText($this->roleForm->get('name')); ?>
+    <?php echo $this->zourceFormDescription($this->roleForm->get('name')); ?>
+    <?php echo $this->formElementErrors($this->roleForm->get('name')); ?>
+</div>
+
+<div class="zui-buttons-container">
+    <div class="zui-buttons">
+        <input type="submit" value="Save">
+    </div>
+</div>
+
+<?php echo $this->form()->closeTag(); ?>

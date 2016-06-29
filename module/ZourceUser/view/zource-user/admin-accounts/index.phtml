@@ -1,0 +1,55 @@
+<?php
+
+$this->layout('layout/page-header');
+
+$this->placeholder('layout')->pageTitle = $this->translate('pageAdminTitle');
+$this->placeholder('layout')->pageMenu = 'admin-users';
+$this->placeholder('layout')->pageNavGroupPrimary = 'admin-navgroup';
+
+?>
+
+<div class="zui-toolbar">
+    <div class="zui-toolbar-primary">
+        <h2>Accounts</h2>
+
+    </div>
+
+    <div class="zui-toolbar-secondary">
+        <div class="zui-button-group">
+            <a href="<?php echo $this->url('admin/usermanagement/accounts/create'); ?>" class="zui-button">Create</a>
+        </div>
+    </div>
+</div>
+
+<?php if (count($this->accounts) === 0) { ?>
+    <div class="zui-alert">
+        <p>
+            No accounts found.
+        </p>
+    </div>
+<?php } else { ?>
+<table class="zui-table zui-table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th class="zui-text-right">Operations</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($this->accounts as $account) { ?>
+            <tr>
+                <td><?php echo $this->escapeHtml($account->getContact()->getDisplayName()); ?></td>
+                <td class="zui-text-right">
+                    <a href="<?php echo $this->url('admin/usermanagement/accounts/update', [
+                        'id' => $account->getId(),
+                    ]); ?>">Update</a>
+                    -
+                    <a href="<?php echo $this->url('admin/usermanagement/accounts/delete', [
+                        'id' => $account->getId(),
+                    ]); ?>">Delete</a>
+                </td>
+            </tr>
+        <?php } ?>
+    </tbody>
+</table>
+<?php } ?>

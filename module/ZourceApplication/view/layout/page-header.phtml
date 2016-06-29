@@ -35,6 +35,32 @@
                     </div>
                 </div>
 
+                <?php if (isset($this->placeholder('layout')->pageNavGroupPrimary) ||
+                          isset($this->placeholder('layout')->pageNavGroupSecondary)) { ?>
+                <nav class="zui-navgroup zui-navgroup-horizontal">
+                    <div class="zui-navgroup-inner">
+                        <div class="zui-navgroup-primary">
+                            <?php
+
+                            if (isset($this->placeholder('layout')->pageNavGroupPrimary)) {
+                                echo $this->zourceUiNav($this->placeholder('layout')->pageNavGroupPrimary);
+                            }
+
+                            ?>
+                        </div>
+                        <div class="zui-navgroup-secondary">
+                            <?php
+
+                            if (isset($this->placeholder('layout')->pageNavGroupSeconcdary)) {
+                                echo $this->zourceUiNav($this->placeholder('layout')->pageNavGroupSecondary);
+                            }
+
+                            ?>
+                        </div>
+                    </div>
+                </nav>
+                <?php } ?>
+
                 <div class="zui-page-panel">
                     <?php if (!empty($this->placeholder('layout')->pageMenu)) { ?>
                         <div class="zui-page-sidebar zui-page-sidebar-left">

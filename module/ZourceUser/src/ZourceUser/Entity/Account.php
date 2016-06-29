@@ -16,7 +16,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 use ZourceContact\Entity\Person;
-use ZourceUser\Entity\Email;
 
 /**
  * @ORM\Entity
