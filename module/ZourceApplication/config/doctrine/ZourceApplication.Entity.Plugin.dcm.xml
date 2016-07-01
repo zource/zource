@@ -16,6 +16,7 @@
 
         <field name="name" type="string" />
         <field name="description" type="string" nullable="true" />
-        <field name="version" type="string" />
+        <field name="namespaces" type="array" />
+        <field name="active" type="boolean" />
     </entity>
 </doctrine-mapping>

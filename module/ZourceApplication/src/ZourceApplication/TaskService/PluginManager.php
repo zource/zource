@@ -10,9 +10,12 @@
 namespace ZourceApplication\TaskService;
 
 use Doctrine\ORM\EntityManager;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 use RuntimeException;
-use Symfony\Component\Process\Process;
-use Symfony\Component\Process\ProcessUtils;
+use Zend\Http\Request;
+use Zend\Math\Rand;
+use ZipArchive;
 use ZourceApplication\Entity\Plugin;
 
 class PluginManager
@@ -36,6 +39,24 @@ class PluginManager
         ]);
     }
 
+    public function activatePlugin(Plugin $plugin)
+    {
+        $plugin->setActive(true);
+
+        $this->entityManager->flush($plugin);
+
+        $this->updateAutoloader();
+    }
+
+    public function deactivatePlugin(Plugin $plugin)
+    {
+        $plugin->setActive(false);
+
+        $this->entityManager->flush($plugin);
+
+        $this->updateAutoloader();
+    }
+
     public function getPlugin($id)
     {
         $repository = $this->entityManager->getRepository(Plugin::class);
@@ -50,93 +71,170 @@ class PluginManager
         return $repository->findAll();
     }
 
-    public function install($name)
+    public function installExternal($path)
     {
-        $plugin = $this->getPluginByName($name);
+        if (is_dir($path)) {
+            $this->installDirectory($path);
+        } else {
+            // Download the file
+            $this->downloadFile($path);
+        }
+    }
+
+    public function installFile($file)
+    {
+        $zip = new ZipArchive();
+
+        if ($zip->open($file) !== true) {
+            unlink($file);
+            throw new RuntimeException('Failed to extract the plugin ' . $file);
+        }
+
+        $pluginInfoContent = $zip->getFromName('zource-plugin.json');
+        if ($pluginInfoContent === false) {
+            unlink($file);
+            throw new RuntimeException('Invalid plugin provided, missing the file zource-plugin.json');
+        }
+
+        $pluginInfo = $this->createPluginInfo($pluginInfoContent);
+        $pluginDirectory = 'data/plugins/' . $pluginInfo['name'];
+
+        $zip->extractTo($pluginDirectory);
+        $zip->close();
+
+        return $this->installDirectory($pluginDirectory);
+    }
+
+    private function installDirectory($path)
+    {
+        $pluginJsonFile = $path . '/zource-plugin.json';
+        if (!is_file($pluginJsonFile)) {
+            throw new RuntimeException('The plugin is invalid, missing plugin.json');
+        }
+
+        $pluginJsonFileContent = file_get_contents($pluginJsonFile);
+        $pluginJsonFileData = $this->createPluginInfo($pluginJsonFileContent);
+
+        $plugin = $this->getPluginByName($pluginJsonFileData['name']);
         if ($plugin) {
             return;
         }
 
-        $process = $this->getProcess(
-            sprintf(
-                'composer require --no-progress --sort-packages --prefer-dist %s',
-                ProcessUtils::escapeArgument($name)
-            )
-        );
-        $process->start();
-        $process->wait();
+        $plugin = new Plugin($pluginJsonFileData['name'], (array)$pluginJsonFileData['namespaces']);
+        $plugin->setActive(true);
 
-        if (strpos($process->getErrorOutput(), 'Nothing to install or update') !== false) {
-            $info = $this->parsePluginInfo($name);
-        } elseif (strpos($process->getErrorOutput(), 'Updating dependencies') !== false) {
-            $info = $this->parsePluginInfo($name);
-        } elseif (strpos($process->getErrorOutput(), 'Could not find package asd at any version for your minimum-stability') !== false) {
-            throw new RuntimeException(sprintf('Package "%s" not found', $name));
-        } else {
-            throw new RuntimeException(sprintf('Unhandled output for package "%s"', $name));
+        if (array_key_exists('description', $pluginJsonFileData)) {
+            $plugin->setDescription($pluginJsonFileData['description']);
         }
-
-        $plugin = new Plugin($name, $info['version']);
-        $plugin->setDescription($info['description']);
 
         $this->entityManager->persist($plugin);
         $this->entityManager->flush($plugin);
+
+        $this->updateAutoloader();
     }
 
     public function uninstall(Plugin $plugin)
     {
-        $process = $this->getProcess(
-            sprintf(
-                'composer remove --no-progress %s',
-                ProcessUtils::escapeArgument($plugin->getName())
-            )
-        );
-        $process->start();
-        $process->wait();
-
         $this->entityManager->remove($plugin);
         $this->entityManager->flush($plugin);
+
+        $this->cleanUpDirectory('data/plugins/' . $plugin->getName());
+
+        $this->updateAutoloader();
     }
 
-    public function update(Plugin $plugin)
+    private function updateAutoloader()
     {
-        $process = $this->getProcess(
-            sprintf(
-                'composer update --no-progress %s',
-                ProcessUtils::escapeArgument($plugin->getName())
-            )
-        );
-        $process->start();
-        $process->wait();
+        $pluginRepository = $this->entityManager->getRepository(Plugin::class);
 
-        $package = $this->parsePluginInfo($plugin->getName());
+        $content = "<?php\n\n";
+        $content .= "// This file is automatically generated by Zource\n";
+        $content .= sprintf("// Generated on %s\n\n", date('r'));
+        $content .= "return [\n";
 
-        $plugin->setVersion($package['version']);
+        foreach ($pluginRepository->findBy(['active' => true]) as $plugin) {
+            $pluginPath = 'data/plugins/' . $plugin->getName();
 
-        $this->entityManager->persist($plugin);
-        $this->entityManager->flush($plugin);
-    }
-
-    private function parsePluginInfo($name)
-    {
-        $data = json_decode(file_get_contents('composer.lock'), true);
-
-        foreach ($data['packages'] as $package) {
-            if ($package['name'] === $name) {
-                return $package;
+            foreach ($plugin->getNamespaces() as $namespaceName => $namespacePath) {
+                $content .= sprintf(
+                    "\t'%s' => '%s',\n",
+                    addslashes($namespaceName),
+                    $pluginPath . '/' . ltrim($namespacePath, '/')
+                );
             }
         }
 
-        return null;
+        $content .= "];\n";
+
+        file_put_contents('data/plugins/autoloader.php', $content);
     }
 
-    private function getProcess($cmd)
+    private function downloadFile($url)
     {
-        return new Process($cmd, getcwd(), [
-            'COMPOSER_DISABLE_XDEBUG_WARN' => '1',
-            'COMPOSER_NO_INTERACTION' => '1',
-            'COMPOSER_CACHE_DIR' => 'data/cache/composer/',
-            'COMPOSER_HOME' => 'data/cache/composer/',
+        $request = new Request();
+        $request->setUri($url);
+
+        $pluginPath = sprintf('data/tmp/plugin-%s.zip', Rand::getString(8, implode('', range('a', 'z'))));
+
+        $client = new \Zend\Http\Client($url, [
+            'keepalive' => true,
+            'outputstream' => $pluginPath,
         ]);
+
+        $response = $client->send($request);
+
+        if (!$response->isOk()) {
+            throw new RuntimeException('Failed to download the plugin from ' . $url);
+        }
+
+        return $this->installFile($pluginPath);
+    }
+
+    private function createPluginInfo($content)
+    {
+        $data = json_decode($content, true);
+
+        if (!$data) {
+            throw new RuntimeException('The plugin is invalid, invalid JSON found in plugin.json.');
+        }
+
+        if (!array_key_exists('name', $data)) {
+            throw new RuntimeException('Missing the name of the plugin.');
+        }
+
+        if (preg_match('/[a-z0-9-]+\/[a-z0-9-]+/', $data['name']) === 0) {
+            throw new RuntimeException('The plugin name is invalid.');
+        }
+
+        if (!array_key_exists('namespaces', $data)) {
+            throw new RuntimeException('The namespaces of the plugin are not configured.');
+        }
+
+        return $data;
+    }
+
+    private function cleanUpDirectory($dirPath)
+    {
+        if (!is_dir($dirPath)) {
+            throw new InvalidArgumentException($dirPath . " must be a directory");
+        }
+
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($dirPath),
+            RecursiveIteratorIterator::CHILD_FIRST
+        );
+
+        /** @var \SplFileInfo $entry */
+        foreach ($iterator as $entry) {
+            if ($entry->getFilename() === '.' || $entry->getFilename() === '..') {
+                continue;
+            } elseif ($entry->isFile()) {
+                unlink($entry->getPathname());
+            } elseif ($entry->isDir()) {
+                rmdir($entry->getPathname());
+            }
+        }
+
+        rmdir($dirPath);
     }
 }

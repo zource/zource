@@ -7,7 +7,7 @@ $this->placeholder('layout')->pageMenu = null;
 
 ?>
 
-<h2><?php echo $this->message ?></h2>
+<h2><?php echo $this->escapeHtml($this->message); ?></h2>
 
 <?php if (isset($this->reason) && $this->reason): ?>
 
@@ -63,11 +63,14 @@ $this->placeholder('layout')->pageMenu = null;
         <dl>
             <dt><?php echo $this->translate('File') ?>:</dt>
             <dd>
-                <pre class="prettyprint linenums"><?php echo $this->exception->getFile() ?>:<?php echo $this->exception->getLine() ?></pre>
+                <pre class="prettyprint linenums">
+                    <?php echo $this->escapeHtml($this->exception->getFile()); ?>:
+                    <?php echo $this->escapeHtml($this->exception->getLine()); ?>
+                </pre>
             </dd>
             <dt><?php echo $this->translate('Message') ?>:</dt>
             <dd>
-                <pre class="prettyprint linenums"><?php echo $this->exception->getMessage() ?></pre>
+                <pre class="prettyprint linenums"><?php echo $this->escapeHtml($this->exception->getMessage()); ?></pre>
             </dd>
             <dt><?php echo $this->translate('Stack trace') ?>:</dt>
             <dd>

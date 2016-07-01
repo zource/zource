@@ -43,12 +43,19 @@ class AdminPlugins extends AbstractActionController
     public function indexAction()
     {
         if ($this->getRequest()->isPost()) {
-            $this->installForm->setData($this->getRequest()->getPost());
+            $this->installForm->setData(array_merge_recursive(
+                $this->getRequest()->getPost()->toArray(),
+                $this->getRequest()->getFiles()->toArray()
+            ));
 
             if ($this->installForm->isValid()) {
                 $data = $this->installForm->getData();
 
-                $this->pluginManager->install($data['name']);
+                if ($data['plugin']['error'] === 0) {
+                    $this->pluginManager->installFile($data['plugin']['tmp_name']);
+                } else {
+                    $this->pluginManager->installExternal($data['location']);
+                }
 
                 return $this->redirect()->toRoute('admin/system/plugins');
             }
@@ -60,7 +67,7 @@ class AdminPlugins extends AbstractActionController
         ]);
     }
 
-    public function updateAction()
+    public function activateAction()
     {
         $plugin = $this->pluginManager->getPlugin($this->params('id'));
 
@@ -68,7 +75,20 @@ class AdminPlugins extends AbstractActionController
             return $this->notFoundAction();
         }
 
-        $this->pluginManager->update($plugin);
+        $this->pluginManager->activatePlugin($plugin);
+
+        return $this->redirect()->toRoute('admin/system/plugins');
+    }
+
+    public function deactivateAction()
+    {
+        $plugin = $this->pluginManager->getPlugin($this->params('id'));
+
+        if (!$plugin) {
+            return $this->notFoundAction();
+        }
+
+        $this->pluginManager->deactivatePlugin($plugin);
 
         return $this->redirect()->toRoute('admin/system/plugins');
     }

@@ -24,8 +24,8 @@ if (!file_exists('vendor/autoload.php')) {
     throw new RuntimeException('Unable to load ZF2. Run `php composer.phar install`.');
 }
 
-// Setup autoloading
-include 'vendor/autoload.php';
+/** @var \Composer\Autoload\ClassLoader $autoloader */
+$autoloader = include __DIR__ . '/../vendor/autoload.php';
 
 if (!defined('APPLICATION_PATH')) {
     define('APPLICATION_PATH', realpath(__DIR__ . '/../'));
@@ -47,6 +47,18 @@ if (isset($appConfig['module_listener_options']['config_glob_paths'])) {
             continue;
         }
         $appConfig['module_listener_options']['config_glob_paths'][$index] = getcwd() . '/' . $path;
+    }
+}
+
+// Load plugins
+if (is_file(__DIR__ . '/../data/plugins/autoloader.php')) {
+    $plugins = include __DIR__ . '/../data/plugins/autoloader.php';
+
+    foreach ($plugins as $name => $path) {
+        $name = rtrim($name, '\\');
+
+        $autoloader->addPsr4($name . '\\', $path);
+        $appConfig['modules'][] = $name;
     }
 }
 

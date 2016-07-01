@@ -4,7 +4,7 @@
  *
  * The previous config file has been stored in ./config/modules.config.old
  */
-return array(
+return [
     'ZF\\DevelopmentMode',
     'ZF\\Apigility',
     'ZF\\Apigility\\Provider',
@@ -23,7 +23,6 @@ return array(
     'DoctrineModule',
     'DoctrineORMModule',
     'ZourceApplication',
-    //'ZourceCalendar',
     'ZourceContact',
     'ZourceUser',
-);
+];

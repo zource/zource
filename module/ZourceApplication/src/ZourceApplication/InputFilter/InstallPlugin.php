@@ -9,31 +9,42 @@
 
 namespace ZourceApplication\InputFilter;
 
-use Zend\Filter\StringToLower;
+use Zend\Filter\File\RenameUpload;
+use Zend\Filter\StringTrim;
 use Zend\InputFilter\InputFilter;
-use Zend\Validator\Regex;
+use Zend\Validator\File\IsCompressed;
 
 class InstallPlugin extends InputFilter
 {
     public function init()
     {
         $this->add([
-            'name' => 'name',
-            'required' => true,
+            'name' => 'location',
+            'required' => false,
             'filters' => [
                 [
-                    'name' => StringToLower::class,
+                    'name' => StringTrim::class,
+                ],
+            ],
+        ]);
+
+        $this->add([
+            'name' => 'plugin',
+            'required' => false,
+            'filters' => [
+                [
+                    'name' => RenameUpload::class,
+                    'options' => [
+                        'target' => 'data/tmp/',
+                        'use_upload_name' => true,
+                        'use_upload_extension' => true,
+                        'randomize' => true,
+                    ],
                 ],
             ],
             'validators' => [
                 [
-                    'name' => Regex::class,
-                    'options' => [
-                        'pattern' => '/^[a-z0-9-_]+\/[a-z0-9-_]+/i',
-                        'messages' => [
-                            Regex::NOT_MATCH => 'Invalid package name provided.',
-                        ],
-                    ],
+                    'name' => IsCompressed::class,
                 ],
             ],
         ]);

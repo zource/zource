@@ -42,23 +42,30 @@ class Plugin
     private $description;
 
     /**
-     * @var string
+     * @var string[]
      */
-    private $version;
+    private $namespaces;
+
+    /**
+     * @var bool
+     */
+    private $active;
 
     /**
      * Initializes a new instance of this class.
      *
      * @param string $name
-     * @param string $version
+     * @param string[] $namespaces
+     * @param string $active
      */
-    public function __construct($name, $version)
+    public function __construct($name, array $namespaces)
     {
         $this->id = Uuid::uuid4();
         $this->installationDate = new DateTime();
         $this->updateDate = new DateTime();
         $this->name = $name;
-        $this->version = $version;
+        $this->namespaces = $namespaces;
+        $this->active = true;
     }
 
     /**
@@ -110,18 +117,26 @@ class Plugin
     }
 
     /**
-     * @return string
+     * @return string[]
      */
-    public function getVersion()
+    public function getNamespaces()
     {
-        return $this->version;
+        return $this->namespaces;
     }
 
     /**
-     * @param string $version
+     * @return boolean
      */
-    public function setVersion($version)
+    public function getActive()
     {
-        $this->version = $version;
+        return $this->active;
+    }
+
+    /**
+     * @param boolean $active
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
     }
 }

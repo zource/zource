@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "733fa478006938c3547e9ca7b2d8b8f3",
-    "content-hash": "fa84c12f093b8f7423ded517d9fec5a8",
+    "hash": "b62d943ea214b13112e91d5dd1686346",
+    "content-hash": "e2c886ffe765373227bc76c09f92086f",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -1661,52 +1661,6 @@
                 }
             ],
             "time": "2016-06-10 07:14:17"
-        },
-        {
-            "name": "phpmath/biginteger",
-            "version": "1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/phpmath/biginteger.git",
-                "reference": "f978ff144b669a33cc46224ac5c439014acdbc4b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/phpmath/biginteger/zipball/f978ff144b669a33cc46224ac5c439014acdbc4b",
-                "reference": "f978ff144b669a33cc46224ac5c439014acdbc4b",
-                "shasum": ""
-            },
-            "require": {
-                "ext-gmp": "*",
-                "php": ">=5.3.3"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "~4.5"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "PHP\\Math\\BigInteger\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Walter Tamboer",
-                    "homepage": "http://www.waltertamboer.nl",
-                    "role": "Developer"
-                }
-            ],
-            "description": "A PHP library to work with big integers.",
-            "keywords": [
-                "BigInteger",
-                "integer",
-                "math"
-            ],
-            "time": "2016-04-18 18:52:19"
         },
         {
             "name": "phpspec/prophecy",

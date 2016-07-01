@@ -19,7 +19,6 @@ $this->installForm->prepare();
     <thead>
         <tr>
             <th>Name</th>
-            <th>Version</th>
             <th class="zui-text-right">Operations</th>
         </tr>
     </thead>
@@ -30,11 +29,16 @@ $this->installForm->prepare();
                 <?php echo $this->escapeHtml($plugin->getName()); ?><br />
                 <small><?php echo $this->escapeHtml($plugin->getDescription()); ?></small>
             </td>
-            <td><?php echo $this->escapeHtml($plugin->getVersion()); ?></td>
             <td class="zui-text-right">
-                <a href="<?php echo $this->url('admin/system/plugins/update', [
-                    'id' => $plugin->getId(),
-                ]); ?>">Update</a>
+                <?php if ($plugin->getActive()) { ?>
+                    <a href="<?php echo $this->url('admin/system/plugins/deactivate', [
+                        'id' => $plugin->getId(),
+                    ]); ?>">Deactivate</a>
+                <?php } else { ?>
+                    <a href="<?php echo $this->url('admin/system/plugins/activate', [
+                        'id' => $plugin->getId(),
+                    ]); ?>">Activate</a>
+                <?php } ?>
                 -
                 <a href="<?php echo $this->url('admin/system/plugins/uninstall', [
                     'id' => $plugin->getId(),
@@ -52,14 +56,27 @@ $this->installForm->prepare();
 
 <h3>Install Plugin</h3>
 
+<p>You can either download a plugin file from an external location or upload a zip file.</p>
+
 <?php echo $this->form()->openTag($this->installForm); ?>
     <?php echo $this->formHidden($this->installForm->get('token')); ?>
 
     <div class="zui-field-group">
-        <?php echo $this->formLabel($this->installForm->get('name')); ?>
-        <?php echo $this->formText($this->installForm->get('name')); ?>
-        <?php echo $this->zourceFormDescription($this->installForm->get('name')); ?>
-        <?php echo $this->formElementErrors($this->installForm->get('name')); ?>
+        <?php echo $this->formLabel($this->installForm->get('location')); ?>
+        <?php echo $this->formText($this->installForm->get('location')); ?>
+        <?php echo $this->zourceFormDescription($this->installForm->get('location')); ?>
+        <?php echo $this->formElementErrors($this->installForm->get('location')); ?>
+    </div>
+
+    <div class="zui-field-group">
+        <?php echo $this->formLabel($this->installForm->get('plugin')); ?>
+        <div class="zui-button-file">
+            <?php echo $this->formFile($this->installForm->get('plugin')); ?>
+
+            <span>Choose File</span>
+        </div>
+        <?php echo $this->zourceFormDescription($this->installForm->get('plugin')); ?>
+        <?php echo $this->formElementErrors($this->installForm->get('plugin')); ?>
     </div>
 
     <div class="zui-buttons-container">

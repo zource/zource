@@ -147,13 +147,23 @@ return [
                                 ],
                                 'may_terminate' => true,
                                 'child_routes' => [
-                                    'update' => [
+                                    'activate' => [
                                         'type' => 'Segment',
                                         'options' => [
-                                            'route' => '/update/:id',
+                                            'route' => '/activate/:id',
                                             'defaults' => [
                                                 'controller' => AdminPluginsController::class,
-                                                'action' => 'update',
+                                                'action' => 'activate',
+                                            ],
+                                        ],
+                                    ],
+                                    'deactivate' => [
+                                        'type' => 'Segment',
+                                        'options' => [
+                                            'route' => '/deactivate/:id',
+                                            'defaults' => [
+                                                'controller' => AdminPluginsController::class,
+                                                'action' => 'deactivate',
                                             ],
                                         ],
                                     ],

@@ -10,6 +10,7 @@
 namespace ZourceApplication\Form;
 
 use Zend\Form\Element\Csrf;
+use Zend\Form\Element\File;
 use Zend\Form\Element\Text;
 use Zend\Form\Form;
 
@@ -23,11 +24,20 @@ class InstallPlugin extends Form
         ]);
 
         $this->add([
-            'name' => 'name',
+            'name' => 'location',
             'type' => Text::class,
             'options' => [
-                'label' => 'Name',
-                'description' => 'The name of the plugin to install.',
+                'label' => 'Location',
+                'description' => 'The location to download the plugin from.',
+            ],
+        ]);
+
+        $this->add([
+            'name' => 'plugin',
+            'type' => File::class,
+            'options' => [
+                'label' => 'Plugin',
+                'description' => 'The plugin file to install.',
             ],
         ]);
 
