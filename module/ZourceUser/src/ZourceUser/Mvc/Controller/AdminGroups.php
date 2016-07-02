@@ -13,6 +13,7 @@ use Zend\Form\FormInterface;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Paginator\Paginator;
 use Zend\View\Model\ViewModel;
+use ZourceUser\TaskService\Group;
 
 class AdminGroups extends AbstractActionController
 {
@@ -22,11 +23,11 @@ class AdminGroups extends AbstractActionController
     private $groupForm;
 
     /**
-     * @var Roles
+     * @var Group
      */
     private $groupTaskService;
 
-    public function __construct(FormInterface $groupForm, Roles $groupTaskService)
+    public function __construct(FormInterface $groupForm, Group $groupTaskService)
     {
         $this->groupForm = $groupForm;
         $this->groupTaskService = $groupTaskService;

@@ -60,6 +60,11 @@ class Module implements ApigilityProviderInterface, ConsoleBannerProviderInterfa
             $formElementErrors->setMessageSeparatorString('</div><div class="zui-error">');
             $formElementErrors->setMessageCloseString('</div>');
 
+            $flashMessenger = $viewHelperManager->get('flashMessenger');
+            $flashMessenger->setMessageOpenFormat('<div class="zui-alert zui-alert-%s"><p>');
+            $flashMessenger->setMessageSeparatorString('</p><p>');
+            $flashMessenger->setMessageCloseString('</p><span class="zui-icon zui-icon-x" role="button" tabindex="0"></span></div>');
+
             /** @var ManagerInterface $sessionManager */
             $sessionManager = $e->getApplication()->getServiceManager()->get(ManagerInterface::class);
             $sessionManager->start();

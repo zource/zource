@@ -7,21 +7,20 @@
  * @license https://raw.githubusercontent.com/zource/zource/master/LICENSE MIT
  */
 
-namespace ZourceUser\Mvc\Controller\Service;
+namespace ZourceUser\TaskService\Service;
 
+use Doctrine\ORM\EntityManager;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use ZourceUser\Form\AdminGroup;
-use ZourceUser\Mvc\Controller\AdminGroups;
 use ZourceUser\TaskService\Group;
 
-class AdminGroupsFactory implements FactoryInterface
+class GroupFactory implements FactoryInterface
 {
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $form = $serviceLocator->getServiceLocator()->get(AdminGroup::class);
-        $taskService = $serviceLocator->getServiceLocator()->get(Group::class);
+        /** @var EntityManager $entityManager */
+        $entityManager = $serviceLocator->get('doctrine.entitymanager.orm_default');
 
-        return new AdminGroups($form, $taskService);
+        return new Group($entityManager);
     }
 }

@@ -38,6 +38,7 @@ return [
     'pageDashboardTitle' => 'Dashboard',
 
     'pageAdminTitle' => 'Administration',
+    'pageAdminTitleCache' => 'Cache',
     'pageAdminTitlePlugin' => 'Plugins',
     'pageAdminTitleSettings' => 'Settings',
 

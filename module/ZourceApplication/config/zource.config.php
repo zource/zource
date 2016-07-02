@@ -36,8 +36,6 @@ use ZourceApplication\InputFilter\InstallPlugin as InstallPluginInputFilter;
 use ZourceApplication\Mvc\Controller\AdminPlugins as AdminPluginsController;
 use ZourceApplication\Mvc\Controller\AdminSettings as AdminSettingsController;
 use ZourceApplication\Mvc\Controller\Dashboard;
-use ZourceApplication\Mvc\Controller\Service\AdminPluginsFactory;
-use ZourceApplication\Mvc\Controller\Service\AdminSettingsFactory;
 use ZourceApplication\Session\Service\SaveHandlerFactory;
 use ZourceApplication\Session\Service\SessionStorageFactory;
 use ZourceApplication\Session\Service\StorageFactory;
@@ -63,11 +61,12 @@ use ZourceApplication\View\Helper\UI\Service\NavFactory;
 return [
     'controllers' => [
         'factories' => [
-            AdminPluginsController::class => AdminPluginsFactory::class,
-            AdminSettingsController::class => AdminSettingsFactory::class,
+            Mvc\Controller\AdminCache::class => Mvc\Controller\Service\AdminCacheFactory::class,
+            Mvc\Controller\AdminPlugins::class => Mvc\Controller\Service\AdminPluginsFactory::class,
+            Mvc\Controller\AdminSettings::class => Mvc\Controller\Service\AdminSettingsFactory::class,
         ],
         'invokables' => [
-            Dashboard::class => Dashboard::class,
+            Mvc\Controller\Dashboard::class => Mvc\Controller\Dashboard::class,
         ],
     ],
     'doctrine' => [
@@ -88,7 +87,7 @@ return [
         'eventmanager' => [
             'orm_default' => [
                 'subscribers' => [
-                    'Gedmo\\Timestampable\TimestampableListener',
+                    'Gedmo\\Timestampable\\TimestampableListener',
                 ],
             ],
         ],
@@ -136,6 +135,29 @@ return [
                             'route' => '/system',
                         ],
                         'child_routes' => [
+                            'cache' => [
+                                'type' => 'Literal',
+                                'options' => [
+                                    'route' => '/cache',
+                                    'defaults' => [
+                                        'controller' => Mvc\Controller\AdminCache::class,
+                                        'action' => 'index',
+                                    ],
+                                ],
+                                'may_terminate' => true,
+                                'child_routes' => [
+                                    'clear' => [
+                                        'type' => 'Segment',
+                                        'options' => [
+                                            'route' => '/clear/:id',
+                                            'defaults' => [
+                                                'controller' => Mvc\Controller\AdminCache::class,
+                                                'action' => 'clear',
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
                             'plugins' => [
                                 'type' => 'Literal',
                                 'options' => [
@@ -220,6 +242,7 @@ return [
         ],
         'factories' => [
             Builder::class => BuilderFactory::class,
+            TaskService\CacheManager::class => TaskService\Service\CacheManagerFactory::class,
             ConfigInterface::class => SessionConfigFactory::class,
             'LazyServiceFactory' => LazyServiceFactoryFactory::class,
             ManagerInterface::class => SessionManagerFactory::class,
@@ -291,6 +314,7 @@ return [
             'partial/scripts' => __DIR__ . '/../view/partial/scripts.phtml',
             'partial/top-bar' => __DIR__ . '/../view/partial/top-bar.phtml',
             'zf-apigility-documentation/show' => __DIR__ . '/../view/zource-application/apigility/show.phtml',
+            'zource-application/admin-cache/index' => __DIR__ . '/../view/zource-application/admin-cache/index.phtml',
             'zource-application/admin-plugins/index' => __DIR__ . '/../view/zource-application/admin-plugin/index.phtml',
             'zource-application/admin-settings/index' => __DIR__ . '/../view/zource-application/admin-settings/index.phtml',
             'zource-application/apigility/api' => __DIR__ . '/../view/zource-application/apigility/api.phtml',
@@ -298,6 +322,24 @@ return [
             'zource-application/apigility/service' => __DIR__ . '/../view/zource-application/apigility/service.phtml',
             'zource-application/apigility/operation' => __DIR__ . '/../view/zource-application/apigility/operation.phtml',
             'zource-application/dashboard/index' => __DIR__ . '/../view/zource-application/dashboard/index.phtml',
+        ],
+    ],
+    'zource_cache_manager' => [
+        'items' => [
+            'module-classmap' => [
+                'type' => 'file',
+                'label' => 'Module Classmap',
+                'options' => [
+                    'path' => 'data/cache/module-classmap-cache.application.module.cache.php',
+                ],
+            ],
+            'module-config' => [
+                'type' => 'file',
+                'label' => 'Module Config',
+                'options' => [
+                    'path' => 'data/cache/module-config-cache.application.config.cache.php',
+                ],
+            ],
         ],
     ],
     'zource_conditions' => [
@@ -445,9 +487,17 @@ return [
                         'route' => 'admin/system/settings',
                     ],
                 ],
-                'plugins' => [
+                'cache' => [
                     'type' => 'label',
                     'priority' => 3000,
+                    'options' => [
+                        'label' => 'Cache',
+                        'route' => 'admin/system/cache',
+                    ],
+                ],
+                'plugins' => [
+                    'type' => 'label',
+                    'priority' => 4000,
                     'options' => [
                         'label' => 'Plugins',
                         'route' => 'admin/system/plugins',

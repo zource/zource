@@ -12,9 +12,9 @@ namespace ZourceUser\TaskService;
 use Doctrine\ORM\EntityManager;
 use DoctrineModule\Paginator\Adapter\Selectable;
 use Zend\Paginator\Paginator;
-use ZourceUser\Entity\Account as AccountEntity;
+use ZourceUser\Entity\Group as GroupEntity;
 
-class Account
+class Group
 {
     private $entityManager;
 
@@ -51,7 +51,7 @@ class Account
 
     public function getPaginator()
     {
-        $repository = $this->entityManager->getRepository(AccountEntity::class);
+        $repository = $this->entityManager->getRepository(GroupEntity::class);
         $adapter = new Selectable($repository);
 
         return new Paginator($adapter);

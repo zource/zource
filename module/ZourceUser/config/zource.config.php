@@ -772,6 +772,7 @@ return [
             AuthenticationService::class => AuthenticationServiceFactory::class,
             ApplicationService::class => ApplicationServiceFactory::class,
             EmailTaskService::class => EmailTaskServiceFactory::class,
+            TaskService\Group::class => TaskService\Service\GroupFactory::class,
             OAuthTaskService::class => OAuthTaskServiceFactory::class,
             PasswordChanger::class => PasswordChangerFactory::class,
             Roles::class => RolesFactory::class,

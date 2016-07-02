@@ -7,21 +7,19 @@
  * @license https://raw.githubusercontent.com/zource/zource/master/LICENSE MIT
  */
 
-namespace ZourceUser\Mvc\Controller\Service;
+namespace ZourceApplication\Mvc\Controller\Service;
 
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use ZourceUser\Form\AdminGroup;
-use ZourceUser\Mvc\Controller\AdminGroups;
-use ZourceUser\TaskService\Group;
+use ZourceApplication\Mvc\Controller\AdminCache;
+use ZourceApplication\TaskService\CacheManager;
 
-class AdminGroupsFactory implements FactoryInterface
+class AdminCacheFactory implements FactoryInterface
 {
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $form = $serviceLocator->getServiceLocator()->get(AdminGroup::class);
-        $taskService = $serviceLocator->getServiceLocator()->get(Group::class);
+        $cacheManager = $serviceLocator->getServiceLocator()->get(CacheManager::class);
 
-        return new AdminGroups($form, $taskService);
+        return new AdminCache($cacheManager);
     }
 }
