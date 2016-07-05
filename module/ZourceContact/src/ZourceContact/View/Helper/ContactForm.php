@@ -118,13 +118,14 @@ class ContactForm extends AbstractHelper
     {
         $label = $this->getView()->translate($element->getLabel());
 
-        $result = '<fieldset class="zui-group">';
-        $result .= '<legend><span>' . $this->getView()->escapeHtml($label) . '</span></legend>';
+        $result = '<div class="zui-field-group">';
+        $result .= '<span class="zui-form-label">' . $this->getView()->escapeHtml($label) . '</span>';
+        $result .= '<div class="zui-field-group-inner">';
 
         foreach ($element->getValueOptions() as $key => $value) {
             $id = uniqid('zui', false);
 
-            $result .= '<div class="radio">';
+            $result .= '<div>';
             if ($element->getValue() == $key) {
                 $checked = ' checked="checked"';
             } else {
@@ -132,7 +133,7 @@ class ContactForm extends AbstractHelper
             }
 
             $result .= sprintf(
-                '<input class="radio" type="radio" name="%s" id="%s" value="%s"%s>',
+                '<input type="radio" name="%s" id="%s" value="%s"%s>',
                 $this->getView()->escapeHtmlAttr($element->getName()),
                 $this->getView()->escapeHtmlAttr($id),
                 $this->getView()->escapeHtmlAttr($key),
@@ -142,8 +143,12 @@ class ContactForm extends AbstractHelper
             $result .= '</div>';
         }
 
+        $result .= '</div>';
+
         $result .= $this->getView()->zourceFormDescription($element);
         $result .= $this->getView()->formElementErrors($element);
+
+        $result .= '</div>';
 
         return $result . '</fieldset>';
     }
