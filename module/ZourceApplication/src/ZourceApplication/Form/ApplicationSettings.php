@@ -23,7 +23,7 @@ class ApplicationSettings extends Form
         ]);
 
         $this->add([
-            'name' => 'applicationTitle',
+            'name' => 'application_title',
             'type' => Text::class,
             'options' => [
                 'label' => 'Application title',

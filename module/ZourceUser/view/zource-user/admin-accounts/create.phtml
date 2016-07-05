@@ -17,10 +17,24 @@ $this->accountForm->setAttribute('method', 'post');
 <?php echo $this->formHidden($this->accountForm->get('token')); ?>
 
 <div class="zui-field-group">
-    <?php echo $this->formLabel($this->accountForm->get('name')); ?>
-    <?php echo $this->formText($this->accountForm->get('name')); ?>
-    <?php echo $this->zourceFormDescription($this->accountForm->get('name')); ?>
-    <?php echo $this->formElementErrors($this->accountForm->get('name')); ?>
+    <?php echo $this->formLabel($this->accountForm->get('first_name')); ?>
+    <?php echo $this->formText($this->accountForm->get('first_name')); ?>
+    <?php echo $this->zourceFormDescription($this->accountForm->get('first_name')); ?>
+    <?php echo $this->formElementErrors($this->accountForm->get('first_name')); ?>
+</div>
+
+<div class="zui-field-group">
+    <?php echo $this->formLabel($this->accountForm->get('middle_name')); ?>
+    <?php echo $this->formText($this->accountForm->get('middle_name')); ?>
+    <?php echo $this->zourceFormDescription($this->accountForm->get('middle_name')); ?>
+    <?php echo $this->formElementErrors($this->accountForm->get('middle_name')); ?>
+</div>
+
+<div class="zui-field-group">
+    <?php echo $this->formLabel($this->accountForm->get('last_name')); ?>
+    <?php echo $this->formText($this->accountForm->get('last_name')); ?>
+    <?php echo $this->zourceFormDescription($this->accountForm->get('last_name')); ?>
+    <?php echo $this->formElementErrors($this->accountForm->get('last_name')); ?>
 </div>
 
 <div class="zui-buttons-container">

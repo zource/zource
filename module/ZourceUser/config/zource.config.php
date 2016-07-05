@@ -161,6 +161,7 @@ return [
             ConsoleController::class => ConsoleControllerFactory::class,
             DeveloperApplication::class => DeveloperApplicationFactory::class,
             Email::class => EmailFactory::class,
+            Mvc\Controller\AdminDirectories::class => Mvc\Controller\Service\AdminDirectoriesFactory::class,
             Notification::class => NotificationFactory::class,
             OAuth::class => OAuthFactory::class,
             Profile::class => ProfileFactory::class,
@@ -203,18 +204,18 @@ return [
         ],
     ],
     'forms' => [
-        AccountForm::class => [
-            'type' => AccountForm::class,
+        Form\Account::class => [
+            'type' => Form\Account::class,
             'hydrator' => 'ClassMethods',
             'input_filter' => AccountInputFilter::class,
         ],
-        AddEmailForm::class => [
-            'type' => AddEmailForm::class,
+        Form\AddEmail::class => [
+            'type' => Form\AddEmail::class,
             'hydrator' => 'ClassMethods',
             'input_filter' => AddEmailInputFilter::class,
         ],
         Form\AdminAccount::class => [
-            'type' => Form\AdminGroup::class,
+            'type' => Form\AdminAccount::class,
             'hydrator' => 'ClassMethods',
             'input_filter' => InputFilter\AdminAccount::class,
         ],
@@ -223,23 +224,23 @@ return [
             'hydrator' => 'ClassMethods',
             'input_filter' => InputFilter\AdminGroup::class,
         ],
-        AdminRole::class => [
-            'type' => AdminRole::class,
+        Form\AdminRole::class => [
+            'type' => Form\AdminRole::class,
             'hydrator' => 'ClassMethods',
             'input_filter' => InputFilter\AdminRole::class,
         ],
-        AuthenticateForm::class => [
-            'type' => AuthenticateForm::class,
+        Form\Authenticate::class => [
+            'type' => Form\Authenticate::class,
             'hydrator' => 'ClassMethods',
             'input_filter' => AuthenticateInputFilter::class,
         ],
-        ChangeIdentityForm::class => [
-            'type' => ChangeIdentityForm::class,
+        Form\ChangeIdentity::class => [
+            'type' => Form\ChangeIdentity::class,
             'hydrator' => 'ClassMethods',
             'input_filter' => ChangeIdentityInputFilter::class,
         ],
-        CreateApplicationForm::class => [
-            'type' => CreateApplicationForm::class,
+        Form\CreateApplication::class => [
+            'type' => Form\CreateApplication::class,
             'hydrator' => [
                 'type' => 'ClassMethods',
                 'options' => [
@@ -248,28 +249,28 @@ return [
             ],
             'input_filter' => CreateApplicationInputFilter::class,
         ],
-        ProfileForm::class => [
-            'type' => ProfileForm::class,
+        Form\Profile::class => [
+            'type' => Form\Profile::class,
             'hydrator' => 'ClassMethods',
             'input_filter' => ProfileInputFilter::class,
         ],
-        RequestPasswordForm::class => [
-            'type' => RequestPasswordForm::class,
+        Form\RequestPassword::class => [
+            'type' => Form\RequestPassword::class,
             'hydrator' => 'ClassMethods',
             'input_filter' => RequestPasswordInputFilter::class,
         ],
-        ResetPasswordForm::class => [
-            'type' => ResetPasswordForm::class,
+        Form\ResetPassword::class => [
+            'type' => Form\ResetPassword::class,
             'hydrator' => 'ClassMethods',
             'input_filter' => ResetPasswordInputFilter::class,
         ],
-        VerifyCodeForm::class => [
-            'type' => VerifyCodeForm::class,
+        Form\VerifyCode::class => [
+            'type' => Form\VerifyCode::class,
             'hydrator' => 'ClassMethods',
             'input_filter' => VerifyCodeInputFilter::class,
         ],
-        VerifyEmailForm::class => [
-            'type' => VerifyEmailForm::class,
+        Form\VerifyEmail::class => [
+            'type' => Form\VerifyEmail::class,
             'hydrator' => 'ClassMethods',
             'input_filter' => VerifyEmailInputFilter::class,
         ],
@@ -342,6 +343,16 @@ return [
                                                 'action' => 'delete',
                                             ],
                                         ],
+                                    ],
+                                ],
+                            ],
+                            'directories' => [
+                                'type' => 'Literal',
+                                'options' => [
+                                    'route' => '/directories',
+                                    'defaults' => [
+                                        'controller' => Mvc\Controller\AdminDirectories::class,
+                                        'action' => 'index',
                                     ],
                                 ],
                             ],
@@ -810,6 +821,9 @@ return [
             'zource-user/admin-accounts/index' => __DIR__ . '/../view/zource-user/admin-accounts/index.phtml',
             'zource-user/admin-accounts/update' => __DIR__ . '/../view/zource-user/admin-accounts/update.phtml',
             'zource-user/admin-groups/index' => __DIR__ . '/../view/zource-user/admin-groups/index.phtml',
+            'zource-user/admin-directories/create' => __DIR__ . '/../view/zource-user/admin-directories/create.phtml',
+            'zource-user/admin-directories/index' => __DIR__ . '/../view/zource-user/admin-directories/index.phtml',
+            'zource-user/admin-directories/update' => __DIR__ . '/../view/zource-user/admin-directories/update.phtml',
             'zource-user/admin-roles/create' => __DIR__ . '/../view/zource-user/admin-roles/create.phtml',
             'zource-user/admin-roles/index' => __DIR__ . '/../view/zource-user/admin-roles/index.phtml',
             'zource-user/admin-roles/update' => __DIR__ . '/../view/zource-user/admin-roles/update.phtml',
@@ -874,7 +888,7 @@ return [
                     'type' => 'header',
                     'priority' => 1000,
                     'options' => [
-                        'label' => 'User Management',
+                        'label' => 'Authentication',
                     ],
                 ],
                 'accounts' => [
@@ -885,9 +899,24 @@ return [
                         'route' => 'admin/usermanagement/accounts',
                     ],
                 ],
-                'groups' => [
+                'directories' => [
                     'type' => 'label',
                     'priority' => 3000,
+                    'options' => [
+                        'label' => 'Directories',
+                        'route' => 'admin/usermanagement/directories',
+                    ],
+                ],
+                'header-authorization' => [
+                    'type' => 'header',
+                    'priority' => 4000,
+                    'options' => [
+                        'label' => 'Authorization',
+                    ],
+                ],
+                'groups' => [
+                    'type' => 'label',
+                    'priority' => 5000,
                     'options' => [
                         'label' => 'Groups',
                         'route' => 'admin/usermanagement/groups',
@@ -895,7 +924,7 @@ return [
                 ],
                 'roles' => [
                     'type' => 'label',
-                    'priority' => 4000,
+                    'priority' => 6000,
                     'options' => [
                         'label' => 'Roles',
                         'route' => 'admin/usermanagement/roles',

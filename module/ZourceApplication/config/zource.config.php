@@ -56,6 +56,7 @@ use ZourceApplication\Validator\Service\UuidFactory;
 use ZourceApplication\Validator\Uuid;
 use ZourceApplication\View\Helper\FormAvatar;
 use ZourceApplication\View\Helper\FormDescription;
+use ZourceApplication\View\Helper\HumanBytes;
 use ZourceApplication\View\Helper\UI\Service\NavFactory;
 
 return [
@@ -251,6 +252,7 @@ return [
             Session::class => SessionFactory::class,
             StorageInterface::class => StorageFactory::class,
             SaveHandlerInterface::class => SaveHandlerFactory::class,
+            TaskService\SettingsManager::class => TaskService\Service\SettingsManagerFactory::class,
         ],
         'invokables' => [
             AuthorizationConditionPluginManager::class => AuthorizationConditionPluginManager::class,
@@ -290,8 +292,10 @@ return [
     'view_helpers' => [
         'factories' => [
             'zourceUiNav' => NavFactory::class,
+            'zourceSettings' => View\Helper\Service\SettingsFactory::class,
         ],
         'invokables' => [
+            'zourceBytes' => View\Helper\Bytes::class,
             'zourceFormAvatar' => FormAvatar::class,
             'zourceFormDescription' => FormDescription::class,
         ],

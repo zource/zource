@@ -7,17 +7,8 @@
  * @license https://raw.githubusercontent.com/zource/zource/master/LICENSE MIT
  */
 
-namespace ZourceApplication\InputFilter;
-
-use Zend\InputFilter\InputFilter;
-
-class ApplicationSettings extends InputFilter
-{
-    public function init()
-    {
-        $this->add([
-            'name' => 'application_title',
-            'required' => true,
-        ]);
-    }
-}
+return [
+    'zource_application_settings' => [
+        'application_title' => 'Zource',
+    ],
+];

@@ -28,7 +28,7 @@ $this->placeholder('layout')->pageNavGroupPrimary = 'admin-navgroup';
         <?php foreach ($this->cacheItems as $cacheItem) { ?>
         <tr>
             <td><?php echo $this->escapeHtml($cacheItem['label']); ?></td>
-            <td><?php echo $this->escapeHtml($cacheItem['size']); ?></td>
+            <td><?php echo $this->escapeHtml($this->zourceBytes($cacheItem['size'])); ?></td>
             <td class="zui-text-right">
                 <a href="<?php echo $this->url('admin/system/cache/clear', [
                     'id' => $cacheItem['id'],

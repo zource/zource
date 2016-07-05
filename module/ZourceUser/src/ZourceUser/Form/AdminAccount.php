@@ -22,10 +22,28 @@ class AdminAccount extends BaseForm
 
         $this->add([
             'type' => 'Text',
-            'name' => 'name',
+            'name' => 'first_name',
             'options' => [
-                'label' => 'Name',
-                'description' => 'The name of the role to create.',
+                'label' => 'First name',
+                'description' => 'The first name of the person to which the account belongs.',
+            ],
+        ]);
+
+        $this->add([
+            'type' => 'Text',
+            'name' => 'middle_name',
+            'options' => [
+                'label' => 'Middle name',
+                'description' => 'The middle name of the person to which the account belongs.',
+            ],
+        ]);
+
+        $this->add([
+            'type' => 'Text',
+            'name' => 'last_name',
+            'options' => [
+                'label' => 'Last name',
+                'description' => 'The last name of the person to which the account belongs.',
             ],
         ]);
 

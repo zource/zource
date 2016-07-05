@@ -7,24 +7,23 @@
  * @license https://raw.githubusercontent.com/zource/zource/master/LICENSE MIT
  */
 
-namespace ZourceApplication\Mvc\Controller\Service;
+namespace ZourceApplication\TaskService\Service;
 
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use ZourceApplication\Form\ApplicationSettings;
-use ZourceApplication\Mvc\Controller\AdminSettings;
+use ZourceApplication\TaskService\CacheManager;
 use ZourceApplication\TaskService\SettingsManager;
 
-class AdminSettingsFactory implements FactoryInterface
+class SettingsManagerFactory implements FactoryInterface
 {
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        /** @var SettingsManager $settingsManager */
-        $settingsManager = $serviceLocator->getServiceLocator()->get(SettingsManager::class);
+        /** @var array $config */
+        $config = $serviceLocator->get('Config');
 
-        /** @var ApplicationSettings $form */
-        $form = $serviceLocator->getServiceLocator()->get(ApplicationSettings::class);
+        /** @var CacheManager $cacheManager */
+        $cacheManager = $serviceLocator->get(CacheManager::class);
 
-        return new AdminSettings($settingsManager, $form);
+        return new SettingsManager($config, $cacheManager);
     }
 }

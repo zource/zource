@@ -25,7 +25,7 @@ class AdminRole extends BaseForm
             'name' => 'name',
             'options' => [
                 'label' => 'Name',
-                'description' => 'The name of the role to create.',
+                'description' => 'The name of the role.',
             ],
         ]);
 

@@ -13,10 +13,6 @@ return [
     'formSelectAvatarDialogButtonCancel' => 'Cancel',
     'formSelectAvatarDialogSelectFile' => 'Select this file',
 
-    'headTitle' => 'Zource',
-
-    'layoutTopMenuTitle' => 'Zource',
-
     'layoutTopMenuAdministration' => 'Administration',
     'layoutTopMenuDashboards' => 'Dashboards',
     'layoutTopMenuDashboardsAvailable' => 'Available',

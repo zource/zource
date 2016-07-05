@@ -14,14 +14,20 @@ $this->settingsForm->prepare();
 
 <h2><?php echo $this->translate('pageAdminTitleSettings'); ?></h2>
 
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_DEFAULT); ?>
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_SUCCESS); ?>
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_WARNING); ?>
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_ERROR); ?>
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_INFO); ?>
+
 <?php echo $this->form()->openTag($this->settingsForm); ?>
 <?php echo $this->formHidden($this->settingsForm->get('token')); ?>
 
 <div class="zui-field-group">
-    <?php echo $this->formLabel($this->settingsForm->get('applicationTitle')); ?>
-    <?php echo $this->formText($this->settingsForm->get('applicationTitle')); ?>
-    <?php echo $this->zourceFormDescription($this->settingsForm->get('applicationTitle')); ?>
-    <?php echo $this->formElementErrors($this->settingsForm->get('applicationTitle')); ?>
+    <?php echo $this->formLabel($this->settingsForm->get('application_title')); ?>
+    <?php echo $this->formText($this->settingsForm->get('application_title')); ?>
+    <?php echo $this->zourceFormDescription($this->settingsForm->get('application_title')); ?>
+    <?php echo $this->formElementErrors($this->settingsForm->get('application_title')); ?>
 </div>
 
 <div class="zui-buttons-container">

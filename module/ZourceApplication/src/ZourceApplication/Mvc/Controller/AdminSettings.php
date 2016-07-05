@@ -12,29 +12,42 @@ namespace ZourceApplication\Mvc\Controller;
 use Zend\Form\FormInterface;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use ZourceApplication\TaskService\SettingsManager;
 
 class AdminSettings extends AbstractActionController
 {
+    /**
+     * @var SettingsManager
+     */
+    private $settingsManager;
+
     /**
      * @var FormInterface
      */
     private $settingsForm;
 
-    public function __construct(FormInterface $settingsForm)
+    public function __construct(SettingsManager $settingsManager, FormInterface $settingsForm)
     {
+        $this->settingsManager = $settingsManager;
         $this->settingsForm = $settingsForm;
     }
 
     public function indexAction()
     {
+        $this->settingsForm->setData($this->settingsManager->getAll());
+
         if ($this->getRequest()->isPost()) {
             $this->settingsForm->setData($this->getRequest()->getPost());
 
             if ($this->settingsForm->isValid()) {
                 $data = $this->settingsForm->getData();
 
-                var_dump($data);
-                exit;
+                $this->settingsManager->set('application_title', $data['application_title']);
+                $this->settingsManager->flush();
+
+                $this->flashMessenger()->addSuccessMessage('The settings have been saved.');
+
+                return $this->redirect()->toRoute('admin/system/settings');
             }
         }
 

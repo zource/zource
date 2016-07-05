@@ -57,6 +57,8 @@ class AdminPlugins extends AbstractActionController
                     $this->pluginManager->installExternal($data['location']);
                 }
 
+                $this->flashMessenger()->addSuccessMessage('The plugin has been installed.');
+
                 return $this->redirect()->toRoute('admin/system/plugins');
             }
         }
@@ -75,6 +77,8 @@ class AdminPlugins extends AbstractActionController
             return $this->notFoundAction();
         }
 
+        $this->flashMessenger()->addSuccessMessage('The plugin has been activated.');
+
         $this->pluginManager->activatePlugin($plugin);
 
         return $this->redirect()->toRoute('admin/system/plugins');
@@ -89,6 +93,8 @@ class AdminPlugins extends AbstractActionController
         }
 
         $this->pluginManager->deactivatePlugin($plugin);
+
+        $this->flashMessenger()->addSuccessMessage('The plugin has been deactivated.');
 
         return $this->redirect()->toRoute('admin/system/plugins');
     }

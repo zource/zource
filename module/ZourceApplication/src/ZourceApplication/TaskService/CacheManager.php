@@ -9,6 +9,8 @@
 
 namespace ZourceApplication\TaskService;
 
+use Zend\EventManager\Event;
+use Zend\EventManager\EventInterface;
 use Zend\EventManager\EventManager;
 
 class CacheManager
@@ -30,6 +32,8 @@ class CacheManager
         $this->eventManager = new EventManager([
             'CacheManager',
         ]);
+
+        $this->eventManager->attach('clear', [$this, 'onClearCache']);
     }
 
     /**
@@ -63,6 +67,27 @@ class CacheManager
 
     public function clearCache($id)
     {
+        $event = new Event();
+        $event->setParam('id', $id);
+
+        $result = $this->getEventManager()->trigger('clear', $event);
+
+        return $result->last();
+    }
+
+    private function getFileSize($path)
+    {
+        if (!is_file($path)) {
+            return 0;
+        }
+
+        return filesize($path);
+    }
+
+    public function onClearCache(EventInterface $event)
+    {
+        $id = $event->getParam('id');
+
         if (!array_key_exists($id, $this->config['items'])) {
             return false;
         }
@@ -77,18 +102,10 @@ class CacheManager
                 break;
 
             default:
-                throw new RuntimeException('Invalid cache type provided: ' . $item['type']);
+                // Non supported cache type, maybe a different listener will pick this up.
+                return false;
         }
 
         return true;
-    }
-
-    private function getFileSize($path)
-    {
-        if (!is_file($path)) {
-            return 0;
-        }
-
-        return filesize($path);
     }
 }
