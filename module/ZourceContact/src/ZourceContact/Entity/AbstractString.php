@@ -16,9 +16,9 @@ abstract class AbstractString extends AbstractValue
      */
     protected $value;
 
-    public function __construct($type, $value)
+    public function __construct(AbstractContact $contact, $type, $value)
     {
-        parent::__construct($type);
+        parent::__construct($contact, $type);
 
         $this->value = $value;
     }

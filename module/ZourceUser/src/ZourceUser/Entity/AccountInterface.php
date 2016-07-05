@@ -25,6 +25,9 @@ interface AccountInterface
     /** The account is inactive. */
     const STATUS_INACTIVE = 1;
 
+    /** The account is inactive. */
+    const STATUS_INVITED = 2;
+
     /** Two-factor authentication using HMAC-based one-time password (OTP) algorithm. */
     const TFA_TYPE_HOTP = 'HOTP';
 

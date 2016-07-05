@@ -10,6 +10,7 @@
 namespace ZourceUser\Form;
 
 use Zend\Form\Form as BaseForm;
+use ZourceUser\Entity\Account;
 
 class AdminAccount extends BaseForm
 {
@@ -21,29 +22,15 @@ class AdminAccount extends BaseForm
         ]);
 
         $this->add([
-            'type' => 'Text',
-            'name' => 'first_name',
+            'type' => 'Radio',
+            'name' => 'status',
             'options' => [
-                'label' => 'First name',
-                'description' => 'The first name of the person to which the account belongs.',
-            ],
-        ]);
-
-        $this->add([
-            'type' => 'Text',
-            'name' => 'middle_name',
-            'options' => [
-                'label' => 'Middle name',
-                'description' => 'The middle name of the person to which the account belongs.',
-            ],
-        ]);
-
-        $this->add([
-            'type' => 'Text',
-            'name' => 'last_name',
-            'options' => [
-                'label' => 'Last name',
-                'description' => 'The last name of the person to which the account belongs.',
+                'label' => 'Status',
+                'description' => 'The status of the account.',
+                'value_options' => [
+                    Account::STATUS_ACTIVE => 'Active',
+                    Account::STATUS_INACTIVE => 'Inactive',
+                ],
             ],
         ]);
 

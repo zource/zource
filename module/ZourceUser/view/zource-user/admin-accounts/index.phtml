@@ -16,10 +16,16 @@ $this->placeholder('layout')->pageNavGroupPrimary = 'admin-navgroup';
 
     <div class="zui-toolbar-secondary">
         <div class="zui-button-group">
-            <a href="<?php echo $this->url('admin/usermanagement/accounts/create'); ?>" class="zui-button">Create</a>
+            <a href="<?php echo $this->url('admin/usermanagement/accounts/invite'); ?>" class="zui-button">Invite</a>
         </div>
     </div>
 </div>
+
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_DEFAULT); ?>
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_SUCCESS); ?>
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_WARNING); ?>
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_ERROR); ?>
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_INFO); ?>
 
 <?php if (count($this->accounts) === 0) { ?>
     <div class="zui-alert">
@@ -28,28 +34,66 @@ $this->placeholder('layout')->pageNavGroupPrimary = 'admin-navgroup';
         </p>
     </div>
 <?php } else { ?>
-<table class="zui-table zui-table-striped">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th class="zui-text-right">Operations</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php foreach ($this->accounts as $account) { ?>
+    <table class="zui-table zui-table-striped">
+        <thead>
             <tr>
-                <td><?php echo $this->escapeHtml($account->getContact()->getDisplayName()); ?></td>
-                <td class="zui-text-right">
-                    <a href="<?php echo $this->url('admin/usermanagement/accounts/update', [
-                        'id' => $account->getId(),
-                    ]); ?>">Update</a>
-                    -
-                    <a href="<?php echo $this->url('admin/usermanagement/accounts/delete', [
-                        'id' => $account->getId(),
-                    ]); ?>">Delete</a>
-                </td>
+                <th>Name</th>
+                <th>Status</th>
+                <th class="zui-text-right">Operations</th>
             </tr>
-        <?php } ?>
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            <?php foreach ($this->accounts as $account) { ?>
+                <tr>
+                    <td>
+                        <a href="<?php echo $this->url('contacts/view', [
+                            'id' => $account->getContact()->getId(),
+                        ]); ?>">
+                            <?php echo $this->escapeHtml($account->getContact()->getDisplayName()); ?>
+                        </a>
+                    </td>
+                    <td style="width: 200px;">
+                        <?php
+
+                        switch ($account->getStatus()) {
+                            case \ZourceUser\Entity\Account::STATUS_ACTIVE:
+                                echo $this->translate('Active');
+                                break;
+
+                            case \ZourceUser\Entity\Account::STATUS_INACTIVE:
+                                echo $this->translate('Inactive');
+                                break;
+
+                            case \ZourceUser\Entity\Account::STATUS_INVITED:
+                                echo $this->translate('Invited');
+                                break;
+                        }
+
+                        ?>
+                    </td>
+                    <td class="zui-text-right" style="width: 250px;">
+                        <?php
+
+                        $links = [];
+
+                        if ($account->getStatus() !== \ZourceUser\Entity\Account::STATUS_INVITED) {
+                            $links[] = sprintf('<a href="%s">Update</a>', $this->url('admin/usermanagement/accounts/update', [
+                                'id' => $account->getId(),
+                            ]));
+                        }
+
+                        if ($this->zourceAccount()->getId() !== $account->getId()) {
+                            $links[] = sprintf('<a href="%s">Delete</a>', $this->url('admin/usermanagement/accounts/delete', [
+                                'id' => $account->getId(),
+                            ]));
+                        }
+
+                        echo implode(' - ', $links);
+
+                        ?>
+                    </td>
+                </tr>
+            <?php } ?>
+        </tbody>
+    </table>
 <?php } ?>

@@ -7,7 +7,7 @@ $this->placeholder('layout')->pageMenu = 'admin-users';
 $this->placeholder('layout')->pageNavGroupPrimary = 'admin-navgroup';
 
 $this->accountForm->setAttribute('action', $this->url('admin/usermanagement/accounts/update', [
-    'id' => $this->role->getId(),
+    'id' => $this->account->getId(),
 ]));
 $this->accountForm->setAttribute('method', 'post');
 
@@ -19,15 +19,19 @@ $this->accountForm->setAttribute('method', 'post');
 <?php echo $this->formHidden($this->accountForm->get('token')); ?>
 
 <div class="zui-field-group">
-    <?php echo $this->formLabel($this->accountForm->get('name')); ?>
-    <?php echo $this->formText($this->accountForm->get('name')); ?>
-    <?php echo $this->zourceFormDescription($this->accountForm->get('name')); ?>
-    <?php echo $this->formElementErrors($this->accountForm->get('name')); ?>
+    <span class="zui-form-label"><?php echo $this->accountForm->get('status')->getLabel(); ?></span>
+
+    <div class="zui-field-group-inner">
+        <?php echo $this->formRadio($this->accountForm->get('status')); ?>
+    </div>
+
+    <?php echo $this->zourceFormDescription($this->accountForm->get('status')); ?>
+    <?php echo $this->formElementErrors($this->accountForm->get('status')); ?>
 </div>
 
 <div class="zui-buttons-container">
     <div class="zui-buttons">
-        <input type="submit" value="Save">
+        <?php echo $this->formSubmit($this->accountForm->get('submit')); ?>
     </div>
 </div>
 

@@ -1,0 +1,53 @@
+<?php
+
+$this->layout('layout/page-header');
+
+$this->placeholder('layout')->pageTitle = $this->translate('pageAdminTitle');
+$this->placeholder('layout')->pageMenu = 'admin-users';
+$this->placeholder('layout')->pageNavGroupPrimary = 'admin-navgroup';
+
+$this->inviteForm->setAttribute('action', $this->url());
+$this->inviteForm->setAttribute('method', 'post');
+
+?>
+
+<h2>Invite user</h2>
+
+<?php echo $this->form()->openTag($this->inviteForm); ?>
+<?php echo $this->formHidden($this->inviteForm->get('token')); ?>
+
+<div class="zui-field-group">
+    <?php echo $this->formLabel($this->inviteForm->get('first_name')); ?>
+    <?php echo $this->formText($this->inviteForm->get('first_name')); ?>
+    <?php echo $this->zourceFormDescription($this->inviteForm->get('first_name')); ?>
+    <?php echo $this->formElementErrors($this->inviteForm->get('first_name')); ?>
+</div>
+
+<div class="zui-field-group">
+    <?php echo $this->formLabel($this->inviteForm->get('middle_name')); ?>
+    <?php echo $this->formText($this->inviteForm->get('middle_name')); ?>
+    <?php echo $this->zourceFormDescription($this->inviteForm->get('middle_name')); ?>
+    <?php echo $this->formElementErrors($this->inviteForm->get('middle_name')); ?>
+</div>
+
+<div class="zui-field-group">
+    <?php echo $this->formLabel($this->inviteForm->get('last_name')); ?>
+    <?php echo $this->formText($this->inviteForm->get('last_name')); ?>
+    <?php echo $this->zourceFormDescription($this->inviteForm->get('last_name')); ?>
+    <?php echo $this->formElementErrors($this->inviteForm->get('last_name')); ?>
+</div>
+
+<div class="zui-field-group">
+    <?php echo $this->formLabel($this->inviteForm->get('email')); ?>
+    <?php echo $this->formText($this->inviteForm->get('email')); ?>
+    <?php echo $this->zourceFormDescription($this->inviteForm->get('email')); ?>
+    <?php echo $this->formElementErrors($this->inviteForm->get('email')); ?>
+</div>
+
+<div class="zui-buttons-container">
+    <div class="zui-buttons">
+        <?php echo $this->formSubmit($this->inviteForm->get('submit')); ?>
+    </div>
+</div>
+
+<?php echo $this->form()->closeTag(); ?>

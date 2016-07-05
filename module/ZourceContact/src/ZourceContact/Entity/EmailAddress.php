@@ -13,4 +13,11 @@ final class EmailAddress extends AbstractString
 {
     const TYPE_PERSONAL = 'personal';
     const TYPE_WORK = 'work';
+
+    public function __construct(AbstractContact $contact, $type, $value)
+    {
+        parent::__construct($contact, $type, $value);
+
+        $contact->getEmailAddresses()->add($this);
+    }
 }

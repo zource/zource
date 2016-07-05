@@ -11,6 +11,8 @@ namespace ZourceContact\Entity;
 
 use DateTime;
 use DateTimeInterface;
+use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 
 abstract class AbstractValue
 {

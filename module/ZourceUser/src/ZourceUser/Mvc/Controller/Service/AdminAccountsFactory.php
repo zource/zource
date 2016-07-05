@@ -12,6 +12,7 @@ namespace ZourceUser\Mvc\Controller\Service;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use ZourceUser\Form\AdminAccount;
+use ZourceUser\Form\AdminInvite;
 use ZourceUser\Mvc\Controller\AdminAccounts;
 use ZourceUser\TaskService\Account;
 
@@ -19,9 +20,10 @@ class AdminAccountsFactory implements FactoryInterface
 {
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $form = $serviceLocator->getServiceLocator()->get(AdminAccount::class);
+        $inviteForm = $serviceLocator->getServiceLocator()->get(AdminInvite::class);
+        $accountForm = $serviceLocator->getServiceLocator()->get(AdminAccount::class);
         $taskService = $serviceLocator->getServiceLocator()->get(Account::class);
 
-        return new AdminAccounts($form, $taskService);
+        return new AdminAccounts($inviteForm, $accountForm, $taskService);
     }
 }

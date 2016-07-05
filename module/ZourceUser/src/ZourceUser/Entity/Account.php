@@ -84,7 +84,7 @@ class Account implements AccountInterface
     private $groups;
 
     /**
-     * @ORM\OneToMany(targetEntity="ZourceUser\Entity\Email", mappedBy="account")
+     * @ORM\OneToMany(targetEntity="ZourceUser\Entity\Email", mappedBy="account", cascade={"all"})
      * @var Email
      */
     private $emailAddresses;

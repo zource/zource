@@ -219,6 +219,11 @@ return [
             'hydrator' => 'ClassMethods',
             'input_filter' => InputFilter\AdminAccount::class,
         ],
+        Form\AdminInvite::class => [
+            'type' => Form\AdminInvite::class,
+            'hydrator' => 'ClassMethods',
+            'input_filter' => InputFilter\AdminInvite::class,
+        ],
         Form\AdminGroup::class => [
             'type' => Form\AdminGroup::class,
             'hydrator' => 'ClassMethods',
@@ -280,6 +285,7 @@ return [
             AuthenticateInputFilter::class => AuthenticateInputFilterFactory::class,
         ],
         'invokables' => [
+            InputFilter\AdminInvite::class => InputFilter\AdminInvite::class,
             AccountInputFilter::class => AccountInputFilter::class,
             AddEmailInputFilter::class => AddEmailInputFilter::class,
             ChangeIdentityInputFilter::class => ChangeIdentityInputFilter::class,
@@ -317,12 +323,12 @@ return [
                                 ],
                                 'may_terminate' => true,
                                 'child_routes' => [
-                                    'create' => [
+                                    'invite' => [
                                         'type' => 'Literal',
                                         'options' => [
-                                            'route' => '/create',
+                                            'route' => '/invite',
                                             'defaults' => [
-                                                'action' => 'create',
+                                                'action' => 'invite',
                                             ],
                                         ],
                                     ],
@@ -353,6 +359,59 @@ return [
                                     'defaults' => [
                                         'controller' => Mvc\Controller\AdminDirectories::class,
                                         'action' => 'index',
+                                    ],
+                                ],
+                                'may_terminate' => true,
+                                'child_routes' => [
+                                    'disable' => [
+                                        'type' => 'Segment',
+                                        'options' => [
+                                            'route' => '/disable/:type',
+                                            'defaults' => [
+                                                'controller' => Mvc\Controller\AdminDirectories::class,
+                                                'action' => 'disable',
+                                            ],
+                                        ],
+                                    ],
+                                    'enable' => [
+                                        'type' => 'Segment',
+                                        'options' => [
+                                            'route' => '/enable/:type',
+                                            'defaults' => [
+                                                'controller' => Mvc\Controller\AdminDirectories::class,
+                                                'action' => 'enable',
+                                            ],
+                                        ],
+                                    ],
+                                    'ldap' => [
+                                        'type' => 'Segment',
+                                        'options' => [
+                                            'route' => '/update/ldap',
+                                            'defaults' => [
+                                                'controller' => Mvc\Controller\AdminDirectoriesLdap::class,
+                                                'action' => 'update',
+                                            ],
+                                        ],
+                                    ],
+                                    'move-down' => [
+                                        'type' => 'Segment',
+                                        'options' => [
+                                            'route' => '/move-down/:type',
+                                            'defaults' => [
+                                                'controller' => Mvc\Controller\AdminDirectories::class,
+                                                'action' => 'move-down',
+                                            ],
+                                        ],
+                                    ],
+                                    'move-up' => [
+                                        'type' => 'Segment',
+                                        'options' => [
+                                            'route' => '/move-up/:type',
+                                            'defaults' => [
+                                                'controller' => Mvc\Controller\AdminDirectories::class,
+                                                'action' => 'move-down',
+                                            ],
+                                        ],
                                     ],
                                 ],
                             ],
@@ -814,11 +873,16 @@ return [
             VerifyEmailCode::class => VerifyEmailCodeFactory::class,
         ],
     ],
+    'view_helpers' => [
+        'factories' => [
+            'zourceAccount' => \ZourceUser\View\Helper\Service\AccountFactory::class,
+        ],
+    ],
     'view_manager' => [
         'template_map' => [
             'zource-user/account/index' => __DIR__ . '/../view/zource-user/account/index.phtml',
-            'zource-user/admin-accounts/create' => __DIR__ . '/../view/zource-user/admin-accounts/create.phtml',
             'zource-user/admin-accounts/index' => __DIR__ . '/../view/zource-user/admin-accounts/index.phtml',
+            'zource-user/admin-accounts/invite' => __DIR__ . '/../view/zource-user/admin-accounts/invite.phtml',
             'zource-user/admin-accounts/update' => __DIR__ . '/../view/zource-user/admin-accounts/update.phtml',
             'zource-user/admin-groups/index' => __DIR__ . '/../view/zource-user/admin-groups/index.phtml',
             'zource-user/admin-directories/create' => __DIR__ . '/../view/zource-user/admin-directories/create.phtml',
@@ -844,6 +908,21 @@ return [
             'zource-user/security/index' => __DIR__ . '/../view/zource-user/security/index.phtml',
             'zource-user/two-factor-authentication/disable' => __DIR__ . '/../view/zource-user/two-factor-authentication/disable.phtml',
             'zource-user/two-factor-authentication/enable' => __DIR__ . '/../view/zource-user/two-factor-authentication/enable.phtml',
+        ],
+    ],
+    'zource_auth_directories' => [
+        'username' => [
+            'type' => 'database',
+            'label' => 'Username',
+        ],
+        'email' => [
+            'type' => 'database',
+            'label' => 'E-mail',
+        ],
+        'ldap' => [
+            'type' => 'ldap',
+            'label' => 'LDAP',
+            'update_route_name' => 'admin/usermanagement/directories/ldap',
         ],
     ],
     'zource_conditions' => [

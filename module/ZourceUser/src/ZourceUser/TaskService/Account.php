@@ -11,16 +11,29 @@ namespace ZourceUser\TaskService;
 
 use Doctrine\ORM\EntityManager;
 use DoctrineModule\Paginator\Adapter\Selectable;
+use Zend\EventManager\EventManager;
 use Zend\Paginator\Paginator;
+use ZourceContact\Entity\EmailAddress;
+use ZourceContact\Entity\Person;
 use ZourceUser\Entity\Account as AccountEntity;
+use ZourceUser\Entity\Email;
 
 class Account
 {
     private $entityManager;
+    private $eventManager;
 
     public function __construct(EntityManager $entityManager)
     {
         $this->entityManager = $entityManager;
+        $this->eventManager = new EventManager([
+            'account-task-service',
+        ]);
+    }
+
+    public function getEventManager()
+    {
+        return $this->eventManager;
     }
 
     public function find($id)
@@ -44,9 +57,37 @@ class Account
 
     public function persistFromArray(array $data)
     {
-        $role = new Role($data['name']);
+    }
 
-        return $this->persist($role);
+    public function inviteAccount($data)
+    {
+        // Lookup the e-mail address:
+        $repository = $this->entityManager->getRepository(Email::class);
+        $accountEmail = $repository->findOneBy(['address' => $data['email']]);
+
+        if ($accountEmail !== null) {
+            return $accountEmail->getAccount();
+        }
+
+        $person = new Person($data['first_name'], $data['last_name']);
+        $person->setMiddleName($data['middle_name']);
+
+        $emailAddress = new EmailAddress($person, EmailAddress::TYPE_WORK, $data['email']);
+
+        $account = new AccountEntity($person);
+        $account->setStatus(AccountEntity::STATUS_INVITED);
+
+        $accountEmail = new Email($account, $data['email']);
+        $accountEmail->setValidationCode('abc');
+        $account->getEmailAddresses()->add($accountEmail);
+
+        $this->entityManager->persist($person);
+        $this->entityManager->persist($emailAddress);
+        $this->entityManager->persist($account);
+
+        $this->entityManager->flush();
+
+        return $account;
     }
 
     public function getPaginator()
