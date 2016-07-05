@@ -13,6 +13,7 @@ use Doctrine\ORM\EntityManager;
 use Zend\Authentication\Adapter\ValidatableAdapterInterface;
 use Zend\Authentication\Result;
 use Zend\Crypt\Password\PasswordInterface;
+use ZourceUser\Entity\Account;
 use ZourceUser\Entity\Identity as IdentityEntity;
 
 class Zource implements ValidatableAdapterInterface
@@ -109,10 +110,17 @@ class Zource implements ValidatableAdapterInterface
             return new Result(Result::FAILURE_IDENTITY_NOT_FOUND, $this->getIdentity());
         }
 
-        $credential = $identity->getAccount()->getCredential();
+        /** @var Account $account */
+        $account = $identity->getAccount();
 
-        if (!$this->crypter->verify($this->getCredential(), $credential)) {
+        if (!$this->crypter->verify($this->getCredential(), $account->getCredential())) {
             return new Result(Result::FAILURE_CREDENTIAL_INVALID, $this->getIdentity());
+        }
+
+        if ($account->getStatus() !== Account::STATUS_ACTIVE) {
+            return new Result(Result::FAILURE_UNCATEGORIZED, $this->getIdentity(), [
+                'The account has been deactivated.'
+            ]);
         }
 
         return new Result(Result::SUCCESS, $identity->getId()->toString());

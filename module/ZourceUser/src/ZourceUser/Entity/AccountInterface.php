@@ -20,13 +20,13 @@ use ZourceContact\Entity\Person;
 interface AccountInterface
 {
     /** The account is active. */
-    const STATUS_ACTIVE = 0;
+    const STATUS_ACTIVE = 1;
 
     /** The account is inactive. */
-    const STATUS_INACTIVE = 1;
+    const STATUS_INACTIVE = 0;
 
     /** The account is inactive. */
-    const STATUS_INVITED = 2;
+    const STATUS_INVITED = -1;
 
     /** Two-factor authentication using HMAC-based one-time password (OTP) algorithm. */
     const TFA_TYPE_HOTP = 'HOTP';
