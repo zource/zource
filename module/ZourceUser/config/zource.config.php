@@ -409,7 +409,7 @@ return [
                                             'route' => '/move-up/:type',
                                             'defaults' => [
                                                 'controller' => Mvc\Controller\AdminDirectories::class,
-                                                'action' => 'move-down',
+                                                'action' => 'move-up',
                                             ],
                                         ],
                                     ],
@@ -839,6 +839,7 @@ return [
     'service_manager' => [
         'factories' => [
             TaskService\Account::class => TaskService\Service\AccountFactory::class,
+            TaskService\Directory::class => TaskService\Service\DirectoryFactory::class,
             AuthenticationService::class => AuthenticationServiceFactory::class,
             ApplicationService::class => ApplicationServiceFactory::class,
             EmailTaskService::class => EmailTaskServiceFactory::class,

@@ -7,19 +7,27 @@
  * @license https://raw.githubusercontent.com/zource/zource/master/LICENSE MIT
  */
 
-namespace ZourceUser\Mvc\Controller\Service;
+namespace ZourceUser\TaskService\Service;
 
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use ZourceUser\Mvc\Controller\AdminDirectories;
+use ZourceApplication\TaskService\CacheManager;
 use ZourceUser\TaskService\Directory;
 
-class AdminDirectoriesFactory implements FactoryInterface
+class DirectoryFactory implements FactoryInterface
 {
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $directoryTaskService = $serviceLocator->getServiceLocator()->get(Directory::class);
+        /** @var array $config */
+        $config = $serviceLocator->get('Config');
 
-        return new AdminDirectories($directoryTaskService);
+        /** @var CacheManager $cacheManager */
+        $cacheManager = $serviceLocator->get(CacheManager::class);
+
+        return new Directory(
+            'config/autoload/zource.auth-directories.local.php',
+            $config['zource_auth_directories'],
+            $cacheManager
+        );
     }
 }

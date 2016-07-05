@@ -14,6 +14,12 @@ $this->placeholder('layout')->pageNavGroupPrimary = 'admin-navgroup';
     </div>
 </div>
 
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_DEFAULT); ?>
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_SUCCESS); ?>
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_WARNING); ?>
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_ERROR); ?>
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_INFO); ?>
+
 <table class="zui-table zui-table-striped">
     <thead>
         <tr>

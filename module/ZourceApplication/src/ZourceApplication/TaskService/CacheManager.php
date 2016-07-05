@@ -65,6 +65,12 @@ class CacheManager
         return $cacheItems;
     }
 
+    public function clearModuleCache()
+    {
+        $this->clearCache('module-classmap');
+        $this->clearCache('module-config');
+    }
+
     public function clearCache($id)
     {
         $event = new Event();

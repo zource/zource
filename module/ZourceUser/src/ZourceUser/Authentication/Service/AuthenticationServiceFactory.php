@@ -30,7 +30,7 @@ class AuthenticationServiceFactory implements FactoryInterface
         $crypter = $serviceLocator->get(PasswordInterface::class);
 
         /** @var AdapterInterface $adapter */
-        $adapter = new Zource($entityManager, 'username', $crypter);
+        $adapter = new Zource($entityManager, ['username', 'email'], $crypter);
 
         /** @var StorageInterface $storage */
         $storage = new Session();
