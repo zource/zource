@@ -10,13 +10,13 @@
 namespace ZourceUser\Authentication\Adapter;
 
 use Doctrine\ORM\EntityManager;
-use Zend\Authentication\Adapter\ValidatableAdapterInterface;
+use Zend\Authentication\Adapter\AbstractAdapter;
 use Zend\Authentication\Result;
 use Zend\Crypt\Password\PasswordInterface;
 use ZourceUser\Entity\Account;
 use ZourceUser\Entity\Identity as IdentityEntity;
 
-class Zource implements ValidatableAdapterInterface
+class Zource extends AbstractAdapter
 {
     /**
      * @var EntityManager
@@ -31,55 +31,13 @@ class Zource implements ValidatableAdapterInterface
     /**
      * @var string
      */
-    private $identity;
-
-    /**
-     * @var string
-     */
-    private $credential;
-
-    /**
-     * @var string
-     */
     private $directory;
 
-    public function __construct(EntityManager $entityManager, $directory, PasswordInterface $crypter)
+    public function __construct(EntityManager $entityManager, $directory, PasswordInterface $crypter = null)
     {
         $this->entityManager = $entityManager;
         $this->crypter = $crypter;
         $this->directory = $directory;
-    }
-
-    /**
-     * @return string
-     */
-    public function getIdentity()
-    {
-        return $this->identity;
-    }
-
-    /**
-     * @param string $identity
-     */
-    public function setIdentity($identity)
-    {
-        $this->identity = $identity;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCredential()
-    {
-        return $this->credential;
-    }
-
-    /**
-     * @param string $credential
-     */
-    public function setCredential($credential)
-    {
-        $this->credential = $credential;
     }
 
     /**
@@ -113,7 +71,7 @@ class Zource implements ValidatableAdapterInterface
         /** @var Account $account */
         $account = $identity->getAccount();
 
-        if (!$this->crypter->verify($this->getCredential(), $account->getCredential())) {
+        if ($this->getCredential() && !$this->crypter->verify($this->getCredential(), $account->getCredential())) {
             return new Result(Result::FAILURE_CREDENTIAL_INVALID, $this->getIdentity());
         }
 

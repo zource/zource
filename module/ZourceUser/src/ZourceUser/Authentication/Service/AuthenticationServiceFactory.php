@@ -40,7 +40,7 @@ class AuthenticationServiceFactory implements FactoryInterface
 
     private function buildChain(ServiceLocatorInterface $serviceLocator)
     {
-        /** @var DirectoryTaskService $crypter */
+        /** @var DirectoryTaskService $directoryTaskService */
         $directoryTaskService = $serviceLocator->get(DirectoryTaskService::class);
 
         /** @var PluginManager $adapterPluginManager */
@@ -60,7 +60,7 @@ class AuthenticationServiceFactory implements FactoryInterface
                     $directory->getServiceName()
                 ));
             }
-            
+
             $adapter = $adapterPluginManager->get(
                 $directory->getServiceName(),
                 $directory->getServiceOptions()

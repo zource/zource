@@ -71,12 +71,12 @@ class Directory
                 $directory->setUpdateRouteOptions($configOptions['update_route_options']);
             }
 
-            if (array_key_exists('service_name', $configOptions)) {
-                $directory->setServiceName($configOptions['service_name']);
+            if (array_key_exists('service_name', $options)) {
+                $directory->setServiceName($options['service_name']);
             }
 
-            if (array_key_exists('service_options', $configOptions)) {
-                $directory->setServiceOptions($configOptions['service_options']);
+            if (array_key_exists('service_options', $options)) {
+                $directory->setServiceOptions($options['service_options']);
             }
 
             $directories[] = $directory;

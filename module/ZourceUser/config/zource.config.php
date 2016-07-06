@@ -903,6 +903,7 @@ return [
     ],
     'zource_auth_adapters' => [
         'factories' => [
+            Authentication\Adapter\Ldap::class => Authentication\Adapter\Service\LdapFactory::class,
             Authentication\Adapter\Zource::class => Authentication\Adapter\Service\ZourceFactory::class,
         ],
     ],
@@ -927,7 +928,7 @@ return [
             'label' => 'LDAP',
             'enabled' => false,
             'update_route_name' => 'admin/usermanagement/directories/ldap',
-            'service_name' => Authentication\Adapter\Zource::class,
+            'service_name' => Authentication\Adapter\Ldap::class,
             'service_options' => [
             ],
         ],
