@@ -41,13 +41,29 @@ class Directory
      */
     private $updateRouteOptions;
 
-    public function __construct($type, $label, $enabled)
+    /**
+     * The name of the service used authenticate a user.
+     *
+     * @var string
+     */
+    private $serviceName;
+
+    /**
+     * Options passed to creating the service.
+     *
+     * @var array
+     */
+    private $serviceOptions;
+
+    public function __construct($type, $label, $serviceName)
     {
         $this->type = $type;
         $this->label = $label;
-        $this->enabled = $enabled;
+        $this->enabled = false;
         $this->updateRouteParams = [];
         $this->updateRouteOptions = [];
+        $this->serviceName = $serviceName;
+        $this->serviceOptions = [];
     }
 
     /**
@@ -128,5 +144,37 @@ class Directory
     public function setUpdateRouteOptions($updateRouteOptions)
     {
         $this->updateRouteOptions = $updateRouteOptions;
+    }
+
+    /**
+     * @return string
+     */
+    public function getServiceName()
+    {
+        return $this->serviceName;
+    }
+
+    /**
+     * @param string $serviceName
+     */
+    public function setServiceName($serviceName)
+    {
+        $this->serviceName = $serviceName;
+    }
+
+    /**
+     * @return array
+     */
+    public function getServiceOptions()
+    {
+        return $this->serviceOptions;
+    }
+
+    /**
+     * @param array $serviceOptions
+     */
+    public function setServiceOptions($serviceOptions)
+    {
+        $this->serviceOptions = $serviceOptions;
     }
 }

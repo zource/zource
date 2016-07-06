@@ -10,14 +10,16 @@
 namespace ZourceUser\Authentication\Service;
 
 use Doctrine\ORM\EntityManager;
-use Zend\Authentication\Adapter\AdapterInterface;
+use RuntimeException;
 use Zend\Authentication\Storage\Session;
 use Zend\Authentication\Storage\StorageInterface;
 use Zend\Crypt\Password\PasswordInterface;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use ZourceUser\Authentication\Adapter\Zource;
+use ZourceUser\Authentication\Adapter\Chain;
 use ZourceUser\Authentication\AuthenticationService;
+use ZourceUser\TaskService\Directory as DirectoryTaskService;
+use ZourceUser\ValueObject\Directory;
 
 class AuthenticationServiceFactory implements FactoryInterface
 {
@@ -26,15 +28,42 @@ class AuthenticationServiceFactory implements FactoryInterface
         /** @var EntityManager $entityManager */
         $entityManager = $serviceLocator->get('doctrine.entitymanager.orm_default');
 
-        /** @var PasswordInterface $crypter */
-        $crypter = $serviceLocator->get(PasswordInterface::class);
-
-        /** @var AdapterInterface $adapter */
-        $adapter = new Zource($entityManager, ['username', 'email'], $crypter);
+        /** @var Chain $chain */
+        $chain = $this->buildChain($serviceLocator);
 
         /** @var StorageInterface $storage */
         $storage = new Session();
 
-        return new AuthenticationService($entityManager, $storage, $adapter);
+        return new AuthenticationService($entityManager, $storage, $chain);
+    }
+
+    private function buildChain(ServiceLocatorInterface $serviceLocator)
+    {
+        /** @var DirectoryTaskService $crypter */
+        $directoryTaskService = $serviceLocator->get(DirectoryTaskService::class);
+
+        $chain = new Chain();
+
+        /** @var Directory $directory */
+        foreach ($directoryTaskService->getDirectories() as $directory) {
+            if (!$directory->getEnabled()) {
+                continue;
+            }
+
+            if (!$serviceLocator->has($directory->getServiceName())) {
+                throw new RuntimeException(sprintf(
+                    'The service "%s" could not be found.',
+                    $directory->getServiceName()
+                ));
+            }
+            
+            $adapter = $serviceLocator->get($directory->getServiceName(), $directory->getServiceOptions());
+
+            $chain->addAdapter($adapter);
+
+            //$chain->addAdapter(new Zource($entityManager, $directoryTaskService->getDirectories(), $crypter));
+        }
+
+        return $chain;
     }
 }

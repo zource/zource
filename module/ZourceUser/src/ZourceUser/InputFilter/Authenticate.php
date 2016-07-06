@@ -9,18 +9,17 @@
 
 namespace ZourceUser\InputFilter;
 
-use Zend\Authentication\Adapter\AdapterInterface;
-use Zend\Authentication\AuthenticationService;
+use Zend\Authentication\AuthenticationServiceInterface;
 use Zend\InputFilter\InputFilter;
 
 class Authenticate extends InputFilter
 {
     /**
-     * @var AuthenticationService
+     * @var AuthenticationServiceInterface
      */
     private $authenticationService;
 
-    public function __construct(AuthenticationService $authenticationService)
+    public function __construct(AuthenticationServiceInterface $authenticationService)
     {
         $this->authenticationService = $authenticationService;
     }

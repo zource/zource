@@ -40,7 +40,8 @@ class Directory
         $this->localConfigPath = $localConfigPath;
         $this->config = $config;
         $this->cacheManager = $cacheManager;
-        $this->directories = $this->loadDirectories();
+
+        $this->loadDirectories();
     }
 
     public function getDirectories()
@@ -53,8 +54,10 @@ class Directory
             $directory = new DirectoryValueObject(
                 $type,
                 $configOptions['label'],
-                $options['enabled']
+                $options['service_name']
             );
+
+            $directory->setEnabled($options['enabled']);
 
             if (array_key_exists('update_route_name', $configOptions)) {
                 $directory->setUpdateRouteName($configOptions['update_route_name']);
@@ -136,8 +139,11 @@ class Directory
     {
         $data = [];
 
+        $flushRequested = true;
+
         if (is_file($this->localConfigPath)) {
             $data = include $this->localConfigPath;
+            $flushRequested = false;
         }
 
         foreach ($this->config as $type => $options) {
@@ -152,13 +158,30 @@ class Directory
             if (!array_key_exists('priority', $data[$type])) {
                 $data[$type]['priority'] = 0;
             }
+
+            if (!array_key_exists('service_name', $data[$type])) {
+                $data[$type]['service_name'] = $options['service_name'];
+            }
+
+            if (!array_key_exists('service_options', $data[$type])) {
+                $data[$type]['service_options'] = $options['service_options'];
+            }
         }
 
         uasort($data, function($lft, $rgt) {
             return strcmp($lft['priority'], $rgt['priority']);
         });
 
-        return $data;
+        $priority = 0;
+        foreach ($data as $type => $options) {
+            $data[$type]['priority'] = $priority++;
+        }
+
+        $this->directories = $data;
+
+        if ($flushRequested) {
+            $this->flush();
+        }
     }
 
     private function flush()

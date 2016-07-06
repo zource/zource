@@ -10,25 +10,35 @@
 namespace ZourceUser\Authentication;
 
 use Doctrine\ORM\EntityManager;
+use Zend\Authentication\Adapter;
 use Zend\Authentication\Adapter\AdapterInterface;
 use Zend\Authentication\AuthenticationService as BaseAuthenticationService;
 use Zend\Authentication\Storage\StorageInterface;
+use ZourceUser\Entity\Account as AccountEntity;
 use ZourceUser\Entity\Identity as IdentityEntity;
 
 class AuthenticationService extends BaseAuthenticationService
 {
+    /**
+     * The entity manager used to lookup
+     *
+     * @var EntityManager
+     */
     private $entityManager;
+
     private $cachedAccount;
     private $cachedIdentity;
 
-    public function __construct(
-        EntityManager $entityManager,
-        StorageInterface $storage = null,
-        AdapterInterface $adapter = null
-    ) {
+    public function __construct(EntityManager $entityManager, StorageInterface $storage, AdapterInterface $adapter)
+    {
         parent::__construct($storage, $adapter);
 
         $this->entityManager = $entityManager;
+    }
+
+    public function getAdapter()
+    {
+        return $this->adapter;
     }
 
     public function clearIdentity()

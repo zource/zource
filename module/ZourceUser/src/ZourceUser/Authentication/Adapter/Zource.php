@@ -41,13 +41,13 @@ class Zource implements ValidatableAdapterInterface
     /**
      * @var string
      */
-    private $directories;
-    
-    public function __construct(EntityManager $entityManager, array $directories, PasswordInterface $crypter)
+    private $directory;
+
+    public function __construct(EntityManager $entityManager, $directory, PasswordInterface $crypter)
     {
         $this->entityManager = $entityManager;
         $this->crypter = $crypter;
-        $this->directories = $directories;
+        $this->directory = $directory;
     }
 
     /**
@@ -85,24 +85,24 @@ class Zource implements ValidatableAdapterInterface
     /**
      * @return string
      */
-    public function getDirectories()
+    public function getDirectory()
     {
-        return $this->directories;
+        return $this->directory;
     }
 
     /**
-     * @param string $directories
+     * @param string $directory
      */
-    public function setDirectories($directories)
+    public function setDirectory($directory)
     {
-        $this->directories = $directories;
+        $this->directory = $directory;
     }
 
     public function authenticate()
     {
         $repository = $this->entityManager->getRepository(IdentityEntity::class);
         $identity = $repository->findOneBy([
-            'directory' => $this->getDirectories(),
+            'directory' => $this->directory,
             'identity' => $this->getIdentity(),
         ]);
 

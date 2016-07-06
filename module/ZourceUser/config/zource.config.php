@@ -22,17 +22,6 @@ use ZourceUser\Entity\Account as AccountEntity;
 use ZourceUser\Entity\AccountInterface;
 use ZourceUser\Entity\Identity as IdentityEntity;
 use ZourceUser\Entity\IdentityInterface;
-use ZourceUser\Form\Account as AccountForm;
-use ZourceUser\Form\AddEmail as AddEmailForm;
-use ZourceUser\Form\AdminRole;
-use ZourceUser\Form\Authenticate as AuthenticateForm;
-use ZourceUser\Form\ChangeIdentity as ChangeIdentityForm;
-use ZourceUser\Form\CreateApplication as CreateApplicationForm;
-use ZourceUser\Form\Profile as ProfileForm;
-use ZourceUser\Form\RequestPassword as RequestPasswordForm;
-use ZourceUser\Form\ResetPassword as ResetPasswordForm;
-use ZourceUser\Form\VerifyCode as VerifyCodeForm;
-use ZourceUser\Form\VerifyEmail as VerifyEmailForm;
 use ZourceUser\InputFilter\Account as AccountInputFilter;
 use ZourceUser\InputFilter\AddEmail as AddEmailInputFilter;
 use ZourceUser\InputFilter\Authenticate as AuthenticateInputFilter;
@@ -838,6 +827,7 @@ return [
     ],
     'service_manager' => [
         'factories' => [
+            Authentication\Adapter\Zource::class => Authentication\Adapter\Service\ZourceFactory::class,
             TaskService\Account::class => TaskService\Service\AccountFactory::class,
             TaskService\Directory::class => TaskService\Service\DirectoryFactory::class,
             AuthenticationService::class => AuthenticationServiceFactory::class,
@@ -913,17 +903,29 @@ return [
     ],
     'zource_auth_directories' => [
         'username' => [
-            'type' => 'database',
             'label' => 'Username',
+            'enabled' => true,
+            'service_name' => Authentication\Adapter\Zource::class,
+            'service_options' => [
+                'directory' => 'username',
+            ],
         ],
         'email' => [
-            'type' => 'database',
             'label' => 'E-mail',
+            'enabled' => true,
+            'service_name' => Authentication\Adapter\Zource::class,
+            'service_options' => [
+                'directory' => 'email',
+            ],
         ],
         'ldap' => [
-            'type' => 'ldap',
             'label' => 'LDAP',
+            'enabled' => false,
             'update_route_name' => 'admin/usermanagement/directories/ldap',
+            'service_name' => Authentication\Adapter\Zource::class,
+            'service_options' => [
+                'directory' => 'username',
+            ],
         ],
     ],
     'zource_conditions' => [
