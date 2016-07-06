@@ -17,6 +17,7 @@ use Zend\Crypt\Password\PasswordInterface;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use ZourceUser\Authentication\Adapter\Chain;
+use ZourceUser\Authentication\Adapter\Service\PluginManager;
 use ZourceUser\Authentication\AuthenticationService;
 use ZourceUser\TaskService\Directory as DirectoryTaskService;
 use ZourceUser\ValueObject\Directory;
@@ -42,6 +43,9 @@ class AuthenticationServiceFactory implements FactoryInterface
         /** @var DirectoryTaskService $crypter */
         $directoryTaskService = $serviceLocator->get(DirectoryTaskService::class);
 
+        /** @var PluginManager $adapterPluginManager */
+        $adapterPluginManager = $serviceLocator->get(PluginManager::class);
+
         $chain = new Chain();
 
         /** @var Directory $directory */
@@ -50,18 +54,19 @@ class AuthenticationServiceFactory implements FactoryInterface
                 continue;
             }
 
-            if (!$serviceLocator->has($directory->getServiceName())) {
+            if (!$adapterPluginManager->has($directory->getServiceName())) {
                 throw new RuntimeException(sprintf(
                     'The service "%s" could not be found.',
                     $directory->getServiceName()
                 ));
             }
             
-            $adapter = $serviceLocator->get($directory->getServiceName(), $directory->getServiceOptions());
+            $adapter = $adapterPluginManager->get(
+                $directory->getServiceName(),
+                $directory->getServiceOptions()
+            );
 
             $chain->addAdapter($adapter);
-
-            //$chain->addAdapter(new Zource($entityManager, $directoryTaskService->getDirectories(), $crypter));
         }
 
         return $chain;

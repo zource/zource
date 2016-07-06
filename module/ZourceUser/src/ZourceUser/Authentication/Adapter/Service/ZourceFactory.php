@@ -27,12 +27,16 @@ class ZourceFactory implements FactoryInterface, MutableCreationOptionsInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         /** @var EntityManager $entityManager */
-        $entityManager = $serviceLocator->get('doctrine.entitymanager.orm_default');
+        $entityManager = $serviceLocator->getServiceLocator()->get('doctrine.entitymanager.orm_default');
 
         /** @var PasswordInterface $crypter */
-        $crypter = $serviceLocator->get(PasswordInterface::class);
+        $crypter = $serviceLocator->getServiceLocator()->get(PasswordInterface::class);
 
-        return new Zource($entityManager, 'username', $crypter);
+        $adapter = new Zource($entityManager, $this->creationOptions['directory'], $crypter);
+
+        $this->creationOptions = [];
+
+        return $adapter;
     }
 
     public function setCreationOptions(array $options)

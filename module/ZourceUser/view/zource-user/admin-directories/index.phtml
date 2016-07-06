@@ -24,15 +24,15 @@ $this->placeholder('layout')->pageNavGroupPrimary = 'admin-navgroup';
     <thead>
         <tr>
             <th>Name</th>
-            <th class="zui-text-right">Priority</th>
-            <th class="zui-text-right">Operations</th>
+            <th style="width: 200px;">Priority</th>
+            <th class="zui-text-right" style="width: 200px;">Operations</th>
         </tr>
     </thead>
     <tbody>
         <?php foreach ($this->directories as $directory) { ?>
             <tr>
                 <td><?php echo $this->escapeHtml($this->translate($directory->getLabel())); ?></td>
-                <td class="zui-text-right">
+                <td>
                     <a href="<?php echo $this->url('admin/usermanagement/directories/move-up', [
                         'type' => $directory->getType(),
                     ]); ?>">Up</a>

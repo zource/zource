@@ -71,6 +71,14 @@ class Directory
                 $directory->setUpdateRouteOptions($configOptions['update_route_options']);
             }
 
+            if (array_key_exists('service_name', $configOptions)) {
+                $directory->setServiceName($configOptions['service_name']);
+            }
+
+            if (array_key_exists('service_options', $configOptions)) {
+                $directory->setServiceOptions($configOptions['service_options']);
+            }
+
             $directories[] = $directory;
         }
 
@@ -152,7 +160,7 @@ class Directory
             }
 
             if (!array_key_exists('enabled', $data[$type])) {
-                $data[$type]['enabled'] = true;
+                $data[$type]['enabled'] = $options['enabled'];
             }
 
             if (!array_key_exists('priority', $data[$type])) {

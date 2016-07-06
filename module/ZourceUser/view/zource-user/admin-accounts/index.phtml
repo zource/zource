@@ -38,8 +38,8 @@ $this->placeholder('layout')->pageNavGroupPrimary = 'admin-navgroup';
         <thead>
             <tr>
                 <th>Name</th>
-                <th>Status</th>
-                <th class="zui-text-right">Operations</th>
+                <th style="width: 200px;">Status</th>
+                <th class="zui-text-right" style="width: 200px;">Operations</th>
             </tr>
         </thead>
         <tbody>
@@ -52,7 +52,7 @@ $this->placeholder('layout')->pageNavGroupPrimary = 'admin-navgroup';
                             <?php echo $this->escapeHtml($account->getContact()->getDisplayName()); ?>
                         </a>
                     </td>
-                    <td style="width: 200px;">
+                    <td>
                         <?php
 
                         switch ($account->getStatus()) {
@@ -71,7 +71,7 @@ $this->placeholder('layout')->pageNavGroupPrimary = 'admin-navgroup';
 
                         ?>
                     </td>
-                    <td class="zui-text-right" style="width: 250px;">
+                    <td class="zui-text-right">
                         <?php
 
                         $links = [];

@@ -827,7 +827,6 @@ return [
     ],
     'service_manager' => [
         'factories' => [
-            Authentication\Adapter\Zource::class => Authentication\Adapter\Service\ZourceFactory::class,
             TaskService\Account::class => TaskService\Service\AccountFactory::class,
             TaskService\Directory::class => TaskService\Service\DirectoryFactory::class,
             AuthenticationService::class => AuthenticationServiceFactory::class,
@@ -841,6 +840,7 @@ return [
             TwoFactorAuthenticationService::class => TwoFactorAuthenticationServiceFactory::class,
         ],
         'invokables' => [
+            Authentication\Adapter\Service\PluginManager::class => Authentication\Adapter\Service\PluginManager::class,
             PasswordInterface::class => Bcrypt::class,
         ],
     ],
@@ -901,6 +901,11 @@ return [
             'zource-user/two-factor-authentication/enable' => __DIR__ . '/../view/zource-user/two-factor-authentication/enable.phtml',
         ],
     ],
+    'zource_auth_adapters' => [
+        'factories' => [
+            Authentication\Adapter\Zource::class => Authentication\Adapter\Service\ZourceFactory::class,
+        ],
+    ],
     'zource_auth_directories' => [
         'username' => [
             'label' => 'Username',
@@ -924,7 +929,6 @@ return [
             'update_route_name' => 'admin/usermanagement/directories/ldap',
             'service_name' => Authentication\Adapter\Zource::class,
             'service_options' => [
-                'directory' => 'username',
             ],
         ],
     ],

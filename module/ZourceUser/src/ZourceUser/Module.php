@@ -10,15 +10,30 @@
 namespace ZourceUser;
 
 use Zend\Console\Console;
+use Zend\ModuleManager\ModuleManager;
 use Zend\Mvc\MvcEvent;
 use Zend\Stdlib\ArrayUtils;
 use ZF\Apigility\Provider\ApigilityProviderInterface;
+use ZourceUser\Authentication\Adapter\Service\PluginManager;
 use ZourceUser\Listener\IdentityGuard;
 use ZourceUser\Listener\RouteGuard;
 use ZourceUser\Listener\Session;
 
 class Module implements ApigilityProviderInterface
 {
+    public function init(ModuleManager $moduleManager)
+    {
+        $sm = $moduleManager->getEvent()->getParam('ServiceManager');
+
+        $serviceListener = $sm->get('ServiceListener');
+        $serviceListener->addServiceManager(
+            PluginManager::class,
+            'zource_auth_adapters',
+            '',
+            ''
+        );
+    }
+
     public function getConfig()
     {
         return ArrayUtils::merge(
