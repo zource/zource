@@ -14,33 +14,31 @@ $this->placeholder('layout')->pageMenu = 'contacts-directory';
             </p>
         </div>
     <?php } else { ?>
-        <ul>
-            <?php foreach ($this->contactsPaginator as $contact) { ?>
-                <li style="width: 250px;">
-                    <h2>
-                        <a href="<?php echo $this->url('contacts/view', [
-                            'id' => $contact->getId()->toString(),
-                        ]); ?>">
-                            <?php echo $this->escapeHtml($contact->getDisplayName()); ?>
-                        </a>
-                    </h2>
-                    <p>
-                        <a href="<?php echo $this->url('contacts/view', [
-                            'id' => $contact->getId()->toString(),
-                        ]); ?>">
-                            <?php echo $this->zourceContactAvatar($contact); ?>
-                        </a>
-                    </p>
-                </li>
-            <?php } ?>
-        </ul>
+        <div class="zui-grid-container" id="zource-contacts-directory-list">
+            <div class="zui-grid-row">
+                <?php foreach ($this->contactsPaginator as $contact) { ?>
+                    <div class="zui-text-center zui-grid-xs-column-12 zui-grid-md-column-4 zui-grid-lg-column-3">
+                        <h2>
+                            <a href="<?php echo $this->url('contacts/view', [
+                                'id' => $contact->getId()->toString(),
+                            ]); ?>">
+                                <?php echo $this->escapeHtml($contact->getDisplayName()); ?>
+                            </a>
+                        </h2>
+                        <p>
+                            <a href="<?php echo $this->url('contacts/view', [
+                                'id' => $contact->getId()->toString(),
+                            ]); ?>">
+                                <?php echo $this->zourceContactAvatar($contact); ?>
+                            </a>
+                        </p>
+                    </div>
+                <?php } ?>
+            </div>
+        </div>
 
-        <?php
-
-        echo $this->paginationControl($this->contactsPaginator, 'sliding', 'partial/paginator', [
+        <?php echo $this->paginationControl($this->contactsPaginator, 'sliding', 'partial/paginator', [
             'route' => 'contacts'
-        ]);
-
-        ?>
+        ]); ?>
     <?php } ?>
 </div>
