@@ -37,13 +37,14 @@ table > thead > tr > th {
     padding: 4px 0 4px 215px;
 }
 
-fieldset.zui-group {
-    padding: 4px 0 4px 215px;
+input[type="checkbox"] {
+    vertical-align: -webkit-baseline-middle;
 }
 
-fieldset legend {
-    margin-left: -215px;
-    width: 200px;
+fieldset {
+    border: 0;
+    margin: 0;
+    padding: 0;
 }
 
 textarea {

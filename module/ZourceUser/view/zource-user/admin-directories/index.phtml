@@ -29,37 +29,57 @@ $this->placeholder('layout')->pageNavGroupPrimary = 'admin-navgroup';
         </tr>
     </thead>
     <tbody>
-        <?php foreach ($this->directories as $directory) { ?>
+        <?php
+
+        foreach ($this->directories as $type => $directory) {
+            $enableRoute = 'admin/usermanagement/directories/enable';
+            $enableRouteParams = array_merge(
+                [
+                    'type' => $type,
+                ],
+                $directory['enable_route_params']
+            );
+            $enableRouteOptions = $directory['enable_route_options'];
+
+            $disableRoute = 'admin/usermanagement/directories/disable';
+            $disableRouteParams = array_merge(
+                [
+                    'type' => $type,
+                ],
+                $directory['disable_route_params']
+            );
+            $disableRouteOptions = $directory['disable_route_options'];
+
+            $updateRoute = $directory['update_route_name'] ? $directory['update_route_name'] : null;
+            $updateRouteParams = array_merge(
+                [
+                    'type' => $type,
+                ],
+                $directory['update_route_params']
+            );
+            $updateRouteOptions = $directory['update_route_options'];
+
+            ?>
             <tr>
-                <td><?php echo $this->escapeHtml($this->translate($directory->getLabel())); ?></td>
+                <td><?php echo $this->escapeHtml($this->translate($directory['label'])); ?></td>
                 <td>
                     <a href="<?php echo $this->url('admin/usermanagement/directories/move-up', [
-                        'type' => $directory->getType(),
+                        'type' => $type,
                     ]); ?>">Up</a>
                     -
                     <a href="<?php echo $this->url('admin/usermanagement/directories/move-down', [
-                        'type' => $directory->getType(),
+                        'type' => $type,
                     ]); ?>">Down</a>
                 </td>
                 <td class="zui-text-right">
-                    <?php if ($directory->getUpdateRouteName()) { ?>
-                        <a href="<?php echo $this->url(
-                            $directory->getUpdateRouteName(),
-                            array_merge([
-                                'type' => $directory->getType(),
-                            ], $directory->getUpdateRouteParams()),
-                            $directory->getUpdateRouteOptions()
-                        ); ?>">Edit</a> -
+                    <?php if ($directory['update_route_name']) { ?>
+                        <a href="<?php echo $this->url($updateRoute, $updateRouteParams, $updateRouteOptions); ?>">Edit</a> -
                     <?php } ?>
 
-                    <?php if ($directory->getEnabled()) { ?>
-                        <a href="<?php echo $this->url('admin/usermanagement/directories/disable', [
-                            'type' => $directory->getType(),
-                        ]); ?>">Disable</a>
+                    <?php if ($directory['enabled']) { ?>
+                        <a href="<?php echo $this->url($disableRoute, $disableRouteParams, $disableRouteOptions); ?>">Disable</a>
                     <?php } else { ?>
-                        <a href="<?php echo $this->url('admin/usermanagement/directories/enable', [
-                            'type' => $directory->getType(),
-                        ]); ?>">Enable</a>
+                        <a href="<?php echo $this->url($enableRoute, $enableRouteParams, $enableRouteOptions); ?>">Enable</a>
                     <?php } ?>
                 </td>
             </tr>

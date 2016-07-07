@@ -13,14 +13,12 @@ use Doctrine\ORM\EntityManager;
 use RuntimeException;
 use Zend\Authentication\Storage\Session;
 use Zend\Authentication\Storage\StorageInterface;
-use Zend\Crypt\Password\PasswordInterface;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use ZourceUser\Authentication\Adapter\Chain;
 use ZourceUser\Authentication\Adapter\Service\PluginManager;
 use ZourceUser\Authentication\AuthenticationService;
 use ZourceUser\TaskService\Directory as DirectoryTaskService;
-use ZourceUser\ValueObject\Directory;
 
 class AuthenticationServiceFactory implements FactoryInterface
 {
@@ -48,22 +46,21 @@ class AuthenticationServiceFactory implements FactoryInterface
 
         $chain = new Chain();
 
-        /** @var Directory $directory */
         foreach ($directoryTaskService->getDirectories() as $directory) {
-            if (!$directory->getEnabled()) {
+            if (!$directory['enabled']) {
                 continue;
             }
 
-            if (!$adapterPluginManager->has($directory->getServiceName())) {
+            if (!$adapterPluginManager->has($directory['service_name'])) {
                 throw new RuntimeException(sprintf(
                     'The service "%s" could not be found.',
-                    $directory->getServiceName()
+                    $directory['service_name']
                 ));
             }
 
             $adapter = $adapterPluginManager->get(
-                $directory->getServiceName(),
-                $directory->getServiceOptions()
+                $directory['service_name'],
+                $directory['service_options']
             );
 
             $chain->addAdapter($adapter);

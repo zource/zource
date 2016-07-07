@@ -151,6 +151,7 @@ return [
             DeveloperApplication::class => DeveloperApplicationFactory::class,
             Email::class => EmailFactory::class,
             Mvc\Controller\AdminDirectories::class => Mvc\Controller\Service\AdminDirectoriesFactory::class,
+            Mvc\Controller\AdminDirectoryLdap::class => Mvc\Controller\Service\AdminDirectoryLdapFactory::class,
             Notification::class => NotificationFactory::class,
             OAuth::class => OAuthFactory::class,
             Profile::class => ProfileFactory::class,
@@ -218,6 +219,11 @@ return [
             'hydrator' => 'ClassMethods',
             'input_filter' => InputFilter\AdminGroup::class,
         ],
+        Form\AdminLdap::class => [
+            'type' => Form\AdminLdap::class,
+            'hydrator' => 'ClassMethods',
+            'input_filter' => InputFilter\AdminLdap::class,
+        ],
         Form\AdminRole::class => [
             'type' => Form\AdminRole::class,
             'hydrator' => 'ClassMethods',
@@ -269,12 +275,18 @@ return [
             'input_filter' => VerifyEmailInputFilter::class,
         ],
     ],
+    'form_elements' => [
+        'invokables' => [
+            Form\Element\LdapServer::class => Form\Element\LdapServer::class,
+        ],
+    ],
     'input_filters' => [
         'factories' => [
             AuthenticateInputFilter::class => AuthenticateInputFilterFactory::class,
         ],
         'invokables' => [
             InputFilter\AdminInvite::class => InputFilter\AdminInvite::class,
+            InputFilter\AdminLdap::class => InputFilter\AdminLdap::class,
             AccountInputFilter::class => AccountInputFilter::class,
             AddEmailInputFilter::class => AddEmailInputFilter::class,
             ChangeIdentityInputFilter::class => ChangeIdentityInputFilter::class,
@@ -372,12 +384,12 @@ return [
                                             ],
                                         ],
                                     ],
-                                    'ldap' => [
+                                    'ldap-update' => [
                                         'type' => 'Segment',
                                         'options' => [
                                             'route' => '/update/ldap',
                                             'defaults' => [
-                                                'controller' => Mvc\Controller\AdminDirectoriesLdap::class,
+                                                'controller' => Mvc\Controller\AdminDirectoryLdap::class,
                                                 'action' => 'update',
                                             ],
                                         ],
@@ -879,6 +891,7 @@ return [
             'zource-user/admin-directories/create' => __DIR__ . '/../view/zource-user/admin-directories/create.phtml',
             'zource-user/admin-directories/index' => __DIR__ . '/../view/zource-user/admin-directories/index.phtml',
             'zource-user/admin-directories/update' => __DIR__ . '/../view/zource-user/admin-directories/update.phtml',
+            'zource-user/admin-directory-ldap/update' => __DIR__ . '/../view/zource-user/admin-directory-ldap/update.phtml',
             'zource-user/admin-roles/create' => __DIR__ . '/../view/zource-user/admin-roles/create.phtml',
             'zource-user/admin-roles/index' => __DIR__ . '/../view/zource-user/admin-roles/index.phtml',
             'zource-user/admin-roles/update' => __DIR__ . '/../view/zource-user/admin-roles/update.phtml',
@@ -927,7 +940,7 @@ return [
         'ldap' => [
             'label' => 'LDAP',
             'enabled' => false,
-            'update_route_name' => 'admin/usermanagement/directories/ldap',
+            'update_route_name' => 'admin/usermanagement/directories/ldap-update',
             'service_name' => Authentication\Adapter\Ldap::class,
             'service_options' => [
             ],

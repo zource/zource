@@ -1,0 +1,50 @@
+<?php
+
+$this->layout('layout/page-header');
+
+$this->placeholder('layout')->pageTitle = $this->translate('pageAdminTitle');
+$this->placeholder('layout')->pageMenu = 'admin-users';
+$this->placeholder('layout')->pageNavGroupPrimary = 'admin-navgroup';
+
+$this->ldapForm->setAttribute('action', $this->url());
+$this->ldapForm->setAttribute('method', 'post');
+$this->ldapForm->prepare();
+
+?>
+
+<div class="zui-toolbar">
+    <div class="zui-toolbar-primary">
+        <h2>LDAP Directory</h2>
+    </div>
+</div>
+
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_DEFAULT); ?>
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_SUCCESS); ?>
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_WARNING); ?>
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_ERROR); ?>
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_INFO); ?>
+
+<p>
+    The LDAP directory will only validate if a certain identity/credential combination is able to log in. It will not
+    modify, create or delete accounts on the LDAP server.
+</p>
+
+<?php echo $this->form()->openTag($this->ldapForm); ?>
+
+<?php echo $this->formHidden($this->ldapForm->get('token')); ?>
+<?php echo $this->formCollection($this->ldapForm->get('servers')); ?>
+
+<div class="zui-field-group">
+    <?php echo $this->formLabel($this->ldapForm->get('autoCreateAccount')); ?>
+    <?php echo $this->formCheckbox($this->ldapForm->get('autoCreateAccount')); ?>
+    <?php echo $this->zourceFormDescription($this->ldapForm->get('autoCreateAccount')); ?>
+    <?php echo $this->formElementErrors($this->ldapForm->get('autoCreateAccount')); ?>
+</div>
+
+<div class="zui-buttons-container">
+    <div class="zui-buttons">
+        <?php echo $this->formSubmit($this->ldapForm->get('submit')); ?>
+    </div>
+</div>
+
+<?php echo $this->form()->closeTag(); ?>

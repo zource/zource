@@ -40,53 +40,35 @@ class Directory
         $this->localConfigPath = $localConfigPath;
         $this->config = $config;
         $this->cacheManager = $cacheManager;
+    }
 
+    public function updateDirectoryServiceOptions($type, $data)
+    {
         $this->loadDirectories();
+
+        $this->directories[$type]['service_options'] = $data;
+
+        $this->flush();
+    }
+
+    public function getDirectory($type)
+    {
+        $this->loadDirectories();
+
+        return $this->directories[$type];
     }
 
     public function getDirectories()
     {
-        $directories = [];
+        $this->loadDirectories();
 
-        foreach ($this->directories as $type => $options) {
-            $configOptions = $this->config[$type];
-
-            $directory = new DirectoryValueObject(
-                $type,
-                $configOptions['label'],
-                $options['service_name']
-            );
-
-            $directory->setEnabled($options['enabled']);
-
-            if (array_key_exists('update_route_name', $configOptions)) {
-                $directory->setUpdateRouteName($configOptions['update_route_name']);
-            }
-
-            if (array_key_exists('update_route_params', $configOptions)) {
-                $directory->setUpdateRouteParams($configOptions['update_route_params']);
-            }
-
-            if (array_key_exists('update_route_options', $configOptions)) {
-                $directory->setUpdateRouteOptions($configOptions['update_route_options']);
-            }
-
-            if (array_key_exists('service_name', $options)) {
-                $directory->setServiceName($options['service_name']);
-            }
-
-            if (array_key_exists('service_options', $options)) {
-                $directory->setServiceOptions($options['service_options']);
-            }
-
-            $directories[] = $directory;
-        }
-
-        return $directories;
+        return $this->directories;
     }
 
     public function disable($directory)
     {
+        $this->loadDirectories();
+
         $this->directories[$directory]['enabled'] = false;
 
         $this->flush();
@@ -94,6 +76,8 @@ class Directory
 
     public function enable($directory)
     {
+        $this->loadDirectories();
+
         $this->directories[$directory]['enabled'] = true;
 
         $this->flush();
@@ -101,6 +85,8 @@ class Directory
 
     public function moveDown($directory)
     {
+        $this->loadDirectories();
+
         $priority = $this->directories[$directory]['priority'];
 
         if ($priority === count($this->directories) - 1) {
@@ -123,6 +109,8 @@ class Directory
 
     public function moveUp($directory)
     {
+        $this->loadDirectories();
+
         $priority = $this->directories[$directory]['priority'];
 
         if ($priority === 0) {
@@ -145,51 +133,40 @@ class Directory
 
     private function loadDirectories()
     {
-        $data = [];
+        if ($this->directories !== null) {
+            return $this->directories;
+        }
 
+        $this->directories = [];
         $flushRequested = true;
 
         if (is_file($this->localConfigPath)) {
-            $data = include $this->localConfigPath;
+            $this->directories = include $this->localConfigPath;
             $flushRequested = false;
         }
 
         foreach ($this->config as $type => $options) {
-            if (!array_key_exists($type, $data)) {
-                $data[$type] = [];
+            if (!array_key_exists($type, $this->directories)) {
+                $this->directories[$type] = [];
             }
 
-            if (!array_key_exists('enabled', $data[$type])) {
-                $data[$type]['enabled'] = $options['enabled'];
-            }
-
-            if (!array_key_exists('priority', $data[$type])) {
-                $data[$type]['priority'] = 0;
-            }
-
-            if (!array_key_exists('service_name', $data[$type])) {
-                $data[$type]['service_name'] = $options['service_name'];
-            }
-
-            if (!array_key_exists('service_options', $data[$type])) {
-                $data[$type]['service_options'] = $options['service_options'];
-            }
+            $this->populateDirectory($this->directories[$type], $options);
         }
 
-        uasort($data, function($lft, $rgt) {
+        uasort($this->directories, function($lft, $rgt) {
             return strcmp($lft['priority'], $rgt['priority']);
         });
 
         $priority = 0;
-        foreach ($data as $type => $options) {
-            $data[$type]['priority'] = $priority++;
+        foreach ($this->directories as $type => $options) {
+            $this->directories[$type]['priority'] = $priority++;
         }
-
-        $this->directories = $data;
 
         if ($flushRequested) {
             $this->flush();
         }
+
+        return $this->directories;
     }
 
     private function flush()
@@ -198,5 +175,48 @@ class Directory
         $writer->toFile($this->localConfigPath, $this->directories);
 
         $this->cacheManager->clearModuleCache();
+    }
+
+    private function populateDirectory(&$directory, $options)
+    {
+        $directory['label'] = $options['label'];
+        $directory['service_name'] = $options['service_name'];
+
+        if (!array_key_exists('enabled', $directory)) {
+            $directory['enabled'] = $options['enabled'];
+        }
+
+        if (!array_key_exists('priority', $directory)) {
+            $directory['priority'] = 0;
+        }
+
+        if (!array_key_exists('service_options', $directory)) {
+            $directory['service_options'] = $options['service_options'];
+        }
+
+        $this->populateRoute('update', $directory, $options);
+        $this->populateRoute('enable', $directory, $options);
+        $this->populateRoute('disable', $directory, $options);
+    }
+
+    private function populateRoute($name, &$directory, $options)
+    {
+        if (array_key_exists($name . '_route_name', $options)) {
+            $directory[$name . '_route_name'] = $options[$name . '_route_name'];
+        } else {
+            $directory[$name . '_route_name'] = null;
+        }
+
+        if (array_key_exists($name . '_route_params', $options)) {
+            $directory[$name . '_route_params'] = $options[$name . '_route_params'];
+        } else {
+            $directory[$name . '_route_params'] = [];
+        }
+
+        if (array_key_exists($name . '_route_options', $options)) {
+            $directory[$name . '_route_options'] = $options[$name . '_route_options'];
+        } else {
+            $directory[$name . '_route_options'] = [];
+        }
     }
 }

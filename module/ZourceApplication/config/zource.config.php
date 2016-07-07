@@ -298,6 +298,8 @@ return [
             'zourceBytes' => View\Helper\Bytes::class,
             'zourceFormAvatar' => FormAvatar::class,
             'zourceFormDescription' => FormDescription::class,
+            'formRow' => View\Helper\Zui\FormRow::class,
+            //'formText' => View\Helper\Zui\FormText::class,
         ],
     ],
     'view_manager' => [

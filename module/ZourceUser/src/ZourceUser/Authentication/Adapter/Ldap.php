@@ -34,7 +34,7 @@ class Ldap extends AbstractAdapter
 
     public function authenticate()
     {
-        $ldapAdapter = new ZendLdapAdapter($this->options, $this->getIdentity(), $this->getCredential());
+        $ldapAdapter = new ZendLdapAdapter($this->options['servers'], $this->getIdentity(), $this->getCredential());
 
         $result = $ldapAdapter->authenticate();
 
