@@ -10,9 +10,11 @@
 namespace ZourceUser\Authorization\Service;
 
 use Zend\Permissions\Rbac\Rbac;
+use Zend\Permissions\Rbac\Role;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use ZourceUser\Entity\AccountInterface;
+use ZourceUser\Entity\Group;
 
 class RbacFactory implements FactoryInterface
 {
@@ -26,8 +28,17 @@ class RbacFactory implements FactoryInterface
         /** @var AccountInterface $account */
         $account = $authenticationService->getAccountEntity();
 
+        $role = new Role('account-' . $account->getId()->toString());
+
+        /** @var Group $group */
+        foreach ($account->getGroups() as $group) {
+            foreach ($group->getPermissions() as $permission) {
+                $role->addPermission($permission);
+            }
+        }
+
         $rbac = new Rbac();
-        $rbac->addRole('account-' . $account->getId()->toString());
+        $rbac->addRole($role);
 
         return $rbac;
     }
