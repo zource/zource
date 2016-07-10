@@ -74,11 +74,7 @@ class Account implements AccountInterface
     private $twoFactorAuthenticationCode;
 
     /**
-     * @ORM\ManyToMany(targetEntity="ZourceUser\Entity\Group", inversedBy="users")
-     * @ORM\JoinTable(name="user_account_group",
-     *     joinColumns={@ORM\JoinColumn(onDelete="CASCADE")},
-     *     inverseJoinColumns={@ORM\JoinColumn(onDelete="CASCADE")}
-     * )
+     * @ORM\ManyToMany(targetEntity="ZourceUser\Entity\Group", mappedBy="accounts", cascade={"all"})
      * @var Collection
      */
     private $groups;
@@ -221,6 +217,18 @@ class Account implements AccountInterface
     }
 
     /**
+     * @param Group $group
+     */
+    public function addGroup(Group $group)
+    {
+        if (!$this->groups->contains($group)) {
+            $this->groups->add($group);
+
+            $group->addAccount($this);
+        }
+    }
+
+    /**
      * Gets the groups of this account.
      *
      * @return Collection
@@ -228,6 +236,34 @@ class Account implements AccountInterface
     public function getGroups()
     {
         return $this->groups;
+    }
+
+    /**
+     * @param Group $group
+     */
+    public function removeGroup(Group $group)
+    {
+        if ($this->groups->contains($group)) {
+            $this->groups->removeElement($group);
+
+            $group->removeAccount($this);
+        }
+    }
+
+    /**
+     * @param Collection $groups
+     */
+    public function setGroups($groups)
+    {
+        foreach ($this->groups as $group) {
+            $this->removeGroup($group);
+        }
+
+        $this->groups->clear();
+
+        foreach ($groups as $group) {
+            $this->addGroup($group);
+        }
     }
 
     /**

@@ -17,7 +17,11 @@ class FormRow extends BaseFormRow
     public function render(ElementInterface $element, $labelPosition = null)
     {
         $result = '<div class="zui-field-group">';
-        $result .= $this->getView()->formLabel($element);
+
+        if ($element->getLabel()) {
+            $result .= $this->getView()->formLabel($element);
+        }
+
         $result .= $this->getView()->formElement($element);
         $result .= $this->getView()->zourceFormDescription($element);
         $result .= $this->getView()->formElementErrors($element);

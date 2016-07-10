@@ -295,11 +295,12 @@ return [
             'zourceSettings' => View\Helper\Service\SettingsFactory::class,
         ],
         'invokables' => [
+            'formRow' => View\Helper\Zui\FormRow::class,
+            //'formText' => View\Helper\Zui\FormText::class,
             'zourceBytes' => View\Helper\Bytes::class,
             'zourceFormAvatar' => FormAvatar::class,
             'zourceFormDescription' => FormDescription::class,
-            'formRow' => View\Helper\Zui\FormRow::class,
-            //'formText' => View\Helper\Zui\FormText::class,
+            'zourceFormSelect2' => View\Helper\FormSelect2::class,
         ],
     ],
     'view_manager' => [

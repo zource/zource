@@ -10,6 +10,8 @@ $this->accountForm->setAttribute('action', $this->url('admin/usermanagement/acco
     'id' => $this->account->getId(),
 ]));
 $this->accountForm->setAttribute('method', 'post');
+$this->accountForm->get('groups')->setAttribute('data-zui-select2-url', $this->url('lookup/group'));
+$this->accountForm->prepare();
 
 ?>
 
@@ -27,6 +29,13 @@ $this->accountForm->setAttribute('method', 'post');
 
     <?php echo $this->zourceFormDescription($this->accountForm->get('status')); ?>
     <?php echo $this->formElementErrors($this->accountForm->get('status')); ?>
+</div>
+
+<div class="zui-field-group">
+    <?php echo $this->formLabel($this->accountForm->get('groups')); ?>
+    <?php echo $this->zourceFormSelect2($this->accountForm->get('groups')); ?>
+    <?php echo $this->zourceFormDescription($this->accountForm->get('groups')); ?>
+    <?php echo $this->formElementErrors($this->accountForm->get('groups')); ?>
 </div>
 
 <div class="zui-buttons-container">

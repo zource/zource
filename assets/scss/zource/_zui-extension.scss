@@ -33,18 +33,36 @@ table > thead > tr > th {
     }
 }
 
+fieldset {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    border: 0;
+    box-sizing: border-box;
+    clear: both;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    width: 100%;
+}
+
+fieldset legend {
+    color: #707070;
+    cursor: pointer;
+    float: left;
+    height: 30px;
+    line-height: 30px;
+    position: relative;
+    text-align: right;
+    width: 200px;
+    word-wrap: break-word;
+}
+
 .zui-buttons-container {
     padding: 4px 0 4px 215px;
 }
 
 input[type="checkbox"] {
     vertical-align: -webkit-baseline-middle;
-}
-
-fieldset {
-    border: 0;
-    margin: 0;
-    padding: 0;
 }
 
 textarea {

@@ -10,6 +10,7 @@
 namespace ZourceUser\Form;
 
 use Zend\Form\Form as BaseForm;
+use ZourceApplication\Form\Element\Select2;
 use ZourceUser\Entity\Account;
 
 class AdminAccount extends BaseForm
@@ -31,6 +32,22 @@ class AdminAccount extends BaseForm
                     Account::STATUS_ACTIVE => 'Active',
                     Account::STATUS_INACTIVE => 'Inactive',
                 ],
+            ],
+        ]);
+
+        $this->add([
+            'type' => Select2::class,
+            'name' => 'groups',
+            'options' => [
+                'label' => 'Groups',
+                'description' => 'The groups that this account is a member of.',
+                'disable_inarray_validator' => true,
+                'use_hidden_element' => true,
+            ],
+            'attributes' => [
+                'multiple' => 'multiple',
+                'class' => 'zui-select2',
+                'data-zui-select2-url' => '', // Will be set in the view
             ],
         ]);
 

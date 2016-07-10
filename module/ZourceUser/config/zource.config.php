@@ -22,6 +22,7 @@ use ZourceUser\Entity\Account as AccountEntity;
 use ZourceUser\Entity\AccountInterface;
 use ZourceUser\Entity\Identity as IdentityEntity;
 use ZourceUser\Entity\IdentityInterface;
+use ZourceUser\Form\AdminAccount;
 use ZourceUser\InputFilter\Account as AccountInputFilter;
 use ZourceUser\InputFilter\AddEmail as AddEmailInputFilter;
 use ZourceUser\InputFilter\Authenticate as AuthenticateInputFilter;
@@ -44,8 +45,6 @@ use ZourceUser\Mvc\Controller\DeveloperApplication;
 use ZourceUser\Mvc\Controller\Email;
 use ZourceUser\Mvc\Controller\Notification;
 use ZourceUser\Mvc\Controller\OAuth;
-use ZourceUser\Mvc\Controller\Plugin\Service\AccountFactory as AccountPluginFactory;
-use ZourceUser\Mvc\Controller\Plugin\Service\IdentityFactory;
 use ZourceUser\Mvc\Controller\Profile;
 use ZourceUser\Mvc\Controller\RecoveryCodes;
 use ZourceUser\Mvc\Controller\Request;
@@ -144,7 +143,6 @@ return [
             Account::class => AccountFactory::class,
             AdminAccountsController::class => AdminAccountsFactory::class,
             AdminGroupsController::class => AdminGroupsFactory::class,
-            AdminRolesController::class => AdminRolesFactory::class,
             Application::class => ApplicationFactory::class,
             Authenticate::class => AuthenticateFactory::class,
             ConsoleController::class => ConsoleControllerFactory::class,
@@ -152,6 +150,8 @@ return [
             Email::class => EmailFactory::class,
             Mvc\Controller\AdminDirectories::class => Mvc\Controller\Service\AdminDirectoriesFactory::class,
             Mvc\Controller\AdminDirectoryLdap::class => Mvc\Controller\Service\AdminDirectoryLdapFactory::class,
+            Mvc\Controller\AdminPermissions::class => Mvc\Controller\Service\AdminPermissionsFactory::class,
+            Mvc\Controller\Lookup::class => Mvc\Controller\Service\LookupFactory::class,
             Notification::class => NotificationFactory::class,
             OAuth::class => OAuthFactory::class,
             Profile::class => ProfileFactory::class,
@@ -162,8 +162,9 @@ return [
     ],
     'controller_plugins' => [
         'factories' => [
-            'zourceAccount' => AccountPluginFactory::class,
-            'zourceIdentity' => IdentityFactory::class,
+            'zourceAccess' => Mvc\Controller\Plugin\Service\AccessFactory::class,
+            'zourceAccount' => Mvc\Controller\Plugin\Service\AccountFactory::class,
+            'zourceIdentity' => Mvc\Controller\Plugin\Service\IdentityFactory::class,
         ],
     ],
     'doctrine' => [
@@ -206,7 +207,7 @@ return [
         ],
         Form\AdminAccount::class => [
             'type' => Form\AdminAccount::class,
-            'hydrator' => 'ClassMethods',
+            'hydrator' => Form\AdminAccount::class,
             'input_filter' => InputFilter\AdminAccount::class,
         ],
         Form\AdminInvite::class => [
@@ -216,7 +217,7 @@ return [
         ],
         Form\AdminGroup::class => [
             'type' => Form\AdminGroup::class,
-            'hydrator' => 'ClassMethods',
+            'hydrator' => Form\AdminGroup::class,
             'input_filter' => InputFilter\AdminGroup::class,
         ],
         Form\AdminLdap::class => [
@@ -276,8 +277,18 @@ return [
         ],
     ],
     'form_elements' => [
+        'factories' => [
+            Form\AdminGroup::class => Form\Service\AdminGroupFactory::class,
+        ],
         'invokables' => [
             Form\Element\LdapServer::class => Form\Element\LdapServer::class,
+            Form\Element\Select2::class => Form\Element\LdapServer::class,
+        ],
+    ],
+    'hydrators' => [
+        'factories' => [
+            Form\AdminAccount::class => Hydrator\Service\AdminAccountFactory::class,
+            Form\AdminGroup::class => Hydrator\Service\AdminGroupFactory::class,
         ],
     ],
     'input_filters' => [
@@ -285,6 +296,7 @@ return [
             AuthenticateInputFilter::class => AuthenticateInputFilterFactory::class,
         ],
         'invokables' => [
+            InputFilter\AdminGroup::class => InputFilter\AdminGroup::class,
             InputFilter\AdminInvite::class => InputFilter\AdminInvite::class,
             InputFilter\AdminLdap::class => InputFilter\AdminLdap::class,
             AccountInputFilter::class => AccountInputFilter::class,
@@ -301,6 +313,34 @@ return [
     ],
     'router' => [
         'routes' => [
+            'lookup' => [
+                'type' => 'Literal',
+                'options' => [
+                    'route' => '/lookup',
+                ],
+                'child_routes' => [
+                    'account' => [
+                        'type' => 'Literal',
+                        'options' => [
+                            'route' => '/account',
+                            'defaults' => [
+                                'controller' => Mvc\Controller\Lookup::class,
+                                'action' => 'account',
+                            ],
+                        ],
+                    ],
+                    'group' => [
+                        'type' => 'Literal',
+                        'options' => [
+                            'route' => '/group',
+                            'defaults' => [
+                                'controller' => Mvc\Controller\Lookup::class,
+                                'action' => 'group',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
             'admin' => [
                 'type' => 'Literal',
                 'options' => [
@@ -456,43 +496,13 @@ return [
                                     ],
                                 ],
                             ],
-                            'roles' => [
+                            'permissions' => [
                                 'type' => 'Literal',
                                 'options' => [
-                                    'route' => '/roles',
+                                    'route' => '/permissions',
                                     'defaults' => [
-                                        'controller' => AdminRolesController::class,
+                                        'controller' => Mvc\Controller\AdminPermissions::class,
                                         'action' => 'index',
-                                    ],
-                                ],
-                                'may_terminate' => true,
-                                'child_routes' => [
-                                    'create' => [
-                                        'type' => 'Literal',
-                                        'options' => [
-                                            'route' => '/create',
-                                            'defaults' => [
-                                                'action' => 'create',
-                                            ],
-                                        ],
-                                    ],
-                                    'update' => [
-                                        'type' => 'Segment',
-                                        'options' => [
-                                            'route' => '/update/:id',
-                                            'defaults' => [
-                                                'action' => 'update',
-                                            ],
-                                        ],
-                                    ],
-                                    'delete' => [
-                                        'type' => 'Segment',
-                                        'options' => [
-                                            'route' => '/delete/:id',
-                                            'defaults' => [
-                                                'action' => 'delete',
-                                            ],
-                                        ],
                                     ],
                                 ],
                             ],
@@ -839,15 +849,16 @@ return [
     ],
     'service_manager' => [
         'factories' => [
+            \Zend\Permissions\Rbac\Rbac::class => Authorization\Service\RbacFactory::class,
             TaskService\Account::class => TaskService\Service\AccountFactory::class,
             TaskService\Directory::class => TaskService\Service\DirectoryFactory::class,
+            TaskService\Permissions::class => TaskService\Service\PermissionsFactory::class,
             AuthenticationService::class => AuthenticationServiceFactory::class,
             ApplicationService::class => ApplicationServiceFactory::class,
             EmailTaskService::class => EmailTaskServiceFactory::class,
             TaskService\Group::class => TaskService\Service\GroupFactory::class,
             OAuthTaskService::class => OAuthTaskServiceFactory::class,
             PasswordChanger::class => PasswordChangerFactory::class,
-            Roles::class => RolesFactory::class,
             Storage::class => StorageFactory::class,
             TwoFactorAuthenticationService::class => TwoFactorAuthenticationServiceFactory::class,
         ],
@@ -878,7 +889,8 @@ return [
     ],
     'view_helpers' => [
         'factories' => [
-            'zourceAccount' => \ZourceUser\View\Helper\Service\AccountFactory::class,
+            'zourceAccess' => View\Helper\Service\AccessFactory::class,
+            'zourceAccount' => View\Helper\Service\AccountFactory::class,
         ],
     ],
     'view_manager' => [
@@ -887,14 +899,14 @@ return [
             'zource-user/admin-accounts/index' => __DIR__ . '/../view/zource-user/admin-accounts/index.phtml',
             'zource-user/admin-accounts/invite' => __DIR__ . '/../view/zource-user/admin-accounts/invite.phtml',
             'zource-user/admin-accounts/update' => __DIR__ . '/../view/zource-user/admin-accounts/update.phtml',
-            'zource-user/admin-groups/index' => __DIR__ . '/../view/zource-user/admin-groups/index.phtml',
             'zource-user/admin-directories/create' => __DIR__ . '/../view/zource-user/admin-directories/create.phtml',
             'zource-user/admin-directories/index' => __DIR__ . '/../view/zource-user/admin-directories/index.phtml',
             'zource-user/admin-directories/update' => __DIR__ . '/../view/zource-user/admin-directories/update.phtml',
             'zource-user/admin-directory-ldap/update' => __DIR__ . '/../view/zource-user/admin-directory-ldap/update.phtml',
-            'zource-user/admin-roles/create' => __DIR__ . '/../view/zource-user/admin-roles/create.phtml',
-            'zource-user/admin-roles/index' => __DIR__ . '/../view/zource-user/admin-roles/index.phtml',
-            'zource-user/admin-roles/update' => __DIR__ . '/../view/zource-user/admin-roles/update.phtml',
+            'zource-user/admin-groups/create' => __DIR__ . '/../view/zource-user/admin-groups/create.phtml',
+            'zource-user/admin-groups/index' => __DIR__ . '/../view/zource-user/admin-groups/index.phtml',
+            'zource-user/admin-groups/update' => __DIR__ . '/../view/zource-user/admin-groups/update.phtml',
+            'zource-user/admin-permissions/index' => __DIR__ . '/../view/zource-user/admin-permissions/index.phtml',
             'zource-user/application/index' => __DIR__ . '/../view/zource-user/application/index.phtml',
             'zource-user/authenticate/login' => __DIR__ . '/../view/zource-user/authenticate/login.phtml',
             'zource-user/authenticate/login-tfa' => __DIR__ . '/../view/zource-user/authenticate/login-tfa.phtml',
@@ -958,6 +970,7 @@ return [
             'login' => false,
             'login-tfa' => false,
             'logout' => true,
+            'lookup/*' => true,
             'oauth/authorize' => true,
             'oauth/token' => false,
             'oauth/resource' => false,
@@ -1026,8 +1039,8 @@ return [
                     'type' => 'label',
                     'priority' => 6000,
                     'options' => [
-                        'label' => 'Roles',
-                        'route' => 'admin/usermanagement/roles',
+                        'label' => 'Permissions',
+                        'route' => 'admin/usermanagement/permissions',
                     ],
                 ],
             ],
@@ -1223,6 +1236,12 @@ return [
             'allow_implicit' => true,
             'enforce_state' => true,
         ],
+    ],
+    'zource_permissions' => [
+        'user.account.invite' => 'Allowes users to invite new users to create accounts.',
+        'user.account.manage' => 'Allowes users to manage accounts.',
+        'user.directory.manage' => 'Allowes users to manage authentication directories.',
+        'user.group.manage' => 'Allowes users to manage user groups.',
     ],
     'zource_ui_nav_items' => [
         'aliases' => [

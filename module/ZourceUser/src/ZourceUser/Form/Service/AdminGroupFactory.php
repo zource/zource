@@ -7,20 +7,19 @@
  * @license https://raw.githubusercontent.com/zource/zource/master/LICENSE MIT
  */
 
-namespace ZourceUser\TaskService\Service;
+namespace ZourceUser\Form\Service;
 
-use Doctrine\ORM\EntityManager;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use ZourceUser\TaskService\Roles;
+use ZourceUser\Form\AdminGroup;
+use ZourceUser\TaskService\Permissions;
 
-class RolesFactory implements FactoryInterface
+class AdminGroupFactory implements FactoryInterface
 {
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        /** @var EntityManager $entityManager */
-        $entityManager = $serviceLocator->get('doctrine.entitymanager.orm_default');
+        $permissionsTaskService = $serviceLocator->getServiceLocator()->get(Permissions::class);
 
-        return new Roles($entityManager);
+        return new AdminGroup($permissionsTaskService);
     }
 }

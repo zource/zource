@@ -17,6 +17,7 @@ use ZourceContact\Entity\EmailAddress;
 use ZourceContact\Entity\Person;
 use ZourceUser\Entity\Account as AccountEntity;
 use ZourceUser\Entity\Email;
+use ZourceUser\Entity\Group as GroupEntity;
 
 class Account
 {
@@ -52,11 +53,13 @@ class Account
     public function persist(AccountEntity $account)
     {
         $this->entityManager->persist($account);
-        $this->entityManager->flush($account);
-    }
 
-    public function persistFromArray(array $data)
-    {
+        /** @var GroupEntity $group */
+        foreach ($account->getGroups() as $group) {
+            $this->entityManager->persist($group);
+        }
+
+        $this->entityManager->flush();
     }
 
     public function inviteAccount($data)
@@ -96,5 +99,34 @@ class Account
         $adapter = new Selectable($repository);
 
         return new Paginator($adapter);
+    }
+
+    public function lookup($queryTerm)
+    {
+        $dql = "SELECT a.id AS account_id, c AS contact
+            FROM ZourceContact\\Entity\\AbstractContact c
+            INNER JOIN ZourceUser\\Entity\\AccountInterface a WITH a.contact = c
+            LEFT JOIN ZourceContact\\Entity\\Person cp WITH cp.id = c.id
+            LEFT JOIN ZourceContact\\Entity\\Company cc WITH cc.id = c.id
+            WHERE c.displayName LIKE :query
+            OR cc.name LIKE :query
+            OR cp.firstName LIKE :query
+            OR cp.lastName LIKE :query";
+
+        $query = $this->entityManager->createQuery($dql);
+        $query->setParameter(':query', '%' . $queryTerm . '%');
+
+        $result = [];
+
+        foreach ($query->getResult() as $entry) {
+            $result[] = [
+                'id' => $entry['account_id']->toString(),
+                'text' => $entry['contact']->getDisplayName(),
+            ];
+        }
+
+        return [
+            'items' => $result,
+        ];
     }
 }

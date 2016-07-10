@@ -827,4 +827,10 @@ return [
             ],
         ],
     ],
+    'zource_permissions' => [
+        'contact.create' => 'Allowes users to create contacts.',
+        'contact.delete' => 'Allowes users to delete contacts.',
+        'contact.update.all' => 'Allowes users to update all contacts',
+        'contact.update.own' => 'Allowes users to update their own contact record.',
+    ],
 ];

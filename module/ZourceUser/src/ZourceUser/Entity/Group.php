@@ -35,10 +35,26 @@ class Group
     private $name;
 
     /**
-     * @ORM\ManyToMany(targetEntity="ZourceUser\Entity\AccountInterface", mappedBy="groups")
+     * @ORM\Column(type="string", nullable=true)
+     * @var string
+     */
+    private $description;
+
+    /**
+     * @ORM\Column(type="array", nullable=true)
+     * @var string[]
+     */
+    private $permissions;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="ZourceUser\Entity\AccountInterface", inversedBy="groups")
+     * @ORM\JoinTable(name="user_group_account",
+     *     joinColumns={@ORM\JoinColumn(onDelete="CASCADE")},
+     *     inverseJoinColumns={@ORM\JoinColumn(onDelete="CASCADE")}
+     * )
      * @var Collection
      */
-    private $users;
+    private $accounts;
 
     /**
      * Initializes a new instance of this class.
@@ -49,7 +65,8 @@ class Group
     {
         $this->id = Uuid::uuid4();
         $this->name = $name;
-        $this->users = new ArrayCollection();
+        $this->permissions = [];
+        $this->accounts = new ArrayCollection();
     }
 
     /**
@@ -80,5 +97,79 @@ class Group
     public function setName($name)
     {
         $this->name = $name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string $description
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getPermissions()
+    {
+        return $this->permissions;
+    }
+
+    /**
+     * @param string[] $permissions
+     */
+    public function setPermissions($permissions)
+    {
+        $this->permissions = $permissions;
+    }
+    
+    public function addAccount(AccountInterface $account)
+    {
+        if (!$this->accounts->contains($account)) {
+            $this->accounts->add($account);
+
+            $account->addGroup($this);
+        }
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getAccounts()
+    {
+        return $this->accounts;
+    }
+
+    public function removeAccount(AccountInterface $account)
+    {
+        if ($this->accounts->contains($account)) {
+            $this->accounts->removeElement($account);
+
+            $account->removeGroup($this);
+        }
+    }
+
+    /**
+     * @param Collection $accounts
+     */
+    public function setAccounts(Collection $accounts)
+    {
+        foreach ($this->accounts as $account) {
+            $account->removeGroup($this);
+
+            $this->accounts->removeElement($account);
+        }
+
+        foreach ($accounts as $account) {
+            $this->addAccount($account);
+        }
     }
 }

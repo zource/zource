@@ -13,6 +13,7 @@ use Zend\Form\FormInterface;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Paginator\Paginator;
 use Zend\View\Model\ViewModel;
+use ZourceUser\Entity\Group as GroupEntity;
 use ZourceUser\TaskService\Group;
 
 class AdminGroups extends AbstractActionController
@@ -47,15 +48,19 @@ class AdminGroups extends AbstractActionController
 
     public function createAction()
     {
+        $this->groupForm->bind(new GroupEntity(''));
+
         if ($this->getRequest()->isPost()) {
             $this->groupForm->setData($this->getRequest()->getPost());
 
             if ($this->groupForm->isValid()) {
                 $data = $this->groupForm->getData();
 
-                $this->roleTaskService->persistFromArray($data);
+                $this->groupTaskService->persist($data);
 
-                return $this->redirect()->toRoute('admin/usermanagement/roles');
+                $this->flashMessenger()->addSuccessMessage('The group has been created.');
+
+                return $this->redirect()->toRoute('admin/usermanagement/groups');
             }
         }
 
@@ -66,7 +71,7 @@ class AdminGroups extends AbstractActionController
 
     public function updateAction()
     {
-        $group = $this->roleTaskService->find($this->params('id'));
+        $group = $this->groupTaskService->find($this->params('id'));
 
         if (!$group) {
             return $this->notFoundAction();
@@ -80,9 +85,11 @@ class AdminGroups extends AbstractActionController
             if ($this->groupForm->isValid()) {
                 $group = $this->groupForm->getData();
 
-                $this->roleTaskService->persist($group);
+                $this->groupTaskService->persist($group);
 
-                return $this->redirect()->toRoute('admin/usermanagement/roles');
+                $this->flashMessenger()->addSuccessMessage('The group has been updated.');
+
+                return $this->redirect()->toRoute('admin/usermanagement/groups');
             }
         }
 
@@ -94,14 +101,16 @@ class AdminGroups extends AbstractActionController
 
     public function deleteAction()
     {
-        $role = $this->roleTaskService->find($this->params('id'));
+        $group = $this->groupTaskService->find($this->params('id'));
 
-        if (!$role) {
+        if (!$group) {
             return $this->notFoundAction();
         }
 
-        $this->roleTaskService->remove($role);
+        $this->groupTaskService->remove($group);
 
-        return $this->redirect()->toRoute('admin/usermanagement/roles');
+        $this->flashMessenger()->addSuccessMessage('The group has been deleted.');
+
+        return $this->redirect()->toRoute('admin/usermanagement/groups');
     }
 }

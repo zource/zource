@@ -12,6 +12,7 @@ namespace ZourceUser\Entity;
 use DateTime;
 use Doctrine\Common\Collections\Collection;
 use Ramsey\Uuid\UuidInterface;
+use Zend\Permissions\Rbac\RoleInterface;
 use ZourceContact\Entity\Person;
 
 /**
@@ -100,11 +101,33 @@ interface AccountInterface
     public function hasTwoFactorAuthentication();
 
     /**
+     * Adds this account to the given group.
+     *
+     * @param Group $group
+     */
+    public function addGroup(Group $group);
+
+    /**
      * Gets the groups of this account.
      *
      * @return Collection
      */
     public function getGroups();
+
+    /**
+     * Removes this account from the given group.
+     *
+     * @param Group $group
+     * @return mixed
+     */
+    public function removeGroup(Group $group);
+
+    /**
+     * Sets the groups for this account.
+     *
+     * @param array|Collection $groups
+     */
+    public function setGroups($groups);
 
     /**
      * Gets the e-mail addresses for this account.

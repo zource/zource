@@ -29,5 +29,30 @@ class AdminGroup extends InputFilter
                 ],
             ],
         ]);
+
+        $this->add([
+            'name' => 'description',
+            'required' => false,
+            'filters' => [
+                [
+                    'name' => 'Zend\Filter\StringTrim',
+                ],
+            ],
+        ]);
+
+        $this->add([
+            'name' => 'accounts',
+            'required' => false,
+            'filters' => [
+                [
+                    'name' => 'Zend\Filter\StringTrim',
+                ],
+            ],
+        ]);
+
+        $this->add([
+            'name' => 'permissions',
+            'required' => false,
+        ]);
     }
 }

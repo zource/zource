@@ -7,21 +7,23 @@
  * @license https://raw.githubusercontent.com/zource/zource/master/LICENSE MIT
  */
 
-namespace ZourceUser\Mvc\Controller\Service;
+namespace ZourceUser\Hydrator\Service;
 
+use Zend\Hydrator\ClassMethods;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use ZourceUser\Form\AdminRole;
-use ZourceUser\Mvc\Controller\AdminRoles;
-use ZourceUser\TaskService\Roles;
+use ZourceUser\Hydrator\Strategy\Groups;
+use ZourceUser\TaskService\Group;
 
-class AdminRolesFactory implements FactoryInterface
+class AdminAccountFactory implements FactoryInterface
 {
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $form = $serviceLocator->getServiceLocator()->get(AdminRole::class);
-        $taskService = $serviceLocator->getServiceLocator()->get(Roles::class);
+        $groupTaskService = $serviceLocator->getServiceLocator()->get(Group::class);
+
+        $hydrartor = new ClassMethods();
+        $hydrartor->addStrategy('groups', new Groups($groupTaskService));
         
-        return new AdminRoles($form, $taskService);
+        return $hydrartor;
     }
 }

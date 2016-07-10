@@ -8,10 +8,12 @@ $this->placeholder('layout')->pageNavGroupPrimary = 'admin-navgroup';
 
 $this->groupForm->setAttribute('action', $this->url());
 $this->groupForm->setAttribute('method', 'post');
+$this->groupForm->get('accounts')->setAttribute('data-zui-select2-url', $this->url('lookup/account'));
+$this->groupForm->prepare()
 
 ?>
 
-<h2>Create Account</h2>
+<h2>Create Group</h2>
 
 <?php echo $this->form()->openTag($this->groupForm); ?>
 <?php echo $this->formHidden($this->groupForm->get('token')); ?>
@@ -21,6 +23,33 @@ $this->groupForm->setAttribute('method', 'post');
     <?php echo $this->formText($this->groupForm->get('name')); ?>
     <?php echo $this->zourceFormDescription($this->groupForm->get('name')); ?>
     <?php echo $this->formElementErrors($this->groupForm->get('name')); ?>
+</div>
+
+<div class="zui-field-group">
+    <?php echo $this->formLabel($this->groupForm->get('description')); ?>
+    <?php echo $this->formTextarea($this->groupForm->get('description')); ?>
+    <?php echo $this->zourceFormDescription($this->groupForm->get('description')); ?>
+    <?php echo $this->formElementErrors($this->groupForm->get('description')); ?>
+</div>
+
+<div class="zui-field-group">
+    <?php echo $this->formLabel($this->groupForm->get('accounts')); ?>
+    <?php echo $this->zourceFormSelect2($this->groupForm->get('accounts')); ?>
+    <?php echo $this->zourceFormDescription($this->groupForm->get('accounts')); ?>
+    <?php echo $this->formElementErrors($this->groupForm->get('accounts')); ?>
+</div>
+
+<div class="zui-field-group">
+    <span class="zui-form-label"><?php echo $this->groupForm->get('permissions')->getLabel(); ?></span>
+
+    <div class="zui-field-group-inner">
+        <div>
+            <?php echo $this->formMultiCheckbox($this->groupForm->get('permissions')); ?>
+        </div>
+    </div>
+
+    <?php echo $this->zourceFormDescription($this->groupForm->get('permissions')); ?>
+    <?php echo $this->formElementErrors($this->groupForm->get('permissions')); ?>
 </div>
 
 <div class="zui-buttons-container">
