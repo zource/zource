@@ -12,6 +12,7 @@ namespace ZourceApplication\View\Helper\UI;
 use InvalidArgumentException;
 use RuntimeException;
 use Zend\View\Helper\AbstractHelper;
+use ZourceApplication\Authorization\Condition\ConditionInterface;
 use ZourceApplication\Authorization\Condition\Service\PluginManager as ConditionPluginManager;
 use ZourceApplication\UI\Navigation\Item\ItemInterface;
 use ZourceApplication\UI\Navigation\Item\Service\PluginManager;
@@ -65,7 +66,7 @@ class Nav extends AbstractHelper
         $renderedItemCount = 0;
 
         foreach ($items as $item) {
-            if (array_key_exists('conditions', $item) && !$this->isAllowed($item)) {
+            if (array_key_exists('conditions', $item)  && !$this->isAllowed($item)) {
                 continue;
             }
 
@@ -109,13 +110,18 @@ class Nav extends AbstractHelper
 
     private function isAllowed(array $item)
     {
+        $matcher = array_key_exists('condition_matcher', $item)
+            ? $item['condition_matcher']
+            : ConditionInterface::MATCH_AND;
+
+        $result = [];
+
         foreach ($item['conditions'] as $key => $conditionItem) {
             if (!isset($conditionItem['type'])) {
                 throw new RuntimeException('The "type" is missing for condition.');
             }
 
             $options = isset($conditionItem['options']) ? $conditionItem['options'] : [];
-
             $condition = $this->conditionManager->get($conditionItem['type'], $options);
             
             $valid = $condition->isValid();
@@ -124,8 +130,14 @@ class Nav extends AbstractHelper
                 $valid = !$valid;
             }
 
-            if (!$valid) {
+            $result[] = $valid;
+        }
+
+        foreach ($result as $valid) {
+            if ($matcher === ConditionInterface::MATCH_AND && !$valid) {
                 return false;
+            } elseif ($matcher === ConditionInterface::MATCH_OR && $valid) {
+                return true;
             }
         }
 

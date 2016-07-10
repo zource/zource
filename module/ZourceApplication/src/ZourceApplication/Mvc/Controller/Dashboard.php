@@ -9,13 +9,30 @@
 
 namespace ZourceApplication\Mvc\Controller;
 
+use ZourceApplication\TaskService\Dashboard as DashboardTaskService;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
 class Dashboard extends AbstractActionController
 {
+    /**
+     * @var DashboardTaskService
+     */
+    private $dashboardTaskService;
+
+    public function __construct(DashboardTaskService $dashboardTaskService)
+    {
+        $this->dashboardTaskService = $dashboardTaskService;
+    }
+
     public function indexAction()
     {
-        return new ViewModel();
+        $account = $this->zourceAccount();
+
+        $dashboard = $this->dashboardTaskService->findForAccount($account);
+
+        return new ViewModel([
+            'dashboard' => $dashboard,
+        ]);
     }
 }

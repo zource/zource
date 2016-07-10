@@ -28,6 +28,19 @@ class RbacFactory implements FactoryInterface
         /** @var AccountInterface $account */
         $account = $authenticationService->getAccountEntity();
 
+        $rbac = new Rbac();
+
+        if ($account) {
+            $role = $this->createAccountRole($account);
+
+            $rbac->addRole($role);
+        }
+
+        return $rbac;
+    }
+
+    private function createAccountRole(AccountInterface $account)
+    {
         $role = new Role('account-' . $account->getId()->toString());
 
         /** @var Group $group */
@@ -37,9 +50,6 @@ class RbacFactory implements FactoryInterface
             }
         }
 
-        $rbac = new Rbac();
-        $rbac->addRole($role);
-
-        return $rbac;
+        return $role;
     }
 }

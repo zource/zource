@@ -65,9 +65,7 @@ return [
             Mvc\Controller\AdminCache::class => Mvc\Controller\Service\AdminCacheFactory::class,
             Mvc\Controller\AdminPlugins::class => Mvc\Controller\Service\AdminPluginsFactory::class,
             Mvc\Controller\AdminSettings::class => Mvc\Controller\Service\AdminSettingsFactory::class,
-        ],
-        'invokables' => [
-            Mvc\Controller\Dashboard::class => Mvc\Controller\Dashboard::class,
+            Mvc\Controller\Dashboard::class => Mvc\Controller\Service\DashboardFactory::class,
         ],
     ],
     'doctrine' => [
@@ -244,6 +242,7 @@ return [
         'factories' => [
             Builder::class => BuilderFactory::class,
             TaskService\CacheManager::class => TaskService\Service\CacheManagerFactory::class,
+            TaskService\Dashboard::class => TaskService\Service\DashboardFactory::class,
             ConfigInterface::class => SessionConfigFactory::class,
             'LazyServiceFactory' => LazyServiceFactoryFactory::class,
             ManagerInterface::class => SessionManagerFactory::class,
@@ -301,6 +300,7 @@ return [
             'zourceFormAvatar' => FormAvatar::class,
             'zourceFormDescription' => FormDescription::class,
             'zourceFormSelect2' => View\Helper\FormSelect2::class,
+            'zourceWidgetContainer' => View\Helper\WidgetContainer::class,
         ],
     ],
     'view_manager' => [
@@ -575,8 +575,11 @@ return [
                     ],
                     'conditions' => [
                         'user-has-identity' => [
-                            'type' => 'UserHasIdentity',
-                            'options' => [],
+                            'type' => 'UserHasAccess',
+                            'options' => [
+                                'resource' => 'application',
+                                'permission' => 'manage',
+                            ],
                         ],
                     ],
                     'child_items' => [
@@ -615,6 +618,19 @@ return [
                     ],
                 ],
             ],
+        ],
+    ],
+    'zource_permissions' => [
+        'application.manage' => 'Allows users to administer the application.',
+    ],
+    'zource_widgets' => [
+        'html' => [
+            'name' => 'HTML',
+            'description' => 'A widget that can render raw HTML.',
+        ],
+        'open-weather' => [
+            'name' => 'Open Weather',
+            'description' => 'A widget that shows the weather conditions.',
         ],
     ],
     'zource_ui_nav_items' => [

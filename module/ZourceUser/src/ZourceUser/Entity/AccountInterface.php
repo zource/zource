@@ -135,4 +135,21 @@ interface AccountInterface
      * @return Collection
      */
     public function getEmailAddresses();
+
+    /**
+     * Gets the property by the given name or returns the default value of it.
+     *
+     * @param string $name The name of the property to get.
+     * @param string|null $defaultValue The default value to return.
+     * @return string|null
+     */
+    public function getProperty($name, $defaultValue = null);
+
+    /**
+     * Sets the property by the given name.
+     *
+     * @param string $name The name of the property to set.
+     * @param string|null $value The default value to set.
+     */
+    public function setProperty($name, $value);
 }

@@ -621,6 +621,15 @@ return [
                     'options' => [
                         'label' => 'Manage',
                     ],
+                    'conditions' => [
+                        'user-has-access' => [
+                            'type' => 'UserHasAccess',
+                            'options' => [
+                                'resource' => 'contacts',
+                                'permission' => 'manage',
+                            ],
+                        ],
+                    ],
                 ],
                 'add-company' => [
                     'type' => 'label',
@@ -629,6 +638,15 @@ return [
                         'label' => 'New company',
                         'route' => 'contacts/company/create',
                     ],
+                    'conditions' => [
+                        'user-has-access' => [
+                            'type' => 'UserHasAccess',
+                            'options' => [
+                                'resource' => 'contacts',
+                                'permission' => 'manage',
+                            ],
+                        ],
+                    ],
                 ],
                 'add-person' => [
                     'type' => 'label',
@@ -636,6 +654,15 @@ return [
                     'options' => [
                         'label' => 'New person',
                         'route' => 'contacts/person/create',
+                    ],
+                    'conditions' => [
+                        'user-has-access' => [
+                            'type' => 'UserHasAccess',
+                            'options' => [
+                                'resource' => 'contacts',
+                                'permission' => 'manage',
+                            ],
+                        ],
                     ],
                 ],
                 'header-filter' => [
@@ -711,6 +738,15 @@ return [
                     'options' => [
                         'label' => 'Manage',
                     ],
+                    'conditions' => [
+                        'user-has-access' => [
+                            'type' => 'UserHasAccess',
+                            'options' => [
+                                'resource' => 'contacts',
+                                'permission' => 'manage',
+                            ],
+                        ],
+                    ],
                 ],
                 'add-company' => [
                     'type' => 'label',
@@ -719,6 +755,15 @@ return [
                         'label' => 'New company',
                         'route' => 'contacts/company/create',
                     ],
+                    'conditions' => [
+                        'user-has-access' => [
+                            'type' => 'UserHasAccess',
+                            'options' => [
+                                'resource' => 'contacts',
+                                'permission' => 'manage',
+                            ],
+                        ],
+                    ],
                 ],
                 'add-person' => [
                     'type' => 'label',
@@ -726,6 +771,15 @@ return [
                     'options' => [
                         'label' => 'New person',
                         'route' => 'contacts/person/create',
+                    ],
+                    'conditions' => [
+                        'user-has-access' => [
+                            'type' => 'UserHasAccess',
+                            'options' => [
+                                'resource' => 'contacts',
+                                'permission' => 'manage',
+                            ],
+                        ],
                     ],
                 ],
                 'update-company' => [
@@ -741,6 +795,13 @@ return [
                             'type' => 'ContactType',
                             'options' => [
                                 'type' => ContactEntry::TYPE_COMPANY,
+                            ],
+                        ],
+                        'user-has-access' => [
+                            'type' => 'UserHasAccess',
+                            'options' => [
+                                'resource' => 'contacts',
+                                'permission' => 'manage',
                             ],
                         ],
                     ],
@@ -760,6 +821,13 @@ return [
                                 'type' => ContactEntry::TYPE_PERSON,
                             ],
                         ],
+                        'user-has-access' => [
+                            'type' => 'UserHasAccess',
+                            'options' => [
+                                'resource' => 'contacts',
+                                'permission' => 'manage',
+                            ],
+                        ],
                     ],
                 ],
                 'delete-company' => [
@@ -775,6 +843,13 @@ return [
                             'type' => 'ContactType',
                             'options' => [
                                 'type' => ContactEntry::TYPE_COMPANY,
+                            ],
+                        ],
+                        'user-has-access' => [
+                            'type' => 'UserHasAccess',
+                            'options' => [
+                                'resource' => 'contacts',
+                                'permission' => 'manage',
                             ],
                         ],
                     ],
@@ -796,6 +871,13 @@ return [
                         ],
                         'contact-delete' => [
                             'type' => 'ContactIsCurrentAccount',
+                        ],
+                        'user-has-access' => [
+                            'type' => 'UserHasAccess',
+                            'options' => [
+                                'resource' => 'contacts',
+                                'permission' => 'manage',
+                            ],
                         ],
                     ],
                 ],
@@ -828,9 +910,6 @@ return [
         ],
     ],
     'zource_permissions' => [
-        'contact.create' => 'Allowes users to create contacts.',
-        'contact.delete' => 'Allowes users to delete contacts.',
-        'contact.update.all' => 'Allowes users to update all contacts',
-        'contact.update.own' => 'Allowes users to update their own contact record.',
+        'contacts.manage' => 'Allows users to manage contacts.',
     ],
 ];

@@ -86,6 +86,12 @@ class Account implements AccountInterface
     private $emailAddresses;
 
     /**
+     * @ORM\OneToMany(targetEntity="ZourceUser\Entity\Property", mappedBy="account", cascade={"all"})
+     * @var Collection
+     */
+    private $properties;
+
+    /**
      * Initializes a new instance of this class.
      *
      * @param Person $contactPerson The person to attach this account to.
@@ -98,6 +104,7 @@ class Account implements AccountInterface
         $this->status = self::STATUS_ACTIVE;
         $this->groups = new ArrayCollection();
         $this->emailAddresses = new ArrayCollection();
+        $this->properties = new ArrayCollection();
     }
 
     /**
@@ -272,5 +279,30 @@ class Account implements AccountInterface
     public function getEmailAddresses()
     {
         return $this->emailAddresses;
+    }
+
+    public function getProperty($name, $defaultValue = null)
+    {
+        foreach ($this->properties as $property) {
+            if ($property->getName() === $name) {
+                return $property->getValue();
+            }
+        }
+
+        return $defaultValue;
+    }
+
+    public function setProperty($name, $value)
+    {
+        foreach ($this->properties as $property) {
+            if ($property->getName() === $name) {
+                $property->setValue($value);
+                return;
+            }
+        }
+
+        $property = new Property($this, $name, $value);
+
+        $this->properties->add($property);
     }
 }

@@ -15,9 +15,6 @@ use Zend\Crypt\Password\PasswordInterface;
 use ZourceUser\Authentication\OAuth\Service\StorageFactory;
 use ZourceUser\Authentication\OAuth\Storage;
 use ZourceUser\Authentication\Service\AuthenticationServiceFactory;
-use ZourceUser\Authorization\Condition\Service\NotificationsExistFactory;
-use ZourceUser\Authorization\Condition\Service\UserHasIdentityFactory;
-use ZourceUser\Authorization\Condition\Service\UserHasRoleFactory;
 use ZourceUser\Entity\Account as AccountEntity;
 use ZourceUser\Entity\AccountInterface;
 use ZourceUser\Entity\Identity as IdentityEntity;
@@ -961,9 +958,9 @@ return [
     ],
     'zource_conditions' => [
         'factories' => [
-            'NotificationsExist' => NotificationsExistFactory::class,
-            'UserHasIdentity' => UserHasIdentityFactory::class,
-            'UserHasRole' => UserHasRoleFactory::class,
+            'NotificationsExist' => Authorization\Condition\Service\NotificationsExistFactory::class,
+            'UserHasAccess' => Authorization\Condition\Service\UserHasAccessFactory::class,
+            'UserHasIdentity' => Authorization\Condition\Service\UserHasIdentityFactory::class,
         ],
     ],
     'zource_guard' => [
@@ -1239,10 +1236,10 @@ return [
         ],
     ],
     'zource_permissions' => [
-        'user.account.invite' => 'Allowes users to invite new users to create accounts.',
-        'user.account.manage' => 'Allowes users to manage accounts.',
-        'user.directory.manage' => 'Allowes users to manage authentication directories.',
-        'user.group.manage' => 'Allowes users to manage user groups.',
+        'user.account.invite' => 'Allows users to invite new users to create accounts.',
+        'user.account.manage' => 'Allows users to manage accounts.',
+        'user.directory.manage' => 'Allows users to manage authentication directories.',
+        'user.group.manage' => 'Allows users to manage user groups.',
     ],
     'zource_ui_nav_items' => [
         'aliases' => [

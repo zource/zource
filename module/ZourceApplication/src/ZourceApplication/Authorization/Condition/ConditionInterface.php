@@ -11,5 +11,8 @@ namespace ZourceApplication\Authorization\Condition;
 
 interface ConditionInterface
 {
+    const MATCH_AND = 'and';
+    const MATCH_OR = 'or';
+    
     public function isValid();
 }

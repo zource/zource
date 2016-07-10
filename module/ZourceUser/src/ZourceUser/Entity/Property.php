@@ -17,9 +17,9 @@ use Ramsey\Uuid\UuidInterface;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="user_role")
+ * @ORM\Table(name="user_account_property")
  */
-class Role
+class Property
 {
     /**
      * @ORM\Id
@@ -29,10 +29,11 @@ class Role
     private $id;
 
     /**
-     * @ORM\Column(type="datetime")
-     * @var DateTimeInterface
+     * @ORM\ManyToOne(targetEntity="ZourceUser\Entity\AccountInterface")
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     * @var AccountInterface
      */
-    private $creationDate;
+    private $account;
 
     /**
      * @ORM\Column(type="string")
@@ -41,15 +42,24 @@ class Role
     private $name;
 
     /**
+     * @ORM\Column(type="string", nullable=true)
+     * @var string|null
+     */
+    private $value;
+
+    /**
      * Initializes a new instance of this class.
      *
+     * @param AccountInterface $account
      * @param string $name
+     * @param string|null $value
      */
-    public function __construct($name)
+    public function __construct(AccountInterface $account, $name, $value)
     {
         $this->id = Uuid::uuid4();
-        $this->creationDate = new DateTime();
+        $this->account = $account;
         $this->name = $name;
+        $this->value = $value;
     }
 
     /**
@@ -61,11 +71,11 @@ class Role
     }
 
     /**
-     * @return DateTimeInterface
+     * @return AccountInterface
      */
-    public function getCreationDate()
+    public function getAccount()
     {
-        return $this->creationDate;
+        return $this->account;
     }
 
     /**
@@ -77,10 +87,10 @@ class Role
     }
 
     /**
-     * @param string $name
+     * @return null|string
      */
-    public function setName($name)
+    public function getValue()
     {
-        $this->name = $name;
+        return $this->value;
     }
 }

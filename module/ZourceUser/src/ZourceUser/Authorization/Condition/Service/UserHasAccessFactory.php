@@ -9,18 +9,34 @@
 
 namespace ZourceUser\Authorization\Condition\Service;
 
+use Zend\Permissions\Rbac\Rbac;
 use Zend\ServiceManager\FactoryInterface;
+use Zend\ServiceManager\MutableCreationOptionsInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use ZourceUser\Authorization\Condition\UserHasIdentity;
+use ZourceUser\Authorization\Condition\UserHasAccess;
 
-class UserHasRoleFactory implements FactoryInterface
+class UserHasAccessFactory implements FactoryInterface, MutableCreationOptionsInterface
 {
+    private $creationOptions;
+
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $authenticationService = $serviceLocator->getServiceLocator()->get(
             'Zend\\Authentication\\AuthenticationService'
         );
 
-        return new UserHasIdentity($authenticationService);
+        $authorizationService = $serviceLocator->getServiceLocator()->get(Rbac::class);
+
+        return new UserHasAccess(
+            $authenticationService,
+            $authorizationService,
+            $this->creationOptions['resource'],
+            $this->creationOptions['permission']
+        );
+    }
+
+    public function setCreationOptions(array $options)
+    {
+        $this->creationOptions = $options;
     }
 }
