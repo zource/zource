@@ -891,6 +891,7 @@ return [
         'factories' => [
             'zourceAccess' => View\Helper\Service\AccessFactory::class,
             'zourceAccount' => View\Helper\Service\AccountFactory::class,
+            'zourceDirectoryEnabled' => View\Helper\Service\DirectoryEnabledFactory::class,
         ],
     ],
     'view_manager' => [

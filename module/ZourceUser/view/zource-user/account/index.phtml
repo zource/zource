@@ -49,6 +49,7 @@ $this->changeIdentityForm->prepare();
 </div>
 <?php echo $this->form()->closeTag(); ?>
 
+<?php if ($this->zourceDirectoryEnabled('username')) { ?>
 <hr>
 
 <h2><?php echo $this->translate('pageUserChangeIdentityTitle'); ?></h2>
@@ -70,3 +71,4 @@ $this->changeIdentityForm->prepare();
     </div>
 </div>
 <?php echo $this->form()->closeTag(); ?>
+<?php } ?>
