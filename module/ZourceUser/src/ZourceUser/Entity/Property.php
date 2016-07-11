@@ -93,4 +93,12 @@ class Property
     {
         return $this->value;
     }
+
+    /**
+     * @param null|string $value
+     */
+    public function setValue($value)
+    {
+        $this->value = $value;
+    }
 }

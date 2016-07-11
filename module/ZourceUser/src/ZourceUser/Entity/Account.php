@@ -294,6 +294,7 @@ class Account implements AccountInterface
 
     public function setProperty($name, $value)
     {
+        /** @var Property $property */
         foreach ($this->properties as $property) {
             if ($property->getName() === $name) {
                 $property->setValue($value);

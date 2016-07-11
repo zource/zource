@@ -16,7 +16,7 @@ use Ramsey\Uuid\UuidInterface;
 
 class WidgetContainer
 {
-    const LAYOUT_33_33_33 = '33-33-33';
+    const LAYOUT_33_33_34 = '33-33-34';
     const LAYOUT_33_67 = '33-67';
     const LAYOUT_50_50 = '50-50';
     const LAYOUT_67_33 = '67-33';

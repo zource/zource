@@ -11,6 +11,7 @@ namespace ZourceApplication\Mvc\Controller\Service;
 
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use ZourceApplication\Form\Dashboard as DashboardForm;
 use ZourceApplication\Mvc\Controller\Dashboard;
 use ZourceApplication\TaskService\Dashboard as DashboardTaskService;
 
@@ -18,8 +19,12 @@ class DashboardFactory implements FactoryInterface
 {
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
+        /** @var DashboardTaskService $dashboardTaskService */
         $dashboardTaskService = $serviceLocator->getServiceLocator()->get(DashboardTaskService::class);
 
-        return new Dashboard($dashboardTaskService);
+        /** @var DashboardForm $dashboardForm */
+        $dashboardForm = $serviceLocator->getServiceLocator()->get(DashboardForm::class);
+
+        return new Dashboard($dashboardTaskService, $dashboardForm);
     }
 }

@@ -6,6 +6,10 @@
     <entity name="ZourceApplication\Entity\Dashboard" table="application_dashboard">
         <id name="id" type="uuid_binary" />
 
+        <many-to-one target-entity="ZourceUser\Entity\AccountInterface" field="createdBy" fetch="EAGER">
+            <join-column on-delete="CASCADE" />
+        </many-to-one>
+
         <field name="creationDate" type="datetime">
             <gedmo:timestampable on="create" />
         </field>

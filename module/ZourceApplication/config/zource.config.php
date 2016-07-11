@@ -92,13 +92,17 @@ return [
         ],
     ],
     'forms' => [
-        ApplicationSettingsForm::class => [
-            'type' => ApplicationSettingsForm::class,
-            'input_filter' => ApplicationSettingsInputFilter::class,
+        Form\ApplicationSettings::class => [
+            'type' => Form\ApplicationSettings::class,
+            'input_filter' => InputFilter\ApplicationSettings::class,
         ],
-        InstallPluginForm::class => [
-            'type' => InstallPluginForm::class,
-            'input_filter' => InstallPluginInputFilter::class,
+        Form\Dashboard::class => [
+            'type' => Form\Dashboard::class,
+            'input_filter' => InputFilter\Dashboard::class,
+        ],
+        Form\InstallPlugin::class => [
+            'type' => Form\InstallPlugin::class,
+            'input_filter' => InputFilter\InstallPlugin::class,
         ],
     ],
     'input_filters' => [
@@ -106,8 +110,9 @@ return [
             InputFilterAbstractServiceFactory::class,
         ],
         'invokables' => [
-            InstallPluginInputFilter::class => InstallPluginInputFilter::class,
-            ApplicationSettingsInputFilter::class => ApplicationSettingsInputFilter::class,
+            InputFilter\ApplicationSettings::class => InputFilter\ApplicationSettings::class,
+            InputFilter\Dashboard::class => InputFilter\Dashboard::class,
+            InputFilter\InstallPlugin::class => InputFilter\InstallPlugin::class,
         ],
     ],
     'lazy_services' => [
@@ -223,6 +228,63 @@ return [
                         'action' => 'index',
                     ],
                 ],
+                'may_terminate' => true,
+                'child_routes' => [
+                    'widget-dialog' => [
+                        'type' => 'Literal',
+                        'options' => [
+                            'route' => 'dashboard/widget-dialog',
+                            'defaults' => [
+                                'action' => 'widget-dialog',
+                            ],
+                        ],
+                    ],
+                    'manage' => [
+                        'type' => 'Literal',
+                        'options' => [
+                            'route' => 'dashboard/manage',
+                            'defaults' => [
+                                'action' => 'manage',
+                            ],
+                        ],
+                    ],
+                    'select' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => 'dashboard/select/:id',
+                            'defaults' => [
+                                'action' => 'select',
+                            ],
+                        ],
+                    ],
+                    'create' => [
+                        'type' => 'Literal',
+                        'options' => [
+                            'route' => 'dashboard/create',
+                            'defaults' => [
+                                'action' => 'create',
+                            ],
+                        ],
+                    ],
+                    'update' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => 'dashboard/update/:id',
+                            'defaults' => [
+                                'action' => 'update',
+                            ],
+                        ],
+                    ],
+                    'delete' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => 'dashboard/delete/:id',
+                            'defaults' => [
+                                'action' => 'delete',
+                            ],
+                        ],
+                    ],
+                ],
             ],
         ],
     ],
@@ -329,6 +391,9 @@ return [
             'zource-application/apigility/service' => __DIR__ . '/../view/zource-application/apigility/service.phtml',
             'zource-application/apigility/operation' => __DIR__ . '/../view/zource-application/apigility/operation.phtml',
             'zource-application/dashboard/index' => __DIR__ . '/../view/zource-application/dashboard/index.phtml',
+            'zource-application/dashboard/manage' => __DIR__ . '/../view/zource-application/dashboard/manage.phtml',
+            'zource-application/dashboard/create' => __DIR__ . '/../view/zource-application/dashboard/create.phtml',
+            'zource-application/dashboard/update' => __DIR__ . '/../view/zource-application/dashboard/update.phtml',
         ],
     ],
     'zource_cache_manager' => [
@@ -460,6 +525,7 @@ return [
         'identity' => [
             'admin/*' => true,
             'dashboard' => true,
+            'dashboard/*' => true,
             'zf-apigility/documentation' => true,
             'zf-apigility/*' => false,
         ],
@@ -523,12 +589,6 @@ return [
                         'title' => 'Enter the Apigility development environment.',
                     ],
                     'conditions' => [
-                        'class-exists' => [
-                            'type' => 'ClassExists',
-                            'options' => [
-                                'fqcn' => 'ZF\\Apigility\\Admin\\Module',
-                            ],
-                        ],
                         'user-has-identity' => [
                             'type' => 'UserHasIdentity',
                             'options' => [],
@@ -557,7 +617,7 @@ return [
                             'priority' => 400,
                             'options' => [
                                 'label' => 'layoutTopMenuDashboardsManage',
-                                'route' => 'dashboard',
+                                'route' => 'dashboard/manage',
                             ],
                         ],
                     ],
@@ -643,6 +703,9 @@ return [
             'label' => Label::class,
             'header' => Header::class,
             'separator' => Separator::class,
+        ],
+        'factories' => [
+            DashboardList::class => UI\Navigation\Item\Service\DashboardListFactory::class,
         ],
     ],
 ];

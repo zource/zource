@@ -1,0 +1,12 @@
+<?php
+
+$this->layout('layout/page-header');
+
+$this->placeholder('layout')->pageTitle = $this->translate('pageDashboardTitle');
+$this->placeholder('layout')->pageHeaderMenu = [
+    $this->url('dashboard/create') => 'Create'
+];
+
+echo $this->zourceWidgetContainer($this->dashboard->getWidgetContainer(), [
+    'edit' => true,
+]);

@@ -7,14 +7,21 @@ module.exports = function (grunt) {
             main: {
                 files: [
                     {
+                        dest: 'public/fonts/',
+                        expand: true,
+                        filter: 'isFile',
+                        flatten: true,
+                        src: ['public/vendor/zource-zui/dist/fonts/*']
+                    },
+                    {
                         dest: 'public/img/avatars/',
                         expand: true,
                         filter: 'isFile',
                         flatten: true,
                         src: ['assets/images/avatars/*']
-                    },
-                ],
-            },
+                    }
+                ]
+            }
         },
         sass: {
             dist: {

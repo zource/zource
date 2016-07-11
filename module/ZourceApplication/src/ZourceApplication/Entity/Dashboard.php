@@ -13,6 +13,7 @@ use DateTime;
 use DateTimeInterface;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
+use ZourceUser\Entity\AccountInterface;
 
 class Dashboard
 {
@@ -20,6 +21,11 @@ class Dashboard
      * @var UuidInterface
      */
     private $id;
+
+    /**
+     * @var AccountInterface
+     */
+    private $createdBy;
 
     /**
      * @var DateTimeInterface
@@ -46,9 +52,10 @@ class Dashboard
      *
      * @param string $name
      */
-    public function __construct($name)
+    public function __construct(AccountInterface $createdBy, $name)
     {
         $this->id = Uuid::uuid4();
+        $this->createdBy = $createdBy;
         $this->creationDate = new DateTime();
         $this->updateDate = new DateTime();
         $this->name = $name;
@@ -61,6 +68,14 @@ class Dashboard
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return AccountInterface
+     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
     }
 
     /**

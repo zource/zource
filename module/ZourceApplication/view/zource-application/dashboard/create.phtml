@@ -1,0 +1,32 @@
+<?php
+
+$this->layout('layout/page-header');
+
+$this->placeholder('layout')->pageTitle = $this->translate('pageDashboardCreateTitle');
+$this->placeholder('layout')->pageHeaderMenu = [
+    'layout' => 'Layout',
+    $this->url('dashboard') => 'Cancel'
+];
+
+$this->dashboardForm->setAttribute('action', $this->url());
+$this->dashboardForm->setAttribute('method', 'post');
+$this->dashboardForm->prepare();
+
+echo $this->form()->openTag($this->dashboardForm); ?>
+
+<?php echo $this->formHidden($this->dashboardForm->get('token')); ?>
+
+<div class="zui-field-group">
+    <?php echo $this->formLabel($this->dashboardForm->get('name')); ?>
+    <?php echo $this->formText($this->dashboardForm->get('name')); ?>
+    <?php echo $this->zourceFormDescription($this->dashboardForm->get('name')); ?>
+    <?php echo $this->formElementErrors($this->dashboardForm->get('name')); ?>
+</div>
+
+<div class="zui-buttons-container">
+    <div class="zui-buttons">
+        <?php echo $this->formSubmit($this->dashboardForm->get('submit')); ?>
+    </div>
+</div>
+
+<?php echo $this->form()->closeTag(); ?>

@@ -70,6 +70,5 @@ class Contact implements FixtureInterface, OrderedFixtureInterface
         }
         
         $person->setNickname('Nickname');
-        $person->set
     }
 }

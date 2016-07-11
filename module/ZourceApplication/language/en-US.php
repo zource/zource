@@ -32,6 +32,8 @@ return [
     'error500NoExceptionAvailable' => 'No Exception available',
 
     'pageDashboardTitle' => 'Dashboard',
+    'pageDashboardCreateTitle' => 'Create Dashboard',
+    'pageDashboardManageTitle' => 'Manage Dashboards',
 
     'pageAdminTitle' => 'Administration',
     'pageAdminTitleCache' => 'Cache',
