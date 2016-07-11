@@ -2,14 +2,15 @@ $(function() {
     $(".zource-dialog-set-layout-item").on("click", function() {
         var dialog = $(this).closest(".zui-dialog"),
             container = $(".zui-gadgets"),
-            oldLayout = String(container.data("zource-container-layout")),
-            newLayout = String($(this).data("zource-container-layout")),
+            oldLayout = String(container.attr("data-zource-container-layout")),
+            newLayout = String($(this).attr("data-zource-container-layout")),
             oldColumns,
             newColumns,
             columnsWidths;
 
         zui.Dialog.close(this);
 
+        console.log(oldLayout, newLayout);
         if (oldLayout === newLayout) {
             return;
         }
@@ -18,6 +19,8 @@ $(function() {
 
         oldColumns = container.find(".zui-gadget-column");
         columnsWidths = newLayout.split('-');
+
+        console.log(oldColumns, columnsWidths);
 
         while (oldColumns.length > columnsWidths.length) {
             var columnToMove = oldColumns.get(oldColumns.length - 1);
