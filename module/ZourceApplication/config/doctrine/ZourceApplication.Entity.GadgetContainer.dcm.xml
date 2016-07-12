@@ -3,12 +3,12 @@
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                   xmlns:gedmo="http://gediminasm.org/schemas/orm/doctrine-extensions-mapping"
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
-    <entity name="ZourceApplication\Entity\WidgetContainer" table="application_widget_container">
+    <entity name="ZourceApplication\Entity\GadgetContainer" table="application_gadget_container">
         <id name="id" type="uuid_binary" />
 
         <field name="layout" type="string" />
 
-        <one-to-many target-entity="ZourceApplication\Entity\Widget" field="widgets" mapped-by="widgetContainer" fetch="EAGER">
+        <one-to-many target-entity="ZourceApplication\Entity\Gadget" field="gadgets" mapped-by="gadgetContainer" fetch="EAGER">
             <cascade>
                 <cascade-all />
             </cascade>

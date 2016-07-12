@@ -43,7 +43,7 @@ module.exports = function (grunt) {
                 },
                 options: {
                     preserveComments: false,
-                    sourceMap: true,
+                    sourceMap: false,
                     sourceMapName: "public/js/zource.min.js.map",
                     report: "min",
                     beautify: {

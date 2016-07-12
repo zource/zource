@@ -44,7 +44,7 @@
     text-align: center;
 }
 
-.zource-widgete-dialog-search input {
+.zource-dialog-gadgets-search input {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -61,8 +61,58 @@
     width: 100%;
 }
 
+#zource-dialog-set-layout {
+    height: 230px;
+}
+
+#zource-dialog-set-layout .zui-dialog-panel ul {
+    display: table;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+#zource-dialog-set-layout .zui-dialog-panel li {
+    display: table-cell;
+    text-align: center;
+    width: 1%;
+}
+
 .zource-dialog-set-layout-item {
     cursor: $zui-cursor-pointer-value;
     height: 75px;
     width: 150px;
+}
+
+#zource-dialog-add-gadget .zui-dialog-panel ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+#zource-dialog-add-gadget .zui-dialog-panel li {
+    border-bottom: 1px solid #CCC;
+    margin-bottom: 20px;
+    padding: 0px 0px 0px 160px;
+    position: relative;
+
+    img {
+        height: 60px;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 120px;
+    }
+
+    button {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+}
+
+#zource-dialog-add-gadget .zui-dialog-panel li:last-child {
+    border: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
 }

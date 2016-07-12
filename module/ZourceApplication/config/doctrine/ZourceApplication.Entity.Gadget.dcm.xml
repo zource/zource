@@ -3,7 +3,7 @@
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                   xmlns:gedmo="http://gediminasm.org/schemas/orm/doctrine-extensions-mapping"
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
-    <entity name="ZourceApplication\Entity\Widget" table="application_widget">
+    <entity name="ZourceApplication\Entity\Gadget" table="application_gadget">
         <id name="id" type="uuid_binary" />
 
         <field name="installationDate" type="datetime">
@@ -19,7 +19,7 @@
         <field name="column" type="integer" />
         <field name="position" type="integer" />
 
-        <many-to-one target-entity="ZourceApplication\Entity\WidgetContainer" field="widgetContainer" inversed-by="widgets" fetch="EAGER">
+        <many-to-one target-entity="ZourceApplication\Entity\GadgetContainer" field="gadgetContainer" inversed-by="gadgets" fetch="EAGER">
             <join-column on-delete="CASCADE" />
         </many-to-one>
     </entity>

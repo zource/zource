@@ -230,12 +230,12 @@ return [
                 ],
                 'may_terminate' => true,
                 'child_routes' => [
-                    'widget-dialog' => [
+                    'gadget-dialog' => [
                         'type' => 'Literal',
                         'options' => [
-                            'route' => 'dashboard/widget-dialog',
+                            'route' => 'dashboard/gadget-dialog',
                             'defaults' => [
-                                'action' => 'widget-dialog',
+                                'action' => 'gadget-dialog',
                             ],
                         ],
                     ],
@@ -254,6 +254,15 @@ return [
                             'route' => 'dashboard/select/:id',
                             'defaults' => [
                                 'action' => 'select',
+                            ],
+                        ],
+                    ],
+                    'update-gadgets' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => 'dashboard/update-gadgets/:id',
+                            'defaults' => [
+                                'action' => 'update-gadgets',
                             ],
                         ],
                     ],
@@ -362,7 +371,7 @@ return [
             'zourceFormAvatar' => FormAvatar::class,
             'zourceFormDescription' => FormDescription::class,
             'zourceFormSelect2' => View\Helper\FormSelect2::class,
-            'zourceWidgetContainer' => View\Helper\WidgetContainer::class,
+            'zourceGadgetContainer' => View\Helper\GadgetContainer::class,
         ],
     ],
     'view_manager' => [
@@ -683,14 +692,24 @@ return [
     'zource_permissions' => [
         'application.manage' => 'Allows users to administer the application.',
     ],
-    'zource_widgets' => [
+    'zource_gadgets' => [
         'html' => [
-            'name' => 'HTML',
-            'description' => 'A widget that can render raw HTML.',
+            'title' => 'HTML',
+            'description' => 'A gadget that can render raw HTML.',
+            'thumbnail' => '',
+            'category' => 'Content',
         ],
         'open-weather' => [
-            'name' => 'Open Weather',
-            'description' => 'A widget that shows the weather conditions.',
+            'title' => 'Open Weather',
+            'description' => 'A gadget that shows the weather conditions.',
+            'thumbnail' => '',
+            'category' => 'Utilities',
+        ],
+        'feed' => [
+            'title' => 'Feed',
+            'description' => 'A gadget that is able to display an external RSS or Atom feed.',
+            'thumbnail' => '',
+            'category' => 'Utilities',
         ],
     ],
     'zource_ui_nav_items' => [

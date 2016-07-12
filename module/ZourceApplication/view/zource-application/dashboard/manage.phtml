@@ -35,3 +35,7 @@ $this->placeholder('layout')->pageHeaderMenu = [
         <?php } ?>
     </tbody>
 </table>
+
+<?php echo $this->paginationControl($this->dashboards, 'sliding', 'partial/paginator', [
+    'route' => 'dashboard/manage'
+]); ?>

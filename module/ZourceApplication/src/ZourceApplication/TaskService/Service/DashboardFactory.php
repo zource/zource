@@ -9,6 +9,7 @@
 
 namespace ZourceApplication\TaskService\Service;
 
+use Doctrine\ORM\EntityManager;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use ZourceApplication\TaskService\Dashboard;
@@ -17,8 +18,12 @@ class DashboardFactory implements FactoryInterface
 {
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
+        /** @var EntityManager $entityManager */
         $entityManager = $serviceLocator->get('doctrine.entitymanager.orm_default');
 
-        return new Dashboard($entityManager);
+        /** @var array $config */
+        $config = $serviceLocator->get('Config');
+
+        return new Dashboard($entityManager, $config['zource_gadgets']);
     }
 }

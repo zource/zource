@@ -4,7 +4,7 @@ $this->layout('layout/page-header');
 
 $this->placeholder('layout')->pageTitle = $this->dashboard->getName();
 
-$widgetContainer = $this->dashboard->getWidgetContainer();
+$gadgetContainer = $this->dashboard->getGadgetContainer();
 
 ?>
 
@@ -13,8 +13,8 @@ $widgetContainer = $this->dashboard->getWidgetContainer();
     </div>
 
     <div class="zui-toolbar-secondary">
-            <a href="" class="zui-button zui-button-subtle" data-zui-dialog-trigger="#zource-dialog-add-widget">
-                Add widget
+            <a href="" class="zui-button zui-button-subtle" data-zui-dialog-trigger="#zource-dialog-add-gadget">
+                Add gadget
             </a>
             <a href="" class="zui-button zui-button-subtle" data-zui-dialog-trigger="#zource-dialog-set-layout">
                 Set layout
@@ -22,17 +22,21 @@ $widgetContainer = $this->dashboard->getWidgetContainer();
     </div>
 </div>
 
-<?php echo $this->zourceWidgetContainer($widgetContainer); ?>
+<div data-zource-container-update-url="<?php echo $this->url('dashboard/update-gadgets', [
+    'id' => $this->dashboard->getId(),
+]); ?>">
+    <?php echo $this->zourceGadgetContainer($gadgetContainer); ?>
+</div>
 
-<div class="zui-dialog zui-dialog-large" id="zource-dialog-add-widget" data-zource-widgets-url="<?php echo $this->url('dashboard/widget-dialog'); ?>">
+<div class="zui-dialog zui-dialog-large" id="zource-dialog-add-gadget" data-zource-gadgets-url="<?php echo $this->url('dashboard/gadget-dialog'); ?>">
     <div class="zui-dialog-header">
-        <h2>Add Widget</h2>
+        <h2>Add Gadget</h2>
         <i class="zui-icon zui-icon-x"></i>
     </div>
 
     <div class="zui-dialog-page">
         <div class="zui-dialog-menu">
-            <form class="zource-widgete-dialog-search">
+            <form class="zource-dialog-gadgets-search">
                 <input type="" name="" value="">
             </form>
 
@@ -43,7 +47,16 @@ $widgetContainer = $this->dashboard->getWidgetContainer();
                     </div>
 
                     <ul class="zui-nav">
-                        <li><a href="http://example.com">Item <span class="zui-badge" style="float: right;">123</span></a></li>
+                        <?php foreach ($this->gadgetCategories as $category) { ?>
+                        <li data-zui-gadget-category="<?php echo $this->escapeHtmlAttr($category['key']); ?>">
+                            <a href="">
+                                <?php echo $this->escapeHtml($category['label']); ?>
+                                <span class="zui-badge" style="float: right;">
+                                    <?php echo $this->escapeHtml($category['gadgetCount']); ?>
+                                </span>
+                            </a>
+                        </li>
+                        <?php } ?>
                     </ul>
                 </div>
             </nav>
@@ -51,23 +64,19 @@ $widgetContainer = $this->dashboard->getWidgetContainer();
 
         <div class="zui-dialog-page-body">
             <div class="zui-dialog-panel">
-                <p>This is the content of the dialog panel.</p>
-            </div>
+                <ul>
+                    <?php foreach ($this->gadgets as $gadgetId => $gadget) { ?>
+                    <li>
+                        <img src="<?php echo $this->escapeHtml($gadget['thumbnail']); ?>" alt="<?php echo $this->escapeHtmlAttr($gadget['title']); ?>">
 
-            <div class="zui-dialog-panel" aria-hidden="true">
-                <p>This is the content of another dialog panel.</p>
+                        <h3><?php echo $this->escapeHtml($gadget['title']); ?></h3>
 
-                <div style="height: 2000px;"></div>
+                        <p><?php echo $this->escapeHtml($gadget['description']); ?></p>
 
-                <p>Cool eh?</p>
-            </div>
-
-            <div class="zui-dialog-panel" aria-hidden="true">
-                <p>This is another awesome panel.</p>
-
-                <div style="height: 2000px;"></div>
-
-                <p>Cool eh?</p>
+                        <button data-zui-gadget="<?php echo $this->escapeHtmlAttr($gadgetId); ?>">Add</button>
+                    </li>
+                    <?php } ?>
+                </ul>
             </div>
         </div>
     </div>
@@ -75,7 +84,7 @@ $widgetContainer = $this->dashboard->getWidgetContainer();
     <div class="zui-dialog-footer">
         <div class="zui-dialog-footer-left">
             <div class="zui-dialog-hint">
-                Choose a widget you would like to add.
+                Choose a gadget you would like to add.
             </div>
         </div>
 
@@ -108,7 +117,7 @@ $widgetContainer = $this->dashboard->getWidgetContainer();
     <div class="zui-dialog-footer">
         <div class="zui-dialog-footer-left">
             <div class="zui-dialog-hint">
-                Choose your preferred widget container layout.
+                Choose your preferred gadget container layout.
             </div>
         </div>
 

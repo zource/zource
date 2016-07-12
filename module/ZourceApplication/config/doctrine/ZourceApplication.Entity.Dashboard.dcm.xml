@@ -20,7 +20,7 @@
 
         <field name="name" type="string" />
 
-        <many-to-one target-entity="ZourceApplication\Entity\WidgetContainer" field="widgetContainer" fetch="EAGER">
+        <many-to-one target-entity="ZourceApplication\Entity\GadgetContainer" field="gadgetContainer" fetch="EAGER">
             <join-column on-delete="CASCADE" />
             <cascade>
                 <cascade-all />

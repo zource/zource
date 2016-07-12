@@ -10,9 +10,10 @@
 namespace ZourceApplication\Mvc\Controller;
 
 use Zend\Form\FormInterface;
+use Zend\Paginator\Paginator;
 use Zend\View\Model\JsonModel;
 use ZourceApplication\Entity\Dashboard as DashboardEntity;
-use ZourceApplication\Entity\WidgetContainer;
+use ZourceApplication\Entity\GadgetContainer;
 use ZourceApplication\TaskService\Dashboard as DashboardTaskService;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
@@ -43,15 +44,38 @@ class Dashboard extends AbstractActionController
 
         return new ViewModel([
             'dashboard' => $dashboard,
+            'gadgets' => $this->dashboardTaskService->getAvailableGadgets(),
+            'gadgetCategories' => $this->dashboardTaskService->getGadgetCategories(),
         ]);
     }
 
-    public function widgetDialogAction()
+    public function gadgetDialogAction()
     {
         return new JsonModel([
-            'widgets' => [
-                'open-weather' => [
+            'gadgets' => [
+                'open-weather1' => [
                     'label' => 'My Label',
+                    'category' => 'Category',
+                ],
+                'open-weather2' => [
+                    'label' => 'My Label',
+                    'category' => 'Category',
+                ],
+                'open-weather3' => [
+                    'label' => 'My Label',
+                    'category' => 'Category',
+                ],
+                'open-weather4' => [
+                    'label' => 'My Label',
+                    'category' => 'Category 2',
+                ],
+                'open-weather5' => [
+                    'label' => 'My Label',
+                    'category' => 'Category 2',
+                ],
+                'open-weather6' => [
+                    'label' => 'My Label',
+                    'category' => 'Category',
                 ],
             ],
         ]);
@@ -59,7 +83,10 @@ class Dashboard extends AbstractActionController
 
     public function manageAction()
     {
+        /** @var Paginator $dashboards */
         $dashboards = $this->dashboardTaskService->getPaginator();
+        $dashboards->setCurrentPageNumber($this->params()->fromQuery('page', 1));
+        $dashboards->setItemCountPerPage(25);
 
         return new ViewModel([
             'dashboards' => $dashboards,
@@ -77,6 +104,21 @@ class Dashboard extends AbstractActionController
         $this->dashboardTaskService->selectDashboard($this->zourceAccount(), $dashboard);
 
         return $this->redirect()->toRoute('dashboard');
+    }
+
+    public function updateGadgetsAction()
+    {
+        /** @var DashboardEntity $dashboard */
+        $dashboard = $this->dashboardTaskService->find($this->params('id'));
+        if (!$dashboard) {
+            return $this->notFoundAction();
+        }
+
+        $this->dashboardTaskService->updateGadgets($dashboard, $this->getRequest()->getPost()->toArray());
+
+        return new JsonModel([
+            'success' => true,
+        ]);
     }
 
     public function createAction()
@@ -121,6 +163,6 @@ class Dashboard extends AbstractActionController
 
         $this->dashboardTaskService->remove($dashboard);
 
-        return $this->redirect()->toRoute('dashboard');
+        return $this->redirect()->toRoute('dashboard/manage');
     }
 }

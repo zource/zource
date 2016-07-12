@@ -14,7 +14,7 @@ use DateTimeInterface;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
-class Widget
+class Gadget
 {
     /**
      * @var UuidInterface
@@ -32,9 +32,9 @@ class Widget
     private $updateDate;
 
     /**
-     * @var WidgetContainer
+     * @var GadgetContainer
      */
-    private $widgetContainer;
+    private $gadgetContainer;
 
     /**
      * @var string
@@ -59,16 +59,16 @@ class Widget
     /**
      * Initializes a new instance of this class.
      *
-     * @param WidgetContainer $widgetContainer
+     * @param GadgetContainer $gadgetContainer
      * @param string $type
      * @param array $options
      */
-    public function __construct(WidgetContainer $widgetContainer, $type, array $options = [])
+    public function __construct(GadgetContainer $gadgetContainer, $type, array $options = [])
     {
         $this->id = Uuid::uuid4();
         $this->installationDate = new DateTime();
         $this->updateDate = new DateTime();
-        $this->widgetContainer = $widgetContainer;
+        $this->gadgetContainer = $gadgetContainer;
         $this->type = $type;
         $this->options = $options;
         $this->column = 0;
@@ -100,11 +100,11 @@ class Widget
     }
 
     /**
-     * @return WidgetContainer
+     * @return GadgetContainer
      */
-    public function getWidgetContainer()
+    public function getGadgetContainer()
     {
-        return $this->widgetContainer;
+        return $this->gadgetContainer;
     }
 
     /**

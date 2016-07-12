@@ -43,9 +43,9 @@ class Dashboard
     private $name;
 
     /**
-     * @var WidgetContainer
+     * @var GadgetContainer
      */
-    private $widgetContainer;
+    private $gadgetContainer;
 
     /**
      * Initializes a new instance of this class.
@@ -59,7 +59,7 @@ class Dashboard
         $this->creationDate = new DateTime();
         $this->updateDate = new DateTime();
         $this->name = $name;
-        $this->widgetContainer = new WidgetContainer(WidgetContainer::LAYOUT_100);
+        $this->gadgetContainer = new GadgetContainer(GadgetContainer::LAYOUT_67_33);
     }
 
     /**
@@ -111,10 +111,10 @@ class Dashboard
     }
 
     /**
-     * @return WidgetContainer
+     * @return GadgetContainer
      */
-    public function getWidgetContainer()
+    public function getGadgetContainer()
     {
-        return $this->widgetContainer;
+        return $this->gadgetContainer;
     }
 }

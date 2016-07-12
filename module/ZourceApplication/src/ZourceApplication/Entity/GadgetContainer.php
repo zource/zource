@@ -14,7 +14,7 @@ use Doctrine\Common\Collections\Collection;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
-class WidgetContainer
+class GadgetContainer
 {
     const LAYOUT_33_33_34 = '33-33-34';
     const LAYOUT_33_67 = '33-67';
@@ -35,7 +35,7 @@ class WidgetContainer
     /**
      * @var Collection
      */
-    private $widgets;
+    private $gadgets;
 
     /**
      * Initializes a new instance of this class.
@@ -46,7 +46,7 @@ class WidgetContainer
     {
         $this->id = Uuid::uuid4();
         $this->layout = $layout;
-        $this->widgets = new ArrayCollection();
+        $this->gadgets = new ArrayCollection();
     }
 
     /**
@@ -70,7 +70,7 @@ class WidgetContainer
      */
     public function setLayout($layout)
     {
-        $this->updateWidgets($this->layout, $layout);
+        $this->updateGadgets($this->layout, $layout);
 
         $this->layout = $layout;
     }
@@ -78,9 +78,9 @@ class WidgetContainer
     /**
      * @return Collection
      */
-    public function getWidgets()
+    public function getGadgets()
     {
-        return $this->widgets;
+        return $this->gadgets;
     }
 
     public function getColumns()
@@ -88,20 +88,20 @@ class WidgetContainer
         return explode('-', $this->getLayout());
     }
 
-    public function getWidgetsForColumn($column)
+    public function getGadgetsForColumn($column)
     {
         $result = [];
 
-        foreach ($this->getWidgets() as $widget) {
-            if ($widget->getColumn() === $column) {
-                $result[] = $widget;
+        foreach ($this->getGadgets() as $gadget) {
+            if ($gadget->getColumn() === $column) {
+                $result[] = $gadget;
             }
         }
 
         return $result;
     }
 
-    private function updateWidgets($oldLayout, $newLayout)
+    private function updateGadgets($oldLayout, $newLayout)
     {
         // TODO
     }
