@@ -27,6 +27,6 @@ class ConsoleFactory implements FactoryInterface
         /** @var PasswordInterface $crypter */
         $crypter = $serviceLocator->getServiceLocator()->get(PasswordInterface::class);
 
-        return new Console($entityManager, $crypter);
+        return new Console($serviceLocator->getServiceLocator()->get('Config'), $entityManager, $crypter);
     }
 }

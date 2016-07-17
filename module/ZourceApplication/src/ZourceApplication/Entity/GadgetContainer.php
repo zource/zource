@@ -70,8 +70,6 @@ class GadgetContainer
      */
     public function setLayout($layout)
     {
-        $this->updateGadgets($this->layout, $layout);
-
         $this->layout = $layout;
     }
 
@@ -88,6 +86,17 @@ class GadgetContainer
         return explode('-', $this->getLayout());
     }
 
+    public function getGadget($id)
+    {
+        foreach ($this->getGadgets() as $gadget) {
+            if ($gadget->getId()->toString() === $id) {
+                return $gadget;
+            }
+        }
+
+        return null;
+    }
+
     public function getGadgetsForColumn($column)
     {
         $result = [];
@@ -98,11 +107,16 @@ class GadgetContainer
             }
         }
 
-        return $result;
-    }
+        usort($result, function(Gadget $lft, Gadget $rgt) {
+            if ($lft->getPosition() < $rgt->getPosition()) {
+                return -1;
+            } elseif ($lft->getPosition() > $rgt->getPosition()) {
+                return 1;
+            }
 
-    private function updateGadgets($oldLayout, $newLayout)
-    {
-        // TODO
+            return 0;
+        });
+
+        return $result;
     }
 }

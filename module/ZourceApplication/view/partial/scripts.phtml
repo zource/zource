@@ -3,5 +3,13 @@
 <script src="<?php echo $this->basePath('/vendor/moment/min/moment.min.js'); ?>"></script>
 <script src="<?php echo $this->basePath('/vendor/select2/dist/js/select2.min.js'); ?>"></script>
 <script src="<?php echo $this->basePath('/vendor/zource-zui/dist/js/zui.min.js'); ?>"></script>
-<script src="<?php echo $this->basePath('/js/zource.min.js'); ?>"></script>
+<script src="<?php
+
+if (file_exists('config/development.config.php')) {
+    echo $this->basePath('/js/zource.js');
+} else {
+    echo $this->basePath('/js/zource.min.js');
+}
+
+?>"></script>
 <?php echo $this->inlineScript() ?>

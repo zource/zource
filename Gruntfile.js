@@ -3,6 +3,14 @@ module.exports = function (grunt) {
 
     grunt.initConfig({
         pkg: grunt.file.readJSON("package.json"),
+        concat: {
+            dist: {
+                src: [
+                    "assets/js/zource.js"
+                ],
+                dest: 'public/js/zource.js'
+            }
+        },
         copy: {
             main: {
                 files: [
@@ -39,11 +47,11 @@ module.exports = function (grunt) {
         uglify: {
             dist: {
                 files: {
-                    "public/js/zource.min.js": ["assets/js/zource.js"]
+                    "public/js/zource.min.js": ["public/js/zource.js"]
                 },
                 options: {
                     preserveComments: false,
-                    sourceMap: false,
+                    sourceMap: true,
                     sourceMapName: "public/js/zource.min.js.map",
                     report: "min",
                     beautify: {
@@ -70,10 +78,11 @@ module.exports = function (grunt) {
         }
     });
 
+    grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-sass');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
 
-    grunt.registerTask('default', ['sass', 'copy', 'uglify']);
+    grunt.registerTask('default', ['sass', 'copy', 'concat', 'uglify']);
 };

@@ -13,7 +13,6 @@ use Doctrine\ORM\EntityManager;
 use DoctrineModule\Paginator\Adapter\Selectable;
 use Zend\Paginator\Paginator;
 use ZourceApplication\Entity\Dashboard as DashboardEntity;
-use ZourceApplication\Entity\GadgetContainer;
 use ZourceUser\Entity\AccountInterface;
 
 class Dashboard
@@ -23,15 +22,9 @@ class Dashboard
      */
     private $entityManager;
 
-    /**
-     * @var array
-     */
-    private $availableGadgets;
-
-    public function __construct(EntityManager $entityManager, $availableGadgets)
+    public function __construct(EntityManager $entityManager)
     {
         $this->entityManager = $entityManager;
-        $this->availableGadgets = $availableGadgets;
     }
 
     public function find($id)
@@ -46,32 +39,6 @@ class Dashboard
         $repository = $this->entityManager->getRepository(DashboardEntity::class);
 
         return $repository->findAll();
-    }
-
-    public function getGadgetCategories()
-    {
-        $result = [];
-
-        foreach ($this->availableGadgets as $gadget) {
-            $category = $gadget['category'];
-
-            if (!array_key_exists($category, $result)) {
-                $result[$category] = [
-                    'key' => preg_replace('/[^a-z0-9]+/i', '-', $category),
-                    'label' => $category,
-                    'gadgetCount' => 0,
-                ];
-            }
-
-            $result[$category]['gadgetCount']++;
-        }
-
-        return $result;
-    }
-
-    public function getAvailableGadgets()
-    {
-        return $this->availableGadgets;
     }
 
     public function getPaginator()
@@ -111,15 +78,6 @@ class Dashboard
         $account->setProperty('dashboard', $dashboard->getId()->toString());
 
         $this->entityManager->flush();
-    }
-
-    public function updateGadgets(DashboardEntity $dashboard, array $data)
-    {
-        /** @var GadgetContainer $gadgetContainer */
-        $gadgetContainer = $dashboard->getGadgetContainer();
-        $gadgetContainer->setLayout($data['layout']);
-
-        $this->entityManager->flush($gadgetContainer);
     }
 
     public function persist(DashboardEntity $dashboard)

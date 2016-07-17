@@ -11,24 +11,16 @@ namespace ZourceApplication\Mvc\Controller\Service;
 
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use ZourceApplication\Form\Dashboard as DashboardForm;
-use ZourceApplication\Mvc\Controller\Dashboard;
-use ZourceApplication\TaskService\Dashboard as DashboardTaskService;
+use ZourceApplication\Mvc\Controller\Gadget;
 use ZourceApplication\TaskService\Gadget as GadgetTaskService;
 
-class DashboardFactory implements FactoryInterface
+class GadgetFactory implements FactoryInterface
 {
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        /** @var DashboardForm $dashboardForm */
-        $dashboardForm = $serviceLocator->getServiceLocator()->get(DashboardForm::class);
-
-        /** @var DashboardTaskService $dashboardTaskService */
-        $dashboardTaskService = $serviceLocator->getServiceLocator()->get(DashboardTaskService::class);
-
         /** @var GadgetTaskService $gadgetTaskService */
         $gadgetTaskService = $serviceLocator->getServiceLocator()->get(GadgetTaskService::class);
 
-        return new Dashboard($dashboardForm, $dashboardTaskService, $gadgetTaskService);
+        return new Gadget($gadgetTaskService);
     }
 }

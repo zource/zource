@@ -39,7 +39,7 @@ class Gadget
     /**
      * @var string
      */
-    private $type;
+    private $gadgetType;
 
     /**
      * @var array
@@ -60,16 +60,16 @@ class Gadget
      * Initializes a new instance of this class.
      *
      * @param GadgetContainer $gadgetContainer
-     * @param string $type
+     * @param string $gadgetType
      * @param array $options
      */
-    public function __construct(GadgetContainer $gadgetContainer, $type, array $options = [])
+    public function __construct(GadgetContainer $gadgetContainer, $gadgetType, array $options = [])
     {
         $this->id = Uuid::uuid4();
         $this->installationDate = new DateTime();
         $this->updateDate = new DateTime();
         $this->gadgetContainer = $gadgetContainer;
-        $this->type = $type;
+        $this->gadgetType = $gadgetType;
         $this->options = $options;
         $this->column = 0;
         $this->position = 0;
@@ -110,9 +110,9 @@ class Gadget
     /**
      * @return string
      */
-    public function getType()
+    public function getGadgetType()
     {
-        return $this->type;
+        return $this->gadgetType;
     }
 
     /**

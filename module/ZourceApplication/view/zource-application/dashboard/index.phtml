@@ -13,22 +13,24 @@ $gadgetContainer = $this->dashboard->getGadgetContainer();
     </div>
 
     <div class="zui-toolbar-secondary">
-            <a href="" class="zui-button zui-button-subtle" data-zui-dialog-trigger="#zource-dialog-add-gadget">
-                Add gadget
-            </a>
-            <a href="" class="zui-button zui-button-subtle" data-zui-dialog-trigger="#zource-dialog-set-layout">
-                Set layout
-            </a>
+        <a href="" class="zui-button zui-button-subtle" data-zui-dialog-trigger="#zource-dialog-add-gadget">
+            Add gadget
+        </a>
+        <a href="" class="zui-button zui-button-subtle" data-zui-dialog-trigger="#zource-dialog-set-layout">
+            Set layout
+        </a>
     </div>
 </div>
 
-<div data-zource-container-update-url="<?php echo $this->url('dashboard/update-gadgets', [
-    'id' => $this->dashboard->getId(),
-]); ?>">
-    <?php echo $this->zourceGadgetContainer($gadgetContainer); ?>
-</div>
+<?php echo $this->zourceGadgetContainer($gadgetContainer, [
+    'load_url' => 'gadget/load',
+    'update_url' => 'gadget/update',
+    'update_container_url' => $this->url('gadget/update-container', [
+        'id' => $this->dashboard->getGadgetContainer()->getId(),
+    ]),
+]); ?>
 
-<div class="zui-dialog zui-dialog-large" id="zource-dialog-add-gadget" data-zource-gadgets-url="<?php echo $this->url('dashboard/gadget-dialog'); ?>">
+<div class="zui-dialog zui-dialog-large" id="zource-dialog-add-gadget">
     <div class="zui-dialog-header">
         <h2>Add Gadget</h2>
         <i class="zui-icon zui-icon-x"></i>

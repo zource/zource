@@ -114,6 +114,51 @@ return [
                         ],
                     ],
                 ],
+                'group-create' => [
+                    'options' => [
+                        'route' => 'zource:group:create [--name=]',
+                        'defaults' => [
+                            'controller' => ConsoleController::class,
+                            'action' => 'groupCreate',
+                        ],
+                    ],
+                ],
+                'group-delete' => [
+                    'options' => [
+                        'route' => 'zource:group:delete <id>',
+                        'defaults' => [
+                            'controller' => ConsoleController::class,
+                            'action' => 'groupDelete',
+                        ],
+                    ],
+                ],
+                'group-list' => [
+                    'options' => [
+                        'route' => 'zource:group:list',
+                        'defaults' => [
+                            'controller' => ConsoleController::class,
+                            'action' => 'groupList',
+                        ],
+                    ],
+                ],
+                'group-permission' => [
+                    'options' => [
+                        'route' => 'zource:group:permission [allow|deny] [--permission=] <id>',
+                        'defaults' => [
+                            'controller' => ConsoleController::class,
+                            'action' => 'groupPermission',
+                        ],
+                    ],
+                ],
+                'group-member' => [
+                    'options' => [
+                        'route' => 'zource:group:member [--add=] [--remove=] <id>',
+                        'defaults' => [
+                            'controller' => ConsoleController::class,
+                            'action' => 'groupMember',
+                        ],
+                    ],
+                ],
                 'identity-create' => [
                     'options' => [
                         'route' => 'zource:identity:create <account> <directory> <identity>',

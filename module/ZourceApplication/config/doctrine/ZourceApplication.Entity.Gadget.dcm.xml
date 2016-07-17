@@ -14,9 +14,9 @@
             <gedmo:timestampable on="update" />
         </field>
 
-        <field name="type" type="string" />
+        <field name="gadgetType" type="string" />
         <field name="options" type="array" />
-        <field name="column" type="integer" />
+        <field name="column" type="integer" column="gadgetColumn" />
         <field name="position" type="integer" />
 
         <many-to-one target-entity="ZourceApplication\Entity\GadgetContainer" field="gadgetContainer" inversed-by="gadgets" fetch="EAGER">

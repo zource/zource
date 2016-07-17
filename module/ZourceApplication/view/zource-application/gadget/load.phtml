@@ -1,0 +1,16 @@
+<div class="zui-gadget"
+     data-load-url="<?php echo $this->url('gadget/load', [
+         'id' => $this->gadget->getId(),
+     ]); ?>"
+     data-update-url="<?php echo $this->url('gadget/update', [
+         'id' => $this->gadget->getId(),
+     ]); ?>"
+     data-zource-gadget-type="<?php echo $this->escapeHtmlAttr($this->gadget->getGadgetType()); ?>"
+     data-zource-gadget-id="<?php echo $this->escapeHtmlAttr($this->gadget->getId()); ?>">
+
+    <div class="zui-gadget-header">Test</div>
+
+    <div class="zui-gadget-body">
+        Test
+    </div>
+</div>

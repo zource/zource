@@ -10,30 +10,38 @@
 namespace ZourceApplication\Mvc\Controller;
 
 use Zend\Form\FormInterface;
-use Zend\Paginator\Paginator;
-use Zend\View\Model\JsonModel;
-use ZourceApplication\Entity\Dashboard as DashboardEntity;
-use ZourceApplication\Entity\GadgetContainer;
-use ZourceApplication\TaskService\Dashboard as DashboardTaskService;
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Paginator\Paginator;
 use Zend\View\Model\ViewModel;
+use ZourceApplication\Entity\Dashboard as DashboardEntity;
+use ZourceApplication\TaskService\Dashboard as DashboardTaskService;
+use ZourceApplication\TaskService\Gadget as GadgetTaskService;
 
 class Dashboard extends AbstractActionController
 {
+    /**
+     * @var FormInterface
+     */
+    private $dashboardForm;
+
     /**
      * @var DashboardTaskService
      */
     private $dashboardTaskService;
 
     /**
-     * @var FormInterface
+     * @var GadgetTaskService
      */
-    private $dashboardForm;
+    private $gadgetTaskService;
 
-    public function __construct(DashboardTaskService $dashboardTaskService, FormInterface $dashboardForm)
-    {
-        $this->dashboardTaskService = $dashboardTaskService;
+    public function __construct(
+        FormInterface $dashboardForm,
+        DashboardTaskService $dashboardTaskService,
+        GadgetTaskService $gadgetTaskService
+    ) {
         $this->dashboardForm = $dashboardForm;
+        $this->dashboardTaskService = $dashboardTaskService;
+        $this->gadgetTaskService = $gadgetTaskService;
     }
 
     public function indexAction()
@@ -44,40 +52,8 @@ class Dashboard extends AbstractActionController
 
         return new ViewModel([
             'dashboard' => $dashboard,
-            'gadgets' => $this->dashboardTaskService->getAvailableGadgets(),
-            'gadgetCategories' => $this->dashboardTaskService->getGadgetCategories(),
-        ]);
-    }
-
-    public function gadgetDialogAction()
-    {
-        return new JsonModel([
-            'gadgets' => [
-                'open-weather1' => [
-                    'label' => 'My Label',
-                    'category' => 'Category',
-                ],
-                'open-weather2' => [
-                    'label' => 'My Label',
-                    'category' => 'Category',
-                ],
-                'open-weather3' => [
-                    'label' => 'My Label',
-                    'category' => 'Category',
-                ],
-                'open-weather4' => [
-                    'label' => 'My Label',
-                    'category' => 'Category 2',
-                ],
-                'open-weather5' => [
-                    'label' => 'My Label',
-                    'category' => 'Category 2',
-                ],
-                'open-weather6' => [
-                    'label' => 'My Label',
-                    'category' => 'Category',
-                ],
-            ],
+            'gadgets' => $this->gadgetTaskService->getAvailableGadgets(),
+            'gadgetCategories' => $this->gadgetTaskService->getGadgetCategories(),
         ]);
     }
 
@@ -104,21 +80,6 @@ class Dashboard extends AbstractActionController
         $this->dashboardTaskService->selectDashboard($this->zourceAccount(), $dashboard);
 
         return $this->redirect()->toRoute('dashboard');
-    }
-
-    public function updateGadgetsAction()
-    {
-        /** @var DashboardEntity $dashboard */
-        $dashboard = $this->dashboardTaskService->find($this->params('id'));
-        if (!$dashboard) {
-            return $this->notFoundAction();
-        }
-
-        $this->dashboardTaskService->updateGadgets($dashboard, $this->getRequest()->getPost()->toArray());
-
-        return new JsonModel([
-            'success' => true,
-        ]);
     }
 
     public function createAction()

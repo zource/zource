@@ -66,6 +66,7 @@ return [
             Mvc\Controller\AdminPlugins::class => Mvc\Controller\Service\AdminPluginsFactory::class,
             Mvc\Controller\AdminSettings::class => Mvc\Controller\Service\AdminSettingsFactory::class,
             Mvc\Controller\Dashboard::class => Mvc\Controller\Service\DashboardFactory::class,
+            Mvc\Controller\Gadget::class => Mvc\Controller\Service\GadgetFactory::class,
         ],
     ],
     'doctrine' => [
@@ -219,6 +220,44 @@ return [
                     ],
                 ],
             ],
+            'gadget' => [
+                'type' => 'Literal',
+                'options' => [
+                    'route' => '/gadget',
+                    'defaults' => [
+                        'controller' => Mvc\Controller\Gadget::class,
+                    ],
+                ],
+                'child_routes' => [
+                    'load' => [
+                        'type' => 'Literal',
+                        'options' => [
+                            'route' => '/load',
+                            'defaults' => [
+                                'action' => 'load',
+                            ],
+                        ],
+                    ],
+                    'update' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => '/update/:id',
+                            'defaults' => [
+                                'action' => 'update',
+                            ],
+                        ],
+                    ],
+                    'update-container' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => '/update-container/:id',
+                            'defaults' => [
+                                'action' => 'update-container',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
             'dashboard' => [
                 'type' => 'Literal',
                 'options' => [
@@ -230,15 +269,6 @@ return [
                 ],
                 'may_terminate' => true,
                 'child_routes' => [
-                    'gadget-dialog' => [
-                        'type' => 'Literal',
-                        'options' => [
-                            'route' => 'dashboard/gadget-dialog',
-                            'defaults' => [
-                                'action' => 'gadget-dialog',
-                            ],
-                        ],
-                    ],
                     'manage' => [
                         'type' => 'Literal',
                         'options' => [
@@ -254,15 +284,6 @@ return [
                             'route' => 'dashboard/select/:id',
                             'defaults' => [
                                 'action' => 'select',
-                            ],
-                        ],
-                    ],
-                    'update-gadgets' => [
-                        'type' => 'Segment',
-                        'options' => [
-                            'route' => 'dashboard/update-gadgets/:id',
-                            'defaults' => [
-                                'action' => 'update-gadgets',
                             ],
                         ],
                     ],
@@ -314,6 +335,7 @@ return [
             Builder::class => BuilderFactory::class,
             TaskService\CacheManager::class => TaskService\Service\CacheManagerFactory::class,
             TaskService\Dashboard::class => TaskService\Service\DashboardFactory::class,
+            TaskService\Gadget::class => TaskService\Service\GadgetFactory::class,
             ConfigInterface::class => SessionConfigFactory::class,
             'LazyServiceFactory' => LazyServiceFactoryFactory::class,
             ManagerInterface::class => SessionManagerFactory::class,
@@ -403,6 +425,7 @@ return [
             'zource-application/dashboard/manage' => __DIR__ . '/../view/zource-application/dashboard/manage.phtml',
             'zource-application/dashboard/create' => __DIR__ . '/../view/zource-application/dashboard/create.phtml',
             'zource-application/dashboard/update' => __DIR__ . '/../view/zource-application/dashboard/update.phtml',
+            'zource-application/gadget/load' => __DIR__ . '/../view/zource-application/gadget/load.phtml',
         ],
     ],
     'zource_cache_manager' => [
@@ -535,6 +558,7 @@ return [
             'admin/*' => true,
             'dashboard' => true,
             'dashboard/*' => true,
+            'gadget/*' => true,
             'zf-apigility/documentation' => true,
             'zf-apigility/*' => false,
         ],

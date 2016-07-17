@@ -1,35 +1,128 @@
-function updateWidgets(container) {
-    var data = {
-        'layout': String(container.attr("data-zource-container-layout"))
+function addEmptyGadgetContainer(column) {
+    var emptyContainer = $("<div>")
+        .addClass("zui-gadget-empty")
+        .text($(column).parent().data("zource-empty-msg"));
+
+    $(column).append(emptyContainer.show())
+}
+
+function updateColumnsAfterSorting() {
+    $(".zui-gadget-empty").remove();
+
+    $(".zui-gadget-column").each(function() {
+        if ($(".zui-gadget", this).length === 0) {
+            addEmptyGadgetContainer(this);
+        }
+    });
+}
+
+function updateGadgets(container, callback) {
+    var data, gadget, gadgets = [];
+
+    console.log('updateGadgets');
+
+    data = {
+        'layout': String(container.attr("data-zource-container-layout")),
+        'gadgets': []
     };
+
+    $(".zui-gadget:not(.zui-gadget-empty)", container).each(function(index, element) {
+        gadget = $(this);
+
+        data.gadgets.push({
+            'id': gadget.attr("data-zource-gadget-id") || null,
+            'type': gadget.attr("data-zource-gadget-type"),
+            'column': gadget.parent().prevAll(".zui-gadget-column").length,
+            'position': gadget.prevAll(".zui-gadget").length
+        });
+
+        gadgets.push(gadget);
+    });
 
     $.ajax({
         'type': 'post',
-        'url': container.closest("[data-zource-container-update-url]").attr("data-zource-container-update-url"),
-        'data': data
+        'url': container.attr("data-zource-container-update-container-url"),
+        'data': data,
+        'dataType': 'json',
+        'success': function(response) {
+            for (var i = 0; i < response.length; ++i) {
+                gadgets[i].attr("data-zource-gadget-id", response[i]);
+            }
+
+            if (callback) {
+                callback();
+            }
+        }
+    });
+}
+
+function loadGadget(gadget) {
+    gadget = $(gadget);
+
+    var loadUrl = gadget.closest(".zui-gadgets").attr("data-zource-container-load-url") + '?id=';
+    loadUrl += gadget.attr("data-zource-gadget-id");
+
+    $.ajax({
+        'url': loadUrl,
+        'data': {},
+        'dataType': 'html',
+        'success': function(response) {
+            gadget.replaceWith(response);
+        }
     });
 }
 
 $(function() {
+    $(".zui-gadget").each(function() {
+        loadGadget(this);
+    });
+
+    $(".zui-gadget-column").sortable({
+        connectWith: ".zui-gadget-column",
+        containment: ".zui-gadgets",
+        handle: ".zui-gadget-header",
+        helper: "clone",
+        placeholder: "zui-gadget-highlight"
+    }).disableSelection();
+
+    $(".zui-gadget-column").on("sortupdate", function() {
+        updateColumnsAfterSorting();
+    });
+
+    $(".zui-gadget-column").on("sortstop", function() {
+        updateGadgets($(this).parent());
+    });
+
     $("#zource-dialog-add-gadget li button").on("click", function() {
-        var gadgetKey = $(this).data('zui-gadget'), emptyColumns, emptyColumn, gadget;
+        var gadgetKey = $(this).data('zui-gadget'),
+            container = $(".zui-gadgets"),
+            emptyColumns,
+            targetColumn,
+            gadget;
 
-        zui.Dialog.close(this);
-
-        gadget = $("<div>").addClass("zui-gadget").html('<p>test</p>');
-
-        emptyColumns = $(".zui-gadget-empty");
+        // The gadget to add.
+        gadget = $("<div>").addClass("zui-gadget").attr("data-zource-gadget-type", gadgetKey);
 
         // When there are no empty columns, we add the widget to the last column, else we pick the
         // first empty column to add the widget to.
-        if (emptyColumns.length === 0) {
-            $(".zui-gadget-column:last").append(gadget);
-        } else {
-            emptyColumn = $(emptyColumns.get(0)).parent();
-            emptyColumn.append(gadget);
+        emptyColumns = $(".zui-gadget-empty");
 
-            $(".zui-gadget-empty", emptyColumn).remove();
+        if (emptyColumns.length === 0) {
+            targetColumn = $(".zui-gadget-column:last");
+        } else {
+            targetColumn = $(emptyColumns.get(0)).parent();
         }
+
+        targetColumn.append(gadget);
+
+        $(".zui-gadget-empty", targetColumn).remove();
+
+        updateGadgets(container, function() {
+            console.log("callback");
+            loadGadget(gadget);
+        });
+
+        zui.Dialog.close(this);
     });
 
     $(".zource-dialog-set-layout-item").on("click", function() {
@@ -39,7 +132,8 @@ $(function() {
             newLayout = String($(this).attr("data-zource-container-layout")),
             oldColumns,
             newColumns,
-            columnsWidths;
+            columnsWidths,
+            newColumn;
 
         zui.Dialog.close(this);
 
@@ -67,9 +161,9 @@ $(function() {
         }
 
         while (oldColumns.length < columnsWidths.length) {
-            var emptyContainer = $("<div>").addClass("zui-gadget zui-gadget-empty").text(container.data("zource-empty-msg"));
+            newColumn = $("<div>").addClass("zui-gadget-column").appendTo(container);
 
-            $("<div>").addClass("zui-gadget-column").append(emptyContainer.show()).appendTo(container);
+            addEmptyGadgetContainer(newColumn);
 
             oldColumns.length++;
         }
@@ -80,6 +174,6 @@ $(function() {
             $(newColumns[i]).css('width', parseInt(columnsWidths[i]) + '%');
         }
 
-        updateWidgets(container);
+        updateGadgets(container);
     });
 });
