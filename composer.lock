@@ -679,16 +679,16 @@
         },
         {
             "name": "doctrine/doctrine-module",
-            "version": "1.0.1",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/DoctrineModule.git",
-                "reference": "ade6c1667283e3d8131d40e79c427b8a8100e7d3"
+                "reference": "eb603352dcbf6f4e2186e19da560ea31e9616db8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/DoctrineModule/zipball/ade6c1667283e3d8131d40e79c427b8a8100e7d3",
-                "reference": "ade6c1667283e3d8131d40e79c427b8a8100e7d3",
+                "url": "https://api.github.com/repos/doctrine/DoctrineModule/zipball/eb603352dcbf6f4e2186e19da560ea31e9616db8",
+                "reference": "eb603352dcbf6f4e2186e19da560ea31e9616db8",
                 "shasum": ""
             },
             "require": {
@@ -696,18 +696,25 @@
                 "doctrine/common": "~2.6",
                 "php": "^5.5 || ^7.0",
                 "symfony/console": "~2.3|~3.0",
-                "zendframework/zend-authentication": "~2.3",
-                "zendframework/zend-cache": "~2.3",
-                "zendframework/zend-mvc": "~2.3",
-                "zendframework/zend-paginator": "~2.3",
-                "zendframework/zend-servicemanager": "~2.3",
-                "zendframework/zend-stdlib": "~2.3",
-                "zendframework/zend-validator": "~2.3"
+                "zendframework/zend-authentication": "^2.5.2",
+                "zendframework/zend-cache": "^2.5.2",
+                "zendframework/zend-hydrator": "^1.1",
+                "zendframework/zend-mvc": "^2.5.2",
+                "zendframework/zend-paginator": "^2.6",
+                "zendframework/zend-servicemanager": "^2.7.5 || ^3.0.3",
+                "zendframework/zend-stdlib": "^2.7.6",
+                "zendframework/zend-validator": "^2.5.2"
             },
             "require-dev": {
                 "doctrine/coding-standard": "dev-master",
                 "phpunit/phpunit": "~4.0",
-                "zendframework/zendframework": "~2.3"
+                "zendframework/zend-i18n": "^2.6",
+                "zendframework/zend-log": "^2.5.2",
+                "zendframework/zend-modulemanager": "^2.6.1",
+                "zendframework/zend-serializer": "^2.6",
+                "zendframework/zend-session": "^2.5.2",
+                "zendframework/zend-test": "^2.5.2",
+                "zendframework/zend-version": "^2.5"
             },
             "suggest": {
                 "doctrine/data-fixtures": "Data Fixtures if you want to generate test data or bootstrap data for your deployments"
@@ -753,7 +760,7 @@
                 "module",
                 "zf2"
             ],
-            "time": "2016-03-21 22:50:01"
+            "time": "2016-07-03 13:37:59"
         },
         {
             "name": "doctrine/doctrine-orm-module",
@@ -8098,6 +8105,7 @@
                 "rest",
                 "web service"
             ],
+            "abandoned": "guzzlehttp/guzzle",
             "time": "2015-03-18 18:23:50"
         },
         {
