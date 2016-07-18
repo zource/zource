@@ -14,6 +14,7 @@ use Zend\Form\FormInterface;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Paginator\Paginator;
 use Zend\View\Model\ViewModel;
+use ZourceUser\Entity\AccountInterface;
 use ZourceUser\Entity\Email;
 use ZourceUser\TaskService\Account;
 
@@ -34,10 +35,15 @@ class AdminAccounts extends AbstractActionController
      */
     private $accountTaskService;
 
-    public function __construct(FormInterface $inviteForm, FormInterface $accountForm, Account $accountTaskService)
-    {
+    public function __construct(
+        FormInterface $inviteForm,
+        FormInterface $accountForm,
+        FormInterface $creationForm,
+        Account $accountTaskService
+    ) {
         $this->inviteForm = $inviteForm;
         $this->accountForm = $accountForm;
+        $this->creationForm = $creationForm;
         $this->accountTaskService = $accountTaskService;
     }
 
@@ -76,6 +82,31 @@ class AdminAccounts extends AbstractActionController
 
         return new ViewModel([
             'inviteForm' => $this->inviteForm,
+        ]);
+    }
+
+    public function createAction()
+    {
+        if ($this->getRequest()->isPost()) {
+            $this->creationForm->setData($this->getRequest()->getPost());
+
+            if ($this->creationForm->isValid()) {
+                $data = $this->creationForm->getData();
+
+                /** @var AccountInterface $account */
+                $account = $this->accountTaskService->createAccount($data);
+
+                $this->flashMessenger()->addSuccessMessage(sprintf(
+                    'An account has been created for %s.',
+                    $account->getContact()->getDisplayName()
+                ));
+
+                return $this->redirect()->toRoute('admin/usermanagement/accounts');
+            }
+        }
+
+        return new ViewModel([
+            'creationForm' => $this->creationForm,
         ]);
     }
 

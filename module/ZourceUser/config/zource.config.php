@@ -252,6 +252,11 @@ return [
             'hydrator' => Form\AdminAccount::class,
             'input_filter' => InputFilter\AdminAccount::class,
         ],
+        Form\AdminAccountCreation::class => [
+            'type' => Form\AdminAccountCreation::class,
+            'hydrator' => Form\AdminAccountCreation::class,
+            'input_filter' => InputFilter\AdminAccountCreation::class,
+        ],
         Form\AdminInvite::class => [
             'type' => Form\AdminInvite::class,
             'hydrator' => 'ClassMethods',
@@ -330,6 +335,7 @@ return [
     'hydrators' => [
         'factories' => [
             Form\AdminAccount::class => Hydrator\Service\AdminAccountFactory::class,
+            Form\AdminAccountCreation::class => Hydrator\Service\AdminAccountCreationFactory::class,
             Form\AdminGroup::class => Hydrator\Service\AdminGroupFactory::class,
         ],
     ],
@@ -338,6 +344,7 @@ return [
             AuthenticateInputFilter::class => AuthenticateInputFilterFactory::class,
         ],
         'invokables' => [
+            InputFilter\AdminAccountCreation::class => InputFilter\AdminAccountCreation::class,
             InputFilter\AdminGroup::class => InputFilter\AdminGroup::class,
             InputFilter\AdminInvite::class => InputFilter\AdminInvite::class,
             InputFilter\AdminLdap::class => InputFilter\AdminLdap::class,
@@ -412,6 +419,15 @@ return [
                                             'route' => '/invite',
                                             'defaults' => [
                                                 'action' => 'invite',
+                                            ],
+                                        ],
+                                    ],
+                                    'create' => [
+                                        'type' => 'Literal',
+                                        'options' => [
+                                            'route' => '/create',
+                                            'defaults' => [
+                                                'action' => 'create',
                                             ],
                                         ],
                                     ],
@@ -940,6 +956,7 @@ return [
         'template_map' => [
             'zource-user/account/index' => __DIR__ . '/../view/zource-user/account/index.phtml',
             'zource-user/admin-accounts/index' => __DIR__ . '/../view/zource-user/admin-accounts/index.phtml',
+            'zource-user/admin-accounts/create' => __DIR__ . '/../view/zource-user/admin-accounts/create.phtml',
             'zource-user/admin-accounts/invite' => __DIR__ . '/../view/zource-user/admin-accounts/invite.phtml',
             'zource-user/admin-accounts/update' => __DIR__ . '/../view/zource-user/admin-accounts/update.phtml',
             'zource-user/admin-directories/create' => __DIR__ . '/../view/zource-user/admin-directories/create.phtml',
@@ -1023,6 +1040,22 @@ return [
             'settings/*' => true,
         ],
         'routes' => [
+        ],
+    ],
+    'zource_mail' => [
+        'messages' => [
+            'account-created' => [
+                'subject' => 'Account Created',
+                'layout' => 'layout/email',
+                'html_template' => 'email/account-created/html',
+                'text_template' => 'email/account-created/text',
+            ],
+            'account-invitation' => [
+                'subject' => 'Create an account',
+                'layout' => 'layout/email',
+                'html_template' => 'email/account-invitation/html',
+                'text_template' => 'email/account-invitation/text',
+            ],
         ],
     ],
     'zource_nav' => [

@@ -12,6 +12,7 @@ namespace ZourceUser\TaskService;
 use Doctrine\ORM\EntityManager;
 use DoctrineModule\Paginator\Adapter\Selectable;
 use Zend\EventManager\EventManager;
+use Zend\Math\Rand;
 use Zend\Paginator\Paginator;
 use ZourceContact\Entity\EmailAddress;
 use ZourceContact\Entity\Person;
@@ -62,6 +63,28 @@ class Account
         $this->entityManager->flush();
     }
 
+    public function createAccount($data)
+    {
+        $person = new Person($data['first_name'], $data['last_name']);
+        $person->setMiddleName($data['middle_name']);
+
+        $emailAddress = new EmailAddress($person, EmailAddress::TYPE_WORK, $data['email']);
+
+        $account = new AccountEntity($person);
+        $account->setStatus($data['status']);
+
+        $accountEmail = new Email($account, $data['email']);
+        $account->getEmailAddresses()->add($accountEmail);
+
+        $this->entityManager->persist($person);
+        $this->entityManager->persist($emailAddress);
+        $this->entityManager->persist($account);
+
+        $this->entityManager->flush();
+
+        return $account;
+    }
+
     public function inviteAccount($data)
     {
         // Lookup the e-mail address:
@@ -81,7 +104,7 @@ class Account
         $account->setStatus(AccountEntity::STATUS_INVITED);
 
         $accountEmail = new Email($account, $data['email']);
-        $accountEmail->setValidationCode('abc');
+        $accountEmail->setValidationCode(Rand::getString(32, range('a', 'z')));
         $account->getEmailAddresses()->add($accountEmail);
 
         $this->entityManager->persist($person);

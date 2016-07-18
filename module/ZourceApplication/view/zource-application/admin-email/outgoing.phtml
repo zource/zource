@@ -1,0 +1,29 @@
+<?php
+
+$this->layout('layout/page-header');
+
+$this->placeholder('layout')->pageTitle = $this->translate('pageAdminTitle');
+$this->placeholder('layout')->pageMenu = 'admin-system';
+$this->placeholder('layout')->pageNavGroupPrimary = 'admin-navgroup';
+
+?>
+
+<h2>Outgoing E-mail</h2>
+
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_DEFAULT); ?>
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_SUCCESS); ?>
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_WARNING); ?>
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_ERROR); ?>
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_INFO); ?>
+
+<table class="zui-table zui-table-bordered zui-table-striped">
+    <thead>
+        <tr>
+            <th>Hostname</th>
+            <th class="zui-text-right">Operations</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+

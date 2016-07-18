@@ -1,0 +1,73 @@
+<?php
+
+$this->layout('layout/page-header');
+
+$this->placeholder('layout')->pageTitle = $this->translate('pageAdminTitle');
+$this->placeholder('layout')->pageMenu = 'admin-users';
+$this->placeholder('layout')->pageNavGroupPrimary = 'admin-navgroup';
+
+$this->creationForm->setAttribute('action', $this->url('admin/usermanagement/accounts/create'));
+$this->creationForm->setAttribute('method', 'post');
+$this->creationForm->get('groups')->setAttribute('data-zui-select2-url', $this->url('lookup/group'));
+$this->creationForm->prepare();
+
+?>
+
+<h2>Create Account</h2>
+
+<?php echo $this->form()->openTag($this->creationForm); ?>
+<?php echo $this->formHidden($this->creationForm->get('token')); ?>
+
+<div class="zui-field-group">
+    <?php echo $this->formLabel($this->creationForm->get('first_name')); ?>
+    <?php echo $this->formText($this->creationForm->get('first_name')); ?>
+    <?php echo $this->zourceFormDescription($this->creationForm->get('first_name')); ?>
+    <?php echo $this->formElementErrors($this->creationForm->get('first_name')); ?>
+</div>
+
+<div class="zui-field-group">
+    <?php echo $this->formLabel($this->creationForm->get('middle_name')); ?>
+    <?php echo $this->formText($this->creationForm->get('middle_name')); ?>
+    <?php echo $this->zourceFormDescription($this->creationForm->get('middle_name')); ?>
+    <?php echo $this->formElementErrors($this->creationForm->get('middle_name')); ?>
+</div>
+
+<div class="zui-field-group">
+    <?php echo $this->formLabel($this->creationForm->get('last_name')); ?>
+    <?php echo $this->formText($this->creationForm->get('last_name')); ?>
+    <?php echo $this->zourceFormDescription($this->creationForm->get('last_name')); ?>
+    <?php echo $this->formElementErrors($this->creationForm->get('last_name')); ?>
+</div>
+
+<div class="zui-field-group">
+    <?php echo $this->formLabel($this->creationForm->get('email')); ?>
+    <?php echo $this->formText($this->creationForm->get('email')); ?>
+    <?php echo $this->zourceFormDescription($this->creationForm->get('email')); ?>
+    <?php echo $this->formElementErrors($this->creationForm->get('email')); ?>
+</div>
+
+<div class="zui-field-group">
+    <span class="zui-form-label"><?php echo $this->creationForm->get('status')->getLabel(); ?></span>
+
+    <div class="zui-field-group-inner">
+        <?php echo $this->formRadio($this->creationForm->get('status')); ?>
+    </div>
+
+    <?php echo $this->zourceFormDescription($this->creationForm->get('status')); ?>
+    <?php echo $this->formElementErrors($this->creationForm->get('status')); ?>
+</div>
+
+<div class="zui-field-group">
+    <?php echo $this->formLabel($this->creationForm->get('groups')); ?>
+    <?php echo $this->zourceFormSelect2($this->creationForm->get('groups')); ?>
+    <?php echo $this->zourceFormDescription($this->creationForm->get('groups')); ?>
+    <?php echo $this->formElementErrors($this->creationForm->get('groups')); ?>
+</div>
+
+<div class="zui-buttons-container">
+    <div class="zui-buttons">
+        <?php echo $this->formSubmit($this->creationForm->get('submit')); ?>
+    </div>
+</div>
+
+<?php echo $this->form()->closeTag(); ?>

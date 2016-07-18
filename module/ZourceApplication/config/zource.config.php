@@ -63,6 +63,7 @@ return [
     'controllers' => [
         'factories' => [
             Mvc\Controller\AdminCache::class => Mvc\Controller\Service\AdminCacheFactory::class,
+            Mvc\Controller\AdminEmail::class => Mvc\Controller\Service\AdminEmailFactory::class,
             Mvc\Controller\AdminPlugins::class => Mvc\Controller\Service\AdminPluginsFactory::class,
             Mvc\Controller\AdminSettings::class => Mvc\Controller\Service\AdminSettingsFactory::class,
             Mvc\Controller\Dashboard::class => Mvc\Controller\Service\DashboardFactory::class,
@@ -158,6 +159,38 @@ return [
                                             'defaults' => [
                                                 'controller' => Mvc\Controller\AdminCache::class,
                                                 'action' => 'clear',
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                            'email' => [
+                                'type' => 'Literal',
+                                'options' => [
+                                    'route' => '/email',
+                                    'defaults' => [
+                                        'controller' => AdminSettingsController::class,
+                                        'action' => 'index',
+                                    ],
+                                ],
+                                'child_routes' => [
+                                    'incoming' => [
+                                        'type' => 'Literal',
+                                        'options' => [
+                                            'route' => '/incoming',
+                                            'defaults' => [
+                                                'controller' => Mvc\Controller\AdminEmail::class,
+                                                'action' => 'incoming',
+                                            ],
+                                        ],
+                                    ],
+                                    'outgoing' => [
+                                        'type' => 'Literal',
+                                        'options' => [
+                                            'route' => '/outgoing',
+                                            'defaults' => [
+                                                'controller' => Mvc\Controller\AdminEmail::class,
+                                                'action' => 'outgoing',
                                             ],
                                         ],
                                     ],
@@ -415,6 +448,8 @@ return [
             'partial/top-bar' => __DIR__ . '/../view/partial/top-bar.phtml',
             'zf-apigility-documentation/show' => __DIR__ . '/../view/zource-application/apigility/show.phtml',
             'zource-application/admin-cache/index' => __DIR__ . '/../view/zource-application/admin-cache/index.phtml',
+            'zource-application/admin-email/incoming' => __DIR__ . '/../view/zource-application/admin-email/incoming.phtml',
+            'zource-application/admin-email/outgoing' => __DIR__ . '/../view/zource-application/admin-email/outgoing.phtml',
             'zource-application/admin-plugins/index' => __DIR__ . '/../view/zource-application/admin-plugin/index.phtml',
             'zource-application/admin-settings/index' => __DIR__ . '/../view/zource-application/admin-settings/index.phtml',
             'zource-application/apigility/api' => __DIR__ . '/../view/zource-application/apigility/api.phtml',
@@ -563,6 +598,14 @@ return [
             'zf-apigility/*' => false,
         ],
     ],
+    'zource_mail_incoming' => [
+        'servers' => [
+        ],
+    ],
+    'zource_mail_outgoing' => [
+        'servers' => [
+        ],
+    ],
     'zource_nav' => [
         'admin-navgroup' => [
             'items' => [
@@ -607,6 +650,29 @@ return [
                     'options' => [
                         'label' => 'Plugins',
                         'route' => 'admin/system/plugins',
+                    ],
+                ],
+                'header-email' => [
+                    'type' => 'header',
+                    'priority' => 5000,
+                    'options' => [
+                        'label' => 'E-mail',
+                    ],
+                ],
+                'email-incoming' => [
+                    'type' => 'label',
+                    'priority' => 6000,
+                    'options' => [
+                        'label' => 'Incoming',
+                        'route' => 'admin/system/email/incoming',
+                    ],
+                ],
+                'email-outgoing' => [
+                    'type' => 'label',
+                    'priority' => 7000,
+                    'options' => [
+                        'label' => 'Outgoing',
+                        'route' => 'admin/system/email/outgoing',
                     ],
                 ],
             ],
