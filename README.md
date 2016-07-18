@@ -87,7 +87,7 @@ curl -s https://raw.githubusercontent.com/zource/zource-installer/master/install
  $ php public/index.php zource:group:create --name=Administrators
  $ Group created with id xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
  $ php public/index.php zource:group:member --add=account-uuid xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
- $ php public/index.php zource:group:permission --allow xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+ $ php public/index.php zource:group:permission allow xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
  ```
  
 9. You're done, visit Zource and login with your credentials.
