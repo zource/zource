@@ -47,10 +47,11 @@ curl -s https://raw.githubusercontent.com/zource/zource-installer/master/install
  $ composer install --no-dev -o
  ```
 
-3. Install the Node.JS dependencies and run Grunt:
+3. Install the Node.JS dependencies, run Bower and run Grunt:
 
  ```bash
  $ npm install
+ $ bower install
  $ grunt
  ```
 
