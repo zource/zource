@@ -23,6 +23,7 @@ return [
     'DoctrineModule',
     'DoctrineORMModule',
     'ZourceApplication',
+    'ZourceDaemon',
     'ZourceContact',
     'ZourceUser',
 ];

@@ -24,7 +24,8 @@
         "zfcampus/zf-development-mode": "~2.0",
         "zfcampus/zf-http-cache": "^1.2",
         "zfr/zfr-cors": "^1.2",
-        "zendframework/zend-ldap": "^2.7"
+        "zendframework/zend-ldap": "^2.7",
+        "pda/pheanstalk": "^3.1"
     },
     "require-dev": {
         "zfcampus/zf-apigility-admin": "^1.4.1",
@@ -38,6 +39,7 @@
             "ZourceApplication\\": "module/ZourceApplication/src/",
             "ZourceCalendar\\": "module/ZourceCalendar/src/",
             "ZourceContact\\": "module/ZourceContact/src/",
+            "ZourceDaemon\\": "module/ZourceDaemon/src/",
             "ZourceInstaller\\": "module/ZourceInstaller/src/",
             "ZourceIssue\\": "module/ZourceIssue/src/",
             "ZourceProject\\": "module/ZourceProject/src/",
