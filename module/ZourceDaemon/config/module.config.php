@@ -32,9 +32,17 @@ return [
             Mvc\Controller\Daemon::class => Mvc\Controller\Service\DaemonFactory::class,
         ],
     ],
+    'controller_plugins' => [
+        'factories' => [
+            'zourceDaemon' => Mvc\Controller\Plugin\Service\DaemonFactory::class,
+        ],
+    ],
     'service_manager' => [
         'factories' => [
             TaskService\Daemon::class => TaskService\Service\DaemonFactory::class,
+        ],
+        'invokables' => [
+            Service\WorkerManager::class => Service\WorkerManager::class,
         ],
     ],
     'zource_daemon' => [

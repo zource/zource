@@ -11,5 +11,5 @@ namespace ZourceDaemon\Worker;
 
 interface WorkerInterface
 {
-    public function run(array $params);
+    public function run();
 }

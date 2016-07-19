@@ -9,10 +9,13 @@
 
 namespace ZourceDaemon\TaskService;
 
-use Pheanstalk\Pheanstalk;
+use Exception;
 use Pheanstalk\PheanstalkInterface;
 use RuntimeException;
+use Zend\Log\LoggerInterface;
+use ZourceDaemon\Service\WorkerManager;
 use ZourceDaemon\ValueObject\Job;
+use ZourceDaemon\Worker\WorkerInterface;
 
 class Daemon
 {
@@ -20,6 +23,16 @@ class Daemon
      * @var PheanstalkInterface
      */
     private $pheanstalk;
+
+    /**
+     * @var WorkerManager
+     */
+    private $workerManager;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
     /**
      * @var int
@@ -31,9 +44,16 @@ class Daemon
      */
     private $interval;
 
-    public function __construct(PheanstalkInterface $pheanstalk, $lifetime, $interval)
-    {
+    public function __construct(
+        PheanstalkInterface $pheanstalk,
+        WorkerManager $workerManager,
+        LoggerInterface $logger,
+        $lifetime,
+        $interval
+    ) {
         $this->pheanstalk = $pheanstalk;
+        $this->workerManager = $workerManager;
+        $this->logger = $logger;
         $this->lifetime = $lifetime;
         $this->interval = $interval;
     }
@@ -42,20 +62,31 @@ class Daemon
     {
         $endTime = time() + $this->lifetime;
 
+        $this->logger->info(sprintf('Started listening with a lifetime of %d seconds.', $this->lifetime));
+
         while (time() < $endTime) {
             try {
+                /** @var \Pheanstalk\Job $job */
                 $job = $this->pheanstalk->reserve(1);
-            } catch (Exception $e) {
+            } catch (Exception $exception) {
             }
 
             if ($job) {
+                $this->logger->info(sprintf('Reserved job #%d: %s', $job->getId(), $job->getData()));
+
                 try {
                     $data = json_decode($job->getData(), true);
 
-                    $this->pheanstalk->delete($job);
+                    /** @var WorkerInterface $worker */
+                    $worker = $this->workerManager->get($data['worker'], $data['params']);
+                    $worker->run();
 
-                    var_dump($data);
-                } catch (Exception $e) {
+                    $this->logger->info(sprintf('Finished job #%d', $job->getId()));
+                    $this->pheanstalk->delete($job);
+                } catch (Exception $exception) {
+                    $this->logger->emerg('Failed to execute job #' . $job->getId(), [
+                        'exception' => $exception,
+                    ]);
                     $this->pheanstalk->bury($job);
                 }
             }

@@ -10,14 +10,22 @@
 namespace ZourceDaemon\TaskService\Service;
 
 use Pheanstalk\Pheanstalk;
+use Zend\Log\Logger;
+use Zend\Log\Writer\Stream;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use ZourceDaemon\Service\WorkerManager;
 use ZourceDaemon\TaskService\Daemon;
 
 class DaemonFactory implements FactoryInterface
 {
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
+        $workerManager = $serviceLocator->get(WorkerManager::class);
+
+        $logger = new Logger();
+        $logger->addWriter(new Stream(fopen('php://output', 'w')));
+
         $config = $serviceLocator->get('Config');
         $config = $config['zource_daemon'];
 
@@ -29,7 +37,7 @@ class DaemonFactory implements FactoryInterface
 
         $pheanstalk->ignore('default');
 
-        return new Daemon($pheanstalk, $config['lifetime'], $config['interval']);
+        return new Daemon($pheanstalk, $workerManager, $logger, $config['lifetime'], $config['interval']);
     }
 }
 

@@ -11,7 +11,7 @@ namespace ZourceDaemon\Worker;
 
 class Noop implements WorkerInterface
 {
-    public function run(array $params)
+    public function run()
     {
     }
 }

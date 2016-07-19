@@ -12,8 +12,12 @@ namespace ZourceDaemon;
 use Zend\Console\Adapter\AdapterInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\ConsoleUsageProviderInterface;
+use Zend\ModuleManager\Feature\InitProviderInterface;
+use Zend\ModuleManager\Listener\ServiceListener;
+use Zend\ModuleManager\ModuleManagerInterface;
+use ZourceDaemon\Service\WorkerManager;
 
-class Module implements ConfigProviderInterface, ConsoleUsageProviderInterface
+class Module implements ConfigProviderInterface, ConsoleUsageProviderInterface, InitProviderInterface
 {
     public function getConfig()
     {
@@ -25,5 +29,12 @@ class Module implements ConfigProviderInterface, ConsoleUsageProviderInterface
         return [
             'zource:daemon:run' => 'Runs the daemon',
         ];
+    }
+
+    public function init(ModuleManagerInterface $moduleManager)
+    {
+        /** @var ServiceListener $serviceListener */
+        $serviceListener = $moduleManager->getEvent()->getParam('ServiceManager')->get(ServiceListener::class);
+        $serviceListener->addServiceManager(WorkerManager::class, 'zource_workers', '', '');
     }
 }
