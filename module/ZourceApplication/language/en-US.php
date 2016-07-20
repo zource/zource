@@ -37,6 +37,8 @@ return [
 
     'pageAdminTitle' => 'Administration',
     'pageAdminTitleCache' => 'Cache',
+    'pageAdminTitleCron' => 'Cronjobs',
+    'pageAdminTitleDaemon' => 'Daemon',
     'pageAdminTitlePlugin' => 'Plugins',
     'pageAdminTitleSettings' => 'Settings',
 

@@ -1,0 +1,47 @@
+<?php
+
+$this->layout('layout/page-header');
+
+$this->placeholder('layout')->pageTitle = $this->translate('pageAdminTitle');
+$this->placeholder('layout')->pageMenu = 'admin-system';
+$this->placeholder('layout')->pageNavGroupPrimary = 'admin-navgroup';
+
+?>
+
+<div class="zui-toolbar">
+    <div class="zui-toolbar-primary">
+        <h2><?php echo $this->translate('pageAdminTitleCron'); ?></h2>
+    </div>
+
+    <div class="zui-toolbar-secondary">
+        <div class="zui-button-group">
+            <a href="<?php echo $this->url('admin/system/cron'); ?>" class="zui-button">Create</a>
+        </div>
+    </div>
+</div>
+
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_DEFAULT); ?>
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_SUCCESS); ?>
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_WARNING); ?>
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_ERROR); ?>
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_INFO); ?>
+
+<?php if (count($this->cronjobs) !== 0) { ?>
+    <table class="zui-table zui-table-bordered zui-table-striped">
+        <thead>
+            <tr>
+                <th>Pattern</th>
+                <th>Command</th>
+                <th class="zui-text-right">Operations</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($this->cronjobs as $cronjob) { ?>
+            <?php } ?>
+        </tbody>
+    </table>
+<?php } else { ?>
+    <p>
+        No cronjobs have been installed.
+    </p>
+<?php } ?>

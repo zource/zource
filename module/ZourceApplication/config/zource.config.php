@@ -63,6 +63,8 @@ return [
     'controllers' => [
         'factories' => [
             Mvc\Controller\AdminCache::class => Mvc\Controller\Service\AdminCacheFactory::class,
+            Mvc\Controller\AdminCron::class => Mvc\Controller\Service\AdminCronFactory::class,
+            Mvc\Controller\AdminDaemon::class => Mvc\Controller\Service\AdminDaemonFactory::class,
             Mvc\Controller\AdminEmailIncoming::class => Mvc\Controller\Service\AdminEmailIncomingFactory::class,
             Mvc\Controller\AdminEmailOutgoing::class => Mvc\Controller\Service\AdminEmailOutgoingFactory::class,
             Mvc\Controller\AdminPlugins::class => Mvc\Controller\Service\AdminPluginsFactory::class,
@@ -172,6 +174,26 @@ return [
                                                 'action' => 'clear',
                                             ],
                                         ],
+                                    ],
+                                ],
+                            ],
+                            'cron' => [
+                                'type' => 'Literal',
+                                'options' => [
+                                    'route' => '/cron',
+                                    'defaults' => [
+                                        'controller' => Mvc\Controller\AdminCron::class,
+                                        'action' => 'index',
+                                    ],
+                                ],
+                            ],
+                            'daemon' => [
+                                'type' => 'Literal',
+                                'options' => [
+                                    'route' => '/daemon',
+                                    'defaults' => [
+                                        'controller' => Mvc\Controller\AdminDaemon::class,
+                                        'action' => 'index',
                                     ],
                                 ],
                             ],
@@ -444,6 +466,7 @@ return [
         'factories' => [
             Builder::class => BuilderFactory::class,
             TaskService\CacheManager::class => TaskService\Service\CacheManagerFactory::class,
+            TaskService\CronManager::class => TaskService\Service\CronManagerFactory::class,
             TaskService\Dashboard::class => TaskService\Service\DashboardFactory::class,
             TaskService\EmailServers::class => TaskService\Service\EmailServersFactory::class,
             TaskService\Gadget::class => TaskService\Service\GadgetFactory::class,
@@ -526,6 +549,8 @@ return [
             'partial/top-bar' => __DIR__ . '/../view/partial/top-bar.phtml',
             'zf-apigility-documentation/show' => __DIR__ . '/../view/zource-application/apigility/show.phtml',
             'zource-application/admin-cache/index' => __DIR__ . '/../view/zource-application/admin-cache/index.phtml',
+            'zource-application/admin-cron/index' => __DIR__ . '/../view/zource-application/admin-cron/index.phtml',
+            'zource-application/admin-daemon/index' => __DIR__ . '/../view/zource-application/admin-daemon/index.phtml',
             'zource-application/admin-email-incoming/index' => __DIR__ . '/../view/zource-application/admin-email-incoming/index.phtml',
             'zource-application/admin-email-incoming/create' => __DIR__ . '/../view/zource-application/admin-email-incoming/create.phtml',
             'zource-application/admin-email-incoming/update' => __DIR__ . '/../view/zource-application/admin-email-incoming/update.phtml',
@@ -755,6 +780,29 @@ return [
                     'options' => [
                         'label' => 'Outgoing',
                         'route' => 'admin/system/email/outgoing',
+                    ],
+                ],
+                'header-tasks' => [
+                    'type' => 'header',
+                    'priority' => 8000,
+                    'options' => [
+                        'label' => 'Tasks',
+                    ],
+                ],
+                'tasks-cron' => [
+                    'type' => 'label',
+                    'priority' => 9000,
+                    'options' => [
+                        'label' => 'Cron',
+                        'route' => 'admin/system/cron',
+                    ],
+                ],
+                'tasks-daemon' => [
+                    'type' => 'label',
+                    'priority' => 10000,
+                    'options' => [
+                        'label' => 'Daemon',
+                        'route' => 'admin/system/daemon',
                     ],
                 ],
             ],

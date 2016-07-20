@@ -1,0 +1,29 @@
+<?php
+
+$this->layout('layout/page-header');
+
+$this->placeholder('layout')->pageTitle = $this->translate('pageAdminTitle');
+$this->placeholder('layout')->pageMenu = 'admin-system';
+$this->placeholder('layout')->pageNavGroupPrimary = 'admin-navgroup';
+
+?>
+
+<div class="zui-toolbar">
+    <div class="zui-toolbar-primary">
+        <h2><?php echo $this->translate('pageAdminTitleDaemon'); ?></h2>
+    </div>
+
+    <div class="zui-toolbar-secondary">
+        <div class="zui-button-group">
+            <a href="<?php echo $this->url('admin/system/daemon'); ?>" class="zui-button">Start</a>
+            <a href="<?php echo $this->url('admin/system/daemon'); ?>" class="zui-button disabled">Restart</a>
+            <a href="<?php echo $this->url('admin/system/daemon'); ?>" class="zui-button disabled">Stop</a>
+        </div>
+    </div>
+</div>
+
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_DEFAULT); ?>
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_SUCCESS); ?>
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_WARNING); ?>
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_ERROR); ?>
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_INFO); ?>
