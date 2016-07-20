@@ -1,0 +1,75 @@
+<?php
+
+$this->layout('layout/page-header');
+
+$this->placeholder('layout')->pageTitle = $this->translate('pageAdminTitle');
+$this->placeholder('layout')->pageMenu = 'admin-system';
+$this->placeholder('layout')->pageNavGroupPrimary = 'admin-navgroup';
+
+$this->accountForm->setAttribute('action', $this->url('admin/system/email/incoming/update', [
+    'id' => $this->accountId,
+]));
+$this->accountForm->setAttribute('method', 'post');
+$this->accountForm->prepare();
+
+?>
+
+<div class="zui-toolbar">
+    <div class="zui-toolbar-primary">
+        <h2>Update Incoming E-mail Account</h2>
+    </div>
+
+    <div class="zui-toolbar-secondary">
+    </div>
+</div>
+
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_DEFAULT); ?>
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_SUCCESS); ?>
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_WARNING); ?>
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_ERROR); ?>
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_INFO); ?>
+
+<?php echo $this->form()->openTag($this->accountForm); ?>
+<?php echo $this->formHidden($this->accountForm->get('token')); ?>
+
+<div class="zui-field-group">
+    <?php echo $this->formLabel($this->accountForm->get('type')); ?>
+    <?php echo $this->formSelect($this->accountForm->get('type')); ?>
+    <?php echo $this->zourceFormDescription($this->accountForm->get('type')); ?>
+    <?php echo $this->formElementErrors($this->accountForm->get('type')); ?>
+</div>
+
+<div class="zui-field-group">
+    <?php echo $this->formLabel($this->accountForm->get('hostname')); ?>
+    <?php echo $this->formText($this->accountForm->get('hostname')); ?>
+    <?php echo $this->zourceFormDescription($this->accountForm->get('hostname')); ?>
+    <?php echo $this->formElementErrors($this->accountForm->get('hostname')); ?>
+</div>
+
+<div class="zui-field-group">
+    <?php echo $this->formLabel($this->accountForm->get('port')); ?>
+    <?php echo $this->formText($this->accountForm->get('port')); ?>
+    <?php echo $this->zourceFormDescription($this->accountForm->get('port')); ?>
+    <?php echo $this->formElementErrors($this->accountForm->get('port')); ?>
+</div>
+
+<div class="zui-field-group">
+    <?php echo $this->formLabel($this->accountForm->get('username')); ?>
+    <?php echo $this->formText($this->accountForm->get('username')); ?>
+    <?php echo $this->zourceFormDescription($this->accountForm->get('username')); ?>
+    <?php echo $this->formElementErrors($this->accountForm->get('username')); ?>
+</div>
+
+<div class="zui-field-group">
+    <?php echo $this->formLabel($this->accountForm->get('password')); ?>
+    <?php echo $this->formPassword($this->accountForm->get('password')); ?>
+    <?php echo $this->zourceFormDescription($this->accountForm->get('password')); ?>
+    <?php echo $this->formElementErrors($this->accountForm->get('password')); ?>
+</div>
+
+<div class="zui-buttons-container">
+    <div class="zui-buttons">
+        <?php echo $this->formSubmit($this->accountForm->get('submit')); ?>
+    </div>
+</div>
+<?php echo $this->form()->closeTag(); ?>

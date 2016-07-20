@@ -1,0 +1,73 @@
+<?php
+
+$this->layout('layout/page-header');
+
+$this->placeholder('layout')->pageTitle = $this->translate('pageAdminTitle');
+$this->placeholder('layout')->pageMenu = 'admin-system';
+$this->placeholder('layout')->pageNavGroupPrimary = 'admin-navgroup';
+
+$this->serverForm->setAttribute('action', $this->url('admin/system/email/outgoing/create'));
+$this->serverForm->setAttribute('method', 'post');
+$this->serverForm->prepare();
+
+?>
+
+<div class="zui-toolbar">
+    <div class="zui-toolbar-primary">
+        <h2>Create Outgoing E-mail Server</h2>
+    </div>
+
+    <div class="zui-toolbar-secondary">
+    </div>
+</div>
+
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_DEFAULT); ?>
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_SUCCESS); ?>
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_WARNING); ?>
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_ERROR); ?>
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_INFO); ?>
+
+<?php echo $this->form()->openTag($this->serverForm); ?>
+<?php echo $this->formHidden($this->serverForm->get('token')); ?>
+
+<div class="zui-field-group">
+    <?php echo $this->formLabel($this->serverForm->get('type')); ?>
+    <?php echo $this->formSelect($this->serverForm->get('type')); ?>
+    <?php echo $this->zourceFormDescription($this->serverForm->get('type')); ?>
+    <?php echo $this->formElementErrors($this->serverForm->get('type')); ?>
+</div>
+
+<div class="zui-field-group">
+    <?php echo $this->formLabel($this->serverForm->get('hostname')); ?>
+    <?php echo $this->formText($this->serverForm->get('hostname')); ?>
+    <?php echo $this->zourceFormDescription($this->serverForm->get('hostname')); ?>
+    <?php echo $this->formElementErrors($this->serverForm->get('hostname')); ?>
+</div>
+
+<div class="zui-field-group">
+    <?php echo $this->formLabel($this->serverForm->get('port')); ?>
+    <?php echo $this->formText($this->serverForm->get('port')); ?>
+    <?php echo $this->zourceFormDescription($this->serverForm->get('port')); ?>
+    <?php echo $this->formElementErrors($this->serverForm->get('port')); ?>
+</div>
+
+<div class="zui-field-group">
+    <?php echo $this->formLabel($this->serverForm->get('username')); ?>
+    <?php echo $this->formText($this->serverForm->get('username')); ?>
+    <?php echo $this->zourceFormDescription($this->serverForm->get('username')); ?>
+    <?php echo $this->formElementErrors($this->serverForm->get('username')); ?>
+</div>
+
+<div class="zui-field-group">
+    <?php echo $this->formLabel($this->serverForm->get('password')); ?>
+    <?php echo $this->formPassword($this->serverForm->get('password')); ?>
+    <?php echo $this->zourceFormDescription($this->serverForm->get('password')); ?>
+    <?php echo $this->formElementErrors($this->serverForm->get('password')); ?>
+</div>
+
+<div class="zui-buttons-container">
+    <div class="zui-buttons">
+        <?php echo $this->formSubmit($this->serverForm->get('submit')); ?>
+    </div>
+</div>
+<?php echo $this->form()->closeTag(); ?>

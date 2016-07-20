@@ -7,19 +7,18 @@
  * @license https://raw.githubusercontent.com/zource/zource/master/LICENSE MIT
  */
 
-namespace ZourceApplication\Mvc\Controller\Service;
+namespace ZourceApplication\TaskService\Service;
 
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use ZourceApplication\Mvc\Controller\AdminEmail;
-use ZourceApplication\TaskService\CacheManager;
+use ZourceApplication\TaskService\EmailServers;
 
-class AdminEmailFactory implements FactoryInterface
+class EmailServersFactory implements FactoryInterface
 {
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $cacheManager = $serviceLocator->getServiceLocator()->get(CacheManager::class);
+        $config = $serviceLocator->get('Config');
 
-        return new AdminEmail();
+        return new EmailServers($config['zource_mail_incoming'], $config['zource_mail_outgoing']);
     }
 }

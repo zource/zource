@@ -63,7 +63,8 @@ return [
     'controllers' => [
         'factories' => [
             Mvc\Controller\AdminCache::class => Mvc\Controller\Service\AdminCacheFactory::class,
-            Mvc\Controller\AdminEmail::class => Mvc\Controller\Service\AdminEmailFactory::class,
+            Mvc\Controller\AdminEmailIncoming::class => Mvc\Controller\Service\AdminEmailIncomingFactory::class,
+            Mvc\Controller\AdminEmailOutgoing::class => Mvc\Controller\Service\AdminEmailOutgoingFactory::class,
             Mvc\Controller\AdminPlugins::class => Mvc\Controller\Service\AdminPluginsFactory::class,
             Mvc\Controller\AdminSettings::class => Mvc\Controller\Service\AdminSettingsFactory::class,
             Mvc\Controller\Dashboard::class => Mvc\Controller\Service\DashboardFactory::class,
@@ -102,9 +103,17 @@ return [
             'type' => Form\Dashboard::class,
             'input_filter' => InputFilter\Dashboard::class,
         ],
+        Form\IncomingEmailAccount::class => [
+            'type' => Form\IncomingEmailAccount::class,
+            'input_filter' => InputFilter\IncomingEmailAccount::class,
+        ],
         Form\InstallPlugin::class => [
             'type' => Form\InstallPlugin::class,
             'input_filter' => InputFilter\InstallPlugin::class,
+        ],
+        Form\OutgoingEmailServer::class => [
+            'type' => Form\OutgoingEmailServer::class,
+            'input_filter' => InputFilter\OutgoingEmailServer::class,
         ],
     ],
     'input_filters' => [
@@ -114,7 +123,9 @@ return [
         'invokables' => [
             InputFilter\ApplicationSettings::class => InputFilter\ApplicationSettings::class,
             InputFilter\Dashboard::class => InputFilter\Dashboard::class,
+            InputFilter\IncomingEmailAccount::class => InputFilter\IncomingEmailAccount::class,
             InputFilter\InstallPlugin::class => InputFilter\InstallPlugin::class,
+            InputFilter\OutgoingEmailServer::class => InputFilter\OutgoingEmailServer::class,
         ],
     ],
     'lazy_services' => [
@@ -179,8 +190,41 @@ return [
                                         'options' => [
                                             'route' => '/incoming',
                                             'defaults' => [
-                                                'controller' => Mvc\Controller\AdminEmail::class,
-                                                'action' => 'incoming',
+                                                'controller' => Mvc\Controller\AdminEmailIncoming::class,
+                                                'action' => 'index',
+                                            ],
+                                        ],
+                                        'may_terminate' => true,
+                                        'child_routes' => [
+                                            'create' => [
+                                                'type' => 'Literal',
+                                                'options' => [
+                                                    'route' => '/create',
+                                                    'defaults' => [
+                                                        'controller' => Mvc\Controller\AdminEmailIncoming::class,
+                                                        'action' => 'create',
+                                                    ],
+                                                ],
+                                            ],
+                                            'update' => [
+                                                'type' => 'Segment',
+                                                'options' => [
+                                                    'route' => '/update/:id',
+                                                    'defaults' => [
+                                                        'controller' => Mvc\Controller\AdminEmailIncoming::class,
+                                                        'action' => 'update',
+                                                    ],
+                                                ],
+                                            ],
+                                            'delete' => [
+                                                'type' => 'Segment',
+                                                'options' => [
+                                                    'route' => '/delete/:id',
+                                                    'defaults' => [
+                                                        'controller' => Mvc\Controller\AdminEmailIncoming::class,
+                                                        'action' => 'delete',
+                                                    ],
+                                                ],
                                             ],
                                         ],
                                     ],
@@ -189,8 +233,41 @@ return [
                                         'options' => [
                                             'route' => '/outgoing',
                                             'defaults' => [
-                                                'controller' => Mvc\Controller\AdminEmail::class,
-                                                'action' => 'outgoing',
+                                                'controller' => Mvc\Controller\AdminEmailOutgoing::class,
+                                                'action' => 'index',
+                                            ],
+                                        ],
+                                        'may_terminate' => true,
+                                        'child_routes' => [
+                                            'create' => [
+                                                'type' => 'Literal',
+                                                'options' => [
+                                                    'route' => '/create',
+                                                    'defaults' => [
+                                                        'controller' => Mvc\Controller\AdminEmailOutgoing::class,
+                                                        'action' => 'create',
+                                                    ],
+                                                ],
+                                            ],
+                                            'update' => [
+                                                'type' => 'Segment',
+                                                'options' => [
+                                                    'route' => '/update/:id',
+                                                    'defaults' => [
+                                                        'controller' => Mvc\Controller\AdminEmailOutgoing::class,
+                                                        'action' => 'update',
+                                                    ],
+                                                ],
+                                            ],
+                                            'delete' => [
+                                                'type' => 'Segment',
+                                                'options' => [
+                                                    'route' => '/delete/:id',
+                                                    'defaults' => [
+                                                        'controller' => Mvc\Controller\AdminEmailOutgoing::class,
+                                                        'action' => 'delete',
+                                                    ],
+                                                ],
                                             ],
                                         ],
                                     ],
@@ -368,6 +445,7 @@ return [
             Builder::class => BuilderFactory::class,
             TaskService\CacheManager::class => TaskService\Service\CacheManagerFactory::class,
             TaskService\Dashboard::class => TaskService\Service\DashboardFactory::class,
+            TaskService\EmailServers::class => TaskService\Service\EmailServersFactory::class,
             TaskService\Gadget::class => TaskService\Service\GadgetFactory::class,
             ConfigInterface::class => SessionConfigFactory::class,
             'LazyServiceFactory' => LazyServiceFactoryFactory::class,
@@ -448,8 +526,12 @@ return [
             'partial/top-bar' => __DIR__ . '/../view/partial/top-bar.phtml',
             'zf-apigility-documentation/show' => __DIR__ . '/../view/zource-application/apigility/show.phtml',
             'zource-application/admin-cache/index' => __DIR__ . '/../view/zource-application/admin-cache/index.phtml',
-            'zource-application/admin-email/incoming' => __DIR__ . '/../view/zource-application/admin-email/incoming.phtml',
-            'zource-application/admin-email/outgoing' => __DIR__ . '/../view/zource-application/admin-email/outgoing.phtml',
+            'zource-application/admin-email-incoming/index' => __DIR__ . '/../view/zource-application/admin-email-incoming/index.phtml',
+            'zource-application/admin-email-incoming/create' => __DIR__ . '/../view/zource-application/admin-email-incoming/create.phtml',
+            'zource-application/admin-email-incoming/update' => __DIR__ . '/../view/zource-application/admin-email-incoming/update.phtml',
+            'zource-application/admin-email-outgoing/index' => __DIR__ . '/../view/zource-application/admin-email-outgoing/index.phtml',
+            'zource-application/admin-email-outgoing/create' => __DIR__ . '/../view/zource-application/admin-email-outgoing/create.phtml',
+            'zource-application/admin-email-outgoing/update' => __DIR__ . '/../view/zource-application/admin-email-outgoing/update.phtml',
             'zource-application/admin-plugins/index' => __DIR__ . '/../view/zource-application/admin-plugin/index.phtml',
             'zource-application/admin-settings/index' => __DIR__ . '/../view/zource-application/admin-settings/index.phtml',
             'zource-application/apigility/api' => __DIR__ . '/../view/zource-application/apigility/api.phtml',

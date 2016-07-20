@@ -1,0 +1,63 @@
+<?php
+
+$this->layout('layout/page-header');
+
+$this->placeholder('layout')->pageTitle = $this->translate('pageAdminTitle');
+$this->placeholder('layout')->pageMenu = 'admin-system';
+$this->placeholder('layout')->pageNavGroupPrimary = 'admin-navgroup';
+
+?>
+
+<div class="zui-toolbar">
+    <div class="zui-toolbar-primary">
+        <h2>Outgoing E-mail</h2>
+    </div>
+
+    <div class="zui-toolbar-secondary">
+        <div class="zui-button-group">
+            <a href="<?php echo $this->url('admin/system/email/outgoing/create'); ?>" class="zui-button">Create</a>
+        </div>
+    </div>
+</div>
+
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_DEFAULT); ?>
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_SUCCESS); ?>
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_WARNING); ?>
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_ERROR); ?>
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_INFO); ?>
+
+<?php if (count($this->servers) !== 0) { ?>
+<table class="zui-table zui-table-bordered zui-table-striped">
+    <thead>
+        <tr>
+            <th>Hostname</th>
+            <th>Port</th>
+            <th>Username</th>
+            <th class="zui-text-right">Operations</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($this->servers as $id => $server) { ?>
+            <tr>
+                <td><?php echo $this->escapeHtml($server['hostname']); ?></td>
+                <td><?php echo $this->escapeHtml($server['port']); ?></td>
+                <td><?php echo $this->escapeHtml($server['username']); ?></td>
+                <td class="zui-text-right">
+                    <a href="<?php echo $this->url('admin/system/email/outgoing/update', [
+                        'id' => $id,
+                    ]); ?>">Edit</a>
+                    -
+                    <a href="<?php echo $this->url('admin/system/email/outgoing/delete', [
+                        'id' => $id,
+                    ]); ?>">Delete</a>
+                </td>
+            </tr>
+        <?php } ?>
+    </tbody>
+</table>
+<?php } else { ?>
+    <p>
+        No outgoing servers configured.
+        <a href="<?php echo $this->url('admin/system/email/outgoing/create'); ?>">Would you like to add one?</a>
+    </p>
+<?php } ?>

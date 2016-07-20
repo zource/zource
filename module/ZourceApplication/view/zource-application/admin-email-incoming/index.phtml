@@ -1,0 +1,65 @@
+<?php
+
+$this->layout('layout/page-header');
+
+$this->placeholder('layout')->pageTitle = $this->translate('pageAdminTitle');
+$this->placeholder('layout')->pageMenu = 'admin-system';
+$this->placeholder('layout')->pageNavGroupPrimary = 'admin-navgroup';
+
+?>
+
+<div class="zui-toolbar">
+    <div class="zui-toolbar-primary">
+        <h2>Incoming E-mail</h2>
+    </div>
+
+    <div class="zui-toolbar-secondary">
+        <div class="zui-button-group">
+            <a href="<?php echo $this->url('admin/system/email/incoming/create'); ?>" class="zui-button">Create</a>
+        </div>
+    </div>
+</div>
+
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_DEFAULT); ?>
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_SUCCESS); ?>
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_WARNING); ?>
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_ERROR); ?>
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_INFO); ?>
+
+<?php if (count($this->accounts) !== 0) { ?>
+<table class="zui-table zui-table-bordered zui-table-striped">
+    <thead>
+        <tr>
+            <th>Type</th>
+            <th>Hostname</th>
+            <th>Port</th>
+            <th>Username</th>
+            <th class="zui-text-right">Operations</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($this->accounts as $id => $account) { ?>
+            <tr>
+                <td><?php echo $this->escapeHtml($account['type']); ?></td>
+                <td><?php echo $this->escapeHtml($account['hostname']); ?></td>
+                <td><?php echo $this->escapeHtml($account['port']); ?></td>
+                <td><?php echo $this->escapeHtml($account['username']); ?></td>
+                <td class="zui-text-right">
+                    <a href="<?php echo $this->url('admin/system/email/incoming/update', [
+                        'id' => $id,
+                    ]); ?>">Edit</a>
+                    -
+                    <a href="<?php echo $this->url('admin/system/email/incoming/delete', [
+                        'id' => $id,
+                    ]); ?>">Delete</a>
+                </td>
+            </tr>
+        <?php } ?>
+    </tbody>
+</table>
+<?php } else { ?>
+    <p>
+        No incoming accounts configured.
+        <a href="<?php echo $this->url('admin/system/email/incoming/create'); ?>">Would you like to add one?</a>
+    </p>
+<?php } ?>
