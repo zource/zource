@@ -9,6 +9,8 @@
 
 namespace ZourceApplication;
 
+use Zend\Log\Logger;
+use Zend\Log\Writer\Stream;
 use Zend\ModuleManager\Feature\ConsoleBannerProviderInterface;
 use Zend\Console\Adapter\AdapterInterface as ConsoleAdapter;
 use Zend\Console\Console;
@@ -43,6 +45,13 @@ class Module implements ApigilityProviderInterface, ConsoleBannerProviderInterfa
         $serviceListener = $moduleManager->getEvent()->getParam('ServiceManager')->get('ServiceListener');
         $serviceListener->addServiceManager(AuthorizationConditionPluginManager::class, 'zource_conditions', '', '');
         $serviceListener->addServiceManager(UiNavigationItemPluginManager::class, 'zource_ui_nav_items', '', '');
+
+        $logger = new Logger([
+            'exceptionhandler' => true,
+            'errorhandler' => true,
+            'fatal_error_shutdownfunction' => true,
+        ]);
+        $logger->addWriter(new Stream('data/logs/php_log.' . date('Y-m-d')));
     }
 
     public function onBootstrap(MvcEvent $e)
