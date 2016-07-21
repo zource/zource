@@ -45,7 +45,9 @@ $this->placeholder('layout')->pageNavGroupPrimary = 'admin-navgroup';
                     <td><?php echo $this->escapeHtml($cronjob->getCommand()); ?></td>
                     <td><?php echo $this->escapeHtml($cronjob->getActive() ? 'Yes' : 'No'); ?></td>
                     <td class="zui-text-right">
-                        <a href="">Update</a>
+                        <a href="<?php echo $this->url('admin/system/cron/update', [
+                            'id' => $cronjob->getId(),
+                        ]); ?>">Update</a>
                         -
                         <a href="<?php echo $this->url('admin/system/cron/delete', [
                             'id' => $cronjob->getId(),

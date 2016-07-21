@@ -42,6 +42,11 @@ class CronManager
         $cronjob = new Cronjob($data['name'], $data['pattern'], $data['command']);
         $cronjob->setActive($data['active']);
 
+        $this->persist($cronjob);
+    }
+
+    public function persist(Cronjob $cronjob)
+    {
         $this->entityManager->persist($cronjob);
         $this->entityManager->flush($cronjob);
 

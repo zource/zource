@@ -104,6 +104,7 @@ return [
         Form\Cronjob::class => [
             'type' => Form\Cronjob::class,
             'input_filter' => InputFilter\Cronjob::class,
+            'hydrator' => \Zend\Hydrator\ClassMethods::class,
         ],
         Form\Dashboard::class => [
             'type' => Form\Dashboard::class,
@@ -589,6 +590,7 @@ return [
             'zource-application/admin-cache/index' => __DIR__ . '/../view/zource-application/admin-cache/index.phtml',
             'zource-application/admin-cron/index' => __DIR__ . '/../view/zource-application/admin-cron/index.phtml',
             'zource-application/admin-cron/create' => __DIR__ . '/../view/zource-application/admin-cron/create.phtml',
+            'zource-application/admin-cron/update' => __DIR__ . '/../view/zource-application/admin-cron/update.phtml',
             'zource-application/admin-daemon/index' => __DIR__ . '/../view/zource-application/admin-daemon/index.phtml',
             'zource-application/admin-email-incoming/index' => __DIR__ . '/../view/zource-application/admin-email-incoming/index.phtml',
             'zource-application/admin-email-incoming/create' => __DIR__ . '/../view/zource-application/admin-email-incoming/create.phtml',

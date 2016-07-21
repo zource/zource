@@ -1,0 +1,68 @@
+<?php
+
+$this->layout('layout/page-header');
+
+$this->placeholder('layout')->pageTitle = $this->translate('pageAdminTitle');
+$this->placeholder('layout')->pageMenu = 'admin-system';
+$this->placeholder('layout')->pageNavGroupPrimary = 'admin-navgroup';
+
+$this->cronjobForm->setAttribute('action', $this->url('admin/system/cron/update', [
+    'id' => $this->cronjob->getId(),
+]));
+$this->cronjobForm->setAttribute('method', 'post');
+$this->cronjobForm->prepare();
+
+?>
+
+<div class="zui-toolbar">
+    <div class="zui-toolbar-primary">
+        <h2><?php echo $this->translate('pageAdminTitleCronUpdate'); ?></h2>
+    </div>
+
+    <div class="zui-toolbar-secondary">
+    </div>
+</div>
+
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_DEFAULT); ?>
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_SUCCESS); ?>
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_WARNING); ?>
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_ERROR); ?>
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_INFO); ?>
+
+<?php echo $this->form()->openTag($this->cronjobForm); ?>
+<?php echo $this->formHidden($this->cronjobForm->get('token')); ?>
+
+<div class="zui-field-group">
+    <?php echo $this->formLabel($this->cronjobForm->get('name')); ?>
+    <?php echo $this->formText($this->cronjobForm->get('name')); ?>
+    <?php echo $this->zourceFormDescription($this->cronjobForm->get('name')); ?>
+    <?php echo $this->formElementErrors($this->cronjobForm->get('name')); ?>
+</div>
+
+<div class="zui-field-group">
+    <?php echo $this->formLabel($this->cronjobForm->get('pattern')); ?>
+    <?php echo $this->formText($this->cronjobForm->get('pattern')); ?>
+    <?php echo $this->zourceFormDescription($this->cronjobForm->get('pattern')); ?>
+    <?php echo $this->formElementErrors($this->cronjobForm->get('pattern')); ?>
+</div>
+
+<div class="zui-field-group">
+    <?php echo $this->formLabel($this->cronjobForm->get('command')); ?>
+    <?php echo $this->formText($this->cronjobForm->get('command')); ?>
+    <?php echo $this->zourceFormDescription($this->cronjobForm->get('command')); ?>
+    <?php echo $this->formElementErrors($this->cronjobForm->get('command')); ?>
+</div>
+
+<div class="zui-field-group">
+    <?php echo $this->formLabel($this->cronjobForm->get('active')); ?>
+    <?php echo $this->formCheckbox($this->cronjobForm->get('active')); ?>
+    <?php echo $this->zourceFormDescription($this->cronjobForm->get('active')); ?>
+    <?php echo $this->formElementErrors($this->cronjobForm->get('active')); ?>
+</div>
+
+<div class="zui-buttons-container">
+    <div class="zui-buttons">
+        <?php echo $this->formSubmit($this->cronjobForm->get('submit')); ?>
+    </div>
+</div>
+<?php echo $this->form()->closeTag(); ?>

@@ -60,6 +60,33 @@ class AdminCron extends AbstractActionController
         ]);
     }
 
+    public function updateAction()
+    {
+        $cronjob = $this->cronManager->find($this->params('id'));
+        if (!$cronjob) {
+            return $this->notFoundAction();
+        }
+
+        $this->cronjobForm->bind($cronjob);
+
+        if ($this->getRequest()->isPost()) {
+            $this->cronjobForm->setData($this->getRequest()->getPost());
+
+            if ($this->cronjobForm->isValid()) {
+                $data = $this->cronjobForm->getData();
+
+                $this->cronManager->persist($data);
+
+                return $this->redirect()->toRoute('admin/system/cron');
+            }
+        }
+
+        return new ViewModel([
+            'cronjob' => $cronjob,
+            'cronjobForm' => $this->cronjobForm,
+        ]);
+    }
+
     public function deleteAction()
     {
         $cronjob = $this->cronManager->find($this->params('id'));
