@@ -126,6 +126,42 @@ class Daemon
 
         return $data;
     }
+
+    public function getStats()
+    {
+        $stats = $this->pheanstalk->stats();
+
+        return [
+            'pid' => $stats['pid'],
+            'hostname' => $stats['hostname'],
+            'version' => $stats['version'],
+            'uptime' => $stats['uptime'],
+            'max-job-size' => $stats['max-job-size'],
+        ];
+    }
+
+    public function getTubeStats()
+    {
+        $result = [];
+        $tubes = $this->pheanstalk->listTubes();
+
+        foreach ($tubes as $tubeName) {
+            $stats = $this->pheanstalk->statsTube($tubeName);
+
+            $result[] = [
+                'name' => $tubeName,
+                'buried' => $stats['current-jobs-buried'],
+                'delayed' => $stats['current-jobs-delayed'],
+                'ready' => $stats['current-jobs-ready'],
+                'reserved' => $stats['current-jobs-reserved'],
+                'urgent' => $stats['current-jobs-urgent'],
+                'waiting' => $stats['current-waiting'],
+                'total' => $stats['total-jobs'],
+            ];
+        }
+
+        return $result;
+    }
 }
 
 

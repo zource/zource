@@ -11,12 +11,28 @@ namespace ZourceApplication\Mvc\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use ZourceDaemon\TaskService\Daemon;
 
 class AdminDaemon extends AbstractActionController
 {
+    /**
+     * @var Daemon
+     */
+    private $daemonTaskService;
+
+    public function __construct(Daemon $daemonTaskService)
+    {
+        $this->daemonTaskService = $daemonTaskService;
+    }
+
     public function indexAction()
     {
+        $stats = $this->daemonTaskService->getStats();
+        $tubes = $this->daemonTaskService->getTubeStats();
+
         return new ViewModel([
+            'stats' => $stats,
+            'tubes' => $tubes,
         ]);
     }
 }

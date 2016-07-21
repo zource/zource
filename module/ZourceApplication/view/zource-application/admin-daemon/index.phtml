@@ -27,3 +27,47 @@ $this->placeholder('layout')->pageNavGroupPrimary = 'admin-navgroup';
 <?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_WARNING); ?>
 <?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_ERROR); ?>
 <?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_INFO); ?>
+
+<h3>Stats</h3>
+
+<table class="zui-table zui-table-list">
+    <tbody>
+        <?php foreach ($this->stats as $name => $value) { ?>
+        <tr>
+            <td><?php echo $this->translate($name); ?></td>
+            <td><?php echo $this->escapeHtml($value); ?></td>
+        </tr>
+        <?php } ?>
+    </tbody>
+</table>
+
+<h3>Tubes</h3>
+
+<table class="zui-table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Jobs Buried</th>
+            <th>Jobs Delayed</th>
+            <th>Jobs Ready</th>
+            <th>Jobs Reserved</th>
+            <th>Jobs Urgent</th>
+            <th>Workers Waiting</th>
+            <th>Total Jobs</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($this->tubes as $tube) { ?>
+            <tr>
+                <td><?php echo $this->escapeHtml($tube['name']); ?></td>
+                <td><?php echo $this->escapeHtml($tube['buried']); ?></td>
+                <td><?php echo $this->escapeHtml($tube['delayed']); ?></td>
+                <td><?php echo $this->escapeHtml($tube['ready']); ?></td>
+                <td><?php echo $this->escapeHtml($tube['reserved']); ?></td>
+                <td><?php echo $this->escapeHtml($tube['urgent']); ?></td>
+                <td><?php echo $this->escapeHtml($tube['waiting']); ?></td>
+                <td><?php echo $this->escapeHtml($tube['total']); ?></td>
+            </tr>
+        <?php } ?>
+    </tbody>
+</table>

@@ -12,11 +12,14 @@ namespace ZourceApplication\Mvc\Controller\Service;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use ZourceApplication\Mvc\Controller\AdminDaemon;
+use ZourceDaemon\TaskService\Daemon;
 
 class AdminDaemonFactory implements FactoryInterface
 {
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        return new AdminDaemon();
+        $daemonTaskService = $serviceLocator->getServiceLocator()->get(Daemon::class);
+
+        return new AdminDaemon($daemonTaskService);
     }
 }
