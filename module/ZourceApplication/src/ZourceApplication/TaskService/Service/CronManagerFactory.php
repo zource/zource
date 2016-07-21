@@ -17,6 +17,8 @@ class CronManagerFactory implements FactoryInterface
 {
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        return new CronManager();
+        $entityManager = $serviceLocator->get('doctrine.entitymanager.orm_default');
+
+        return new CronManager($entityManager);
     }
 }

@@ -9,6 +9,7 @@
 
 namespace ZourceApplication\Mvc\Controller;
 
+use Zend\Form\FormInterface;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use ZourceApplication\TaskService\CronManager;
@@ -20,9 +21,15 @@ class AdminCron extends AbstractActionController
      */
     private $cronManager;
 
-    public function __construct(CronManager $cronManager)
+    /**
+     * @var FormInterface
+     */
+    private $cronjobForm;
+
+    public function __construct(CronManager $cronManager, FormInterface $cronjobForm)
     {
         $this->cronManager = $cronManager;
+        $this->cronjobForm = $cronjobForm;
     }
 
     public function indexAction()
@@ -32,5 +39,36 @@ class AdminCron extends AbstractActionController
         return new ViewModel([
             'cronjobs' => $cronjobs,
         ]);
+    }
+
+    public function createAction()
+    {
+        if ($this->getRequest()->isPost()) {
+            $this->cronjobForm->setData($this->getRequest()->getPost());
+
+            if ($this->cronjobForm->isValid()) {
+                $data = $this->cronjobForm->getData();
+
+                $this->cronManager->persistFromArray($data);
+
+                return $this->redirect()->toRoute('admin/system/cron');
+            }
+        }
+
+        return new ViewModel([
+            'cronjobForm' => $this->cronjobForm,
+        ]);
+    }
+
+    public function deleteAction()
+    {
+        $cronjob = $this->cronManager->find($this->params('id'));
+        if (!$cronjob) {
+            return $this->notFoundAction();
+        }
+
+        $this->cronManager->remove($cronjob);
+
+        return $this->redirect()->toRoute('admin/system/cron');
     }
 }

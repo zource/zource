@@ -11,6 +11,7 @@ namespace ZourceApplication\Mvc\Controller\Service;
 
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use ZourceApplication\Form\Cronjob;
 use ZourceApplication\Mvc\Controller\AdminCron;
 use ZourceApplication\TaskService\CronManager;
 
@@ -21,6 +22,9 @@ class AdminCronFactory implements FactoryInterface
         /** @var CronManager $cronManager */
         $cronManager = $serviceLocator->getServiceLocator()->get(CronManager::class);
 
-        return new AdminCron($cronManager);
+        /** @var Cronjob $cronjobForm */
+        $cronjobForm = $serviceLocator->getServiceLocator()->get(Cronjob::class);
+
+        return new AdminCron($cronManager, $cronjobForm);
     }
 }

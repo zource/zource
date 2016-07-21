@@ -9,23 +9,67 @@
 
 namespace ZourceApplication\TaskService;
 
+use Doctrine\ORM\EntityManager;
+use ZourceApplication\Entity\Cronjob;
+
 class CronManager
 {
     const TMP_PATH = 'data/tmp/crontab.txt';
 
-    public function getCronjobs()
+    private $entityManager;
+
+    public function __construct(EntityManager $entityManager)
     {
-        return [];
+        $this->entityManager = $entityManager;
     }
 
-    public function persist()
+    public function getCronjobs()
     {
-        $output = shell_exec('crontab -l');
+        $repository = $this->entityManager->getRepository(Cronjob::class);
 
-        $newCron = '* * * * * NEW_CRON';
+        return $repository->findAll();
+    }
 
-        file_put_contents(self::TMP_PATH, $output . $newCron . PHP_EOL);
+    public function find($id)
+    {
+        $repository = $this->entityManager->getRepository(Cronjob::class);
 
+        return $repository->find($id);
+    }
+
+    public function persistFromArray(array $data)
+    {
+        $cronjob = new Cronjob($data['name'], $data['pattern'], $data['command']);
+        $cronjob->setActive($data['active']);
+
+        $this->entityManager->persist($cronjob);
+        $this->entityManager->flush($cronjob);
+
+        $this->flushToSystem();
+    }
+
+    public function remove(Cronjob $cronjob)
+    {
+        $this->entityManager->remove($cronjob);
+        $this->entityManager->flush($cronjob);
+
+        $this->flushToSystem();
+    }
+
+    private function flushToSystem()
+    {
+        $crontabContent = '';
+
+        /** @var Cronjob $cronjob */
+        foreach ($this->getCronjobs() as $cronjob) {
+            if ($cronjob->getActive()) {
+                $crontabContent .= $cronjob->getPattern() . ' ' . $cronjob->getCommand() . PHP_EOL;
+            }
+        }
+
+        file_put_contents(self::TMP_PATH, $crontabContent);
+
+        exec('crontab -r');
         exec('crontab ' . self::TMP_PATH);
     }
 }

@@ -101,6 +101,10 @@ return [
             'type' => Form\ApplicationSettings::class,
             'input_filter' => InputFilter\ApplicationSettings::class,
         ],
+        Form\Cronjob::class => [
+            'type' => Form\Cronjob::class,
+            'input_filter' => InputFilter\Cronjob::class,
+        ],
         Form\Dashboard::class => [
             'type' => Form\Dashboard::class,
             'input_filter' => InputFilter\Dashboard::class,
@@ -124,6 +128,7 @@ return [
         ],
         'invokables' => [
             InputFilter\ApplicationSettings::class => InputFilter\ApplicationSettings::class,
+            InputFilter\Cronjob::class => InputFilter\Cronjob::class,
             InputFilter\Dashboard::class => InputFilter\Dashboard::class,
             InputFilter\IncomingEmailAccount::class => InputFilter\IncomingEmailAccount::class,
             InputFilter\InstallPlugin::class => InputFilter\InstallPlugin::class,
@@ -184,6 +189,39 @@ return [
                                     'defaults' => [
                                         'controller' => Mvc\Controller\AdminCron::class,
                                         'action' => 'index',
+                                    ],
+                                ],
+                                'may_terminate' => true,
+                                'child_routes' => [
+                                    'create' => [
+                                        'type' => 'Literal',
+                                        'options' => [
+                                            'route' => '/create',
+                                            'defaults' => [
+                                                'controller' => Mvc\Controller\AdminCron::class,
+                                                'action' => 'create',
+                                            ],
+                                        ],
+                                    ],
+                                    'update' => [
+                                        'type' => 'Segment',
+                                        'options' => [
+                                            'route' => '/update/:id',
+                                            'defaults' => [
+                                                'controller' => Mvc\Controller\AdminCron::class,
+                                                'action' => 'update',
+                                            ],
+                                        ],
+                                    ],
+                                    'delete' => [
+                                        'type' => 'Segment',
+                                        'options' => [
+                                            'route' => '/delete/:id',
+                                            'defaults' => [
+                                                'controller' => Mvc\Controller\AdminCron::class,
+                                                'action' => 'delete',
+                                            ],
+                                        ],
                                     ],
                                 ],
                             ],
@@ -550,6 +588,7 @@ return [
             'zf-apigility-documentation/show' => __DIR__ . '/../view/zource-application/apigility/show.phtml',
             'zource-application/admin-cache/index' => __DIR__ . '/../view/zource-application/admin-cache/index.phtml',
             'zource-application/admin-cron/index' => __DIR__ . '/../view/zource-application/admin-cron/index.phtml',
+            'zource-application/admin-cron/create' => __DIR__ . '/../view/zource-application/admin-cron/create.phtml',
             'zource-application/admin-daemon/index' => __DIR__ . '/../view/zource-application/admin-daemon/index.phtml',
             'zource-application/admin-email-incoming/index' => __DIR__ . '/../view/zource-application/admin-email-incoming/index.phtml',
             'zource-application/admin-email-incoming/create' => __DIR__ . '/../view/zource-application/admin-email-incoming/create.phtml',
