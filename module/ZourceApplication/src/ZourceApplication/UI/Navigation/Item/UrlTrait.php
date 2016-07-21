@@ -15,16 +15,20 @@ trait UrlTrait
 {
     private function getUrl(array $options)
     {
-        if (!array_key_exists('route', $options)) {
-            throw new InvalidArgumentException('The options are missing the "route" option.');
+        if (array_key_exists('route', $options)) {
+            $routeParams = empty($options['route_params']) ? [] : $options['route_params'];
+            $routeOptions = empty($options['route_options']) ? [] : $options['route_options'];
+            $routeReuseMatchedParams = empty($options['route_reuse_matched_params'])
+                ? false
+                : $options['route_reuse_matched_params'];
+
+            $url = $this->getView()->url($options['route'], $routeParams, $routeOptions, $routeReuseMatchedParams);
+        } elseif (array_key_exists('url', $options)) {
+            $url = $options['url'];
+        } else {
+            throw new InvalidArgumentException('The options are missing the "route" or "url" option.');
         }
 
-        $routeParams = empty($options['route_params']) ? [] : $options['route_params'];
-        $routeOptions = empty($options['route_options']) ? [] : $options['route_options'];
-        $routeReuseMatchedParams = empty($options['route_reuse_matched_params'])
-            ? false
-            : $options['route_reuse_matched_params'];
-
-        return $this->getView()->url($options['route'], $routeParams, $routeOptions, $routeReuseMatchedParams);
+        return $url;
     }
 }

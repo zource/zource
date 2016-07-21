@@ -45,6 +45,9 @@ class InstallPlugin extends InputFilter
             'validators' => [
                 [
                     'name' => IsCompressed::class,
+                    'options' => [
+                        'magicFile' => false,
+                    ],
                 ],
             ],
         ]);
