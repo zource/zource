@@ -9,11 +9,11 @@
 
 namespace ZourceApplication;
 
+use Zend\Console\Adapter\AdapterInterface as ConsoleAdapter;
+use Zend\Console\Console;
 use Zend\Log\Logger;
 use Zend\Log\Writer\Stream;
 use Zend\ModuleManager\Feature\ConsoleBannerProviderInterface;
-use Zend\Console\Adapter\AdapterInterface as ConsoleAdapter;
-use Zend\Console\Console;
 use Zend\ModuleManager\Listener\ServiceListener;
 use Zend\ModuleManager\ModuleManager;
 use Zend\Mvc\ModuleRouteListener;

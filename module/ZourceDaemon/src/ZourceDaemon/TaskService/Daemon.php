@@ -118,7 +118,7 @@ class Daemon
         );
     }
 
-    public function dequeue()
+    protected function dequeue()
     {
         $job = $this->pheanstalk->reserve(1);
 
