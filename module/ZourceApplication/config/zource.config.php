@@ -67,6 +67,7 @@ return [
             Mvc\Controller\AdminDaemon::class => Mvc\Controller\Service\AdminDaemonFactory::class,
             Mvc\Controller\AdminEmailIncoming::class => Mvc\Controller\Service\AdminEmailIncomingFactory::class,
             Mvc\Controller\AdminEmailOutgoing::class => Mvc\Controller\Service\AdminEmailOutgoingFactory::class,
+            Mvc\Controller\AdminLogs::class => Mvc\Controller\Service\AdminLogsFactory::class,
             Mvc\Controller\AdminPlugins::class => Mvc\Controller\Service\AdminPluginsFactory::class,
             Mvc\Controller\AdminSettings::class => Mvc\Controller\Service\AdminSettingsFactory::class,
             Mvc\Controller\Dashboard::class => Mvc\Controller\Service\DashboardFactory::class,
@@ -327,6 +328,92 @@ return [
                                                     'defaults' => [
                                                         'controller' => Mvc\Controller\AdminEmailOutgoing::class,
                                                         'action' => 'delete',
+                                                    ],
+                                                ],
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                            'logs' => [
+                                'type' => 'Literal',
+                                'options' => [
+                                    'route' => '/logs',
+                                ],
+                                'child_routes' => [
+                                    'daemon' => [
+                                        'type' => 'Literal',
+                                        'options' => [
+                                            'route' => '/daemon',
+                                            'defaults' => [
+                                                'controller' => Mvc\Controller\AdminLogs::class,
+                                                'action' => 'daemon',
+                                            ],
+                                        ],
+                                        'may_terminate' => true,
+                                        'child_routes' => [
+                                            'delete' => [
+                                                'type' => 'Segment',
+                                                'options' => [
+                                                    'route' => '/delete/:date',
+                                                    'defaults' => [
+                                                        'controller' => Mvc\Controller\AdminLogs::class,
+                                                        'action' => 'deleteDaemon',
+                                                    ],
+                                                    'constraints' => [
+                                                        'date' => '[0-9]{4}-[0-9]{2}-[0-9]{2}',
+                                                    ],
+                                                ],
+                                            ],
+                                            'download' => [
+                                                'type' => 'Segment',
+                                                'options' => [
+                                                    'route' => '/download/:date',
+                                                    'defaults' => [
+                                                        'controller' => Mvc\Controller\AdminLogs::class,
+                                                        'action' => 'downloadDaemon',
+                                                    ],
+                                                    'constraints' => [
+                                                        'date' => '[0-9]{4}-[0-9]{2}-[0-9]{2}',
+                                                    ],
+                                                ],
+                                            ],
+                                        ],
+                                    ],
+                                    'errors' => [
+                                        'type' => 'Literal',
+                                        'options' => [
+                                            'route' => '/errors',
+                                            'defaults' => [
+                                                'controller' => Mvc\Controller\AdminLogs::class,
+                                                'action' => 'errors',
+                                            ],
+                                        ],
+                                        'may_terminate' => true,
+                                        'child_routes' => [
+                                            'delete' => [
+                                                'type' => 'Segment',
+                                                'options' => [
+                                                    'route' => '/delete/:date',
+                                                    'defaults' => [
+                                                        'controller' => Mvc\Controller\AdminLogs::class,
+                                                        'action' => 'deleteErrors',
+                                                    ],
+                                                    'constraints' => [
+                                                        'date' => '[0-9]{4}-[0-9]{2}-[0-9]{2}',
+                                                    ],
+                                                ],
+                                            ],
+                                            'download' => [
+                                                'type' => 'Segment',
+                                                'options' => [
+                                                    'route' => '/download/:date',
+                                                    'defaults' => [
+                                                        'controller' => Mvc\Controller\AdminLogs::class,
+                                                        'action' => 'downloadErrors',
+                                                    ],
+                                                    'constraints' => [
+                                                        'date' => '[0-9]{4}-[0-9]{2}-[0-9]{2}',
                                                     ],
                                                 ],
                                             ],
@@ -598,6 +685,8 @@ return [
             'zource-application/admin-email-outgoing/index' => __DIR__ . '/../view/zource-application/admin-email-outgoing/index.phtml',
             'zource-application/admin-email-outgoing/create' => __DIR__ . '/../view/zource-application/admin-email-outgoing/create.phtml',
             'zource-application/admin-email-outgoing/update' => __DIR__ . '/../view/zource-application/admin-email-outgoing/update.phtml',
+            'zource-application/admin-logs/daemon' => __DIR__ . '/../view/zource-application/admin-logs/daemon.phtml',
+            'zource-application/admin-logs/errors' => __DIR__ . '/../view/zource-application/admin-logs/errors.phtml',
             'zource-application/admin-plugins/index' => __DIR__ . '/../view/zource-application/admin-plugin/index.phtml',
             'zource-application/admin-settings/index' => __DIR__ . '/../view/zource-application/admin-settings/index.phtml',
             'zource-application/apigility/api' => __DIR__ . '/../view/zource-application/apigility/api.phtml',
@@ -844,6 +933,29 @@ return [
                     'options' => [
                         'label' => 'Daemon',
                         'route' => 'admin/system/daemon',
+                    ],
+                ],
+                'header-logs' => [
+                    'type' => 'header',
+                    'priority' => 11000,
+                    'options' => [
+                        'label' => 'Logs',
+                    ],
+                ],
+                'logs-error' => [
+                    'type' => 'label',
+                    'priority' => 12000,
+                    'options' => [
+                        'label' => 'Errors',
+                        'route' => 'admin/system/logs/errors',
+                    ],
+                ],
+                'logs-daemon' => [
+                    'type' => 'label',
+                    'priority' => 13000,
+                    'options' => [
+                        'label' => 'Daemon',
+                        'route' => 'admin/system/logs/daemon',
                     ],
                 ],
             ],

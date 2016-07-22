@@ -41,6 +41,8 @@ return [
     'pageAdminTitleDaemon' => 'Daemon',
     'pageAdminTitlePlugin' => 'Plugins',
     'pageAdminTitleSettings' => 'Settings',
+    'pageAdminTitleLogsErrors' => 'Error Logs',
+    'pageAdminTitleLogsDaemon' => 'Daemon Logs',
 
     'pageUserSettingsTitle' => 'Settings',
 

@@ -1,0 +1,75 @@
+<?php
+
+$this->layout('layout/page-header');
+
+$this->placeholder('layout')->pageTitle = $this->translate('pageAdminTitle');
+$this->placeholder('layout')->pageMenu = 'admin-system';
+$this->placeholder('layout')->pageNavGroupPrimary = 'admin-navgroup';
+
+?>
+
+<div class="zui-toolbar">
+    <div class="zui-toolbar-primary">
+        <h2><?php echo $this->translate('pageAdminTitleLogsDaemon'); ?></h2>
+    </div>
+
+    <div class="zui-toolbar-secondary">
+    </div>
+</div>
+
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_DEFAULT); ?>
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_SUCCESS); ?>
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_WARNING); ?>
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_ERROR); ?>
+<?php echo $this->flashMessenger()->render(\Zend\Mvc\Controller\Plugin\FlashMessenger::NAMESPACE_INFO); ?>
+
+<?php if (!$this->dayLogs) { ?>
+    <div class="zui-alert">
+        <p>No logs found.</p>
+    </div>
+<?php } ?>
+
+<?php foreach ($this->dayLogs as $date => $logs) { ?>
+
+    <div class="zui-toolbar">
+        <div class="zui-toolbar-primary">
+            <h3><?php echo $this->escapeHtml($date); ?></h3>
+        </div>
+
+        <div class="zui-toolbar-secondary">
+            <div class="zui-button-group">
+                <a href="<?php echo $this->url('admin/system/logs/daemon/download', [
+                    'date' => $date,
+                ]); ?>" class="zui-button">Download</a>
+                <a href="<?php echo $this->url('admin/system/logs/daemon/delete', [
+                    'date' => $date,
+                ]); ?>" class="zui-button">Delete</a>
+            </div>
+        </div>
+    </div>
+
+    <?php if (!$logs) { ?>
+        <div class="zui-alert">
+            <p>Congratulations, no errors did occur.</p>
+        </div>
+    <?php } else { ?>
+        <table class="zui-table">
+            <thead>
+                <tr>
+                    <th style="width: 225px;">Date</th>
+                    <th>Priority</th>
+                    <th>Message</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($logs as $log) { ?>
+                    <tr>
+                        <td><?php echo $this->escapeHtml($log['timestamp']); ?></td>
+                        <td><?php echo $this->escapeHtml($log['priorityName']); ?></td>
+                        <td><?php echo $this->escapeHtml($log['message']); ?></td>
+                    </tr>
+                <?php } ?>
+            </tbody>
+        </table>
+    <?php } ?>
+<?php } ?>

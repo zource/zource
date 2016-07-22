@@ -11,6 +11,7 @@ namespace ZourceApplication;
 
 use Zend\Console\Adapter\AdapterInterface as ConsoleAdapter;
 use Zend\Console\Console;
+use Zend\Log\Formatter\Xml;
 use Zend\Log\Logger;
 use Zend\Log\Writer\Stream;
 use Zend\ModuleManager\Feature\ConsoleBannerProviderInterface;
@@ -22,6 +23,7 @@ use Zend\Session\ManagerInterface;
 use Zend\Stdlib\ArrayUtils;
 use ZF\Apigility\Provider\ApigilityProviderInterface;
 use ZourceApplication\Authorization\Condition\Service\PluginManager as AuthorizationConditionPluginManager;
+use ZourceApplication\Log\Formatter\JsonStream;
 use ZourceApplication\Ui\Navigation\Item\Service\PluginManager as UiNavigationItemPluginManager;
 
 class Module implements ApigilityProviderInterface, ConsoleBannerProviderInterface
@@ -46,12 +48,17 @@ class Module implements ApigilityProviderInterface, ConsoleBannerProviderInterfa
         $serviceListener->addServiceManager(AuthorizationConditionPluginManager::class, 'zource_conditions', '', '');
         $serviceListener->addServiceManager(UiNavigationItemPluginManager::class, 'zource_ui_nav_items', '', '');
 
+        $writer = new Stream('data/logs/php_log.' . date('Y-m-d') . '.xml');
+        $writer->setFormatter(new Xml([
+            'rootElement' => 'log',
+        ]));
+
         $logger = new Logger([
             'exceptionhandler' => true,
             'errorhandler' => true,
             'fatal_error_shutdownfunction' => true,
         ]);
-        $logger->addWriter(new Stream('data/logs/php_log.' . date('Y-m-d')));
+        $logger->addWriter($writer);
     }
 
     public function onBootstrap(MvcEvent $e)

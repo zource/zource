@@ -10,6 +10,7 @@
 namespace ZourceDaemon\TaskService\Service;
 
 use Pheanstalk\Pheanstalk;
+use Zend\Log\Formatter\Xml;
 use Zend\Log\Logger;
 use Zend\Log\Writer\Stream;
 use Zend\ServiceManager\FactoryInterface;
@@ -23,8 +24,14 @@ class DaemonFactory implements FactoryInterface
     {
         $workerManager = $serviceLocator->get(WorkerManager::class);
 
+        $writer = new Stream('data/logs/daemon.' . date('Y-m-d') . '.xml');
+        $writer->setFormatter(new Xml([
+            'rootElement' => 'log',
+        ]));
+
         $logger = new Logger();
         $logger->addWriter(new Stream(fopen('php://output', 'w')));
+        $logger->addWriter($writer);
 
         $config = $serviceLocator->get('Config');
         $config = $config['zource_daemon'];
