@@ -106,4 +106,100 @@ class Contact
         $this->entityManager->remove($contact);
         $this->entityManager->flush($contact);
     }
+
+    public function populateApiArray($item)
+    {
+        $data = [
+            'id' => $item->getId(),
+            'type' => null,
+            'creation_date' => $this->extractDate($item->getCreationDate()),
+            'update_date' => $this->extractDate($item->getLastUpdated()),
+            'display_name' => $item->getDisplayName(),
+            'notes' => $item->getNotes(),
+            'dates' => [],
+            'email_addresses' => [],
+            'impp_addresses' => [],
+            'phone_numbers' => [],
+            'properties' => [],
+        ];
+
+        /** @var Date $date */
+        foreach ($item->getDates() as $date) {
+            $data['email_addresses'] = $this->extractAbstractValue($date);
+        }
+
+        /** @var EmailAddress $emailAddress */
+        foreach ($item->getEmailAddresses() as $emailAddress) {
+            $data['email_addresses'] = $this->extractAbstractValue($emailAddress);
+        }
+
+        /** @var Impp $imppAddress */
+        foreach ($item->getImppAddresses() as $imppAddress) {
+            $data['impp_addresses'] = $this->extractAbstractValue($emailAddress);
+        }
+
+        /** @var PhoneNumber $phoneNumber */
+        foreach ($item->getPhoneNumbers() as $phoneNumber) {
+            $data['phone_numbers'] = $this->extractAbstractValue($emailAddress);
+        }
+
+        /** @var Property $property */
+        foreach ($item->getProperties() as $property) {
+            $data['properties'] = $this->extractAbstractValue($emailAddress);
+        }
+
+        if ($item instanceof Company) {
+            $this->extractCompany($item, $data);
+        } else {
+            $this->extractPerson($item, $data);
+        }
+
+        return $data;
+    }
+
+    private function extractCompany(Company $item, array &$data)
+    {
+        $data['type'] = 'company';
+        $data['name'] = $item->getName();
+    }
+
+    private function extractPerson(Person $item, array &$data)
+    {
+        $data['type'] = 'person';
+
+        $data['gender'] = $item->getGender();
+
+        $data['first_name'] = $item->getFirstName();
+        $data['phonetic_first_name'] = $item->getPhoneticFirstName();
+
+        $data['middle_name'] = $item->getMiddleName();
+        $data['phonetic_middle_name'] = $item->getPhoneticMiddleName();
+
+        $data['last_name'] = $item->getLastName();
+        $data['phonetic_last_name'] = $item->getPhoneticLastName();
+
+        $data['maiden_name'] = $item->getMaidenName();
+        $data['suffix'] = $item->getSuffix();
+        $data['nickname'] = $item->getNickname();
+        $data['job_title'] = $item->getJobTitle();
+        $data['department'] = $item->getDepartment();
+        $data['company'] = $item->getCompany();
+    }
+
+    private function extractDate(\DateTime $date)
+    {
+        $date->setTimezone(new \DateTimeZone("UTC"));
+
+        return $date->format('c');
+    }
+
+    private function extractAbstractValue(AbstractValue $value)
+    {
+        return [
+            'id' => $value->getId(),
+            'creation_date' => $this->extractDate($value->getCreationDate()),
+            'type' => $value->getType(),
+            'value' => $value->getValue(),
+        ];
+    }
 }

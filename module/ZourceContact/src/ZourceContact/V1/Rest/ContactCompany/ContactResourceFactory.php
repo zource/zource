@@ -1,5 +1,5 @@
 <?php
-namespace ZourceContact\V1\Rest\Contact;
+namespace ZourceContact\V1\Rest\ContactCompany;
 
 use ZourceContact\TaskService\Contact;
 

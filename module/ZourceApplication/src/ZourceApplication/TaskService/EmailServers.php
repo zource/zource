@@ -66,6 +66,7 @@ class EmailServers
             'port' => $data['port'],
             'username' => $data['username'],
             'password' => $data['password'],
+            'ssl' => $data['ssl'] ? $data['ssl'] : false,
         ];
 
         $this->persist();

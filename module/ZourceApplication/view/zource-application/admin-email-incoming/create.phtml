@@ -29,6 +29,8 @@ $this->accountForm->prepare();
 
 <?php echo $this->form()->openTag($this->accountForm); ?>
 <?php echo $this->formHidden($this->accountForm->get('token')); ?>
+<input style="display:none;" type="text" name="username" />
+<input style="display:none;" type="password" name="password" />
 
 <div class="zui-field-group">
     <?php echo $this->formLabel($this->accountForm->get('type')); ?>
@@ -63,6 +65,13 @@ $this->accountForm->prepare();
     <?php echo $this->formPassword($this->accountForm->get('password')); ?>
     <?php echo $this->zourceFormDescription($this->accountForm->get('password')); ?>
     <?php echo $this->formElementErrors($this->accountForm->get('password')); ?>
+</div>
+
+<div class="zui-field-group">
+    <?php echo $this->formLabel($this->accountForm->get('ssl')); ?>
+    <?php echo $this->formSelect($this->accountForm->get('ssl')); ?>
+    <?php echo $this->zourceFormDescription($this->accountForm->get('ssl')); ?>
+    <?php echo $this->formElementErrors($this->accountForm->get('ssl')); ?>
 </div>
 
 <div class="zui-buttons-container">

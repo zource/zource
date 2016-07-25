@@ -60,6 +60,21 @@ use ZourceApplication\View\Helper\HumanBytes;
 use ZourceApplication\View\Helper\UI\Service\NavFactory;
 
 return [
+    'console' => [
+        'router' => [
+            'routes' => [
+                'check-incoming-mail' => [
+                    'options' => [
+                        'route' => 'zource:incoming-mail:check',
+                        'defaults' => [
+                            'controller' => Mvc\Controller\IncomingMail::class,
+                            'action' => 'check',
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
     'controllers' => [
         'factories' => [
             Mvc\Controller\AdminCache::class => Mvc\Controller\Service\AdminCacheFactory::class,
@@ -72,6 +87,7 @@ return [
             Mvc\Controller\AdminSettings::class => Mvc\Controller\Service\AdminSettingsFactory::class,
             Mvc\Controller\Dashboard::class => Mvc\Controller\Service\DashboardFactory::class,
             Mvc\Controller\Gadget::class => Mvc\Controller\Service\GadgetFactory::class,
+            Mvc\Controller\IncomingMail::class => Mvc\Controller\Service\IncomingMailFactory::class,
         ],
     ],
     'doctrine' => [
@@ -836,7 +852,7 @@ return [
         ],
     ],
     'zource_mail_incoming' => [
-        'servers' => [
+        'accounts' => [
         ],
     ],
     'zource_mail_outgoing' => [
@@ -1098,6 +1114,15 @@ return [
         ],
         'factories' => [
             DashboardList::class => UI\Navigation\Item\Service\DashboardListFactory::class,
+        ],
+    ],
+    'zource_workers' => [
+        'factories' => [
+            Worker\CheckIncomingMail::class => Worker\Service\CheckIncomingMailFactory::class,
+            Worker\CheckIncomingMailMessage::class => Worker\Service\CheckIncomingMailMessageFactory::class,
+        ],
+        'invokables' => [
+            Worker\CheckIncomingMailAccount::class => Worker\CheckIncomingMailAccount::class,
         ],
     ],
 ];

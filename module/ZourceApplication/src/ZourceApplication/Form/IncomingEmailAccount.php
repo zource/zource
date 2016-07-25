@@ -62,6 +62,9 @@ class IncomingEmailAccount extends Form
                 'label' => 'Username',
                 'description' => 'The username of the incoming server.',
             ],
+            'attributes' => [
+                'autocomplete' => 'off',
+            ],
         ]);
 
         $this->add([
@@ -70,6 +73,23 @@ class IncomingEmailAccount extends Form
             'options' => [
                 'label' => 'Password',
                 'description' => 'The password of the incoming server.',
+            ],
+            'attributes' => [
+                'autocomplete' => 'off',
+            ],
+        ]);
+
+        $this->add([
+            'name' => 'ssl',
+            'type' => Select::class,
+            'options' => [
+                'label' => 'SSL',
+                'description' => 'Whether or not to connect over SSL.',
+                'empty_option' => 'No',
+                'value_options' => [
+                    'ssl' => 'SSL',
+                    'tls' => 'TLS',
+                ],
             ],
         ]);
 

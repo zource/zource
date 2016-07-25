@@ -1,5 +1,5 @@
 <?php
-namespace ZourceContact\V1\Rest\Contact;
+namespace ZourceContact\V1\Rest\ContactPerson;
 
 use Zend\Paginator\Adapter\Callback;
 use Zend\Paginator\Paginator;
@@ -14,7 +14,7 @@ class ContactCollection extends Paginator
     public function __construct(Contact $contactTaskService)
     {
         $this->contactTaskService = $contactTaskService;
-        $this->paginator = $this->contactTaskService->getOverviewPaginator(null);
+        $this->paginator = $this->contactTaskService->getOverviewPaginator('person');
 
         parent::__construct(new Callback([$this, 'onGetItems'], [$this, 'onCount']));
     }

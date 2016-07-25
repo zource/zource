@@ -7,13 +7,13 @@
  * @license https://raw.githubusercontent.com/zource/zource/master/LICENSE MIT
  */
 
-namespace ZourceDaemon\Worker;
+namespace ZourceApplication\TaskService;
 
-use ZourceDaemon\ValueObject\Context;
+use Zend\Mail\Storage\Message;
 
-class Noop implements WorkerInterface
+interface IncomingMailHandlerInterface
 {
-    public function run(Context $context)
-    {
-    }
+    public function canHandle(Message $message);
+
+    public function handle(Message $message);
 }

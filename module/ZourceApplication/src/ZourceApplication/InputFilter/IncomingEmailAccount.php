@@ -71,5 +71,10 @@ class IncomingEmailAccount extends InputFilter
                 ],
             ],
         ]);
+
+        $this->add([
+            'name' => 'ssl',
+            'required' => false,
+        ]);
     }
 }

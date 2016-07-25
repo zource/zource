@@ -9,7 +9,9 @@
 
 namespace ZourceDaemon\Worker;
 
+use ZourceDaemon\ValueObject\Context;
+
 interface WorkerInterface
 {
-    public function run();
+    public function run(Context $context);
 }

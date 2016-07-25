@@ -1,5 +1,5 @@
 <?php
-namespace ZourceContact\V1\Rest\Contact;
+namespace ZourceContact\V1\Rest\ContactPerson;
 
 use Doctrine\ORM\EntityManager;
 use ZF\ApiProblem\ApiProblem;

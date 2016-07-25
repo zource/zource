@@ -33,6 +33,8 @@ class AdminLogs extends AbstractActionController
             }
         }
 
+        ksort($result);
+
         return new ViewModel([
             'dayLogs' => array_reverse($result),
         ]);
@@ -55,7 +57,7 @@ class AdminLogs extends AbstractActionController
         }
 
         return new ViewModel([
-            'dayLogs' => array_reverse($result),
+            'dayLogs' => $result,
         ]);
     }
 

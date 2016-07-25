@@ -14,6 +14,7 @@ use Pheanstalk\PheanstalkInterface;
 use RuntimeException;
 use Zend\Log\LoggerInterface;
 use ZourceDaemon\Service\WorkerManager;
+use ZourceDaemon\ValueObject\Context;
 use ZourceDaemon\ValueObject\Job;
 use ZourceDaemon\Worker\WorkerInterface;
 
@@ -79,7 +80,7 @@ class Daemon
 
                     /** @var WorkerInterface $worker */
                     $worker = $this->workerManager->get($data['worker'], $data['params']);
-                    $worker->run();
+                    $worker->run(new Context($this, $this->logger, $data['params']));
 
                     $this->logger->info(sprintf('Finished job #%d', $job->getId()));
                     $this->pheanstalk->delete($job);

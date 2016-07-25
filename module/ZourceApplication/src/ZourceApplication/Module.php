@@ -14,19 +14,26 @@ use Zend\Console\Console;
 use Zend\Log\Formatter\Xml;
 use Zend\Log\Logger;
 use Zend\Log\Writer\Stream;
+use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\ConsoleBannerProviderInterface;
+use Zend\ModuleManager\Feature\ConsoleUsageProviderInterface;
+use Zend\ModuleManager\Feature\InitProviderInterface;
 use Zend\ModuleManager\Listener\ServiceListener;
-use Zend\ModuleManager\ModuleManager;
+use Zend\ModuleManager\ModuleManagerInterface;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Zend\Session\ManagerInterface;
 use Zend\Stdlib\ArrayUtils;
 use ZF\Apigility\Provider\ApigilityProviderInterface;
 use ZourceApplication\Authorization\Condition\Service\PluginManager as AuthorizationConditionPluginManager;
-use ZourceApplication\Log\Formatter\JsonStream;
 use ZourceApplication\Ui\Navigation\Item\Service\PluginManager as UiNavigationItemPluginManager;
 
-class Module implements ApigilityProviderInterface, ConsoleBannerProviderInterface
+class Module implements
+    ApigilityProviderInterface,
+    ConfigProviderInterface,
+    ConsoleBannerProviderInterface,
+    ConsoleUsageProviderInterface,
+    InitProviderInterface
 {
     public function getConfig()
     {
@@ -41,7 +48,14 @@ class Module implements ApigilityProviderInterface, ConsoleBannerProviderInterfa
         return 'Zource';
     }
 
-    public function init(ModuleManager $moduleManager)
+    public function getConsoleUsage(ConsoleAdapter $console)
+    {
+        return [
+            'zource:incoming-mail:check' => 'Checks configured accounts for incoming mail.',
+        ];
+    }
+
+    public function init(ModuleManagerInterface $moduleManager)
     {
         /** @var ServiceListener $serviceListener */
         $serviceListener = $moduleManager->getEvent()->getParam('ServiceManager')->get('ServiceListener');
