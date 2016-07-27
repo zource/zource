@@ -1,38 +1,32 @@
 <?php
+/**
+ * This file is part of Zource. (https://github.com/zource/)
+ *
+ * @link https://github.com/zource/zource for the canonical source repository
+ * @copyright Copyright (c) 2005-2016 Zource. (https://github.com/zource/)
+ * @license https://raw.githubusercontent.com/zource/zource/master/LICENSE MIT
+ */
+
 namespace ZourceContact\V1\Rest\Contact;
 
-use Zend\Paginator\Adapter\Callback;
-use Zend\Paginator\Paginator;
-use ZourceContact\Entity\AbstractContact;
+use ZourceApplication\Paginator\AbstractProxy;
 use ZourceContact\TaskService\Contact;
 
-class ContactCollection extends Paginator
+class ContactCollection extends AbstractProxy
 {
-    private $paginator;
     private $contactTaskService;
 
     public function __construct(Contact $contactTaskService)
     {
         $this->contactTaskService = $contactTaskService;
-        $this->paginator = $this->contactTaskService->getOverviewPaginator(null);
 
-        parent::__construct(new Callback([$this, 'onGetItems'], [$this, 'onCount']));
+        $paginator = $this->contactTaskService->getOverviewPaginator(null);
+
+        parent::__construct($paginator->getAdapter());
     }
 
-    public function onCount()
+    protected function build($key, $value)
     {
-        return $this->paginator->getAdapter()->count();
-    }
-
-    public function onGetItems($offset, $itemCountPerPage)
-    {
-        $result = [];
-
-        /** @var AbstractContact $item */
-        foreach ($this->paginator->getAdapter()->getItems($offset, $itemCountPerPage) as $item) {
-            $result[] = $this->contactTaskService->populateApiArray($item);
-        }
-
-        return $result;
+        return $this->contactTaskService->populateApiArray($value);
     }
 }

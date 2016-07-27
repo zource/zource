@@ -7,8 +7,10 @@
  * @license https://raw.githubusercontent.com/zource/zource/master/LICENSE MIT
  */
 
-namespace ZourceContact\V1\Rest\Contact;
+namespace ZourceUser\V1\Rest\Permission;
 
-class ContactEntity
+class PermissionEntity
 {
+    public $id;
+    public $description;
 }

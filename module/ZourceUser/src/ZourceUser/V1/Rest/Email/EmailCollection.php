@@ -9,8 +9,12 @@
 
 namespace ZourceUser\V1\Rest\Email;
 
-use Zend\Paginator\Paginator;
+use ZourceApplication\Paginator\AbstractProxy;
 
-class EmailCollection extends Paginator
+class EmailCollection extends AbstractProxy
 {
+    protected function build($key, $value)
+    {
+        return [];
+    }
 }

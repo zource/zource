@@ -44,22 +44,33 @@ class CacheManager
         return $this->eventManager;
     }
 
+    public function getCacheItem($id)
+    {
+        if (!array_key_exists($id, $this->config['items'])) {
+            return null;
+        }
+
+        $item = $this->config['items'][$id];
+
+        $data = [
+            'id' => $id,
+            'label' => $item['label'],
+            'size' => 0,
+        ];
+
+        if ($item['type'] === 'file') {
+            $data['size'] = $this->getFileSize($item['options']['path']);
+        }
+
+        return $data;
+    }
+
     public function getCacheItems()
     {
         $cacheItems = [];
 
         foreach ($this->config['items'] as $id => $item) {
-            $data = [
-                'id' => $id,
-                'label' => $item['label'],
-                'size' => 0,
-            ];
-
-            if ($item['type'] === 'file') {
-                $data['size'] = $this->getFileSize($item['options']['path']);
-            }
-
-            $cacheItems[] = $data;
+            $cacheItems[] = $this->getCacheItem($id);
         }
 
         return $cacheItems;

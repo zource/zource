@@ -7,17 +7,17 @@
  * @license https://raw.githubusercontent.com/zource/zource/master/LICENSE MIT
  */
 
-namespace ZourceUser\V1\Rest\Group;
+namespace ZourceUser\V1\Rest\Permission;
 
 use ZourceApplication\Paginator\AbstractProxy;
 
-class GroupCollection extends AbstractProxy
+class PermissionCollection extends AbstractProxy
 {
     protected function build($key, $value)
     {
-        $entity = new GroupEntity();
-        $entity->id = $value->getId();
-        $entity->name = $value->getName();
+        $entity = new PermissionEntity();
+        $entity->id = $key;
+        $entity->description = $value;
 
         return $entity;
     }

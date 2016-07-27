@@ -7,23 +7,28 @@
  * @license https://raw.githubusercontent.com/zource/zource/master/LICENSE MIT
  */
 
-namespace ZourceContact\V1\Rest\Contact;
+namespace ZourceApplication\V1\Rest\Cache;
 
-use Doctrine\ORM\EntityManager;
+use Zend\Paginator\Adapter\ArrayAdapter;
 use ZF\ApiProblem\ApiProblem;
 use ZF\Rest\AbstractResourceListener;
-use ZourceContact\TaskService\Contact;
+use ZourceApplication\TaskService\CacheManager;
 
-class ContactResource extends AbstractResourceListener
+class CacheResource extends AbstractResourceListener
 {
     /**
-     * @var EntityManager
+     * @var CacheManager
      */
-    private $contactTaskService;
+    private $cacheManager;
 
-    public function __construct(Contact $contactTaskService)
+    /**
+     * Initializes a new instance of this class.
+     *
+     * @param array $config
+     */
+    public function __construct(CacheManager $cacheManager)
     {
-        $this->contactTaskService = $contactTaskService;
+        $this->cacheManager = $cacheManager;
     }
 
     /**
@@ -67,9 +72,12 @@ class ContactResource extends AbstractResourceListener
      */
     public function fetch($id)
     {
-        $contact = $this->contactTaskService->find($id);
+        $cache = $this->cacheManager->getCacheItem($id);
+        if (!$cache) {
+            return null;
+        }
 
-        return $this->contactTaskService->populateApiArray($contact);
+        return new CacheEntity($cache);
     }
 
     /**
@@ -80,7 +88,9 @@ class ContactResource extends AbstractResourceListener
      */
     public function fetchAll($params = array())
     {
-        return new ContactCollection($this->contactTaskService);
+        $adapter = new ArrayAdapter($this->cacheManager->getCacheItems());
+
+        return new CacheCollection($adapter);
     }
 
     /**

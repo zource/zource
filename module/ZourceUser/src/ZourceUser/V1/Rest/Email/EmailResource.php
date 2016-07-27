@@ -9,20 +9,29 @@
 
 namespace ZourceUser\V1\Rest\Email;
 
-use ZourceApplication\Rest\AbstractDoctrineListener;
-use ZourceUser\Entity\AccountInterface;
+use Doctrine\ORM\EntityManager;
+use DoctrineModule\Paginator\Adapter\Selectable;
+use ZF\Rest\AbstractResourceListener;
+use ZourceUser\Entity\Email;
 
-class EmailResource extends AbstractDoctrineListener
+class EmailResource extends AbstractResourceListener
 {
     /**
-     * {@inheritDoc}
+     * @var EntityManager
      */
-    public function create($data)
+    private $entityManager;
+
+    public function __construct(EntityManager $entityManager)
     {
-        $account = $this->getEntityManager()->getRepository(AccountInterface::class)->find($data->account);
+        $this->entityManager = $entityManager;
+    }
 
-        $data->account = $account;
+    public function fetchAll($params = [])
+    {
+        $repository = $this->entityManager->getRepository(Email::class);
 
-        return parent::create($data);
+        $adapter = new Selectable($repository);
+
+        return new EmailCollection($adapter);
     }
 }

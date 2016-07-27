@@ -7,8 +7,16 @@
  * @license https://raw.githubusercontent.com/zource/zource/master/LICENSE MIT
  */
 
-namespace ZourceContact\V1\Rest\Contact;
+namespace ZourceApplication\V1\Rest\Cache;
 
-class ContactEntity
+use ZourceApplication\TaskService\CacheManager;
+
+class CacheResourceFactory
 {
+    public function __invoke($services)
+    {
+        $cacheManager = $services->get(CacheManager::class);
+
+        return new CacheResource($cacheManager);
+    }
 }

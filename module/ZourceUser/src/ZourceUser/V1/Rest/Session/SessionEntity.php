@@ -11,23 +11,10 @@ namespace ZourceUser\V1\Rest\Session;
 
 class SessionEntity
 {
-    /**
-     * @var string
-     */
-    private $sessionId;
-
-    /**
-     * Initializes a new instance of this class.
-     *
-     * @param string $sessionId The session id.
-     */
-    public function __construct($sessionId)
-    {
-        $this->sessionId = $sessionId;
-    }
-
-    public function getSessionId()
-    {
-        return $this->sessionId;
-    }
+    public $sessionId;
+    public $creationDate;
+    public $lastModified;
+    public $lifetime;
+    public $userAgent;
+    public $remoteAddress;
 }

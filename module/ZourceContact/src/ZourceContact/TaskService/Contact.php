@@ -17,7 +17,6 @@ use ZourceContact\Entity\AbstractContact;
 use ZourceContact\Entity\Company;
 use ZourceContact\Entity\Person;
 use ZourceContact\Paginator\Adapter\ContactOverview;
-use ZourceContact\ValueObject\ContactEntry;
 
 class Contact
 {
@@ -112,8 +111,8 @@ class Contact
         $data = [
             'id' => $item->getId(),
             'type' => null,
-            'creation_date' => $this->extractDate($item->getCreationDate()),
-            'update_date' => $this->extractDate($item->getLastUpdated()),
+            'creation_date' => $item->getCreationDate(),
+            'update_date' => $item->getLastUpdated(),
             'display_name' => $item->getDisplayName(),
             'notes' => $item->getNotes(),
             'dates' => [],
@@ -186,18 +185,11 @@ class Contact
         $data['company'] = $item->getCompany();
     }
 
-    private function extractDate(\DateTime $date)
-    {
-        $date->setTimezone(new \DateTimeZone("UTC"));
-
-        return $date->format('c');
-    }
-
     private function extractAbstractValue(AbstractValue $value)
     {
         return [
             'id' => $value->getId(),
-            'creation_date' => $this->extractDate($value->getCreationDate()),
+            'creation_date' => $value->getCreationDate(),
             'type' => $value->getType(),
             'value' => $value->getValue(),
         ];

@@ -7,8 +7,14 @@
  * @license https://raw.githubusercontent.com/zource/zource/master/LICENSE MIT
  */
 
-namespace ZourceContact\V1\Rest\Contact;
+namespace ZourceApplication\V1\Rest\Cache;
 
-class ContactEntity
+use ZourceApplication\Paginator\AbstractProxy;
+
+class CacheCollection extends AbstractProxy
 {
+    protected function build($key, $value)
+    {
+        return new CacheEntity($value);
+    }
 }

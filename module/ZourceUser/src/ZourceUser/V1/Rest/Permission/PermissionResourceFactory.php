@@ -7,8 +7,14 @@
  * @license https://raw.githubusercontent.com/zource/zource/master/LICENSE MIT
  */
 
-namespace ZourceContact\V1\Rest\Contact;
+namespace ZourceUser\V1\Rest\Permission;
 
-class ContactEntity
+class PermissionResourceFactory
 {
+    public function __invoke($services)
+    {
+        $config = $services->get('Config');
+
+        return new PermissionResource($config['zource_permissions']);
+    }
 }

@@ -9,8 +9,20 @@
 
 namespace ZourceUser\V1\Rest\Session;
 
-use Zend\Paginator\Paginator;
+use ZourceApplication\Paginator\AbstractProxy;
 
-class SessionCollection extends Paginator
+class SessionCollection extends AbstractProxy
 {
+    protected function build($key, $value)
+    {
+        $entity = new SessionEntity();
+        $entity->sessionId = $value->getId();
+        $entity->creationDate = $value->getCreationDate();
+        $entity->lastModified = $value->getLastModified();
+        $entity->lifetime = $value->getLifetime();
+        $entity->userAgent = $value->getUserAgent();
+        $entity->remoteAddress = $value->getRemoteAddress();
+
+        return $entity;
+    }
 }

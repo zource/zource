@@ -11,6 +11,7 @@ return array(
             'ZourceUser\\V1\\Rest\\Email\\EmailResource' => 'ZourceUser\\V1\\Rest\\Email\\EmailResourceFactory',
             'ZourceUser\\V1\\Rest\\Group\\GroupResource' => 'ZourceUser\\V1\\Rest\\Group\\GroupResourceFactory',
             'ZourceUser\\V1\\Rest\\Identity\\IdentityResource' => 'ZourceUser\\V1\\Rest\\Identity\\IdentityResourceFactory',
+            'ZourceUser\\V1\\Rest\\Permission\\PermissionResource' => 'ZourceUser\\V1\\Rest\\Permission\\PermissionResourceFactory',
             'ZourceUser\\V1\\Rest\\Session\\SessionResource' => 'ZourceUser\\V1\\Rest\\Session\\SessionResourceFactory',
         ),
     ),
@@ -19,67 +20,76 @@ return array(
             'zource-user.rest.account' => array(
                 'type' => 'Segment',
                 'options' => array(
-                    'route' => '/api/account[/:account_id]',
+                    'route' => '/api/user-accounts[/:account_id]',
                     'defaults' => array(
                         'controller' => 'ZourceUser\\V1\\Rest\\Account\\Controller',
                     ),
                     'constraints' => array(
-                        'account_id' => '^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}$',
+                        'account_id' => '[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12}',
                     ),
                 ),
             ),
             'zource-user.rest.email' => array(
                 'type' => 'Segment',
                 'options' => array(
-                    'route' => '/api/email[/:email_id]',
+                    'route' => '/api/user-emails[/:email_id]',
                     'defaults' => array(
                         'controller' => 'ZourceUser\\V1\\Rest\\Email\\Controller',
                     ),
                     'constraints' => array(
-                        'email_id' => '^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}$',
+                        'email_id' => '[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12}',
                     ),
                 ),
             ),
             'zource-user.rest.group' => array(
                 'type' => 'Segment',
                 'options' => array(
-                    'route' => '/api/group[/:group_id]',
+                    'route' => '/api/user-groups[/:group_id]',
                     'defaults' => array(
                         'controller' => 'ZourceUser\\V1\\Rest\\Group\\Controller',
                     ),
                     'constraints' => array(
-                        'group_id' => '^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}$',
+                        'group_id' => '[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12}',
                     ),
                 ),
             ),
             'zource-user.rest.identity' => array(
                 'type' => 'Segment',
                 'options' => array(
-                    'route' => '/api/identity[/:identity_id]',
+                    'route' => '/api/user-identities[/:identity_id]',
                     'defaults' => array(
                         'controller' => 'ZourceUser\\V1\\Rest\\Identity\\Controller',
                     ),
                     'constraints' => array(
-                        'identity_id' => '^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}$',
+                        'identity_id' => '[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12}',
+                    ),
+                ),
+            ),
+            'zource-user.rest.permission' => array(
+                'type' => 'Segment',
+                'options' => array(
+                    'route' => '/api/user-permissions[/:permission_id]',
+                    'defaults' => array(
+                        'controller' => 'ZourceUser\\V1\\Rest\\Permission\\Controller',
                     ),
                 ),
             ),
             'zource-user.rest.session' => array(
                 'type' => 'Segment',
                 'options' => array(
-                    'route' => '/api/session[/:session_id]',
+                    'route' => '/api/user-sessions[/:session_id]',
                     'defaults' => array(
                         'controller' => 'ZourceUser\\V1\\Rest\\Session\\Controller',
                     ),
                     'constraints' => array(
-                        'session_id' => '[a-zA-Z0-9]{32}',
+                        //'session_id' => '^[a-zA-Z0-9]{32}$',
                     ),
                 ),
             ),
             'zource-user.rpc.group-register' => array(
                 'type' => 'Segment',
                 'options' => array(
-                    'route' => '/api/group/membership',
+                    'route' => '/api/user-group/membership',
                     'defaults' => array(
                         'controller' => 'ZourceUser\\V1\\Rpc\\GroupMembership\\Controller',
                         'action' => 'groupMembership',
@@ -95,6 +105,7 @@ return array(
             3 => 'zource-user.rest.email',
             4 => 'zource-user.rest.group',
             5 => 'zource-user.rest.identity',
+            6 => 'zource-user.rest.permission',
             6 => 'zource-user.rest.session',
             7 => 'zource-user.rpc.group-register',
         ),
@@ -184,6 +195,24 @@ return array(
             'collection_class' => 'ZourceUser\\V1\\Rest\\Group\\GroupCollection',
             'service_name' => 'Group',
         ),
+        'ZourceUser\\V1\\Rest\\Permission\\Controller' => array(
+            'listener' => 'ZourceUser\\V1\\Rest\\Permission\\PermissionResource',
+            'route_name' => 'zource-user.rest.permission',
+            'route_identifier_name' => 'permission_id',
+            'collection_name' => 'permission',
+            'entity_http_methods' => array(
+                0 => 'GET',
+            ),
+            'collection_http_methods' => array(
+                0 => 'GET',
+            ),
+            'collection_query_whitelist' => array(),
+            'page_size' => 25,
+            'page_size_param' => 'page_size',
+            'entity_class' => 'ZourceUser\\V1\\Rest\\Permission\\PermissionEntity',
+            'collection_class' => 'ZourceUser\\V1\\Rest\\Permission\\PermissionCollection',
+            'service_name' => 'Permission',
+        ),
         'ZourceUser\\V1\\Rest\\Session\\Controller' => array(
             'listener' => 'ZourceUser\\V1\\Rest\\Session\\SessionResource',
             'route_name' => 'zource-user.rest.session',
@@ -210,6 +239,7 @@ return array(
             'ZourceUser\\V1\\Rest\\Email\\Controller' => 'HalJson',
             'ZourceUser\\V1\\Rest\\Group\\Controller' => 'HalJson',
             'ZourceUser\\V1\\Rest\\Identity\\Controller' => 'HalJson',
+            'ZourceUser\\V1\\Rest\\Permission\\Controller' => 'HalJson',
             'ZourceUser\\V1\\Rest\\Session\\Controller' => 'HalJson',
             'ZourceUser\\V1\\Rpc\\GroupMembership\\Controller' => 'Json',
         ),
@@ -230,6 +260,11 @@ return array(
                 2 => 'application/json',
             ),
             'ZourceUser\\V1\\Rest\\Identity\\Controller' => array(
+                0 => 'application/vnd.zource-user.v1+json',
+                1 => 'application/hal+json',
+                2 => 'application/json',
+            ),
+            'ZourceUser\\V1\\Rest\\Permission\\Controller' => array(
                 0 => 'application/vnd.zource-user.v1+json',
                 1 => 'application/hal+json',
                 2 => 'application/json',
@@ -262,6 +297,10 @@ return array(
                 0 => 'application/vnd.zource-user.v1+json',
                 1 => 'application/json',
             ),
+            'ZourceUser\\V1\\Rest\\Permission\\Controller' => array(
+                0 => 'application/vnd.zource-user.v1+json',
+                1 => 'application/json',
+            ),
             'ZourceUser\\V1\\Rest\\Session\\Controller' => array(
                 0 => 'application/vnd.zource-user.v1+json',
                 1 => 'application/json',
@@ -278,7 +317,7 @@ return array(
                 'entity_identifier_name' => 'id',
                 'route_name' => 'zource-user.rest.account',
                 'route_identifier_name' => 'account_id',
-                'hydrator' => 'Zend\\Hydrator\\ClassMethods',
+                'hydrator' => 'Zend\\Hydrator\\ObjectProperty',
             ),
             'ZourceUser\\V1\\Rest\\Account\\AccountCollection' => array(
                 'entity_identifier_name' => 'id',
@@ -290,7 +329,7 @@ return array(
                 'entity_identifier_name' => 'id',
                 'route_name' => 'zource-user.rest.email',
                 'route_identifier_name' => 'email_id',
-                'hydrator' => 'Zend\\Hydrator\\ClassMethods',
+                'hydrator' => 'Zend\\Hydrator\\ObjectProperty',
             ),
             'ZourceUser\\V1\\Rest\\Email\\EmailCollection' => array(
                 'entity_identifier_name' => 'id',
@@ -302,7 +341,7 @@ return array(
                 'entity_identifier_name' => 'id',
                 'route_name' => 'zource-user.rest.group',
                 'route_identifier_name' => 'group_id',
-                'hydrator' => 'Zend\\Hydrator\\ClassMethods',
+                'hydrator' => 'Zend\\Hydrator\\ObjectProperty',
             ),
             'ZourceUser\\V1\\Rest\\Group\\GroupCollection' => array(
                 'entity_identifier_name' => 'id',
@@ -314,7 +353,7 @@ return array(
                 'entity_identifier_name' => 'id',
                 'route_name' => 'zource-user.rest.identity',
                 'route_identifier_name' => 'identity_id',
-                'hydrator' => 'Zend\\Hydrator\\ClassMethods',
+                'hydrator' => 'Zend\\Hydrator\\ObjectProperty',
             ),
             'ZourceUser\\V1\\Rest\\Identity\\IdentityCollection' => array(
                 'entity_identifier_name' => 'id',
@@ -322,11 +361,23 @@ return array(
                 'route_identifier_name' => 'identity_id',
                 'is_collection' => true,
             ),
+            'ZourceUser\\V1\\Rest\\Permission\\PermissionEntity' => array(
+                'entity_identifier_name' => 'id',
+                'route_name' => 'zource-user.rest.permission',
+                'route_identifier_name' => 'permission_id',
+                'hydrator' => 'Zend\\Hydrator\\ObjectProperty',
+            ),
+            'ZourceUser\\V1\\Rest\\Permission\\PermissionCollection' => array(
+                'entity_identifier_name' => 'permission_id',
+                'route_name' => 'zource-user.rest.permission',
+                'route_identifier_name' => 'permission_id',
+                'is_collection' => true,
+            ),
             'ZourceUser\\V1\\Rest\\Session\\SessionEntity' => array(
-                'entity_identifier_name' => 'session_id',
+                'entity_identifier_name' => 'sessionId',
                 'route_name' => 'zource-user.rest.session',
                 'route_identifier_name' => 'session_id',
-                'hydrator' => 'Zend\\Hydrator\\ClassMethods',
+                'hydrator' => 'Zend\\Hydrator\\ObjectProperty',
             ),
             'ZourceUser\\V1\\Rest\\Session\\SessionCollection' => array(
                 'entity_identifier_name' => 'session_id',
@@ -390,6 +441,22 @@ return array(
                 'collection' => array(
                     'GET' => true,
                     'POST' => true,
+                    'PUT' => false,
+                    'PATCH' => false,
+                    'DELETE' => false,
+                ),
+                'entity' => array(
+                    'GET' => true,
+                    'POST' => false,
+                    'PUT' => false,
+                    'PATCH' => false,
+                    'DELETE' => true,
+                ),
+            ),
+            'ZourceUser\\V1\\Rest\\Permission\\Controller' => array(
+                'collection' => array(
+                    'GET' => true,
+                    'POST' => false,
                     'PUT' => false,
                     'PATCH' => false,
                     'DELETE' => false,

@@ -9,20 +9,26 @@
 
 namespace ZourceUser\V1\Rest\Identity;
 
-use ZourceApplication\Rest\AbstractDoctrineListener;
-use ZourceUser\Entity\AccountInterface;
+use Doctrine\ORM\EntityManager;
+use DoctrineModule\Paginator\Adapter\Selectable;
+use ZF\Rest\AbstractResourceListener;
+use ZourceUser\Entity\Identity;
 
-class IdentityResource extends AbstractDoctrineListener
+class IdentityResource extends AbstractResourceListener
 {
-    /**
-     * {@inheritDoc}
-     */
-    public function create($data)
+    private $entityManager;
+
+    public function __construct(EntityManager $entityManager)
     {
-        $account = $this->getEntityManager()->getRepository(AccountInterface::class)->find($data->account);
+        $this->entityManager = $entityManager;
+    }
 
-        $data->account = $account;
+    public function fetchAll($params = [])
+    {
+        $repository = $this->entityManager->getRepository(Identity::class);
 
-        return parent::create($data);
+        $adapter = new Selectable($repository);
+
+        return new IdentityCollection($adapter);
     }
 }
