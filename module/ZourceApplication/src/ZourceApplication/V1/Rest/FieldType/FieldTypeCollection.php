@@ -7,16 +7,14 @@
  * @license https://raw.githubusercontent.com/zource/zource/master/LICENSE MIT
  */
 
-namespace ZourceContact\V1\Rest\Contact;
+namespace ZourceApplication\V1\Rest\FieldType;
 
-use Doctrine\ORM\EntityManager;
+use ZourceApplication\Paginator\AbstractProxy;
 
-class ContactResourceFactory
+class FieldTypeCollection extends AbstractProxy
 {
-    public function __invoke($services)
+    protected function build($key, $value)
     {
-        $entityManager = $services->get(EntityManager::class);
-
-        return new ContactResource($entityManager);
+        return new FieldTypeEntity($value);
     }
 }

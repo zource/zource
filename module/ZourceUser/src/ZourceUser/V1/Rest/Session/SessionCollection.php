@@ -15,14 +15,6 @@ class SessionCollection extends AbstractProxy
 {
     protected function build($key, $value)
     {
-        $entity = new SessionEntity();
-        $entity->sessionId = $value->getId();
-        $entity->creationDate = $value->getCreationDate();
-        $entity->lastModified = $value->getLastModified();
-        $entity->lifetime = $value->getLifetime();
-        $entity->userAgent = $value->getUserAgent();
-        $entity->remoteAddress = $value->getRemoteAddress();
-
-        return $entity;
+        return new SessionEntity($value);
     }
 }

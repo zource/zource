@@ -7,16 +7,16 @@
  * @license https://raw.githubusercontent.com/zource/zource/master/LICENSE MIT
  */
 
-namespace ZourceContact\V1\Rest\Contact;
+namespace ZourceUser\V1\Rest\Directory;
 
-use Doctrine\ORM\EntityManager;
+use ZourceApplication\Paginator\AbstractProxy;
 
-class ContactResourceFactory
+class DirectoryCollection extends AbstractProxy
 {
-    public function __invoke($services)
+    protected function build($key, $value)
     {
-        $entityManager = $services->get(EntityManager::class);
+        $value['id'] = $key;
 
-        return new ContactResource($entityManager);
+        return new DirectoryEntity($value);
     }
 }

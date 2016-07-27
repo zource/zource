@@ -9,6 +9,8 @@
 
 namespace ZourceUser\V1\Rest\Session;
 
+use ZourceApplication\Entity\Session;
+
 class SessionEntity
 {
     public $sessionId;
@@ -17,4 +19,14 @@ class SessionEntity
     public $lifetime;
     public $userAgent;
     public $remoteAddress;
+
+    public function __construct(Session $value)
+    {
+        $this->sessionId = $value->getId();
+        $this->creationDate = $value->getCreationDate();
+        $this->lastModified = $value->getLastModified();
+        $this->lifetime = $value->getLifetime();
+        $this->userAgent = $value->getUserAgent();
+        $this->remoteAddress = $value->getRemoteAddress();
+    }
 }

@@ -7,16 +7,14 @@
  * @license https://raw.githubusercontent.com/zource/zource/master/LICENSE MIT
  */
 
-namespace ZourceContact\V1\Rest\Contact;
+namespace ZourceUser\V1\Rest\Directory;
 
-use Doctrine\ORM\EntityManager;
-
-class ContactResourceFactory
+class DirectoryResourceFactory
 {
     public function __invoke($services)
     {
-        $entityManager = $services->get(EntityManager::class);
+        $config = $services->get('Config');
 
-        return new ContactResource($entityManager);
+        return new DirectoryResource($config['zource_auth_directories']);
     }
 }

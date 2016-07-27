@@ -9,8 +9,12 @@
 
 namespace ZourceUser\V1\Rest\Account;
 
-use Zend\Paginator\Paginator;
+use ZourceApplication\Paginator\AbstractProxy;
 
-class AccountCollection extends Paginator
+class AccountCollection extends AbstractProxy
 {
+    public function build($key, $value)
+    {
+        return new AccountEntity($value);
+    }
 }

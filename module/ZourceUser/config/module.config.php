@@ -8,6 +8,7 @@ return array(
     'service_manager' => array(
         'factories' => array(
             'ZourceUser\\V1\\Rest\\Account\\AccountResource' => 'ZourceUser\\V1\\Rest\\Account\\AccountResourceFactory',
+            'ZourceUser\\V1\\Rest\\Directory\\DirectoryResource' => 'ZourceUser\\V1\\Rest\\Directory\\DirectoryResourceFactory',
             'ZourceUser\\V1\\Rest\\Email\\EmailResource' => 'ZourceUser\\V1\\Rest\\Email\\EmailResourceFactory',
             'ZourceUser\\V1\\Rest\\Group\\GroupResource' => 'ZourceUser\\V1\\Rest\\Group\\GroupResourceFactory',
             'ZourceUser\\V1\\Rest\\Identity\\IdentityResource' => 'ZourceUser\\V1\\Rest\\Identity\\IdentityResourceFactory',
@@ -20,7 +21,7 @@ return array(
             'zource-user.rest.account' => array(
                 'type' => 'Segment',
                 'options' => array(
-                    'route' => '/api/user-accounts[/:account_id]',
+                    'route' => '/api/user-account[/:account_id]',
                     'defaults' => array(
                         'controller' => 'ZourceUser\\V1\\Rest\\Account\\Controller',
                     ),
@@ -29,10 +30,19 @@ return array(
                     ),
                 ),
             ),
+            'zource-user.rest.directory' => array(
+                'type' => 'Segment',
+                'options' => array(
+                    'route' => '/api/user-directory[/:directory_id]',
+                    'defaults' => array(
+                        'controller' => 'ZourceUser\\V1\\Rest\\Directory\\Controller',
+                    ),
+                ),
+            ),
             'zource-user.rest.email' => array(
                 'type' => 'Segment',
                 'options' => array(
-                    'route' => '/api/user-emails[/:email_id]',
+                    'route' => '/api/user-email[/:email_id]',
                     'defaults' => array(
                         'controller' => 'ZourceUser\\V1\\Rest\\Email\\Controller',
                     ),
@@ -44,7 +54,7 @@ return array(
             'zource-user.rest.group' => array(
                 'type' => 'Segment',
                 'options' => array(
-                    'route' => '/api/user-groups[/:group_id]',
+                    'route' => '/api/user-group[/:group_id]',
                     'defaults' => array(
                         'controller' => 'ZourceUser\\V1\\Rest\\Group\\Controller',
                     ),
@@ -56,7 +66,7 @@ return array(
             'zource-user.rest.identity' => array(
                 'type' => 'Segment',
                 'options' => array(
-                    'route' => '/api/user-identities[/:identity_id]',
+                    'route' => '/api/user-identity[/:identity_id]',
                     'defaults' => array(
                         'controller' => 'ZourceUser\\V1\\Rest\\Identity\\Controller',
                     ),
@@ -68,7 +78,7 @@ return array(
             'zource-user.rest.permission' => array(
                 'type' => 'Segment',
                 'options' => array(
-                    'route' => '/api/user-permissions[/:permission_id]',
+                    'route' => '/api/user-permission[/:permission_id]',
                     'defaults' => array(
                         'controller' => 'ZourceUser\\V1\\Rest\\Permission\\Controller',
                     ),
@@ -77,12 +87,11 @@ return array(
             'zource-user.rest.session' => array(
                 'type' => 'Segment',
                 'options' => array(
-                    'route' => '/api/user-sessions[/:session_id]',
+                    'route' => '/api/user-session[/:session_id]',
                     'defaults' => array(
                         'controller' => 'ZourceUser\\V1\\Rest\\Session\\Controller',
                     ),
-                    'constraints' => array(
-                        //'session_id' => '^[a-zA-Z0-9]{32}$',
+                    'constraints' => array(//'session_id' => '^[a-zA-Z0-9]{32}$',
                     ),
                 ),
             ),
@@ -101,11 +110,11 @@ return array(
     'zf-versioning' => array(
         'uri' => array(
             0 => 'zource-user.rest.account',
-            1 => 'zource-user.rest.account-details',
-            3 => 'zource-user.rest.email',
-            4 => 'zource-user.rest.group',
-            5 => 'zource-user.rest.identity',
-            6 => 'zource-user.rest.permission',
+            1 => 'zource-user.rest.directory',
+            2 => 'zource-user.rest.email',
+            3 => 'zource-user.rest.group',
+            4 => 'zource-user.rest.identity',
+            5 => 'zource-user.rest.permission',
             6 => 'zource-user.rest.session',
             7 => 'zource-user.rpc.group-register',
         ),
@@ -127,9 +136,29 @@ return array(
             'collection_query_whitelist' => array(),
             'page_size' => 25,
             'page_size_param' => 'page_size',
-            'entity_class' => 'ZourceUser\\V1\\Rest\\Account\\AccountInterface',
+            'entity_class' => 'ZourceUser\\V1\\Rest\\Account\\AccountEntity',
             'collection_class' => 'ZourceUser\\V1\\Rest\\Account\\AccountCollection',
             'service_name' => 'Account',
+        ),
+        'ZourceUser\\V1\\Rest\\Directory\\Controller' => array(
+            'listener' => 'ZourceUser\\V1\\Rest\\Directory\\DirectoryResource',
+            'route_name' => 'zource-user.rest.directory',
+            'route_identifier_name' => 'directory_id',
+            'collection_name' => 'directory',
+            'entity_http_methods' => array(
+                0 => 'GET',
+                1 => 'PATCH',
+                2 => 'PUT',
+            ),
+            'collection_http_methods' => array(
+                0 => 'GET',
+            ),
+            'collection_query_whitelist' => array(),
+            'page_size' => 25,
+            'page_size_param' => 'page_size',
+            'entity_class' => 'ZourceUser\\V1\\Rest\\Directory\\DirectoryEntity',
+            'collection_class' => 'ZourceUser\\V1\\Rest\\Directory\\DirectoryCollection',
+            'service_name' => 'Directory',
         ),
         'ZourceUser\\V1\\Rest\\Email\\Controller' => array(
             'listener' => 'ZourceUser\\V1\\Rest\\Email\\EmailResource',
@@ -236,6 +265,7 @@ return array(
     'zf-content-negotiation' => array(
         'controllers' => array(
             'ZourceUser\\V1\\Rest\\Account\\Controller' => 'HalJson',
+            'ZourceUser\\V1\\Rest\\Directory\\Controller' => 'HalJson',
             'ZourceUser\\V1\\Rest\\Email\\Controller' => 'HalJson',
             'ZourceUser\\V1\\Rest\\Group\\Controller' => 'HalJson',
             'ZourceUser\\V1\\Rest\\Identity\\Controller' => 'HalJson',
@@ -245,6 +275,11 @@ return array(
         ),
         'accept_whitelist' => array(
             'ZourceUser\\V1\\Rest\\Account\\Controller' => array(
+                0 => 'application/vnd.zource-user.v1+json',
+                1 => 'application/hal+json',
+                2 => 'application/json',
+            ),
+            'ZourceUser\\V1\\Rest\\Directory\\Controller' => array(
                 0 => 'application/vnd.zource-user.v1+json',
                 1 => 'application/hal+json',
                 2 => 'application/json',
@@ -282,6 +317,10 @@ return array(
         ),
         'content_type_whitelist' => array(
             'ZourceUser\\V1\\Rest\\Account\\Controller' => array(
+                0 => 'application/vnd.zource-user.v1+json',
+                1 => 'application/json',
+            ),
+            'ZourceUser\\V1\\Rest\\Directory\\Controller' => array(
                 0 => 'application/vnd.zource-user.v1+json',
                 1 => 'application/json',
             ),
@@ -323,6 +362,18 @@ return array(
                 'entity_identifier_name' => 'id',
                 'route_name' => 'zource-user.rest.account',
                 'route_identifier_name' => 'account_id',
+                'is_collection' => true,
+            ),
+            'ZourceUser\\V1\\Rest\\Directory\\DirectoryEntity' => array(
+                'entity_identifier_name' => 'id',
+                'route_name' => 'zource-user.rest.directory',
+                'route_identifier_name' => 'directory_id',
+                'hydrator' => 'Zend\\Hydrator\\ObjectProperty',
+            ),
+            'ZourceUser\\V1\\Rest\\Directory\\DirectoryCollection' => array(
+                'entity_identifier_name' => 'id',
+                'route_name' => 'zource-user.rest.directory',
+                'route_identifier_name' => 'directory_id',
                 'is_collection' => true,
             ),
             'ZourceUser\\V1\\Rest\\Email\\EmailEntity' => array(
@@ -390,6 +441,22 @@ return array(
     'zf-mvc-auth' => array(
         'authorization' => array(
             'ZourceUser\\V1\\Rest\\Account\\Controller' => array(
+                'collection' => array(
+                    'GET' => true,
+                    'POST' => true,
+                    'PUT' => false,
+                    'PATCH' => false,
+                    'DELETE' => false,
+                ),
+                'entity' => array(
+                    'GET' => true,
+                    'POST' => false,
+                    'PUT' => true,
+                    'PATCH' => true,
+                    'DELETE' => true,
+                ),
+            ),
+            'ZourceUser\\V1\\Rest\\Directory\\Controller' => array(
                 'collection' => array(
                     'GET' => true,
                     'POST' => true,

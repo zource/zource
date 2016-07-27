@@ -10,23 +10,11 @@
 namespace ZourceContact\V1\Rest\Contact;
 
 use ZourceApplication\Paginator\AbstractProxy;
-use ZourceContact\TaskService\Contact;
 
 class ContactCollection extends AbstractProxy
 {
-    private $contactTaskService;
-
-    public function __construct(Contact $contactTaskService)
-    {
-        $this->contactTaskService = $contactTaskService;
-
-        $paginator = $this->contactTaskService->getOverviewPaginator(null);
-
-        parent::__construct($paginator->getAdapter());
-    }
-
     protected function build($key, $value)
     {
-        return $this->contactTaskService->populateApiArray($value);
+        return new ContactEntity($value);
     }
 }

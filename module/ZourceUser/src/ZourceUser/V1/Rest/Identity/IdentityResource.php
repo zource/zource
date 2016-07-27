@@ -23,6 +23,18 @@ class IdentityResource extends AbstractResourceListener
         $this->entityManager = $entityManager;
     }
 
+    public function fetch($id)
+    {
+        $repository = $this->entityManager->getRepository(Identity::class);
+        $identity = $repository->find($id);
+
+        if (!$identity) {
+            return null;
+        }
+
+        return new IdentityEntity($identity);
+    }
+
     public function fetchAll($params = [])
     {
         $repository = $this->entityManager->getRepository(Identity::class);

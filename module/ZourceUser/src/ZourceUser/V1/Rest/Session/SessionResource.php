@@ -32,15 +32,7 @@ class SessionResource extends AbstractResourceListener
             return null;
         }
 
-        $entity = new SessionEntity();
-        $entity->sessionId = $session->getId();
-        $entity->creationDate = $session->getCreationDate();
-        $entity->lastModified = $session->getLastModified();
-        $entity->lifetime = $session->getLifetime();
-        $entity->userAgent = $session->getUserAgent();
-        $entity->remoteAddress = $session->getRemoteAddress();
-
-        return $entity;
+        return new SessionEntity($session);
     }
 
     public function fetchAll($params = [])

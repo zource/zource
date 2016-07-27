@@ -9,10 +9,20 @@
 
 namespace ZourceUser\V1\Rest\Identity;
 
+use ZourceUser\V1\Rest\Account\AccountEntity;
+
 class IdentityEntity
 {
     public $id;
     public $account;
     public $directory;
     public $identity;
+    
+    public function __construct($identity)
+    {
+        $this->id = $identity->getId();
+        $this->account = new AccountEntity($identity->getAccount());
+        $this->directory = $identity->getDirectory();
+        $this->identity = $identity->getIdentity();
+    }
 }

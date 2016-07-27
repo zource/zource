@@ -7,16 +7,18 @@
  * @license https://raw.githubusercontent.com/zource/zource/master/LICENSE MIT
  */
 
-namespace ZourceContact\V1\Rest\Contact;
+namespace ZourceApplication\V1\Rest\FieldType;
 
-use Doctrine\ORM\EntityManager;
-
-class ContactResourceFactory
+class FieldTypeEntity
 {
-    public function __invoke($services)
-    {
-        $entityManager = $services->get(EntityManager::class);
+    public $id;
+    public $name;
+    public $description;
 
-        return new ContactResource($entityManager);
+    public function __construct(array $item)
+    {
+        $this->id = $item['id'];
+        $this->name = $item['name'];
+        $this->description = $item['description'];
     }
 }

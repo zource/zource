@@ -7,16 +7,14 @@
  * @license https://raw.githubusercontent.com/zource/zource/master/LICENSE MIT
  */
 
-namespace ZourceContact\V1\Rest\Contact;
+namespace ZourceApplication\V1\Rest\Dashboard;
 
-use Doctrine\ORM\EntityManager;
+use ZourceApplication\Paginator\AbstractProxy;
 
-class ContactResourceFactory
+class DashboardCollection extends AbstractProxy
 {
-    public function __invoke($services)
+    protected function build($key, $value)
     {
-        $entityManager = $services->get(EntityManager::class);
-
-        return new ContactResource($entityManager);
+        return new DashboardEntity($value);
     }
 }

@@ -7,16 +7,16 @@
  * @license https://raw.githubusercontent.com/zource/zource/master/LICENSE MIT
  */
 
-namespace ZourceContact\V1\Rest\Contact;
+namespace ZourceApplication\V1\Rest\Dashboard;
 
-use Doctrine\ORM\EntityManager;
+use ZourceApplication\TaskService\Dashboard;
 
-class ContactResourceFactory
+class DashboardResourceFactory
 {
     public function __invoke($services)
     {
-        $entityManager = $services->get(EntityManager::class);
+        $dashboardTaskService = $services->get(Dashboard::class);
 
-        return new ContactResource($entityManager);
+        return new DashboardResource($dashboardTaskService);
     }
 }

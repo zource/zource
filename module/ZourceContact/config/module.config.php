@@ -12,7 +12,7 @@ return array(
             'zource-contact.rest.contact' => array(
                 'type' => 'Segment',
                 'options' => array(
-                    'route' => '/api/contacts[/:contact_id]',
+                    'route' => '/api/contact[/:contact_id]',
                     'defaults' => array(
                         'controller' => 'ZourceContact\\V1\\Rest\\Contact\\Controller',
                     ),
@@ -24,7 +24,7 @@ return array(
             'zource-contact.rest.contact-company' => array(
                 'type' => 'Segment',
                 'options' => array(
-                    'route' => '/api/contacts/companies[/:contact_id]',
+                    'route' => '/api/contact/company[/:contact_id]',
                     'defaults' => array(
                         'controller' => 'ZourceContact\\V1\\Rest\\ContactCompany\\Controller',
                     ),
@@ -36,7 +36,7 @@ return array(
             'zource-contact.rest.contact-person' => array(
                 'type' => 'Segment',
                 'options' => array(
-                    'route' => '/api/contacts/people[/:contact_id]',
+                    'route' => '/api/contact/person[/:contact_id]',
                     'defaults' => array(
                         'controller' => 'ZourceContact\\V1\\Rest\\ContactPerson\\Controller',
                     ),
