@@ -9,7 +9,6 @@
 
 return [
     'modules' => [
-        'AssetManager',
         'DoctrineDataFixtureModule',
         'ZendDeveloperTools',
         'ZF\\Apigility\\Admin',

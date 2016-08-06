@@ -155,9 +155,9 @@ class Module implements
     private function initializeErrorLogging()
     {
         $writer = new Stream('data/logs/php_log.' . date('Y-m-d') . '.xml');
-        $writer->setFormatter(new Xml([
+        /*$writer->setFormatter(new Xml([
             'rootElement' => 'log',
-        ]));
+        ]));*/
 
         $logger = new Logger([
             'exceptionhandler' => true,
