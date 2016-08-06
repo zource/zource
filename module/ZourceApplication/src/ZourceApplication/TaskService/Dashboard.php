@@ -91,6 +91,15 @@ class Dashboard
         $dashboard = new DashboardEntity($data['name']);
 
         $this->persist($dashboard);
+
+        return $dashboard;
+    }
+
+    public function updateFromArray($dashboard, $data)
+    {
+        $dashboard->setName($data->name);
+
+        $this->persist($dashboard);
     }
 
     public function remove(DashboardEntity $dashboard)

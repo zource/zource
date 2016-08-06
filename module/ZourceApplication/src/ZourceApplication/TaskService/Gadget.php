@@ -150,6 +150,19 @@ class Gadget
         $this->persist($dashboard);
     }
 
+    public function updateFromArray(GadgetEntity $gadget, $data)
+    {
+        if (array_key_exists('column', $data)) {
+            $gadget->setColumn($data['column']);
+        }
+
+        if (array_key_exists('position', $data)) {
+            $gadget->setColumn($data['position']);
+        }
+
+        $this->persist($gadget);
+    }
+
     public function remove(GadgetEntity $dashboard)
     {
         $this->entityManager->remove($dashboard);

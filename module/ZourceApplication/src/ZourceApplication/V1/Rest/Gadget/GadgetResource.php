@@ -9,6 +9,8 @@
 
 namespace ZourceApplication\V1\Rest\Gadget;
 
+use ZF\ApiProblem\ApiProblem;
+use ZF\ApiProblem\ApiProblemResponse;
 use ZF\Hal\Entity as HalEntity;
 use ZF\Hal\Link\Link;
 use ZF\Rest\AbstractResourceListener;
@@ -31,6 +33,19 @@ class GadgetResource extends AbstractResourceListener
         $this->gadgetTaskService = $gadgetTaskService;
     }
 
+    public function delete($id)
+    {
+        /** @var \ZourceApplication\Entity\Gadget $gadget */
+        $gadget = $this->gadgetTaskService->find($id);
+        if (!$gadget) {
+            return new ApiProblem(ApiProblemResponse::STATUS_CODE_404, 'Entity not found.');
+        }
+
+        $this->gadgetTaskService->remove($gadget);
+
+        return true;
+    }
+
     public function fetch($id)
     {
         /** @var \ZourceApplication\Entity\Gadget $gadget */
@@ -39,6 +54,44 @@ class GadgetResource extends AbstractResourceListener
             return null;
         }
 
+        return $this->buildGadgetEntity($gadget);
+    }
+
+    public function fetchAll($params = array())
+    {
+        $adapter = $this->gadgetTaskService->getPaginator()->getAdapter();
+
+        return new GadgetCollection($adapter);
+    }
+
+    public function patch($id, $data)
+    {
+        /** @var \ZourceApplication\Entity\Gadget $gadget */
+        $gadget = $this->gadgetTaskService->find($id);
+        if (!$gadget) {
+            return new ApiProblem(ApiProblemResponse::STATUS_CODE_404, 'Entity not found.');
+        }
+        
+        $this->gadgetTaskService->updateFromArray($gadget, (array)$data);
+
+        return $this->buildGadgetEntity($gadget);
+    }
+
+    public function update($id, $data)
+    {
+        /** @var \ZourceApplication\Entity\Gadget $gadget */
+        $gadget = $this->gadgetTaskService->find($id);
+        if (!$gadget) {
+            return new ApiProblem(ApiProblemResponse::STATUS_CODE_404, 'Entity not found.');
+        }
+
+        $this->gadgetTaskService->updateFromArray($gadget, (array)$data);
+
+        return $this->buildGadgetEntity($gadget);
+    }
+
+    private function buildGadgetEntity($gadget)
+    {
         $entity = new HalEntity(new GadgetEntity($gadget), $gadget->getId());
         $entity->getLinks()->add(Link::factory([
             'rel' => 'gadget-container',
@@ -51,12 +104,5 @@ class GadgetResource extends AbstractResourceListener
         ]));
 
         return $entity;
-    }
-
-    public function fetchAll($params = array())
-    {
-        $adapter = $this->gadgetTaskService->getPaginator()->getAdapter();
-
-        return new GadgetCollection($adapter);
     }
 }

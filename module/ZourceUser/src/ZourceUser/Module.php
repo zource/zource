@@ -98,30 +98,5 @@ class Module implements ApigilityProviderInterface
 
         $session = new Session();
         $session->attach($eventManager);
-
-        $services = $e->getApplication()->getServiceManager();
-
-        $hal = $services->get('ViewHelperManager')->get('Hal');
-        $hal->getEventManager()->attach('renderEntity', [$this, 'onRenderEntity']);
-    }
-
-    public function onRenderEntity($e)
-    {
-        $entity = $e->getParam('entity');
-
-        if (!$entity->entity instanceof AccountEntity) {
-            return;
-        }
-
-        return;
-        var_dump($entity->entity->getContact());
-        exit;
-
-        $entity->getLinks()->add(\ZF\Hal\Link\Link::factory(array(
-            'rel' => 'contact',
-            'route' => array(
-                'name' => 'my/api/docs',
-            ),
-        )));
     }
 }

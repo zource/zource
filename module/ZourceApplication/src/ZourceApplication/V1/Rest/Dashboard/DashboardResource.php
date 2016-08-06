@@ -10,6 +10,7 @@
 namespace ZourceApplication\V1\Rest\Dashboard;
 
 use ZF\ApiProblem\ApiProblem;
+use ZF\ApiProblem\ApiProblemResponse;
 use ZF\Rest\AbstractResourceListener;
 use ZourceApplication\TaskService\Dashboard;
 
@@ -32,14 +33,20 @@ class DashboardResource extends AbstractResourceListener
 
     public function create($data)
     {
-        var_dump($this->getIdentity()->getAuthenticationIdentity());
-        exit;
-        $dashboard = new \ZourceApplication\Entity\Dashboard();
-        $dashboard->setName($data->name);
+        $dashboard = $this->dashboardTaskService->persistFromArray((array)$data);
 
-        $this->dashboardTaskService->persist($dashboard);
+        return new DashboardEntity($dashboard);
+    }
 
-        return $dashboard;
+    public function delete($id)
+    {
+        /** @var \ZourceApplication\Entity\Dashboard $dashboard */
+        $dashboard = $this->dashboardTaskService->find($id);
+        if (!$dashboard) {
+            return new ApiProblem(ApiProblemResponse::STATUS_CODE_404, 'Entity not found.');
+        }
+
+        $this->dashboardTaskService->remove($dashboard);
     }
 
     public function fetch($id)
@@ -57,5 +64,31 @@ class DashboardResource extends AbstractResourceListener
         $adapter = $this->dashboardTaskService->getPaginator()->getAdapter();
 
         return new DashboardCollection($adapter);
+    }
+
+    public function patch($id, $data)
+    {
+        /** @var \ZourceApplication\Entity\Dashboard $dashboard */
+        $dashboard = $this->dashboardTaskService->find($id);
+        if (!$dashboard) {
+            return new ApiProblem(ApiProblemResponse::STATUS_CODE_404, 'Entity not found.');
+        }
+
+        $this->dashboardTaskService->updateFromArray($dashboard, $data);
+
+        return new DashboardEntity($dashboard);
+    }
+
+    public function update($id, $data)
+    {
+        /** @var \ZourceApplication\Entity\Dashboard $dashboard */
+        $dashboard = $this->dashboardTaskService->find($id);
+        if (!$dashboard) {
+            return new ApiProblem(ApiProblemResponse::STATUS_CODE_404, 'Entity not found.');
+        }
+
+        $this->dashboardTaskService->updateFromArray($dashboard, $data);
+
+        return new DashboardEntity($dashboard);
     }
 }

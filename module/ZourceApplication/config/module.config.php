@@ -1,5 +1,11 @@
 <?php
 return array(
+    'controllers' => array(
+        'factories' => array(
+            'ZourceApplication\\V1\\Rpc\\PluginActivate\\Controller' => 'ZourceApplication\\V1\\Rpc\\PluginActivate\\PluginActivateControllerFactory',
+            'ZourceApplication\\V1\\Rpc\\PluginDeactivate\\Controller' => 'ZourceApplication\\V1\\Rpc\\PluginDeactivate\\PluginDeactivateControllerFactory',
+        ),
+    ),
     'input_filter_specs' => array(
         'ZourceApplication\\V1\\Rest\\Dashboard\\Validator' => array(
             0 => array(
@@ -126,6 +132,26 @@ return array(
                     ),
                 ),
             ),
+            'zource-application.rpc.plugin-activate' => array(
+                'type' => 'Segment',
+                'options' => array(
+                    'route' => '/api/plugin/activate/:plugin_id',
+                    'defaults' => array(
+                        'controller' => 'ZourceApplication\\V1\\Rpc\\PluginActivate\\Controller',
+                        'action' => 'pluginActivate',
+                    ),
+                ),
+            ),
+            'zource-application.rpc.plugin-deactivate' => array(
+                'type' => 'Segment',
+                'options' => array(
+                    'route' => '/api/plugin/deactivate/:plugin_id',
+                    'defaults' => array(
+                        'controller' => 'ZourceApplication\\V1\\Rpc\\PluginDeactivate\\Controller',
+                        'action' => 'pluginDeactivate',
+                    ),
+                ),
+            ),
         ),
     ),
     'zf-content-validation' => array(
@@ -148,6 +174,7 @@ return array(
             7 => 'zource-application.rest.mail-outgoing',
             8 => 'zource-application.rest.plugin',
             9 => 'zource-application.rest.setting',
+            10 => 'zource-application.rpc.plugin-activate',
         ),
     ),
     'zf-rest' => array(
@@ -162,6 +189,7 @@ return array(
             ),
             'collection_http_methods' => array(
                 0 => 'GET',
+                1 => 'DELETE',
             ),
             'collection_query_whitelist' => array(),
             'page_size' => 25,
@@ -217,6 +245,9 @@ return array(
             'collection_name' => 'gadget',
             'entity_http_methods' => array(
                 0 => 'GET',
+                1 => 'DELETE',
+                2 => 'PATCH',
+                3 => 'PUT',
             ),
             'collection_http_methods' => array(
                 0 => 'GET',
@@ -231,10 +262,12 @@ return array(
         'ZourceApplication\\V1\\Rest\\GadgetContainer\\Controller' => array(
             'listener' => 'ZourceApplication\\V1\\Rest\\GadgetContainer\\GadgetContainerResource',
             'route_name' => 'zource-application.rest.gadget-container',
-            'route_identifier_name' => 'gadget_id',
+            'route_identifier_name' => 'gadget_container_id',
             'collection_name' => 'gadget-container',
             'entity_http_methods' => array(
                 0 => 'GET',
+                1 => 'PATCH',
+                2 => 'PUT',
             ),
             'collection_http_methods' => array(
                 0 => 'GET',
@@ -306,7 +339,8 @@ return array(
             'route_identifier_name' => 'plugin_id',
             'collection_name' => 'plugin',
             'entity_http_methods' => array(
-                0 => 'GET',
+                0 => 'DELETE',
+                1 => 'GET',
             ),
             'collection_http_methods' => array(
                 0 => 'GET',
@@ -350,6 +384,8 @@ return array(
             'ZourceApplication\\V1\\Rest\\MailOutgoing\\Controller' => 'HalJson',
             'ZourceApplication\\V1\\Rest\\Plugin\\Controller' => 'HalJson',
             'ZourceApplication\\V1\\Rest\\Setting\\Controller' => 'HalJson',
+            'ZourceApplication\\V1\\Rpc\\PluginActivate\\Controller' => 'Json',
+            'ZourceApplication\\V1\\Rpc\\PluginDeactivate\\Controller' => 'Json',
         ),
         'accept_whitelist' => array(
             'ZourceApplication\\V1\\Rest\\Cache\\Controller' => array(
@@ -402,6 +438,16 @@ return array(
                 1 => 'application/hal+json',
                 2 => 'application/json',
             ),
+            'ZourceApplication\\V1\\Rpc\\PluginActivate\\Controller' => array(
+                0 => 'application/vnd.zource-application.v1+json',
+                1 => 'application/json',
+                2 => 'application/*+json',
+            ),
+            'ZourceApplication\\V1\\Rpc\\PluginDeactivate\\Controller' => array(
+                0 => 'application/vnd.zource-application.v1+json',
+                1 => 'application/json',
+                2 => 'application/*+json',
+            ),
         ),
         'content_type_whitelist' => array(
             'ZourceApplication\\V1\\Rest\\Cache\\Controller' => array(
@@ -441,6 +487,14 @@ return array(
                 1 => 'application/json',
             ),
             'ZourceApplication\\V1\\Rest\\Setting\\Controller' => array(
+                0 => 'application/vnd.zource-application.v1+json',
+                1 => 'application/json',
+            ),
+            'ZourceApplication\\V1\\Rpc\\PluginActivate\\Controller' => array(
+                0 => 'application/vnd.zource-application.v1+json',
+                1 => 'application/json',
+            ),
+            'ZourceApplication\\V1\\Rpc\\PluginDeactivate\\Controller' => array(
                 0 => 'application/vnd.zource-application.v1+json',
                 1 => 'application/json',
             ),
@@ -568,6 +622,186 @@ return array(
                 'route_identifier_name' => 'setting_id',
                 'is_collection' => true,
             ),
+        ),
+    ),
+    'zf-mvc-auth' => array(
+        'authorization' => array(
+            'ZourceApplication\\V1\\Rest\\Cache\\Controller' => array(
+                'collection' => array(
+                    'GET' => true,
+                    'POST' => true,
+                    'PUT' => true,
+                    'PATCH' => true,
+                    'DELETE' => true,
+                ),
+                'entity' => array(
+                    'GET' => true,
+                    'POST' => true,
+                    'PUT' => true,
+                    'PATCH' => true,
+                    'DELETE' => true,
+                ),
+            ),
+            'ZourceApplication\\V1\\Rest\\Dashboard\\Controller' => array(
+                'collection' => array(
+                    'GET' => true,
+                    'POST' => true,
+                    'PUT' => true,
+                    'PATCH' => true,
+                    'DELETE' => true,
+                ),
+                'entity' => array(
+                    'GET' => true,
+                    'POST' => true,
+                    'PUT' => true,
+                    'PATCH' => true,
+                    'DELETE' => true,
+                ),
+            ),
+            'ZourceApplication\\V1\\Rest\\FieldType\\Controller' => array(
+                'collection' => array(
+                    'GET' => true,
+                    'POST' => true,
+                    'PUT' => true,
+                    'PATCH' => true,
+                    'DELETE' => true,
+                ),
+                'entity' => array(
+                    'GET' => true,
+                    'POST' => true,
+                    'PUT' => true,
+                    'PATCH' => true,
+                    'DELETE' => true,
+                ),
+            ),
+            'ZourceApplication\\V1\\Rest\\Gadget\\Controller' => array(
+                'collection' => array(
+                    'GET' => true,
+                    'POST' => true,
+                    'PUT' => true,
+                    'PATCH' => true,
+                    'DELETE' => true,
+                ),
+                'entity' => array(
+                    'GET' => true,
+                    'POST' => true,
+                    'PUT' => true,
+                    'PATCH' => true,
+                    'DELETE' => true,
+                ),
+            ),
+            'ZourceApplication\\V1\\Rest\\GadgetContainer\\Controller' => array(
+                'collection' => array(
+                    'GET' => true,
+                    'POST' => true,
+                    'PUT' => true,
+                    'PATCH' => true,
+                    'DELETE' => true,
+                ),
+                'entity' => array(
+                    'GET' => true,
+                    'POST' => true,
+                    'PUT' => true,
+                    'PATCH' => true,
+                    'DELETE' => true,
+                ),
+            ),
+            'ZourceApplication\\V1\\Rest\\GadgetType\\Controller' => array(
+                'collection' => array(
+                    'GET' => true,
+                    'POST' => true,
+                    'PUT' => true,
+                    'PATCH' => true,
+                    'DELETE' => true,
+                ),
+                'entity' => array(
+                    'GET' => true,
+                    'POST' => true,
+                    'PUT' => true,
+                    'PATCH' => true,
+                    'DELETE' => true,
+                ),
+            ),
+            'ZourceApplication\\V1\\Rest\\MailIncoming\\Controller' => array(
+                'collection' => array(
+                    'GET' => true,
+                    'POST' => true,
+                    'PUT' => true,
+                    'PATCH' => true,
+                    'DELETE' => true,
+                ),
+                'entity' => array(
+                    'GET' => true,
+                    'POST' => true,
+                    'PUT' => true,
+                    'PATCH' => true,
+                    'DELETE' => true,
+                ),
+            ),
+            'ZourceApplication\\V1\\Rest\\MailOutgoing\\Controller' => array(
+                'collection' => array(
+                    'GET' => true,
+                    'POST' => true,
+                    'PUT' => true,
+                    'PATCH' => true,
+                    'DELETE' => true,
+                ),
+                'entity' => array(
+                    'GET' => true,
+                    'POST' => true,
+                    'PUT' => true,
+                    'PATCH' => true,
+                    'DELETE' => true,
+                ),
+            ),
+            'ZourceApplication\\V1\\Rest\\Plugin\\Controller' => array(
+                'collection' => array(
+                    'GET' => true,
+                    'POST' => true,
+                    'PUT' => true,
+                    'PATCH' => true,
+                    'DELETE' => true,
+                ),
+                'entity' => array(
+                    'GET' => true,
+                    'POST' => true,
+                    'PUT' => true,
+                    'PATCH' => true,
+                    'DELETE' => true,
+                ),
+            ),
+            'ZourceApplication\\V1\\Rest\\Setting\\Controller' => array(
+                'collection' => array(
+                    'GET' => true,
+                    'POST' => true,
+                    'PUT' => true,
+                    'PATCH' => true,
+                    'DELETE' => true,
+                ),
+                'entity' => array(
+                    'GET' => true,
+                    'POST' => true,
+                    'PUT' => true,
+                    'PATCH' => true,
+                    'DELETE' => true,
+                ),
+            ),
+        ),
+    ),
+    'zf-rpc' => array(
+        'ZourceApplication\\V1\\Rpc\\PluginActivate\\Controller' => array(
+            'service_name' => 'PluginActivate',
+            'http_methods' => array(
+                0 => 'POST',
+            ),
+            'route_name' => 'zource-application.rpc.plugin-activate',
+        ),
+        'ZourceApplication\\V1\\Rpc\\PluginDeactivate\\Controller' => array(
+            'service_name' => 'PluginDeactivate',
+            'http_methods' => array(
+                0 => 'POST',
+            ),
+            'route_name' => 'zource-application.rpc.plugin-deactivate',
         ),
     ),
 );

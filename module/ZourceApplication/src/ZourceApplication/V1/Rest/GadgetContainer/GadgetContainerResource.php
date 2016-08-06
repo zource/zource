@@ -9,6 +9,8 @@
 
 namespace ZourceApplication\V1\Rest\GadgetContainer;
 
+use ZF\ApiProblem\ApiProblem;
+use ZF\ApiProblem\ApiProblemResponse;
 use ZF\Rest\AbstractResourceListener;
 use ZourceApplication\TaskService\Gadget;
 
@@ -44,5 +46,29 @@ class GadgetContainerResource extends AbstractResourceListener
         $adapter = $this->gadgetTaskService->getContainerPaginator()->getAdapter();
 
         return new GadgetContainerCollection($adapter);
+    }
+
+    public function patch($id, $data)
+    {
+        $gadgetContainer = $this->gadgetTaskService->findContainer($id);
+        if (!$gadgetContainer) {
+            return new ApiProblem(ApiProblemResponse::STATUS_CODE_404, 'Entity not found.');
+        }
+
+        $this->gadgetTaskService->updateGadgetContainer($gadgetContainer, (array)$data);
+
+        return new GadgetContainerEntity($gadgetContainer);
+    }
+
+    public function update($id, $data)
+    {
+        $gadgetContainer = $this->gadgetTaskService->findContainer($id);
+        if (!$gadgetContainer) {
+            return new ApiProblem(ApiProblemResponse::STATUS_CODE_404, 'Entity not found.');
+        }
+
+        $this->gadgetTaskService->updateGadgetContainer($gadgetContainer, (array)$data);
+
+        return new GadgetContainerEntity($gadgetContainer);
     }
 }

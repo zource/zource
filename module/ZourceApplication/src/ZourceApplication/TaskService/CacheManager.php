@@ -76,6 +76,13 @@ class CacheManager
         return $cacheItems;
     }
 
+    public function clearAllCache()
+    {
+        foreach ($this->getCacheItems() as $item) {
+            $this->clearCache($item['id']);
+        }
+    }
+
     public function clearModuleCache()
     {
         $this->clearCache('module-classmap');

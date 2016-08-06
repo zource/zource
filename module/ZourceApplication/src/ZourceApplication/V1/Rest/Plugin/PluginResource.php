@@ -10,6 +10,10 @@
 namespace ZourceApplication\V1\Rest\Plugin;
 
 use Zend\Paginator\Adapter\ArrayAdapter;
+use ZF\ApiProblem\ApiProblem;
+use ZF\ApiProblem\ApiProblemResponse;
+use ZF\Hal\Entity as HalEntity;
+use ZF\Hal\Link\Link;
 use ZF\Rest\AbstractResourceListener;
 use ZourceApplication\TaskService\PluginManager;
 
@@ -30,6 +34,18 @@ class PluginResource extends AbstractResourceListener
         $this->pluginManager = $pluginManager;
     }
 
+    public function delete($id)
+    {
+        $plugin = $this->pluginManager->getPlugin($id);
+        if (!$plugin) {
+            return new ApiProblem(ApiProblemResponse::STATUS_CODE_404, 'Entity not found.');
+        }
+
+        $this->pluginManager->uninstall($plugin);
+
+        return true;
+    }
+
     public function fetch($id)
     {
         $plugin = $this->pluginManager->getPlugin($id);
@@ -37,7 +53,7 @@ class PluginResource extends AbstractResourceListener
             return null;
         }
 
-        return new PluginEntity($plugin);
+        return $this->buildEntity($plugin);
     }
 
     public function fetchAll($params = array())
@@ -45,5 +61,30 @@ class PluginResource extends AbstractResourceListener
         $adapter = new ArrayAdapter($this->pluginManager->getPlugins());
 
         return new PluginCollection($adapter);
+    }
+
+    private function buildEntity($plugin)
+    {
+        $entity = new HalEntity(new PluginEntity($plugin), $plugin->getId());
+        $entity->getLinks()->add(Link::factory([
+            'rel' => 'activate',
+            'route' => [
+                'name' => 'zource-application.rest.plugin',
+                'params' => [
+                    'plugin_id' => $plugin->getId(),
+                ],
+            ],
+        ]));
+        $entity->getLinks()->add(Link::factory([
+            'rel' => 'deactivate',
+            'route' => [
+                'name' => 'zource-application.rest.plugin',
+                'params' => [
+                    'plugin_id' => $plugin->getId(),
+                ],
+            ],
+        ]));
+
+        return $entity;
     }
 }
