@@ -9,20 +9,29 @@
 
 namespace ZourceApplication\V1\Rest\Gadget;
 
+use ZourceApplication\Entity\Gadget;
+use ZourceApplication\V1\Rest\GadgetContainer\GadgetContainerEntity;
+
 class GadgetEntity
 {
     public $id;
-    public $title;
-    public $description;
-    public $category;
-    public $thumbnail;
+    public $installationDate;
+    public $updateDate;
+    public $gadgetContainer;
+    public $gadgetType;
+    public $options;
+    public $column;
+    public $position;
 
-    public function __construct(array $item)
+    public function __construct(Gadget $item)
     {
-        $this->id = $item['id'];
-        $this->title = $item['title'];
-        $this->description = $item['description'];
-        $this->category = $item['category'];
-        $this->thumbnail = $item['thumbnail'];
+        $this->id = $item->getId();
+        $this->installationDate = $item->getInstallationDate();
+        $this->updateDate = $item->getUpdateDate();
+        $this->gadgetContainer = $item->getGadgetContainer()->getId();
+        $this->gadgetType = $item->getGadgetType();
+        $this->options = $item->getOptions();
+        $this->column = $item->getColumn();
+        $this->position = $item->getPosition();
     }
 }

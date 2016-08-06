@@ -7,16 +7,16 @@
  * @license https://raw.githubusercontent.com/zource/zource/master/LICENSE MIT
  */
 
-namespace ZourceApplication\V1\Rest\Gadget;
+namespace ZourceApplication\V1\Rest\Plugin;
 
-use ZourceApplication\TaskService\Gadget;
+use ZourceApplication\TaskService\PluginManager;
 
-class GadgetResourceFactory
+class PluginResourceFactory
 {
     public function __invoke($services)
     {
-        $gadgetTaskService = $services->get(Gadget::class);
+        $pluginManager = $services->get(PluginManager::class);
 
-        return new GadgetResource($gadgetTaskService);
+        return new PluginResource($pluginManager);
     }
 }

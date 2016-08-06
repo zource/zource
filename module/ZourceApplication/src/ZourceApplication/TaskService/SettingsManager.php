@@ -38,9 +38,14 @@ class SettingsManager
         $this->cacheManager = $cacheManager;
     }
 
+    public function has($name)
+    {
+        return array_key_exists($name, $this->config);
+    }
+
     public function get($name, $defaultValue = null)
     {
-        if (!array_key_exists($name, $this->config)) {
+        if (!$this->has($name)) {
             return $defaultValue;
         }
 

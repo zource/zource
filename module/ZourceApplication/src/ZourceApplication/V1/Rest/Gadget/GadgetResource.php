@@ -9,122 +9,54 @@
 
 namespace ZourceApplication\V1\Rest\Gadget;
 
-use Zend\Paginator\Adapter\ArrayAdapter;
-use ZF\ApiProblem\ApiProblem;
+use ZF\Hal\Entity as HalEntity;
+use ZF\Hal\Link\Link;
 use ZF\Rest\AbstractResourceListener;
+use ZourceApplication\TaskService\Gadget;
 
 class GadgetResource extends AbstractResourceListener
 {
     /**
-     * @var array
+     * @var Gadget
      */
-    private $config;
+    private $gadgetTaskService;
 
     /**
      * Initializes a new instance of this class.
      *
-     * @param array $config
+     * @param Gadget $gadgetTaskService
      */
-    public function __construct(array $config)
+    public function __construct(Gadget $gadgetTaskService)
     {
-        $this->config = $config;
+        $this->gadgetTaskService = $gadgetTaskService;
     }
 
-    /**
-     * Create a resource
-     *
-     * @param  mixed $data
-     * @return ApiProblem|mixed
-     */
-    public function create($data)
-    {
-        return new ApiProblem(405, 'The POST method has not been defined');
-    }
-
-    /**
-     * Delete a resource
-     *
-     * @param  mixed $id
-     * @return ApiProblem|mixed
-     */
-    public function delete($id)
-    {
-        return new ApiProblem(405, 'The DELETE method has not been defined for individual resources');
-    }
-
-    /**
-     * Delete a collection, or members of a collection
-     *
-     * @param  mixed $data
-     * @return ApiProblem|mixed
-     */
-    public function deleteList($data)
-    {
-        return new ApiProblem(405, 'The DELETE method has not been defined for collections');
-    }
-
-    /**
-     * Fetch a resource
-     *
-     * @param  mixed $id
-     * @return ApiProblem|mixed
-     */
     public function fetch($id)
     {
-        if (!array_key_exists($id, $this->config)) {
+        /** @var \ZourceApplication\Entity\Gadget $gadget */
+        $gadget = $this->gadgetTaskService->find($id);
+        if (!$gadget) {
             return null;
         }
 
-        $this->config[$id]['id'] = $id;
+        $entity = new HalEntity(new GadgetEntity($gadget), $gadget->getId());
+        $entity->getLinks()->add(Link::factory([
+            'rel' => 'gadget-container',
+            'route' => [
+                'name' => 'zource-application.rest.gadget-container',
+                'params' => [
+                    'gadget_container_id' => $gadget->getGadgetContainer()->getId(),
+                ],
+            ],
+        ]));
 
-        return new GadgetEntity($this->config[$id]);
+        return $entity;
     }
 
-    /**
-     * Fetch all or a subset of resources
-     *
-     * @param  array $params
-     * @return ApiProblem|mixed
-     */
     public function fetchAll($params = array())
     {
-        $adapter = new ArrayAdapter($this->config);
+        $adapter = $this->gadgetTaskService->getPaginator()->getAdapter();
 
         return new GadgetCollection($adapter);
-    }
-
-    /**
-     * Patch (partial in-place update) a resource
-     *
-     * @param  mixed $id
-     * @param  mixed $data
-     * @return ApiProblem|mixed
-     */
-    public function patch($id, $data)
-    {
-        return new ApiProblem(405, 'The PATCH method has not been defined for individual resources');
-    }
-
-    /**
-     * Replace a collection or members of a collection
-     *
-     * @param  mixed $data
-     * @return ApiProblem|mixed
-     */
-    public function replaceList($data)
-    {
-        return new ApiProblem(405, 'The PUT method has not been defined for collections');
-    }
-
-    /**
-     * Update a resource
-     *
-     * @param  mixed $id
-     * @param  mixed $data
-     * @return ApiProblem|mixed
-     */
-    public function update($id, $data)
-    {
-        return new ApiProblem(405, 'The PUT method has not been defined for individual resources');
     }
 }

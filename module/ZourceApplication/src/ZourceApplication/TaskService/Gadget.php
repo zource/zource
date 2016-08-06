@@ -90,6 +90,15 @@ class Gadget
         return new Paginator($adapter);
     }
 
+    public function getContainerPaginator()
+    {
+        $repository = $this->entityManager->getRepository(GadgetContainer::class);
+
+        $adapter = new Selectable($repository);
+
+        return new Paginator($adapter);
+    }
+
     public function updateGadgetContainer(GadgetContainer $gadgetContainer, array $data)
     {
         $gadgets = [];

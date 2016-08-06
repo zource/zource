@@ -7,16 +7,14 @@
  * @license https://raw.githubusercontent.com/zource/zource/master/LICENSE MIT
  */
 
-namespace ZourceApplication\V1\Rest\Gadget;
+namespace ZourceApplication\V1\Rest\Setting;
 
-use ZourceApplication\TaskService\Gadget;
+use ZourceApplication\Paginator\AbstractProxy;
 
-class GadgetResourceFactory
+class SettingCollection extends AbstractProxy
 {
-    public function __invoke($services)
+    protected function build($key, $value)
     {
-        $gadgetTaskService = $services->get(Gadget::class);
-
-        return new GadgetResource($gadgetTaskService);
+        return new SettingEntity($key, $value);
     }
 }

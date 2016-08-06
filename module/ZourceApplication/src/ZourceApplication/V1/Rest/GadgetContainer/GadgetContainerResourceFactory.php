@@ -7,16 +7,16 @@
  * @license https://raw.githubusercontent.com/zource/zource/master/LICENSE MIT
  */
 
-namespace ZourceApplication\V1\Rest\Gadget;
+namespace ZourceApplication\V1\Rest\GadgetContainer;
 
 use ZourceApplication\TaskService\Gadget;
 
-class GadgetResourceFactory
+class GadgetContainerResourceFactory
 {
     public function __invoke($services)
     {
         $gadgetTaskService = $services->get(Gadget::class);
 
-        return new GadgetResource($gadgetTaskService);
+        return new GadgetContainerResource($gadgetTaskService);
     }
 }

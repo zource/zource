@@ -7,13 +7,13 @@
  * @license https://raw.githubusercontent.com/zource/zource/master/LICENSE MIT
  */
 
-namespace ZourceApplication\V1\Rest\MailIncoming;
+namespace ZourceApplication\V1\Rest\MailOutgoing;
 
 use Zend\Paginator\Adapter\ArrayAdapter;
 use ZF\Rest\AbstractResourceListener;
 use ZourceApplication\TaskService\EmailServers;
 
-class MailIncomingResource extends AbstractResourceListener
+class MailOutgoingResource extends AbstractResourceListener
 {
     /**
      * @var EmailServers
@@ -32,21 +32,21 @@ class MailIncomingResource extends AbstractResourceListener
 
     public function fetch($id)
     {
-        $incomingAccount = $this->emailServers->findIncoming($id);
+        $account = $this->emailServers->findOutgoing($id);
 
-        if (!$incomingAccount) {
+        if (!$account) {
             return null;
         }
 
-        $incomingAccount['id'] = $id;
+        $account['id'] = $id;
 
-        return new MailIncomingEntity($incomingAccount);
+        return new MailOutgoingEntity($account);
     }
 
     public function fetchAll($params = [])
     {
-        $adapter = new ArrayAdapter($this->emailServers->getIncomingAccounts());
+        $adapter = new ArrayAdapter($this->emailServers->getOutgoingServers());
 
-        return new MailIncomingCollection($adapter);
+        return new MailOutgoingCollection($adapter);
     }
 }

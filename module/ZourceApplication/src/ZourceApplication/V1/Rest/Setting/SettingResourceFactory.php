@@ -7,16 +7,16 @@
  * @license https://raw.githubusercontent.com/zource/zource/master/LICENSE MIT
  */
 
-namespace ZourceApplication\V1\Rest\Gadget;
+namespace ZourceApplication\V1\Rest\Setting;
 
-use ZourceApplication\TaskService\Gadget;
+use ZourceApplication\TaskService\SettingsManager;
 
-class GadgetResourceFactory
+class SettingResourceFactory
 {
     public function __invoke($services)
     {
-        $gadgetTaskService = $services->get(Gadget::class);
+        $settingManager = $services->get(SettingsManager::class);
 
-        return new GadgetResource($gadgetTaskService);
+        return new SettingResource($settingManager);
     }
 }

@@ -10,17 +10,20 @@
 namespace ZourceApplication\V1\Rest\Dashboard;
 
 use ZourceApplication\Entity\Dashboard;
+use ZourceApplication\V1\Rest\GadgetContainer\GadgetContainerEntity;
 
 class DashboardEntity
 {
     public $id;
     public $creationDate;
     public $name;
+    public $gadgetContainer;
 
     public function __construct(Dashboard $dashboard)
     {
         $this->id = $dashboard->getId();
         $this->creationDate = $dashboard->getCreationDate();
         $this->name = $dashboard->getName();
+        $this->gadgetContainer = new GadgetContainerEntity($dashboard->getGadgetContainer());
     }
 }

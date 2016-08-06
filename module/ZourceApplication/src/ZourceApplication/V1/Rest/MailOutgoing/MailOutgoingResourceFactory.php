@@ -7,16 +7,17 @@
  * @license https://raw.githubusercontent.com/zource/zource/master/LICENSE MIT
  */
 
-namespace ZourceApplication\V1\Rest\Gadget;
+namespace ZourceApplication\V1\Rest\MailOutgoing;
 
-use ZourceApplication\TaskService\Gadget;
+use ZourceApplication\TaskService\EmailServers;
 
-class GadgetResourceFactory
+class MailOutgoingResourceFactory
 {
     public function __invoke($services)
     {
-        $gadgetTaskService = $services->get(Gadget::class);
+        /** @var EmailServers $emailServers */
+        $emailServers = $services->get(EmailServers::class);
 
-        return new GadgetResource($gadgetTaskService);
+        return new MailOutgoingResource($emailServers);
     }
 }

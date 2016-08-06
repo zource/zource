@@ -62,7 +62,7 @@ class Dashboard
         }
 
         if (!$dashboard) {
-            $dashboard = new DashboardEntity($account, 'Dashboard ' . $account->getContact()->getDisplayName());
+            $dashboard = new DashboardEntity('Dashboard ' . $account->getContact()->getDisplayName());
 
             $account->setProperty('dashboard', $dashboard->getId()->toString());
 
@@ -86,9 +86,9 @@ class Dashboard
         $this->entityManager->flush($dashboard);
     }
 
-    public function persistFromArray(AccountInterface $account, $data)
+    public function persistFromArray($data)
     {
-        $dashboard = new DashboardEntity($account, $data['name']);
+        $dashboard = new DashboardEntity($data['name']);
 
         $this->persist($dashboard);
     }

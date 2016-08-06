@@ -7,42 +7,43 @@
  * @license https://raw.githubusercontent.com/zource/zource/master/LICENSE MIT
  */
 
-namespace ZourceApplication\V1\Rest\FieldType;
+namespace ZourceApplication\V1\Rest\Plugin;
 
 use Zend\Paginator\Adapter\ArrayAdapter;
-use ZF\ApiProblem\ApiProblem;
 use ZF\Rest\AbstractResourceListener;
+use ZourceApplication\TaskService\PluginManager;
 
-class FieldTypeResource extends AbstractResourceListener
+class PluginResource extends AbstractResourceListener
 {
     /**
-     * @var array
+     * @var PluginManager
      */
-    private $config;
+    private $pluginManager;
 
     /**
      * Initializes a new instance of this class.
      *
      * @param array $config
      */
-    public function __construct(array $config)
+    public function __construct(PluginManager $pluginManager)
     {
-        $this->config = $config;
+        $this->pluginManager = $pluginManager;
     }
 
     public function fetch($id)
     {
-        if (!array_key_exists($id, $this->config)) {
+        $plugin = $this->pluginManager->getPlugin($id);
+        if (!$plugin) {
             return null;
         }
 
-        return new FieldTypeEntity($this->config[$id]);
+        return new PluginEntity($plugin);
     }
 
     public function fetchAll($params = array())
     {
-        $adapter = new ArrayAdapter($this->config);
+        $adapter = new ArrayAdapter($this->pluginManager->getPlugins());
 
-        return new FieldTypeCollection($adapter);
+        return new PluginCollection($adapter);
     }
 }

@@ -8,7 +8,7 @@ $this->placeholder('layout')->pageHeaderMenu = [
     $this->url('dashboard') => 'Cancel'
 ];
 
-$this->dashboardForm->setAttribute('action', $this->url());
+$this->dashboardForm->setAttribute('action', $this->url('dashboard/create'));
 $this->dashboardForm->setAttribute('method', 'post');
 $this->dashboardForm->prepare();
 

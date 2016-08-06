@@ -7,13 +7,12 @@
  * @license https://raw.githubusercontent.com/zource/zource/master/LICENSE MIT
  */
 
-namespace ZourceApplication\V1\Rest\FieldType;
+namespace ZourceApplication\V1\Rest\GadgetType;
 
 use Zend\Paginator\Adapter\ArrayAdapter;
-use ZF\ApiProblem\ApiProblem;
 use ZF\Rest\AbstractResourceListener;
 
-class FieldTypeResource extends AbstractResourceListener
+class GadgetTypeResource extends AbstractResourceListener
 {
     /**
      * @var array
@@ -36,13 +35,15 @@ class FieldTypeResource extends AbstractResourceListener
             return null;
         }
 
-        return new FieldTypeEntity($this->config[$id]);
+        $this->config[$id]['id'] = $id;
+
+        return new GadgetTypeEntity($this->config[$id]);
     }
 
     public function fetchAll($params = array())
     {
         $adapter = new ArrayAdapter($this->config);
 
-        return new FieldTypeCollection($adapter);
+        return new GadgetTypeCollection($adapter);
     }
 }

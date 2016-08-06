@@ -13,7 +13,6 @@ $this->placeholder('layout')->pageHeaderMenu = [
     <thead>
         <tr>
             <th>Name</th>
-            <th>Created By</th>
             <th class="zui-text-right">Operations</th>
         </tr>
     </thead>
@@ -21,7 +20,6 @@ $this->placeholder('layout')->pageHeaderMenu = [
         <?php foreach ($this->dashboards as $dashboard) { ?>
         <tr>
             <td><?php echo $this->escapeHtml($dashboard->getName()); ?></td>
-            <td><?php echo $this->escapeHtml($dashboard->getCreatedBy()->getContact()->getDisplayName()); ?></td>
             <td class="zui-text-right">
                 <a href="<?php echo $this->url('dashboard/select', [
                     'id' => $dashboard->getId(),

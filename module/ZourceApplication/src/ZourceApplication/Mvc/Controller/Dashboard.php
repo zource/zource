@@ -90,7 +90,7 @@ class Dashboard extends AbstractActionController
             if ($this->dashboardForm->isValid()) {
                 $data = $this->dashboardForm->getData();
 
-                $this->dashboardTaskService->persistFromArray($this->zourceAccount(), $data);
+                $this->dashboardTaskService->persistFromArray($data);
 
                 return $this->redirect()->toRoute('dashboard/manage');
             }
