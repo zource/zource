@@ -70,6 +70,10 @@ class EmailServers
         ];
 
         $this->persist();
+
+        $this->incoming['accounts'][$id]['id'] = $id;
+
+        return $this->incoming['accounts'][$id];
     }
 
     public function persistOutgoingFromArray(array $data, $id = null)
@@ -87,6 +91,10 @@ class EmailServers
         ];
 
         $this->persist();
+
+        $this->outgoing['servers'][$id]['id'] = $id;
+
+        return $this->outgoing['servers'][$id];
     }
 
     public function removeIncomingKey($id)

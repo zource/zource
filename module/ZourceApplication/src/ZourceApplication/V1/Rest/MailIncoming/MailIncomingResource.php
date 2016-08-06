@@ -30,6 +30,11 @@ class MailIncomingResource extends AbstractResourceListener
         $this->emailServers = $emailServers;
     }
 
+    public function create($data)
+    {
+        return $this->emailServers->persistIncomingFromArray((array)$data);
+    }
+
     public function fetch($id)
     {
         $incomingAccount = $this->emailServers->findIncoming($id);

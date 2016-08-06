@@ -8,7 +8,7 @@ return array(
     ),
     'input_filter_specs' => array(
         'ZourceApplication\\V1\\Rest\\Dashboard\\Validator' => array(
-            0 => array(
+            array(
                 'required' => true,
                 'validators' => array(),
                 'filters' => array(),
@@ -16,8 +16,76 @@ return array(
                 'description' => 'The name of the dashboard.',
             ),
         ),
+        'ZourceApplication\\V1\\Rest\\MailIncoming\\Validator' => array(
+            array(
+                'required' => true,
+                'validators' => array(
+                    array(
+                        'name' => \Zend\Validator\InArray::class,
+                        'options' => array(
+                            'haystack' => array(
+                                'imap',
+                            ),
+                        ),
+                    ),
+                ),
+                'filters' => array(),
+                'name' => 'type',
+                'description' => 'The type of connection to make.',
+            ),
+            array(
+                'required' => true,
+                'validators' => array(),
+                'filters' => array(),
+                'name' => 'hostname',
+                'description' => 'The hostname to connect to.',
+            ),
+            array(
+                'required' => true,
+                'validators' => array(
+                    array(
+                        'name' => \Zend\Validator\Digits::class,
+                        'options' => array(),
+                    ),
+                ),
+                'filters' => array(),
+                'name' => 'port',
+                'description' => 'The port to connect to.',
+            ),
+            array(
+                'required' => true,
+                'validators' => array(),
+                'filters' => array(),
+                'name' => 'username',
+                'description' => 'The username to authenticate with.',
+            ),
+            array(
+                'required' => true,
+                'validators' => array(),
+                'filters' => array(),
+                'name' => 'password',
+                'description' => 'The password to authenticate with.',
+            ),
+            array(
+                'required' => false,
+                'validators' => array(
+                    array(
+                        'name' => \Zend\Validator\InArray::class,
+                        'options' => array(
+                            'haystack' => array(
+                                'ssl',
+                                'tls',
+                            ),
+                        ),
+                    ),
+                ),
+                'filters' => array(),
+                'name' => 'ssl',
+                'description' => 'The ssl method.',
+            ),
+        ),
         'ZourceApplication\\V1\\Rest\\Setting\\Validator' => array(
-            0 => array(
+            array(
                 'required' => true,
                 'validators' => array(),
                 'filters' => array(),
@@ -157,6 +225,9 @@ return array(
     'zf-content-validation' => array(
         'ZourceApplication\\V1\\Rest\\Dashboard\\Controller' => array(
             'input_filter' => 'ZourceApplication\\V1\\Rest\\Dashboard\\Validator',
+        ),
+        'ZourceApplication\\V1\\Rest\\MailIncoming\\Controller' => array(
+            'input_filter' => 'ZourceApplication\\V1\\Rest\\MailIncoming\\Validator',
         ),
         'ZourceApplication\\V1\\Rest\\Setting\\Controller' => array(
             'input_filter' => 'ZourceApplication\\V1\\Rest\\Setting\\Validator',
@@ -303,10 +374,14 @@ return array(
             'route_identifier_name' => 'mail_incoming_id',
             'collection_name' => 'mail-incoming',
             'entity_http_methods' => array(
-                0 => 'GET',
+                0 => 'DELETE',
+                1 => 'GET',
+                2 => 'PATCH',
+                3 => 'PUT',
             ),
             'collection_http_methods' => array(
                 0 => 'GET',
+                1 => 'POST',
             ),
             'collection_query_whitelist' => array(),
             'page_size' => 25,
@@ -321,10 +396,14 @@ return array(
             'route_identifier_name' => 'mail_outgoing_id',
             'collection_name' => 'mail-outgoing',
             'entity_http_methods' => array(
-                0 => 'GET',
+                0 => 'DELETE',
+                1 => 'GET',
+                2 => 'PATCH',
+                3 => 'PUT',
             ),
             'collection_http_methods' => array(
                 0 => 'GET',
+                1 => 'POST',
             ),
             'collection_query_whitelist' => array(),
             'page_size' => 25,
