@@ -44,6 +44,10 @@ class OAuth
 
     public function getApplication($clientId)
     {
+        if (!$clientId) {
+            return null;
+        }
+
         return $this->server->getStorage('client')->getApplication($clientId);
     }
 
@@ -56,6 +60,10 @@ class OAuth
 
     public function isApplicationAuthorized(OAuthApplication $application, $identityId)
     {
+        if (!$identityId) {
+            return false;
+        }
+
         $qb = $this->entityManager->createQueryBuilder();
         $qb->select('COUNT(e.application)');
         $qb->from(OAuthAuthorizedApplication::class, 'e');
