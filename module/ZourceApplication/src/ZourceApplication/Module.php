@@ -165,5 +165,8 @@ class Module implements
             'fatal_error_shutdownfunction' => true,
         ]);
         $logger->addWriter($writer);
+        $logger->info('This is a test');
+        $logger->debug('This is a test');
+        $logger->err('This is a test');
     }
 }
