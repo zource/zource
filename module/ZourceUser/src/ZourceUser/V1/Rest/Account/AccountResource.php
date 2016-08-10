@@ -11,11 +11,13 @@ namespace ZourceUser\V1\Rest\Account;
 
 use Doctrine\ORM\EntityManager;
 use DoctrineModule\Paginator\Adapter\Selectable;
-use Zend\Paginator\Adapter\Callback;
+use RuntimeException;
 use ZF\ApiProblem\ApiProblem;
+use ZF\ApiProblem\ApiProblemResponse;
 use ZF\Rest\AbstractResourceListener;
-use ZourceContact\Entity\Company;
+use ZourceContact\Entity\Person;
 use ZourceUser\Entity\Account;
+use ZourceUser\Entity\AccountInterface;
 
 class AccountResource extends AbstractResourceListener
 {
@@ -32,6 +34,40 @@ class AccountResource extends AbstractResourceListener
     public function __construct(EntityManager $entityManager)
     {
         $this->entityManager = $entityManager;
+    }
+
+    public function create($data)
+    {
+        $person = new Person($data->first_name, $data->last_name);
+
+        if (isset($data->middle_name)) {
+            $person->setMiddleName($data->middle_name);
+        }
+
+        if (isset($data->display_name)) {
+            $person->setDisplayName($data->display_name);
+        }
+
+        $account = new Account($person);
+
+        switch ($data->status) {
+            case 'active':
+                $account->setStatus(AccountInterface::STATUS_ACTIVE);
+                break;
+
+            case 'inactive':
+                $account->setStatus(AccountInterface::STATUS_INACTIVE);
+                break;
+
+            default:
+                throw new RuntimeException('Invalid account status provided.');
+        }
+
+        $this->entityManager->persist($person);
+        $this->entityManager->persist($account);
+        $this->entityManager->flush($account);
+
+        return new AccountEntity($account);
     }
 
     public function fetch($id)
@@ -53,5 +89,37 @@ class AccountResource extends AbstractResourceListener
         $adapter = new Selectable($repository);
 
         return new AccountCollection($adapter);
+    }
+
+    public function patch($id, $data)
+    {
+        return $this->update($id, $data);
+    }
+
+    public function update($id, $data)
+    {
+        /** @var Account $entity */
+        $entity = $this->entityManager->find(Account::class, $id);
+
+        if (!$entity) {
+            return new ApiProblem(ApiProblemResponse::STATUS_CODE_404, 'Entity not found.');
+        }
+
+        switch ($data->status) {
+            case 'active':
+                $entity->setStatus(AccountInterface::STATUS_ACTIVE);
+                break;
+
+            case 'inactive':
+                $entity->setStatus(AccountInterface::STATUS_INACTIVE);
+                break;
+
+            default:
+                throw new RuntimeException('Invalid account status provided.');
+        }
+
+        $this->entityManager->flush($entity);
+
+        return new AccountEntity($entity);
     }
 }

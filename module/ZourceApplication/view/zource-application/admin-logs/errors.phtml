@@ -68,11 +68,13 @@ $this->placeholder('layout')->pageNavGroupPrimary = 'admin-navgroup';
                         <td><?php echo $this->escapeHtml($log['priorityName']); ?></td>
                         <td>
                             <?php echo $this->escapeHtml($log['message']); ?><br/>
+                            <?php if (isset($log['extra']['file']) || isset($log['extra']['line'])) { ?>
                             <small>
                                 File: <?php echo $this->escapeHtml($log['extra']['file']); ?>
                                 -
                                 Line: <?php echo $this->escapeHtml($log['extra']['line']); ?>
                             </small>
+                            <?php } ?>
                         </td>
                     </tr>
                 <?php } ?>

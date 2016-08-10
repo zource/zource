@@ -15,10 +15,6 @@ class GroupCollection extends AbstractProxy
 {
     protected function build($key, $value)
     {
-        $entity = new GroupEntity();
-        $entity->id = $value->getId();
-        $entity->name = $value->getName();
-
-        return $entity;
+        return new GroupEntity($value);
     }
 }

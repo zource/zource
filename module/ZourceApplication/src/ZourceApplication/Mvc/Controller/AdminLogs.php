@@ -11,9 +11,11 @@ namespace ZourceApplication\Mvc\Controller;
 
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
-use Zend\Http\Response;
+use Zend\Http\Response\Stream;
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Paginator\Paginator;
 use Zend\View\Model\ViewModel;
+use ZourceApplication\Paginator\Adapter\CsvStream;
 
 class AdminLogs extends AbstractActionController
 {
@@ -28,8 +30,8 @@ class AdminLogs extends AbstractActionController
 
         /** @var \SplFileInfo $item */
         foreach ($iterator as $item) {
-            if (preg_match('/daemon.([0-9]{4}-[0-9]{2}-[0-9]{2}).xml/', $item->getBasename(), $matches)) {
-                $result[$matches[1]] = $this->loadXmlLog($item->getPathname());
+            if (preg_match('/daemon.([0-9]{4}-[0-9]{2}-[0-9]{2}).csv/', $item->getBasename(), $matches)) {
+                $result[$matches[1]] = $this->loadCsvLog($item->getPathname());
             }
         }
 
@@ -51,8 +53,8 @@ class AdminLogs extends AbstractActionController
 
         /** @var \SplFileInfo $item */
         foreach ($iterator as $item) {
-            if (preg_match('/php_log.([0-9]{4}-[0-9]{2}-[0-9]{2}).xml/', $item->getBasename(), $matches)) {
-                $result[$matches[1]] = $this->loadXmlLog($item->getPathname());
+            if (preg_match('/php_log.([0-9]{4}-[0-9]{2}-[0-9]{2}).csv/', $item->getBasename(), $matches)) {
+                $result[$matches[1]] = $this->loadCsvLog($item->getPathname());
             }
         }
 
@@ -65,15 +67,15 @@ class AdminLogs extends AbstractActionController
     {
         $date = $this->params('date');
         $path = sprintf('data/logs/daemon.%s.xml', $date);
-        $xml = sprintf('<?xml version="1.0" ?><root>%s</root>', file_get_contents($path));
 
-        $response = new Response();
-        $response->setContent($xml);
+        $response = new Stream();
+        $response->setStream(fopen($path, 'r'));
+        $response->setCleanup(false);
         $response->setStatusCode(200);
 
         $headers = $response->getHeaders();
-        $headers->addHeaderLine(sprintf('Content-Disposition: attachment; filename="daemon-%s.xml"', $date));
-        $headers->addHeaderLine('Content-Type: text/xml');
+        $headers->addHeaderLine(sprintf('Content-Disposition: attachment; filename="daemon-%s.csv"', $date));
+        $headers->addHeaderLine('Content-Type: text/csv');
 
         return $response;
     }
@@ -82,22 +84,22 @@ class AdminLogs extends AbstractActionController
     {
         $date = $this->params('date');
         $path = sprintf('data/logs/php_log.%s.xml', $date);
-        $xml = sprintf('<?xml version="1.0" ?><root>%s</root>', file_get_contents($path));
 
-        $response = new Response();
-        $response->setContent($xml);
+        $response = new Stream();
+        $response->setStream(fopen($path, 'r'));
+        $response->setCleanup(false);
         $response->setStatusCode(200);
 
         $headers = $response->getHeaders();
-        $headers->addHeaderLine(sprintf('Content-Disposition: attachment; filename="log-%s.xml"', $date));
-        $headers->addHeaderLine('Content-Type: text/xml');
+        $headers->addHeaderLine(sprintf('Content-Disposition: attachment; filename="log-%s.csv"', $date));
+        $headers->addHeaderLine('Content-Type: text/csv');
 
         return $response;
     }
 
     public function deleteDaemonAction()
     {
-        $path = sprintf('data/logs/daemon.%s.xml', $this->params('date'));
+        $path = sprintf('data/logs/daemon.%s.csv', $this->params('date'));
 
         if (is_file($path)) {
             unlink($path);
@@ -108,7 +110,7 @@ class AdminLogs extends AbstractActionController
 
     public function deleteErrorsAction()
     {
-        $path = sprintf('data/logs/php_log.%s.xml', $this->params('date'));
+        $path = sprintf('data/logs/php_log.%s.csv', $this->params('date'));
 
         if (is_file($path)) {
             unlink($path);
@@ -117,17 +119,28 @@ class AdminLogs extends AbstractActionController
         return $this->redirect()->toRoute('admin/system/logs/errors');
     }
 
-    private function loadXmlLog($path)
+    private function loadCsvLog($path)
     {
         $result = [];
 
-        $xml = sprintf('<?xml version="1.0" ?><root>%s</root>', file_get_contents($path));
-        $elements = new \SimpleXMLElement($xml);
+        $stream = fopen($path, 'r');
 
-        foreach ($elements as $log) {
-            $result[] = json_decode(json_encode($log), TRUE);;
+        while (!feof($stream)) {
+            $data = fgetcsv($stream, null, ';');
+
+            if ($data) {
+                $result[] = [
+                    'timestamp' => $data[0],
+                    'priority' => $data[1],
+                    'priorityName' => $data[2],
+                    'message' => $data[3],
+                    'extra' => json_decode($data[4], true),
+                ];
+            }
         }
 
-        return array_reverse($result);
+        fclose($stream);
+
+        return $result;
     }
 }

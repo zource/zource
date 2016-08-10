@@ -15,6 +15,7 @@ use Zend\Log\Logger;
 use Zend\Log\Writer\Stream;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use ZourceApplication\Log\Writer\CsvStream;
 use ZourceDaemon\Service\WorkerManager;
 use ZourceDaemon\TaskService\Daemon;
 
@@ -24,7 +25,7 @@ class DaemonFactory implements FactoryInterface
     {
         $workerManager = $serviceLocator->get(WorkerManager::class);
 
-        $writer = new Stream('data/logs/daemon.' . date('Y-m-d') . '.xml');
+        $writer = new CsvStream('data/logs/daemon.' . date('Y-m-d') . '.csv');
         $writer->setFormatter(new Xml([
             'rootElement' => 'log',
         ]));

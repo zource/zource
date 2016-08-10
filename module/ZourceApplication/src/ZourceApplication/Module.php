@@ -9,6 +9,7 @@
 
 namespace ZourceApplication;
 
+use Gedmo\Exception\RuntimeException;
 use Zend\Console\Adapter\AdapterInterface as ConsoleAdapter;
 use Zend\Console\Console;
 use Zend\EventManager\EventInterface;
@@ -31,6 +32,7 @@ use Zend\Session\ManagerInterface;
 use Zend\Stdlib\ArrayUtils;
 use ZF\Apigility\Provider\ApigilityProviderInterface;
 use ZourceApplication\Authorization\Condition\Service\PluginManager as AuthorizationConditionPluginManager;
+use ZourceApplication\Log\Writer\CsvStream;
 use ZourceApplication\Ui\Navigation\Item\Service\PluginManager as UiNavigationItemPluginManager;
 
 class Module implements
@@ -154,19 +156,11 @@ class Module implements
 
     private function initializeErrorLogging()
     {
-        $writer = new Stream('data/logs/php_log.' . date('Y-m-d') . '.xml');
-        /*$writer->setFormatter(new Xml([
-            'rootElement' => 'log',
-        ]));*/
-
         $logger = new Logger([
             'exceptionhandler' => true,
             'errorhandler' => true,
             'fatal_error_shutdownfunction' => true,
         ]);
-        $logger->addWriter($writer);
-        $logger->info('This is a test');
-        $logger->debug('This is a test');
-        $logger->err('This is a test');
+        $logger->addWriter(new CsvStream('data/logs/php_log.' . date('Y-m-d') . '.csv'));
     }
 }

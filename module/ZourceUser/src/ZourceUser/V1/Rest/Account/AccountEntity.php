@@ -9,10 +9,12 @@
 
 namespace ZourceUser\V1\Rest\Account;
 
+use RuntimeException;
 use ZourceContact\Entity\Person;
 use ZourceContact\V1\Rest\ContactCompany\ContactEntity as CompanyEntity;
 use ZourceContact\V1\Rest\ContactPerson\ContactEntity as PersonEntity;
 use ZourceUser\Entity\Account;
+use ZourceUser\Entity\AccountInterface;
 
 class AccountEntity
 {
@@ -25,7 +27,23 @@ class AccountEntity
     {
         $this->id = $account->getId();
         $this->creationDate = $account->getCreationDate();
-        $this->status = $account->getStatus();
+
+        switch ($account->getStatus()) {
+            case AccountInterface::STATUS_ACTIVE:
+                $this->status = 'active';
+                break;
+
+            case AccountInterface::STATUS_INACTIVE:
+                $this->status = 'inactive';
+                break;
+
+            case AccountInterface::STATUS_INVITED:
+                $this->status = 'invited';
+                break;
+
+            default:
+                throw new RuntimeException('The account status could not be converted to a string.');
+        }
 
         $contact = $account->getContact();
         if ($contact instanceof Person) {
